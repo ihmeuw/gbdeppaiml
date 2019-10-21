@@ -14,14 +14,21 @@ find_pjnz <- function(loc){
   if(temp.loc == 'NAM'){unaids.year = 2017}
   ## TODO: What is wrong with the 2018 ZAF file?
   if(grepl('ZAF', loc)){unaids.year = 2017}
-  if(unaids.year %in% 2017:2018) {
-    dir <- paste0("/home/j/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/UNAIDS_country_data/", unaids.year, "/")
+  ##make exception for india
+  if(grepl('IND', loc)){dir <-paste0("/ihme/limited_use/LIMITED_USE/PROJECT_FOLDERS/UNAIDS_ESTIMATES/2013/IND")}else{
+  
+  if(unaids.year %in% 2016:2019) {
+    dir <- paste0("/home/j/DATA/UNAIDS_ESTIMATES/", unaids.year, "/", temp.loc, '/')
   } else {
-    dir <- paste0("/home/j/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/UNAIDS_country_data/", unaids.year, "/", temp.loc, "/")        
+    dir <- paste0("/ihme/limited_use/LIMITED_USE/PROJECT_FOLDERS/UNAIDS_ESTIMATES/", unaids.year, "/", temp.loc, "/")        
   }
+    }
   if(file.exists(dir)) {
     pjnz.list <- list.files(dir, pattern = "PJNZ", full.names = T)
+    pjn.list <- list.files(dir, pattern = "PJN", full.names = T)
+    
     file.list <- grep(temp.loc, pjnz.list, value = T)
+    if(length(file.list) == 0){file.list <- grep(temp.loc, pjn.list, value = T)}
     if(loc == "NGA") file.list <- c()
   } else {
     one.up <- paste(head(unlist(tstrsplit(dir, "/")), -1), collapse = "/")
@@ -37,8 +44,14 @@ find_pjnz <- function(loc){
   if(loc.name=="Plateau"){
     file.list <-  pjnz.list[which(grepl(paste0("Nigeria_", loc.name), pjnz.list))]
   }
-  if(loc.name=="Niger" | loc.name=="Guinea"| 
-     loc.name=="Congo" | loc.name=="Sudan"){
+  
+  ##This may be requried for the 2018 files, or just rename
+  # if(loc.name=="Niger" | loc.name=="Guinea"| 
+  #    loc.name=="Congo" | loc.name=="Sudan"){
+  #   file.list <-  pjnz.list[which(grepl(paste0("/", loc.name,"_"), pjnz.list))]
+  # }
+  
+  if(loc.name=="Niger" ){
     file.list <-  pjnz.list[which(grepl(paste0("/", loc.name,"_"), pjnz.list))]
   }
   
@@ -56,6 +69,13 @@ find_pjnz <- function(loc){
   if(length(file.list) == 0) {
     loc.name <- loc.table[ihme_loc_id == temp.loc, location_name]
     file.list <-  pjnz.list[which(grepl(paste0(loc.name,"_"), pjnz.list))]
+    if(length(file.list == 0)){
+      loc.name <- paste(unlist(strsplit(toupper(loc.name), split = ' ')), collapse = '_')
+      file.list <- pjnz.list[which(grepl((loc.name), pjnz.list))]
+    }
+    if(loc.name == 'Sudan'){
+      file.list <- file.list[!grepl('South', file.list)]
+    }
 
     if(length(file.list) == 0) {
       file.list <- grep(loc.name, pjnz.list, value = T)
@@ -86,50 +106,83 @@ collapse_epp <- function(loc){
     pjnz <- file
     eppd <- epp::read_epp_data(pjnz)
   })
+  
   cc <- attr(eppd.list[[1]], 'country_code')
-  eppd.list <- unlist(eppd.list,recursive = FALSE )
+
+  subpop.tot <- loc
+  
+  eppd.tot <- eppd.list
+  names(eppd.tot) <- names(eppd.list)
+  
+  if(length(file.list) > 1){
+    add_index <<- TRUE
+    for(kk in 1:length(eppd.list)){
+      attr(eppd.tot[[kk]],"subpop") <-   names(eppd.list[[kk]])[1]
+    }
+  } else {
+    add_index <<- FALSE
+    eppd.tot <- eppd.list[[1]]
+    names(eppd.tot) <- names(eppd.list[[1]])
+    
+    for(kk in 1:length(names(eppd.tot))){
+      attr(eppd.tot[[kk]],"subpop") <- names(eppd.tot)[[kk]]
+    }
+    
+  }
+
+  ancsitedat <- melt_ancsite_data(eppd.tot, add_index = add_index)
+  hhsdat <-  tidy_hhs_data(eppd.tot, add_index = add_index)
+  
+  eppd.list <- unlist(eppd.list,recursive = FALSE)
   eppd.tot <- eppd.list[1]
   subpop.tot <- loc
   names(eppd.tot) <- subpop.tot
+  eppd.tot[[subpop.tot]]$ancsitedat <- ancsitedat
+  eppd.tot[[subpop.tot]]$hhs <- hhsdat
+
   
+  ##########REMOVE START HERE################
   # region
-  eppd.tot[[subpop.tot]]$region <- subpop.tot 
-  
-  #country 
+  eppd.tot[[subpop.tot]]$region <- subpop.tot
+  eppd.tot[[subpop.tot]]$region <- subpop.tot
+
+  #country
   attr(eppd.tot,"country") <- eppd.tot[[1]]$country
   attr(eppd.tot,"country_code") <- cc
-  
-  # anc.used (append)
+
+  #anc.used (append)
   eppd.tot[[subpop.tot]]$anc.used <- unlist(lapply(eppd.list, function(eppd) {
     anc.used <- eppd$anc.used
     names(anc.used) <- rownames(eppd$anc.prev)
     return(anc.used)
   }))
-  
+
+
+
   # anc.prev (append)
   eppd.tot[[subpop.tot]]$anc.prev <- do.call(rbind, lapply(eppd.list, function(eppd) {
     subpop <- names(eppd)
     anc.prev <- eppd$anc.prev
   }))
-  
+
   # anc.n (append)
   eppd.tot[[subpop.tot]]$anc.n <- do.call(rbind, lapply(eppd.list, function(eppd) {
     subpop <- names(eppd)
     anc.n <- eppd$anc.n
   }))
-  
+
   # ancrtsite.prev (collapse)
   eppd.tot[[subpop.tot]]$ancrtsite.prev <- do.call(rbind, lapply(eppd.list, function(eppd) {
     subpop <- names(eppd)
     ancrtsite.prev <- eppd$ancrtsite.prev
   }))
-  
+
   # ancrtsite.prev (append)
   eppd.tot[[subpop.tot]]$ancrtsite.n <- do.call(rbind, lapply(eppd.list, function(eppd) {
     subpop <- names(eppd)
     ancrtsite.n <- eppd$ancrtsite.n
   }))
-  
+
   # TODO: Pull all of this out, vet, sub in
   # For now, just collapsing
   artcens.temp <- data.table(do.call(rbind, lapply(eppd.list, function(eppd) {
@@ -144,24 +197,27 @@ collapse_epp <- function(loc){
   } else {
   eppd.tot[[subpop.tot]]$ancrtcens <- data.frame(year=integer(), prev=integer(), n=integer())
   }
-  
+
   # hhs (append) ** be careful "not used TRUE"
-  hhs.temp <- data.table(do.call(rbind, lapply(eppd.list, function(eppd) {
-    subpop <- names(eppd)
-    hhs <- eppd$hhs
-  })))
-  # hhs.temp <- hhs.temp[used == TRUE]
-  # TODO: what to do with hhs? we're subbing in our own prev surveys, so probably doesn't matter
-  if(any(!is.na(hhs.temp$n))){
-    hhs.temp[, pos := n * prev]
-    hhs.sum <- hhs.temp[, lapply(.SD, sum), by = .(year)]
-    hhs.sum[, prev := pos / n]
-    hhs.sum[, se := ((prev * (1 - prev)) / n)**0.5]
-    hhs.sum[, used := NULL]
-    hhs.sum[, pos := NULL]
-    hhs.sum[, used := TRUE]
-  }
-  eppd.tot[[subpop.tot]]$hhs <- as.data.frame(hhs.temp)
+  # hhs.temp <- data.table(do.call(rbind, lapply(eppd.list, function(eppd) {
+  #   subpop <- names(eppd)
+  #   hhs <- eppd$hhs
+  # })))
+  #hhs.temp <- hhs.temp[used == TRUE]
+  # 
+  # ##########remove end###############
+  # # TODO: what to do with hhs? we're subbing in our own prev surveys, so probably doesn't matter
+  # if(any(!is.na(hhs.temp$n))){
+  #   hhs.temp[, pos := n * prev]
+  #   hhs.sum <- hhs.temp[, lapply(.SD, sum), by = .(year)]
+  #   hhs.sum[, prev := pos / n]
+  #   hhs.sum[, se := ((prev * (1 - prev)) / n)**0.5]
+  #   hhs.sum[, used := NULL]
+  #   hhs.sum[, pos := NULL]
+  #   hhs.sum[, used := TRUE]
+  # }
+
+  #eppd.tot[[subpop.tot]]$hhs <- as.data.frame(hhs.temp)
   # eppd.tot[[subpop.tot]]$hhs <- as.data.frame(hhs.temp)
   
   ## epp.subp

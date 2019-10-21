@@ -280,8 +280,8 @@ split_u5_gbd2017 <- function(dt){
   
 }
 
-split_u1 <- function(dt, loc, run.name){
-  pop <- fread(paste0('/ihme/hiv/epp_input/gbd19/', run.name, "/population_splits/", loc, '.csv'))
+split_u1 <- function(dt, loc, run.name.old, run.name.new){
+  pop <- data.table(fread(paste0('/ihme/hiv/epp_input/gbd19/', run.name.old, "/population_splits/", loc, '.csv')))
   u1.pop <- pop[age_group_id < 5]
   u1.pop[,pop_total := sum(population), by = c('sex_id', 'year_id')]
   u1.pop[,pop_prop := population/sum(population), by = c('sex_id', 'year_id')]
@@ -310,7 +310,7 @@ split_u1 <- function(dt, loc, run.name){
   spec_u1[, age_group_id := NULL]
   
   ## pull in incidence proportions from eppasm
-  split.dt <- fread(paste0('/share/hiv/epp_output/gbd19/', run.name ,'/compiled/', loc, '_under1_splits.csv'))
+  split.dt <- fread(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name.new ,'/compiled/', loc, '_under1_splits.csv'))
   split.dt <- melt(split.dt, id.vars = c('year', 'run_num'))
   setnames(split.dt, 'variable', 'age')
   spec_u1 <- merge(spec_u1, split.dt, by = c('year', 'run_num', 'age'))
@@ -323,7 +323,7 @@ split_u1 <- function(dt, loc, run.name){
   
 }
 
-get_summary <- function(output, loc, run.name, paediatric = FALSE){
+get_summary <- function(output, loc, run.name.old, run.name.new, paediatric = FALSE){
   ## create gbd age groups
   output[age >= 5,age_gbd :=  age - age%%5]
   output[age %in% 1:4, age_gbd := 1]
@@ -333,7 +333,7 @@ get_summary <- function(output, loc, run.name, paediatric = FALSE){
                       pop_art = sum(pop_art), pop_gt350 = sum(pop_gt350), pop_200to350 = sum(pop_200to350), pop_lt200 = sum(pop_lt200)), by = c('age_gbd', 'sex', 'year', 'run_num')]
   setnames(output, 'age_gbd', 'age')
   if(paediatric){
-    output.u1 <- split_u1(output[age == 0], loc, run.name)
+    output.u1 <- split_u1(output[age == 0], loc, run.name.old, run.name.new)
     output <- output[age != 0]
     output <- rbind(output, output.u1, use.names = T)    
   }
@@ -342,7 +342,7 @@ get_summary <- function(output, loc, run.name, paediatric = FALSE){
   output.count <- melt(output, id.vars = c('age', 'sex', 'year', 'pop', 'run_num'))
   
 
-  age.map <- fread(paste0('/ihme/hiv/epp_input/gbd19/', run.name, "/age_map.csv"))
+  age.map <- fread(paste0('/ihme/hiv/epp_input/gbd19/', run.name.old, "/age_map.csv"))
   age.map[age_group_name_short == 'All', age_group_name_short := 'All']
   if(!paediatric){
     age.spec <- age.map[age_group_id %in% 8:21,.(age_group_id, age = age_group_name_short)]
@@ -398,7 +398,7 @@ get_summary <- function(output, loc, run.name, paediatric = FALSE){
 
 ## Get data from eppd object, save for future plotting
 save_data <- function(loc, eppd, run.name){
-  age.map <-  fread(paste0('/ihme/hiv/epp_input/gbd19/', run.name, "/age_map.csv"))
+  age.map <-  fread(paste0('/ihme/hiv/epp_input/', gbdyear, '/', run.name, "/age_map.csv"))
   if(nrow(eppd$hhs) > 0){
     prevdata <- data.table(eppd$hhs)
     prevdata <- prevdata[,.(sex, agegr, type = 'point', model = 'Household Survey', indicator = 'Prevalence', mean = prev, upper = prev + (1.96 * se), lower = ifelse(prev - (1.96 * se) < 0, 0, prev - (1.96 * se)), year)]
@@ -415,14 +415,17 @@ save_data <- function(loc, eppd, run.name){
   }else{
     prevdata <- NULL
   }
-  
+  if(exists("ancsitedat",where=eppd)){
   ancdata <- data.table(eppd$ancsitedat)
-  ancdata <- ancdata[,.(sex = 'female', age = agegr, type = 'point', model = 'ANC Site', indicator = 'Prevalence', mean = prev, upper = NA, lower = NA, year, age_group_id = 24)]
+  ancdata <- ancdata[type=="ancss",.(sex = 'female', age = agegr, type = 'point', model = 'ANC Site', indicator = 'Prevalence', mean = prev, upper = NA, lower = NA, year, age_group_id = 24)]
+  } else {
+    ancdata <- NULL
+  }
   output <- rbind(prevdata, ancdata, use.names = T)
   output[, metric := 'Rate']
   output[, ihme_loc_id := loc]
-  path <- paste0('/share/hiv/epp_input/gbd19/', run.name, '/fit_data/', loc, '.csv')
-  dir.create(paste0('/share/hiv/epp_input/gbd19/', run.name, '/fit_data/'), recursive = TRUE, showWarnings = FALSE)
+  path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc, '.csv')
+  dir.create(paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/'), recursive = TRUE, showWarnings = FALSE)
   write.csv(output, path, row.names = F)
   return(output)
 }

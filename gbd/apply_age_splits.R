@@ -12,9 +12,9 @@ if(length(args) > 0) {
   run.name <- args[2]
   spec.name <- args[3]
 } else {
-  loc <- "MWI"
-  run.name <- "190613_quetzal"
-  spec.name <- "190613_quetzal"
+  loc <- "MDG"
+  run.name <- "190630_rhino2"
+  spec.name <- "190630_rhino"
 }
 fill.draw <- T
 fill.na <- T
@@ -63,7 +63,8 @@ loc_id <- locations[ihme_loc_id==loc,location_id]
 
 
 ## Bring in EPPASM Draws
-spec_draw <- data.table(fread(paste0(eppasm_dir,"/compiled/",loc,".csv")))
+
+spec_draw <- data.table(fread(paste0(eppasm_dir,"/compiled/",loc,".csv"), blank.lines.skip = T))
 spec_draw[age >= 5,age_gbd :=  age - age%%5]
 spec_draw[age %in% 1:4, age_gbd := 1]
 spec_draw[age == 0, age_gbd := 0 ]
@@ -110,7 +111,7 @@ spec_draw[, suscept_pop := pop_neg]
 
 
 ## Calculate birth prevalence rate
-birth_pop <- get_population(age_group_id=164, location_id=loc_id, year_id=1970:2019, sex_id=1:2, gbd_round_id = 6, decomp_step = 'step2')
+birth_pop <- get_population(age_group_id=164, location_id=loc_id, year_id=1970:2019, sex_id=1:2, gbd_round_id = 6, decomp_step = 'step4')
 setnames(birth_pop, c("year_id", "population"), c("year", "gbd_pop"))
 birth_dt <- copy(spec_draw)
 birth_dt <- birth_dt[,.(age_group_id = 164, birth_prev = sum(birth_prev), total_births = sum(total_births)), by = c('year', 'run_num', 'sex_id')]
@@ -204,10 +205,19 @@ spec_combined[,(convert_vars) := lapply(.SD,shift_to_midyear),.SDcols=convert_va
 spec_combined[,(convert_vars) := lapply(.SD,convert_to_rate),.SDcols=convert_vars] 
 print(head(spec_combined))
 
+convert_vars2 <- c("suscept_pop","pop_neg","pop_lt200","pop_200to350","pop_gt350","pop_art")
+spec_combined[,(convert_vars2) := lapply(.SD,convert_to_rate),.SDcols=convert_vars2] 
+print(spec_combined)
+
 
 ##################################################################################################################
 ## Format and Output
 setnames(spec_combined,"year","year_id")
+
+##This is a fluke in gbd2019 that we get negative values - need to figure out how it could happen
+if(loc == "KEN_44796" | loc == "KEN_35646"){
+  spec_combined[run_num==880 & year_id==2019 & sex_id==2 & age_group_id==13,pop_lt200:=0]
+}
 
 print(head(spec_combined))
 assert_values(spec_combined, names(spec_combined), "gte", 0)

@@ -1,12 +1,21 @@
 ## Reads in prepped .rds object and subs in indicated GBD parameters
 ## Output object is read to run through fitmod()
-read_spec_object <- function(loc, i, start.year = 1970, stop.year = 2019, trans.params.sub = TRUE, 
-                             pop.sub = TRUE, anc.sub = TRUE, anc.backcast = TRUE, prev.sub = TRUE, art.sub = TRUE, sexincrr.sub = TRUE, 
-                             popadjust = TRUE, age.prev = FALSE, paediatric = FALSE, anc.rt = FALSE
-                             ){
-  dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))
+read_spec_object <- function(loc, j, start.year = 1970, stop.year, trans.params.sub = TRUE, 
+                             pop.sub = TRUE,  prev.sub = TRUE, art.sub = TRUE, sexincrr.sub = TRUE, 
+                             popadjust = TRUE, age.prev = FALSE, paediatric, anc.rt = FALSE, geoadjust=TRUE,
+                             anc.prior.sub = TRUE){
   
-  ## Substitute IHME data
+  print(age.prev)
+  #Do this for now as something is weird with the new PJNZ files - don't need subpop anyway
+  #Eventually these hsould all be regenerated with subpopulations
+  if(grepl("ZAF",loc) | grepl("IND",loc) | grepl("SDN",loc)){
+    dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))
+  } else {
+    dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', loc, '.rds'))
+  }
+
+
+ ## Substitute IHME data
   ## Population parameters
   if(pop.sub){
     ## TODO fix this workflow
@@ -17,21 +26,22 @@ read_spec_object <- function(loc, i, start.year = 1970, stop.year = 2019, trans.
       attr(dt, 'specfp') <- create_spectrum_fixpar(projp, demp, proj_start = start.year, proj_end = stop.year, popadjust=popadjust)
       attr(dt, 'specfp')$ss$time_epi_start <- 1985
     }
-      specfp <- sub.pop.params.specfp(attr(dt, 'specfp'), loc, i)
+    
+      specfp <- sub.pop.params.specfp(attr(dt, 'specfp'), loc, j)
       specfp <- update_spectrum_fixpar(specfp, proj_start = start.year, proj_end = stop.year,time_epi_start = specfp$ss$time_epi_start, popadjust=popadjust)
       attr(dt, 'specfp') <- specfp
     }
   ## Pediatric inputs
   if(paediatric){
     print('Preparing paediatric module inputs')
-    dt <- sub.paeds(dt, loc, i)
+    dt <- sub.paeds(dt, loc, j, start.year = 1970, stop.year = 2020)
   }
   ## Transition parameters
   if(trans.params.sub) {
     print('Substituting transition parameters')
-    dt <- sub.off.art(dt, loc, i)
-    dt <- sub.on.art(dt, loc, i)
-    dt <- sub.cd4.prog(dt, loc, i)
+    dt <- sub.off.art(dt, loc, j)
+    dt <- sub.on.art(dt, loc, j)
+    dt <- sub.cd4.prog(dt, loc, j)
   }
   ## Extrapolated ART
   if(art.sub){
@@ -43,6 +53,8 @@ read_spec_object <- function(loc, i, start.year = 1970, stop.year = 2019, trans.
     ## Prevalence surveys
     if(prev.sub) {
       print("Substituting prevalence surveys")
+      
+      ##adding in age.prev arg
       if(age.prev){
         dt <- sub.prev.granular(dt, loc)
         attr(dt, 'specfp')$fitincrr <- 'regincrr'
@@ -52,26 +64,24 @@ read_spec_object <- function(loc, i, start.year = 1970, stop.year = 2019, trans.
       }
     }
     
+    ##adding in another placeholder arg
+    geoadjust <- TRUE
     ## ANC data
-    if(anc.sub){
-      print("ANC substitution")
-      high.risk.list <- loc.table[epp == 1 & collapse_subpop == 0 & !grepl("ZAF", ihme_loc_id) & !grepl("KEN", ihme_loc_id), ihme_loc_id]
-      ken.anc.path <- paste0(root, "WORK/04_epi/01_database/02_data/hiv/data/prepped/kenya_anc_map.csv")
-      ken.anc <- fread(ken.anc.path)
-      no.anc.ken <- setdiff(loc.table[epp == 1 & grepl("KEN", ihme_loc_id), ihme_loc_id], ken.anc$ihme_loc_id)
-      if(loc %in% c(high.risk.list, "PNG", no.anc.ken)) {
-        anc.backcast <- F
-      }
+    if(geoadjust){
       
-      if(anc.backcast) {
-        print("Substituting ANC backcast output")
-        dt <- sub.anc(loc, dt, i)
-      }
+      print("Merging ANC bias offsets")
       
+      dt <- geo_adj(loc, dt, j, uncertainty=TRUE)
     } 
+    
     if(sexincrr.sub){
-      print('Substiting sex incrr')
-      dt <- sub.sexincrr(dt, loc, i)
+      print('Substituting sex incrr')
+      dt <- sub.sexincrr(dt, loc, j)
+    }
+    
+    if(anc.prior.sub){
+      print("Substituting ANC bias prior")
+      dt <- gbdeppaiml::sub.anc.prior(dt,loc)
     }
     
     ## Subsetting KEN counties from province
@@ -95,11 +105,11 @@ read_spec_object <- function(loc, i, start.year = 1970, stop.year = 2019, trans.
     }
       
   
-    if(!anc.rt){
-      attr(dt, 'eppd')$ancrtsite.prev <- NULL
-      attr(dt, 'eppd')$ancrtsite.n <- NULL
-      attr(dt, 'eppd')$ancrtcens <- NULL
-    }
+    # if(!anc.rt){
+    #   attr(dt, 'eppd')$ancrtsite.prev <- NULL
+    #   attr(dt, 'eppd')$ancrtsite.n <- NULL
+    #   attr(dt, 'eppd')$ancrtcens <- NULL
+    # }
     attr(dt, 'specfp')$prior_args <- list(logiota.unif.prior = c(log(1e-14), log(0.000025)))
     attr(dt, 'specfp')$group <- '1'
   }else{
@@ -119,6 +129,12 @@ read_spec_object <- function(loc, i, start.year = 1970, stop.year = 2019, trans.
     dt <- append.ciba.incrr(dt, loc, run.name)
     
   }
+  ## Append fertility rate ratios for countries in SSA
+  if(loc.table[ihme_loc_id == loc, super_region_name] == 'Sub-Saharan Africa'){
+    print('Appending FRR')
+    dt <- add_frr_noage_fp(dt)
+  }
+  
   
     return(dt)
     
@@ -136,6 +152,7 @@ update_spectrum_fixpar <- function(specfp, hiv_steps_per_year = 10L, proj_start 
   
   ## Parameters defining the model projection period and state-space
   ss <- list(proj_start = proj_start,
+             popadjust = popadjust,
              PROJ_YEARS = as.integer(proj_end - proj_start + 1L),
              AGE_START  = as.integer(AGE_START),
              hiv_steps_per_year = as.integer(hiv_steps_per_year),
@@ -229,6 +246,7 @@ update_spectrum_fixpar <- function(specfp, hiv_steps_per_year = 10L, proj_start 
   
   
   ## set population adjustment
+  popadjust <- TRUE
   specfp$popadjust <- popadjust
   if(!length(setdiff(proj_start:proj_end, dimnames(specfp$targetpop)[[3]]))){
     specfp$entrantpop <- specfp$targetpop[1,,as.character(proj_start:proj_end)]

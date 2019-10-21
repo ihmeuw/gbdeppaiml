@@ -39,6 +39,7 @@ newest <- versions[which.max(as.Date(versions, format="%Y_%m_%d"))]
 load(dir(paste0(geos_dir, newest), pattern=".Rdata", full.names=T)[1])
 setnames(gbd_all, "country", "iso3")
 data3 <- gbd_all[!is.na(iso3) & !is.na(hiv_test) & !is.na(hiv_weight),]
+
 ## Kenya
 # Use admin2 data
 data3[grepl("KEN", iso3) & !(admin_2_id == "KEN" | admin_2_id == "" | is.na(admin_2_id)), iso3 := admin_2_id]

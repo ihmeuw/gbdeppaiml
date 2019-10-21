@@ -14,7 +14,8 @@ print(args)
 if(length(args) > 0) {
   loc <- args[1]
 } else {
-  loc <- "MDG"
+  loc <- "SDN"
+
 }
 ### Functions
 library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
@@ -35,7 +36,6 @@ if(grepl('1', loc.table[ihme_loc_id == loc, group])){
 }else{
   val <- prepare_spec_object_group2(loc)
 }
-saveRDS(val, paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))
 
 
 

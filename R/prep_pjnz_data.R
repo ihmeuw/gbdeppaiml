@@ -29,11 +29,10 @@ prepare_spec_object <- function(loc, popadjust = TRUE, popupdate=TRUE, use_ep5=F
   country <- attr(eppd, "country")
   cc <- attr(eppd, "country_code")
   
-  ## melt site-level data
-  eppd <- Map("[[<-", eppd, "ancsitedat", lapply(eppd, melt_ancsite_data))
-  
-  ## tidy HHS data
-  eppd <- Map("[[<-", eppd, "hhs", lapply(eppd, tidy_hhs_data))
+  ## melt site-level data - move to within collapse_epp
+  # eppd <- Map("[[<-", eppd, "ancsitedat", lapply(eppd, melt_ancsite_data))
+  # ## tidy HHS data
+  # eppd <- Map("[[<-", eppd, "hhs", lapply(eppd, tidy_hhs_data))
   
   attr(eppd, "country") <- country
   attr(eppd, "country_code") <- cc
@@ -103,7 +102,7 @@ prepare_spec_object_ind <- function(loc, start.year = 1970, stop.year = 2019, po
   attr(val, 'specfp') <- specfp
   attr(val, 'country') <- eppd$country
   attr(val, 'region') <- loc
-  #saveRDS(val, paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))
+  saveRDS(val, paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', loc, '.rds'))
   
   return(val)
   
@@ -146,14 +145,47 @@ create_spectrum_demog_param <- function(loc, start.year = 1970, stop.year = 2019
 }
 
 ## Creates projp object
+create_spectrum_demog_param <- function(loc, start.year = 1970, stop.year = 2019){
+  
+  proj.years <- start.year:stop.year
+  version <- "Spectrum 5.63"
+  
+  ## Create all structures in demp object
+  ## Fill with 0s, with the exception of srb
+  ## All variables will be subbed using sub.pop.params.demp()
+  basepop <- array(0, c(81, 2, length(proj.years)))
+  dimnames(basepop) <- list(paste0(0:80), c('Male', 'Female'), paste0(proj.years))
+  Sx <- array(0, c(81, 2, length(proj.years)))
+  dimnames(Sx) <- list(age=0:80, sex=c("Male", "Female"), year=proj.years)  
+  mx <- -log(Sx)
+  tfr <- rep(0, length(proj.years))
+  names(tfr) <- proj.years
+  asfr <- array(0, c(35, length(proj.years)))
+  dimnames(asfr) <- list(age = paste0(15:49), year = paste0(start.year:stop.year))
+  births <- rep(0, length(proj.years))
+  names(births) <- proj.years
+  srb <- rep(102, length(proj.years))
+  names(srb) <- proj.years
+  netmigr <- array(0, c(81, 2, length(proj.years)))
+  dimnames(netmigr) <- list(age=0:80, sex=c("Male", "Female"), year=proj.years)  
+  
+  demp <- list("basepop"=basepop, "mx"=mx, "Sx"=Sx, "asfr"=asfr, "tfr"=tfr, "srb"=srb, "netmigr"=netmigr,
+               "births"=births)
+  class(demp) <- "demp"
+  attr(demp, "version") <- version
+  
+  return(demp)
+}
+
+## Creates projp object
 create_hivproj_param <- function(loc, start.year = 1970, stop.year = 2019){
   yr_start <- start.year
   yr_end <- stop.year
   proj.years = yr_start:yr_end
-
+  
   ## TODO: Get these fertility and incrr adjustments by country from Jeff
   print('Warning: Still reading in placeholders from other location for some parameters')
-  pjnz <- find_pjnz('MWI')[[1]]
+  pjnz <- find_pjnz(loc)[[1]]
   temp.projp <- read_hivproj_param(pjnz, use_ep5=FALSE)
   relinfectART <- 0.15
   if(grepl('IND', loc)){
@@ -172,7 +204,7 @@ create_hivproj_param <- function(loc, start.year = 1970, stop.year = 2019){
   frr_art6mos <- rep(1.0, 7)
   names(frr_art6mos) <- seq(15, 45, 5)
   frr_scalar <- 1.0
-
+  
   ## Currently subbing in GBD sex incrr parameters, if they exist
   if(grepl('IND', loc)){
     temp.loc <- loc.table[parent_id == loc.table[ihme_loc_id == loc, location_id], ihme_loc_id][1]
@@ -205,7 +237,7 @@ create_hivproj_param <- function(loc, start.year = 1970, stop.year = 2019){
     incrr_age_years[,,j] <- incrr_age
   }
   dimnames(incrr_age_years) <- list(seq(0, 80, 5), c('Male', 'Female'), paste0(proj.years))
-
+  
   ## Using CD4 initial distribution and median CD4 placeholder
   ## TODO: How are these estimated? How should we fill these?
   artmx_timerr <- temp.projp$artmx_timerr
@@ -222,15 +254,15 @@ create_hivproj_param <- function(loc, start.year = 1970, stop.year = 2019){
   art15plus_eligthresh <- art15plus_eligthresh[,cd4_threshold]
   names(art15plus_eligthresh) <- proj.years
   artelig_specpop <- temp.projp$artelig_specpop
-
+  
   ## GBD progression parameters are subbed in later
   cd4_prog <- array(0, c(6, 4, 2))
   cd4_mort <- array(0, c(7, 4, 2))
   art_mort <- array(0, c(3, 7, 4, 2))
-
+  
   median_cd4init <- rep(0, length(proj.years))
   names(median_cd4init) <- proj.years
-
+  
   ## ART variables
   ## For now, using last year's extrapolated numbers
   ## art15plus_numperc - 0 if count, else 1
@@ -245,15 +277,15 @@ create_hivproj_param <- function(loc, start.year = 1970, stop.year = 2019){
   art15plus_num[, sex := NULL]
   art15plus_num <- as.matrix(art15plus_num)
   dimnames(art15plus_num) <- list(sex=c("Male", "Female"), year=proj.years)
-
+  
   art15plus_numperc <- art[,.(year, sex, numper)]
   art15plus_numperc <- dcast.data.table(art15plus_numperc, sex~year, value.var = 'numper')
   art15plus_numperc[, sex := NULL]
   art15plus_numperc <- as.matrix(art15plus_numperc)
   dimnames(art15plus_numperc) <- list(sex=c("Male", "Female"), year=proj.years)
-
-
-
+  
+  
+  
   ##TODO: Not sure where to get art dropout and vert trans from
   ## For now, using previous vertical transmission results
   art_dropout <- rep(0, length(proj.years))
@@ -269,7 +301,7 @@ create_hivproj_param <- function(loc, start.year = 1970, stop.year = 2019){
   }
   verttrans <- verttrans[,value]
   names(verttrans) <- proj.years
-
+  
   hivpop <- spec[,.(pop_lt200 = mean(pop_lt200), pop_200to350 = mean(pop_200to350), pop_gt350 = mean(pop_gt350), pop_art = mean(pop_art)), by = c('sex', 'age', 'year')]
   hivpop <- hivpop[,.(sex, age, year, value = (pop_lt200 + pop_200to350 + pop_gt350 + pop_art))]
   hivpop <- extend.years(hivpop, proj.years)
@@ -288,7 +320,7 @@ create_hivproj_param <- function(loc, start.year = 1970, stop.year = 2019){
   }
   dimnames(temp) <- list(0:80, c('Male', 'Female'), paste0(proj.years))
   hivpop <- temp
-
+  
   hivdeaths <- spec[,.(value = mean(hiv_deaths)), by = c('sex', 'age', 'year')]
   hivdeaths <- extend.years(hivdeaths, proj.years)
   hivdeaths <- merge(hivdeaths, single, by = c('sex', 'year', 'age'), all.y = TRUE)
@@ -304,7 +336,7 @@ create_hivproj_param <- function(loc, start.year = 1970, stop.year = 2019){
   }
   dimnames(temp) <- list(0:80, c('Male', 'Female'), paste0(proj.years))
   hivdeaths <- temp
-
+  
   ## age 14 population
   ## Pulling age 14 HIV+ population from previous estimates (until we build paediatric model)
   ## This is a super rough estimate
@@ -336,7 +368,7 @@ create_hivproj_param <- function(loc, start.year = 1970, stop.year = 2019){
                                 CD4cat = c("CD4_1000", "CD4_750",  "CD4_500",  "CD4_350",  "CD4_200",  "CD4_0"),
                                 Sex = c('Male', 'Female'),
                                 Year = paste0(proj.years))
-
+  
   dir <- paste0('/share/hiv/epp_input/gbd19/', run.name)
   pop <- fread(paste0(dir, '/population_single_age/', loc, '.csv'))
   pop <- pop[age_group_id == 14 + 48]
@@ -350,7 +382,7 @@ create_hivproj_param <- function(loc, start.year = 1970, stop.year = 2019){
   pop[, sex_id := NULL]
   age14totpop <- as.matrix(pop)
   dimnames(age14totpop) <- list(c("Male", "Female"), proj.years)
-
+  
   projp <- list("yr_start" = yr_start,
                 "yr_end" = yr_end,
                 "relinfectART" = relinfectART,

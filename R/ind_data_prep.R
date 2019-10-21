@@ -2,14 +2,18 @@
 ## Function to read .ep1 and .ep3 files to create eppd object
 prepare_eppd_ind <- function(loc, proj.end=2019, anc.sub = FALSE){
   unaids.year <- loc.table[ihme_loc_id == loc, unaids_recent]
-  dir <- paste0(root, "WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/UNAIDS_country_data/", unaids.year, "/",loc, "/")        
-  filepath <- paste0(dir, loc)
+  if(unaids.year %in% 2016:2019) {
+    dir <- paste0("/home/j/DATA/UNAIDS_ESTIMATES/", unaids.year, "/", loc, '/')
+  } else {
+    dir <- paste0("/ihme/limited_use/LIMITED_USE/PROJECT_FOLDERS/UNAIDS_ESTIMATES/", unaids.year, "/IND/")        
+  }
+  filepath <- dir
   eppd <- ind.prepare.epp.fit(filepath, proj.end = proj.end, anc.sub = FALSE)
-  # gen.pop.dict <- c("General Population", "General population", "GP", "GENERAL POPULATION", "GEN. POPL.", "General population(Low Risk)", "Remaining Pop")
-  # gen.pop.i <- which(names(eppd) %in% gen.pop.dict)
-  # temp.eppd <- list()
-  # temp.eppd[['General Population']] <- eppd[[gen.pop.i]]
-  # eppd <- temp.eppd
+  gen.pop.dict <- c("General Population", "General population", "GP", "GENERAL POPULATION", "GEN. POPL.", "General population(Low Risk)", "Remaining Pop")
+  gen.pop.i <- which(names(eppd) %in% gen.pop.dict)
+  temp.eppd <- list()
+  temp.eppd[['General Population']] <- eppd[[gen.pop.i]]
+  eppd <- temp.eppd
   ## melt site-level data
   eppd <- Map("[[<-", eppd, "ancsitedat", lapply(eppd, melt_ancsite_data))
   
@@ -41,13 +45,18 @@ ind.prepare.epp.fit <- function(filepath, proj.end=2016.5, anc.sub = T, sub.art.
   input.loc.map[ ihme_loc_id=="IND_4871", gbd15_spectrum_loc:= "IND_TL"]  
   iso3_init <- input.loc.map[ihme_loc_id == loc, gbd15_spectrum_loc]
   
-  ep1 <- scan(paste(filepath, ".ep1", sep=""), "character", sep="\n")
+  possible_files.which <- grepl(loc ,list.files('/ihme/limited_use/LIMITED_USE/PROJECT_FOLDERS/UNAIDS_ESTIMATES/2013/IND'))
+  possible_files <- list.files('/ihme/limited_use/LIMITED_USE/PROJECT_FOLDERS/UNAIDS_ESTIMATES/2013/IND')[possible_files.which]
+  ep1 <- paste0(filepath, possible_files[grepl('.EP1', possible_files)])
+  ep1 <- scan(ep1, "character", sep="\n")
   ep1 <<- ep1[3:length(ep1)]
-  ep4 <- scan(paste(filepath, ".ep3", sep=""), "character", sep="\n")
+  ep4 <- paste0(filepath, possible_files[grepl('.EP3', possible_files)])
+  ep4 <- scan(ep4, "character", sep="\n")
   ep4 <<- ep4[3:length(ep4)]
   
   ## epp
-  eppd <- ind.read.epp.data(paste(filepath, ".xml", sep=""))
+  xml <- paste0(filepath, possible_files[grepl('.XML', possible_files)])
+  eppd <- ind.read.epp.data(xml)
   ##TODO - fix ANC subbing - there is currently an issue when merging together anc.prev, anc.n, and anc.used the melt_ancsite_data function
   if(anc.sub) {
     ## Prevalence

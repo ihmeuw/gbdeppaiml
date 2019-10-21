@@ -29,6 +29,7 @@ if(length(args) > 0) {
 surv.path <- paste0("/share/hiv/epp_output/gbd19/", run.name, "/prev_surveys.csv")
 
 pop.dir <- paste0('/ihme/hiv/epp_input/gbd19/', run.name, "/population_single_age/india_splitting_locs/")
+pop.dir <- paste0('/ihme/hiv/epp_input/gbd19/', run.name, "/population_single_age/")
 
 out.path = paste0('/ihme/hiv/epp_input/gbd19/', run.name, '/art_prop.csv')
 plot.path <- paste0("/ihme/hiv/epp_output/gbd19/", run.name, "/art_prop.pdf")
