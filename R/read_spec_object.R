@@ -3,7 +3,7 @@
 read_spec_object <- function(loc, j, start.year = 1970, stop.year, trans.params.sub = TRUE, 
                              pop.sub = TRUE,  prev.sub = TRUE, art.sub = TRUE, sexincrr.sub = TRUE, 
                              popadjust = TRUE, age.prev = FALSE, paediatric, anc.rt = FALSE, geoadjust=TRUE,
-                             anc.prior.sub = TRUE){
+                             anc.prior.sub = TRUE, lbd.anc = FALSE){
   
   print(age.prev)
   #Do this for now as something is weird with the new PJNZ files - don't need subpop anyway
@@ -14,6 +14,9 @@ read_spec_object <- function(loc, j, start.year = 1970, stop.year, trans.params.
     dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', loc, '.rds'))
   }
 
+  if(lbd.anc){
+    attr(dt, 'eppd')$ancsitedat <- as.data.frame(readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/offset/', loc, '.rds')))
+  }
 
  ## Substitute IHME data
   ## Population parameters
@@ -46,7 +49,7 @@ read_spec_object <- function(loc, j, start.year = 1970, stop.year, trans.params.
   ## Extrapolated ART
   if(art.sub){
     print('Substituting ART data')
-    dt <- sub.art(dt,loc, use.recent.unaids = FALSE)
+    dt <- sub.art(dt,loc)
   }
   ## Group 1 inputs
   if(grepl('1', loc.table[ihme_loc_id == loc, group])){
