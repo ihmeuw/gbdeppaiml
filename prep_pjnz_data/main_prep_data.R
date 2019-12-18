@@ -33,7 +33,6 @@ dir.create(paste0("/share/hiv/data/PJNZ_prepped/",unaids_year,"/"),recursive = T
 #Alternate metadata until 2019 becomes available
 loc.table <- fread("/ihme/mortality/shared/hiv_model_strategy_2020.csv")
 loc.list = loc.table[unaids_2019==1 & grepl("1",group) & epp==1,ihme_loc_id]
-l <- loc.list[grepl("ETH",loc.list)]
 
 
 if(grepl('1', loc.table[ihme_loc_id == loc, group])){
