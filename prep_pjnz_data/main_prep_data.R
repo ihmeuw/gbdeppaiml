@@ -13,8 +13,10 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) > 0) {
   loc <- args[1]
+  unaids_year <- args[2]
 } else {
   loc <- "SDN"
+  unaids_year <- 2019
 
 }
 ### Functions
@@ -26,6 +28,13 @@ devtools::load_all()
 
 ### Tables
 loc.table <- data.table(get_locations(hiv_metadata = T))
+dir.create(paste0("/share/hiv/data/PJNZ_prepped/",unaids_year,"/"),recursive = TRUE)
+
+#Alternate metadata until 2019 becomes available
+loc.table <- fread("/ihme/mortality/shared/hiv_model_strategy_2020.csv")
+loc.list = loc.table[unaids_2019==1 & grepl("1",group) & epp==1,ihme_loc_id]
+l <- loc.list[grepl("ETH",loc.list)]
+
 
 if(grepl('1', loc.table[ihme_loc_id == loc, group])){
   if(!grepl('IND', loc)){
@@ -37,7 +46,9 @@ if(grepl('1', loc.table[ihme_loc_id == loc, group])){
   val <- prepare_spec_object_group2(loc)
 }
 
+for(loc in l){
+print(loc)
+val <- prepare_spec_object(loc)
+saveRDS(val, paste0("/share/hiv/data/PJNZ_prepped/",unaids_year,"/", loc, '.rds'))
 
-
-
-
+}

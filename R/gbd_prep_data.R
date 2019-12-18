@@ -1,4 +1,5 @@
 find_pjnz <- function(loc){
+
   if(grepl("KEN", loc) & loc.table[ihme_loc_id == loc, level] == 5) {
       temp.loc <- loc.table[location_id == loc.table[ihme_loc_id == loc, parent_id], ihme_loc_id]
   } else if(grepl('ZAF', loc)){
@@ -7,10 +8,23 @@ find_pjnz <- function(loc){
     temp.loc <- loc
   } 
   
-  
+  loc.table <-fread("/ihme/mortality/shared/hiv_model_strategy_2020.csv")
   loc.name <- loc.table[ihme_loc_id == temp.loc, location_name]
   
   unaids.year <- loc.table[ihme_loc_id == temp.loc, unaids_recent]
+  
+  #Temporary condition until unaids_recent column is fixed
+  if("unaids_2019" %in% colnames(loc.table)){
+    if(loc.table[ihme_loc_id == temp.loc, unaids_2019]==1){
+      unaids.year <- 2019
+      print("Using 2019 PJNZ")
+    }
+  }
+  
+  #Subnational files are stored in national folders
+  if(grepl("ETH",loc)){temp.loc <- "ETH"}
+  if(grepl("NGA",loc)){temp.loc <- "NGA"}
+  
   if(temp.loc == 'NAM'){unaids.year = 2017}
   ## TODO: What is wrong with the 2018 ZAF file?
   if(grepl('ZAF', loc)){unaids.year = 2017}
@@ -29,7 +43,7 @@ find_pjnz <- function(loc){
     
     file.list <- grep(temp.loc, pjnz.list, value = T)
     if(length(file.list) == 0){file.list <- grep(temp.loc, pjn.list, value = T)}
-    if(loc == "NGA") file.list <- c()
+
   } else {
     one.up <- paste(head(unlist(tstrsplit(dir, "/")), -1), collapse = "/")
     dir.list <- list.files(one.up, pattern = loc, full.names = T)
@@ -37,6 +51,24 @@ find_pjnz <- function(loc){
       list.files(dir, pattern = "PJNZ", full.names = T)
     }))
   }
+  
+  if(grepl("ETH",loc)){
+    if(loc.name == "Afar"){
+      loc.name <- "Affar"
+    }   
+    file.list <-  pjnz.list[which(grepl(paste0(toupper(loc.name),"_"), pjnz.list))]
+   
+  }
+    
+  if(grepl("NGA",loc)){
+    if(loc.name == "FCT (Abuja)"){
+    loc.name <- "FCT_Abuja"
+    file.list <-  file.list[which(grepl(paste0(loc.name), file.list))]
+    }   
+    file.list <-  pjnz.list[which(grepl(paste0(toupper(loc.name),"_"), pjnz.list))]
+    
+  }
+      
   
   if(loc.name=="Central"){
     file.list <-  pjnz.list[which(grepl(paste0("Kenya-", loc.name), pjnz.list))]
@@ -51,20 +83,20 @@ find_pjnz <- function(loc){
   #   file.list <-  pjnz.list[which(grepl(paste0("/", loc.name,"_"), pjnz.list))]
   # }
   
-  if(loc.name=="Niger" ){
-    file.list <-  pjnz.list[which(grepl(paste0("/", loc.name,"_"), pjnz.list))]
-  }
+  # if(loc.name=="Niger" ){
+  #   file.list <-  pjnz.list[which(grepl(paste0("/", loc.name,"_"), pjnz.list))]
+  # }
   
-  if(temp.loc =="NGA_25344"){
-    loc.name <- 'Nigeria_Niger'
-    file.list <- grep(loc.name, pjnz.list, value = T)    
-  }
-  
-  if(temp.loc =="NGA_25332"){
-    loc.name <- 'FCT_Abuja'
-    file.list <- grep(loc.name, pjnz.list, value = T)    
-  }
-  
+  # if(temp.loc =="NGA_25344"){
+  #   loc.name <- 'Nigeria_Niger'
+  #   file.list <- grep(loc.name, pjnz.list, value = T)    
+  # }
+  # 
+  # if(temp.loc =="NGA_25332"){
+  #   loc.name <- 'FCT_Abuja'
+  #   file.list <- grep(loc.name, pjn.list, value = T)    
+  # }
+  # 
   
   if(length(file.list) == 0) {
     loc.name <- loc.table[ihme_loc_id == temp.loc, location_name]

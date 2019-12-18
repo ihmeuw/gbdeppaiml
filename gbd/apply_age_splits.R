@@ -14,7 +14,7 @@ if(length(args) > 0) {
 } else {
   loc <- "MDG"
   run.name <- "190630_rhino2"
-  spec.name <- "190630_rhino"
+  spec.name <- "190630_rhino_combined"
 }
 fill.draw <- T
 fill.na <- T
@@ -30,7 +30,7 @@ dir.create(out_dir_birth, recursive = T, showWarnings = F)
 
 ### Functions
 library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
-source(paste0(root, "/temp/central_comp/libraries/current/r/get_population.R"))
+source(paste0("/share/cc_resources/libraries/current/r/get_population.R"))
 source(paste0(root, "/Project/Mortality/shared/functions/get_locations.r"))
 setwd(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/"))
 devtools::load_all()
@@ -72,7 +72,7 @@ spec_draw <- spec_draw[,.(pop = sum(pop), hiv_deaths = sum(hiv_deaths), non_hiv_
                     total_births = sum(total_births), hiv_births = sum(hiv_births), birth_prev = sum(birth_prev),
                     pop_art = sum(pop_art), pop_gt350 = sum(pop_gt350), pop_200to350 = sum(pop_200to350), pop_lt200 = sum(pop_lt200)), by = c('age_gbd', 'sex', 'year', 'run_num')]
 setnames(spec_draw, 'age_gbd', 'age')
-output.u1 <- split_u1(spec_draw[age == 0], loc, run.name)
+output.u1 <- split_u1(spec_draw[age == 0], loc, run.name.old=run.name, run.name.new = run.name)
 spec_draw <- spec_draw[age != 0]
 spec_draw <- rbind(spec_draw, output.u1, use.names = T)    
 
