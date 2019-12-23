@@ -3,7 +3,7 @@
 read_spec_object <- function(loc, j, start.year = 1970, stop.year, trans.params.sub = TRUE, 
                              pop.sub = TRUE,  prev.sub = TRUE, art.sub = TRUE, sexincrr.sub = TRUE, 
                              popadjust = TRUE, age.prev = FALSE, paediatric, anc.rt = FALSE, geoadjust=TRUE,
-                             anc.prior.sub = TRUE){
+                             anc.prior.sub = TRUE, use_2019=FALSE){
   
   print(age.prev)
   #Do this for now as something is weird with the new PJNZ files - don't need subpop anyway
@@ -12,6 +12,10 @@ read_spec_object <- function(loc, j, start.year = 1970, stop.year, trans.params.
     dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))
   } else {
     dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', loc, '.rds'))
+  }
+  
+  if(use_2019){
+    dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))
   }
 
 
