@@ -17,8 +17,8 @@ if(length(args) > 0) {
   draw.fill <- as.logical(args[4])
   paediatric <- as.logical(args[5])
 } else {
-  run.name <- "190503_all"
-  loc <- "AUS"
+  run.name <- "191218_group2_tests"
+  loc <- "PER"
   n <- 1
   draw.fill <- TRUE
   paediatric <- FALSE
@@ -71,5 +71,6 @@ if(paediatric){
     split.dt <- fill_draws(split.dt)
   }
   write.csv(split.dt, paste0(compiled.path, loc, '_under1_splits.csv'), row.names = F)
-}
 
+
+}

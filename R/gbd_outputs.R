@@ -20,56 +20,15 @@
 gbd_sim_mod <-  function(fit, rwproj=fit$fp$eppmod == "rspline", VERSION = 'C'){
   ## We only need 1 draw, so let's save time and subset to that now
   rand.draw <- round(runif(1, min = 1, max = 3000))
-  if(!(exists('group', where = fit$fp) & fit$fp$group == '2')){
-    fit$param <- lapply(seq_len(nrow(fit$resample)), function(ii) fnCreateParam(fit$resample[ii,], fit$fp))
-    
-    if(rwproj){
-      if(exists("eppmod", where=fit$fp) && fit$fp$eppmod == "rtrend")
-        stop("Random-walk projection is only used with r-spline model")
-      
-      dt <- if(inherits(fit$fp, "eppfp")) fit$fp$dt else 1.0/fit$fp$ss$hiv_steps_per_year
-      
-      lastdata.idx <- as.integer(max(fit$likdat$ancsite.dat$df$yidx,
-                                     fit$likdat$hhs.dat$yidx,
-                                     fit$likdat$ancrtcens.dat$yidx,
-                                     fit$likdat$hhsincid.dat$idx,
-                                     fit$likdat$sibmx.dat$idx))
-      
-      fit$rvec.spline <- sapply(fit$param, "[[", "rvec")
-      firstidx <- which(fit$fp$proj.steps == fit$fp$tsEpidemicStart)
-      lastidx <- (lastdata.idx-1)/dt+1
-      
-      ## replace rvec with random-walk simulated rvec
-      fit$param <- lapply(fit$param, function(par){par$rvec <- epp:::sim_rvec_rwproj(par$rvec, firstidx, lastidx, dt); par})
-    }
-    
-    fp.list <- lapply(fit$param, function(par) update(fit$fp, list=par))
-    fp.draw <- fp.list[[rand.draw]]
-  }else{
-    fp.draw <- fit$fp
+  
+  if(inherits(fit, "specopt"))
+    theta <- fit$par
+  else 
     theta <- fit$resample[rand.draw,]
-    # fp.draw$art_mort <- fp.draw$art_mort * exp(theta[2])
-    fp.draw$cd4_mort_adjust <- exp(theta[1])
-    fp.draw$cd4_mort_adjust <- 1
-    incrr_nparam <- getnparam_incrr(fp.draw)
-    paramcurr <- 2
-    if(incrr_nparam > 0){
-      fp.draw$incrr_sex = fp.draw$incrr_sex[1:fp.draw$SIM_YEARS]
-      fp.draw$incrr_age = fp.draw$incrr_age[,,1:fp.draw$SIM_YEARS]
-      param <- list()
-      param <- transf_incrr(theta[paramcurr + 1:incrr_nparam], param, fp.draw)
-      paramcurr <- paramcurr + incrr_nparam
-      fp.draw <- update(fp.draw, list = param)
-    }
-    nparam_eppmod <- get_nparam_eppmod(fp.draw)
-    nparam_diagn <- 0
-    fp.draw <- create_param_csavr(theta[paramcurr + 1:(nparam_eppmod + nparam_diagn)], fp.draw)
-    
-    
-  }
-
+  
+  fp.draw <- fnCreateParam(theta, fit$fp)
   mod <- simmod(fp.draw, VERSION = VERSION)
-  attr(mod, 'theta') <- fit$resample[rand.draw,]
+  attr(mod, 'theta') <- theta
   return(mod)
 }
 

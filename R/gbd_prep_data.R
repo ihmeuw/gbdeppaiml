@@ -12,12 +12,12 @@ find_pjnz <- function(loc){
   
   unaids.year <- loc.table[ihme_loc_id == temp.loc, unaids_recent]
   ## TODO: What is wrong with the 2018 ZAF file?
-  if(grepl('ZAF', loc)){unaids.year = 2017}
-  if(unaids.year %in% 2017:2018) {
-    dir <- paste0("/home/j/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/UNAIDS_country_data/", unaids.year, "/")
+  if(unaids.year %in% 2016:2019) {
+    dir <- paste0("/home/j/DATA/UNAIDS_ESTIMATES/", unaids.year, "/", temp.loc, '/')
   } else {
-    dir <- paste0("/home/j/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/UNAIDS_country_data/", unaids.year, "/", temp.loc, "/")        
+    dir <- paste0("/ihme/limited_use/LIMITED_USE/PROJECT_FOLDERS/UNAIDS_ESTIMATES/", unaids.year, "/", temp.loc, "/")        
   }
+  
   if(file.exists(dir)) {
     pjnz.list <- list.files(dir, pattern = "PJNZ", full.names = T)
     file.list <- grep(temp.loc, pjnz.list, value = T)

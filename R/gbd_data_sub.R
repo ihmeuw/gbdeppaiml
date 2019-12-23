@@ -72,16 +72,32 @@ append.ciba.incrr <- function(dt, loc, run.name){
 append.diagn <- function(dt, loc, run.name){
   diagn.dt <- fread(paste0('/share/hiv/epp_input/gbd19/', run.name, '/fit_data/', loc, '.csv'))
   diagn.dt <- diagn.dt[ihme_loc_id == loc & model == 'Case Report',.(sex, mean, year)]
+  if(nrow(diagn.dt) > 0){
   diagn.mat <- dcast(diagn.dt, sex ~year, value.var = 'mean')
   diagn.mat[, sex := NULL]
   diagn.mat <- as.matrix(diagn.mat)
   attr(dt, 'eppd')$diagnoses <- diagn.mat
+  }
   return(dt)
 }
 
 append.vr <- function(dt, loc, run.name){
   years <- start.year:stop.year
   cod.dt <- fread(paste0('/share/hiv/epp_input/gbd19/', run.name, '/fit_data/', loc, '.csv'))
+  
+  ##India is not ready yet
+  if(grepl(loc,"IND")){
+    children = loc.table[parent_id==4841,location_id]
+    cod_dt = fread("/share/hiv/data/india_test_data.csv")[location_id %in% children]
+    cod_dt[,.()]
+    cod_dt = cod_dt[!age_name %in% c("Post Netonatal", "1 to 4", "5 to 9", "10 to 14",
+                                     "All Ages", "Age-standardized", "80 to 84", "85 to 89", "90 to 94",
+                                     "95 plus")] 
+    cod_dt = cod_dt[,list(raw_deaths = sum(raw_deaths,na.rm=TRUE)), by=c("year","sex")]
+    cod_dt[]
+  }
+  
+
   cod.dt <- cod.dt[year > 1980 & model == 'VR' & age_group_id >= 8 & metric == 'Count' & age_group_id != 22,.(mean, age, sex, year, age_group_id)]
   cod.dt[age_group_id >= 30, age := '80']
   cod.dt <- cod.dt[,.(mean = sum(mean)), by = c('age', 'sex', 'year')]

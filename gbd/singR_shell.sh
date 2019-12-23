@@ -5,4 +5,4 @@ export SINGULARITYENV_orig_umask=$(umask)
 # ls /ihme/* 1>/dev/null
 # ls /home/j 1>/dev/null
 run_file="$1"; shift
-singularity exec /ihme/singularity-images/hiv/hiv_11.img /usr/local/bin/R <$run_file  --no-save --args $@
+singularity exec --bind /tmp:/tmp /ihme/singularity-images/hiv/hiv_11.img /usr/local/bin/R <$run_file  --no-save --args $@

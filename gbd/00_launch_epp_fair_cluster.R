@@ -10,12 +10,12 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 library(data.table)
 
 ## Arguments
-run.name <- "190503_all"
+run.name <- "191218_group2_tests"
 compare.run <- NA
 proj.end <- 2019
-n.draws <- 100
+n.draws <- 1
 run.group2 <- TRUE
-paediatric <- TRUE
+paediatric <- FALSE
 cluster.project <- "proj_hiv"
 
 ### Paths
@@ -32,7 +32,9 @@ loc.table <- data.table(get_locations(hiv_metadata = T))
 
 ### Code
 epp.list <- sort(loc.table[epp == 1, ihme_loc_id])
-loc.list <- c('NLD', 'AUS')
+
+locs = gsub(".rds","",list.files("/share/hiv/data/PJNZ_EPPASM_prepped_2a/"))
+loc.list = locs
 
 # Cache inputs
 if(!file.exists(paste0(input.dir, "population/"))) {
@@ -71,7 +73,8 @@ if(!file.exists(paste0(input.dir, 'art_prop.csv'))){
 ## Launch EPP
 for(loc in loc.list) {
     ## Run EPPASM
-    epp.string <- paste0("qsub -l m_mem_free=1G -l fthread=1 -l h_rt=04:00:00 -l archive -q all.q -P ", cluster.project, " ",
+    epp.string <- paste0("qsub -l m_mem_free=1G -l fthread=1 -l h_rt=04:00:00 -l archive -q all.q -P ", 
+                         cluster.project, " ",
                          "-e /share/temp/sgeoutput/", user, "/errors ",
                          "-o /share/temp/sgeoutput/", user, "/output ",
                          "-N ", loc, "_eppasm ",
@@ -87,7 +90,7 @@ for(loc in loc.list) {
     draw.string <- paste0("qsub -l m_mem_free=2G -l fthread=1 -l h_rt=00:10:00 -q all.q -P ", cluster.project, " ",
                           "-e /share/temp/sgeoutput/", user, "/errors ",
                           "-o /share/temp/sgeoutput/", user, "/output ",
-                          "-N ", loc, "_save_draws ",
+                          "-N ", loc, "211`_save_draws ",
                           "-hold_jid ", loc, "_eppasm ",
                           code.dir, "gbd/singR_shell.sh ",
                           code.dir, "gbd/compile_draws.R ",
