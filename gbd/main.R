@@ -42,6 +42,7 @@ prev.sub <- TRUE
 sexincrr.sub <- TRUE
 plot.draw <- FALSE
 anc.prior.sub <- TRUE
+lbd.anc <- TRUE
 geoadjust <- c.args[['anc_sub']]
 anc.sub <- c.args[['anc_sub']]
 anc.backcast <- c.args[['anc_backcast']]
@@ -74,13 +75,16 @@ if(geoadjust & !loc %in% no_geo_adj){
   geoadjust  <- FALSE
 }
 
+if(!loc %in% unlist(strsplit(list.files('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/'), '.rds'))){
+  lbd.anc <- FALSE
+}
 
 ### Code
 ## Read in spectrum object, sub in GBD parameters
 dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub, 
                        pop.sub, anc.sub, anc.backcast, prev.sub = TRUE, art.sub = TRUE, 
                        sexincrr.sub = TRUE, popadjust, age.prev = age.prev, paediatric = TRUE, 
-                       anc.prior.sub = TRUE)
+                       anc.prior.sub = TRUE, lbd.anc)
 
 
 
