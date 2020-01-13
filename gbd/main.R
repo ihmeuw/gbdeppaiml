@@ -20,7 +20,7 @@ if(length(args) > 0) {
   paediatric <- as.logical(args[4])
 } else {
 
-	run.name <- "190630_rhino2"
+	run.name <- "190630_rhino"
 	loc <- "SWZ"
 	stop.year <- 2019
 	i <- 1
