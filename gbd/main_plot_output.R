@@ -23,6 +23,7 @@ if(length(args) > 0) {
   run.name <- "191224_trumpet_temp"
   loc <- "AGO"
   draw.fill <- TRUE
+
   paediatric <- TRUE
   compare.run <- NA
 }
@@ -37,35 +38,25 @@ devtools::load_all()
 setwd(code.dir)
 devtools::load_all()
 
-####WILL NEED TO BE UPDATED LATER
-loc.table <- data.table(get_locations(hiv_metadata = T))
-epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
-epp.list <- epp.list[-grep('IND', epp.list)]
-loc.list <- epp.list
 
 
 
 
+loc.table <- fread(paste0('/share/hiv/epp_input/gbd19/', run.name, '/location_table.csv'))
+# 
+## 15-49 plots
+dir.create(paste0('/ihme/hiv/epp_output/gbd19/', run.name, '/15to49_plots/'), recursive = TRUE, showWarnings = FALSE)
+plot_15to49(loc, run.name, compare.run, paediatric, plot.deaths = FALSE)
 
+# Age-specific plots
+for(c.indicator in c( 'Prevalence','Incidence','Deaths')){
+  dir.create(paste0('/ihme/hiv/epp_output/gbd19/', run.name, '/age_specific_plots/', c.indicator, '/'), recursive = TRUE, showWarnings = FALSE)
+}
+plot_age_specific(loc, run.name, compare.run, paediatric)
 
-  # 
-  ## 15-49 plots
-  dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name.new, '/15to49_plots/'), recursive = TRUE, showWarnings = FALSE)
-  plot_15to49(loc, run.name.old, compare.run = '190630_rhino2', paediatric, plot.deaths = FALSE, new.run = run.name.new, compare.stage2 = FALSE)
-  
-  # Age-specific plots
-  for(c.indicator in c( 'Prevalence','Incidence','Deaths')){
-    dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name.new, '/age_specific_plots/', c.indicator, '/'), recursive = TRUE, showWarnings = FALSE)
-  }
-  plot_age_specific(loc, run.name.old = run.name.old, compare.run, paediatric, run.name.new = run.name.new)
-  
-  ## Birth prevalence
-  dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name.new, '/paeds_plots/'), showWarnings = F)
-  plot_birthprev(loc, run.name.old = run.name.old, run.name.new = run.name.new)
-  
-
-
-
+## Birth prevalence
+dir.create(paste0('/ihme/hiv/epp_output/gbd19/', run.name, '/paeds_plots/'), showWarnings = F)
+plot_birthprev(loc, run.name)
 
 
 # CIBA/Spectrum comparison plots
@@ -106,6 +97,34 @@ loc.list <- epp.list
 # setnames(comb2,c("variable","value"),c("sex_id","perc_change"))
 # comb2[,sex_id := as.integer(sex_id)]
 # combined.dt <- merge(combined.dt,comb2,by=c("year_id","sex_id"))
+<<<<<<< HEAD
+=======
+# 
+# comb2 <- dcast(combined.dt[,.(run,mean_value, year_id,sex_id)], year_id ~ run + sex_id , value.var = c("mean_value"))
+# comb2[,perc_ch1 := (GBD17_1-GBD19_1)]
+# comb2[,perc_ch2 := (GBD17_2-GBD19_2)]
+# comb2 <- melt(comb2[,.(perc_ch1,perc_ch2,year_id)],id.vars = "year_id")
+# comb2[,variable := ifelse(variable=="perc_ch1",1,2)]
+# setnames(comb2,c("variable","value"),c("sex_id","abs_change"))
+# comb2[,sex_id := as.integer(sex_id)]
+# 
+# combined.dt <- merge(combined.dt,comb2,by=c("year_id","sex_id"))
+# 
+# d4 <- melt(combined.dt[,.(year_id,sex_id,mean_value,perc_change,abs_change,run)], id.vars=c("year_id","sex_id","run"))
+# 
+# if(grepl("IND",loc)){
+#   cutoff  <- 1990
+# } else {
+#   cutoff <- 1980
+# }
+# 
+# pdf(paste0('/ihme/hiv/epp_output/gbd19/', run.name, '/hivq15_plots/', loc, '.pdf'), width = 10, height = 6)
+# gg <- ggplot(d4[year_id >= cutoff]) + geom_line(aes(year_id,value, color=run)) +
+#     facet_wrap(~variable + sex_id,scales = "free_y",nrow=3) +
+#     ggtitle(plot_title) + theme_bw() 
+# print(gg)
+# dev.off()
+>>>>>>> 2019_decomp4
 # 
 # comb2 <- dcast(combined.dt[,.(run,mean_value, year_id,sex_id)], year_id ~ run + sex_id , value.var = c("mean_value"))
 # comb2[,perc_ch1 := (GBD17_1-GBD19_1)]
@@ -146,4 +165,20 @@ loc.list <- epp.list
 
 
 
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> 2019_decomp4
 

@@ -18,6 +18,7 @@ if(length(args) > 0) {
   loc <- "SSD"
   unaids_year <- 2019
 
+
 }
 ### Functions
 library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
@@ -30,7 +31,16 @@ devtools::load_all()
 loc.table <- data.table(get_locations(hiv_metadata = T))
 dir.create(paste0("/share/hiv/data/PJNZ_prepped/",unaids_year,"/"),recursive = TRUE)
 
-loc.table[grepl("1",group) & epp==1 & grepl("KEN",ihme_loc_id),ihme_loc_id]
+
+if(grepl('1', loc.table[ihme_loc_id == loc, group])){
+  if(!grepl('IND', loc)){
+    val <- prepare_spec_object(loc)
+  }else{
+    val <- prepare_spec_object_ind(loc)
+  }
+}else{
+  val <- prepare_spec_object_group2(loc)
+}
 
 loc.list = loc.table[unaids_recent==2019 & grepl("1",group) & epp==1,ihme_loc_id]
 

@@ -30,6 +30,7 @@ gbdyear <- "gbd20"
 input.dir <- paste0("/ihme/hiv/epp_input/", gbdyear, '/', run.name, "/")
 dir.create(input.dir, recursive = TRUE, showWarnings = FALSE)
 dir <- paste0("/ihme/hiv/epp_output/", gbdyear, '/', run.name, "/")
+
 dir.create(dir, showWarnings = FALSE)
 
 ### Functions
@@ -56,25 +57,16 @@ for(loc in loc.list) {
                        "-o /share/temp/sgeoutput/", user, "/output ",
                        "-N ", loc, "_plot_art ",
                        code.dir, "gbd/singR_shell.sh ",
-                       paste0(paste0("/ihme/homes/", user), "/hiv_gbd2019/01_prep/plot_ART.R ",
+             paste0(paste0("/ihme/homes/", user), "/hiv_gbd2019/01_prep/plot_ART.R "),
                        "2019 ", loc, " ", "2017", " ",run.name)
-  print(art.string)
-  system(art.string)
-
+  print(art.string )
+  system(art.string )
 }
 
-plot.dir <- paste0("/ihme/hiv/epp_input/", gbdyear, '/',run.name,"/art_plots/")
+plot.dir <- paste0("/ihme/hiv/epp_input/gbd19/",run.name,"/art_plots/")
 setwd(plot.dir)
 # Combine location-specific plots
 system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=art_plots.pdf -f *"))
-system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=Deaths_plots.pdf -f *"))
-
-
-plot.dir <- paste0("/ihme/hiv/epp_output/", gbdyear, '/',run.name,"/15to49_plots/")
-setwd(plot.dir)
-# Combine location-specific plots
-system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=15to49_plots.pdf -f *"))
-
 # Move to parent directory
 system(paste0("mv ", plot.dir, "/art_plots.pdf ",input.dir,"/"))
 # Delete location specific plots
@@ -117,6 +109,7 @@ if(!file.exists(paste0(input.dir, 'art_prop.csv'))){
   system(prop.job)
 }
 
+
 ## Launch EPP
 for(loc in loc.list) {    ## Run EPPASM
 
@@ -156,6 +149,7 @@ for(loc in loc.list) {    ## Run EPPASM
     print(plot.string)
     system(plot.string)
 
+
  
      
 }
@@ -185,6 +179,7 @@ check_loc_results(loc.table[grepl("1",group) & spectrum==1,ihme_loc_id],paste0('
   plot.holds <- paste(paste0(loc.list, '_plot_eppasm'), collapse = ",")
   plot.string <- paste0("qsub -l m_mem_free=1G -l fthread=1 -l h_rt=00:35:00 -q all.q -P ", cluster.project, " ",
                         "-e /share/homes/", user, "/errors ",
+
                         "-o /share/temp/sgeoutput/", user, "/output ",
                         "-N ", "compile_plots_eppasm ",
                         "-hold_jid ", plot.holds, " ",

@@ -8,6 +8,7 @@ code.dir <- paste0(ifelse(windows, "H:", paste0("/homes/", user)), "/gbdeppaiml/
 library(data.table); library(mvtnorm); library(survey);library(assertable)
 print('Packages loaded')
 
+
 ## Arguments
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
@@ -47,6 +48,7 @@ fill_draws <- function(fill.dt,type=NULL){
     if(type=="adult"){
     missing_spec <- data.table(ihme_loc_id=rep(loc,length(missing)), missing=need.draws)
     write.csv(missing_spec,paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, "/", loc,"/missing_or_neg_draws.csv"),row.names = FALSE)
+
     }
   }
   return(fill.dt)

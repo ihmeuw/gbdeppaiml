@@ -45,6 +45,7 @@ anc.prior.sub = TRUE, lbd.anc = FALSE){
 
   }
 
+
  ## Substitute IHME data
   ## Population parameters
   if(pop.sub){
@@ -102,11 +103,18 @@ anc.prior.sub = TRUE, lbd.anc = FALSE){
       print("Merging ANC bias offsets")
       
       dt <- geo_adj(loc, dt, j, uncertainty=TRUE)
+
     } 
     
     if(sexincrr.sub){
       print('Substituting sex incrr')
       dt <- sub.sexincrr(dt, loc, j)
+    }
+    
+    if(anc.prior.sub){
+      print("Substituting ANC bias prior")
+      dt <- gbdeppaiml::sub.anc.prior(dt,loc)
+
     }
     
     if(anc.prior.sub){

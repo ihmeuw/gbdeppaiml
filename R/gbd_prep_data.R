@@ -72,23 +72,15 @@ find_pjnz <- function(loc){
     file.list <-  pjnz.list[which(grepl(paste0(toupper(loc.name),"_"), pjnz.list))]
    
   }
-    
-  if(grepl("NGA",loc)){
-    if(loc.name == "FCT (Abuja)"){
-    loc.name <- "Abuja"
-    file.list <-  file.list[which(grepl(paste0(loc.name), file.list))]
-    }   
-    if(loc.name == "Akwa Ibom"){
-      loc.name <- "AKWALBOM"
-      file.list <-  file.list[which(grepl(paste0(loc.name), file.list))]
-    } 
-    
-    if(loc.name == "Cross River"){
-      loc.name <- "Cross_River"
-      file.list <-  file.list[which(grepl(paste0(loc.name), file.list))]
-    } 
-    file.list <-  pjnz.list[which(grepl(paste0(toupper(loc.name),"_"), pjnz.list))]
-    
+
+  ##This may be requried for the 2018 files, or just rename
+  # if(loc.name=="Niger" | loc.name=="Guinea"| 
+  #    loc.name=="Congo" | loc.name=="Sudan"){
+  #   file.list <-  pjnz.list[which(grepl(paste0("/", loc.name,"_"), pjnz.list))]
+  # }
+  
+  if(loc.name=="Niger" ){
+    file.list <-  pjnz.list[which(grepl(paste0("/", loc.name,"_"), pjnz.list))]
   }
       
   if(grepl("KEN",loc)){
@@ -141,6 +133,7 @@ find_pjnz <- function(loc){
       loc.name <- paste(unlist(strsplit(toupper(loc.name), split = ' ')), collapse = '_')
       file.list <- pjnz.list[which(grepl((loc.name), pjnz.list))]
     }
+
     if(loc.name == 'Sudan'){
       file.list <- file.list[!grepl('South', file.list)]
     }
@@ -177,30 +170,31 @@ collapse_epp <- function(loc){
   
   cc <- attr(eppd.list[[1]], 'country_code')
 
-  #subpop.tot <- loc
-  
-  # eppd.tot <- eppd.list
-  # names(eppd.tot) <- names(eppd.list[[1]])
-  # 
-  # if(length(file.list) > 1){
-  #   add_index <<- TRUE
-  #   for(kk in 1:length(eppd.list)){
-  #     attr(eppd.tot[[kk]],"subpop") <-   names(eppd.list[[kk]][1])
-  #   }
-  # } else {
-  #   add_index <<- FALSE
-  #   eppd.tot <- eppd.list[[1]]
-  #   names(eppd.tot) <- names(eppd.list[[1]])
-  #   
-  #   for(kk in 1:length(names(eppd.tot))){
-  #     attr(eppd.tot[[kk]],"subpop") <- names(eppd.tot)[[kk]]
-  #   }
-  #   
-  # }
 
-  ancsitedat <- melt_ancsite_data(eppd = eppd.list)
-  hhsdat <-  tidy_hhs_data(eppd.list, add_index = add_index)
+  subpop.tot <- loc
   
+  eppd.tot <- eppd.list
+  names(eppd.tot) <- names(eppd.list)
+  
+  if(length(file.list) > 1){
+    add_index <<- TRUE
+    for(kk in 1:length(eppd.list)){
+      attr(eppd.tot[[kk]],"subpop") <-   names(eppd.list[[kk]])[1]
+    }
+  } else {
+    add_index <<- FALSE
+    eppd.tot <- eppd.list[[1]]
+    names(eppd.tot) <- names(eppd.list[[1]])
+    
+    for(kk in 1:length(names(eppd.tot))){
+      attr(eppd.tot[[kk]],"subpop") <- names(eppd.tot)[[kk]]
+    }
+    
+  }
+
+  ancsitedat <- melt_ancsite_data(eppd.tot, add_index = add_index)
+  hhsdat <-  tidy_hhs_data(eppd.tot, add_index = add_index)
+
   eppd.list <- unlist(eppd.list,recursive = FALSE)
   eppd.tot <- eppd.list[1]
   subpop.tot <- loc

@@ -401,6 +401,7 @@ sub.paeds <- function(dt, loc, k, start.year = 1970, stop.year = stop.year){
   #art <- extend.years(art, years)
   setnames(art, old = 'year_id', new = 'year')
   
+
   if(min(art$year) > start.year){
     backfill <- data.table(year = start.year:(min(art$year) - 1))
     backfill <- backfill[, names(art)[!names(art) == 'year'] := 0]
@@ -525,6 +526,7 @@ sub.paeds <- function(dt, loc, k, start.year = 1970, stop.year = stop.year){
 
 sub.pop.params.specfp <- function(fp, loc, k){
   dir <- paste0('/share/hiv/epp_input/', gbdyear ,'/', run.name, '/')
+
   
   ## Population
   years <- start.year:stop.year
@@ -910,6 +912,7 @@ geo_adj <- function(loc, dt, i, uncertainty) {
       setnames(anc.dt.all,c("clinic","year_id"),c("site","year"))
       
     }
+
     eppd <- attr(dt, "eppd")
   
     # Collapse up to single provincial ANC site for ZAF and SWZ - NEED TO DECIDE WHETHER TO DO THIS GOING FORWARD
@@ -966,6 +969,7 @@ geo_adj <- function(loc, dt, i, uncertainty) {
       for(row in 1:nrow(anc.dt.all)){
         if(!is.na(anc.dt.all[row,adm0_mean])){
           set.seed(j)
+
           lower <- anc.dt.all[row,adm0_lower]
           upper <- anc.dt.all[row,adm0_upper]
           replace <- sample(runif(1000,lower,upper),1)
@@ -1042,6 +1046,7 @@ geo_adj <- function(loc, dt, i, uncertainty) {
         all.anc[,c('adm0_mean','adm0_lower','adm0_upper') := NULL] 
         
       }
+
      
      ##This corrects a mistake in the file generation - should be corrected in the initial generation
      if(loc=="NGA_25332"){
@@ -1053,6 +1058,7 @@ geo_adj <- function(loc, dt, i, uncertainty) {
      
      
      eppd$ancsitedat <- unique(all.anc)
+
      
      attr(dt, "eppd") <- eppd
 
@@ -1071,6 +1077,7 @@ geo_adj <- function(loc, dt, i, uncertainty) {
     for(c.year in c('UNAIDS_2019', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
       #art.path <-paste0(root, "WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/extrapolate_ART/PV_testing/", c.year, "/", temp.loc, "_Adult_ART_cov.csv") 
       art.path <-paste0('/ihme/homes/mwalte10/', "04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/extrapolate_ART/PV_testing/", c.year, "/", temp.loc, "_Adult_ART_cov.csv") 
+
       if(file.exists(art.path)){
         print(c.year)
         art.dt <- fread(art.path)
@@ -1130,7 +1137,6 @@ geo_adj <- function(loc, dt, i, uncertainty) {
     }
     return(dt)
   }
-  
   
   
   

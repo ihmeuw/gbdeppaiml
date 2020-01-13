@@ -15,6 +15,7 @@ plot_15to49_draw <- function(loc, output, eppd, run.name, compare.run = '190630_
     data <- fread(paste0('/share/hiv/epp_input/gbd20/', run.name, '/fit_data/', loc1, '.csv'))
     } else {
     data <- fread(paste0('/share/hiv/epp_input/gbd20/', run.name, '/fit_data/', loc, '.csv'))
+
   }
   
   data <- data[agegr == '15-49']
@@ -91,6 +92,7 @@ plot_15to49 <- function(loc="IND_4854", run.name.old="190630_rhino2",  compare.r
     data <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/', new.run, '/fit_data/', loc1, '.csv'))
   } else {
     data <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/', new.run, '/fit_data/', loc, '.csv'))
+
   }
   
   data <- data[metric == 'Rate']
@@ -143,7 +145,6 @@ plot_15to49 <- function(loc="IND_4854", run.name.old="190630_rhino2",  compare.r
       compare.dt <- compare.dt[age_group_id == 24 & sex == 'both' & measure %in% meas.list & metric == "Rate",.(type = 'line', year, indicator = measure, model = compare.run, mean, lower, upper)]
     }else{compare.dt = NULL}
     }
-  
 
   # 
   ##will need to be changed
@@ -178,10 +179,13 @@ plot_15to49 <- function(loc="IND_4854", run.name.old="190630_rhino2",  compare.r
   cur.dt <- get_summary(cur.dt, loc, run.name.old = run.name.old, run.name.new = run.name.new,  paediatric)
   cur.dt <- cur.dt[age_group_id == 24 & sex == 'both' & measure %in% meas.list & metric == "Rate",.(type = 'line', year, indicator = measure, model = run.name, mean, lower, upper)]
   
-  ##hard coding compare.dt.unaids out
-  #plot.dt <- rbind(data, compare.dt.17, compare.dt, cur.dt, compare.dt.unaids, use.names = T, fill = T)
-  plot.dt <- rbind(data, compare.dt, cur.dt, compare.dt.s2, use.names = T, fill = T)
+
   
+  plot.dt <- rbind(data, compare.dt.17, compare.dt, cur.dt, compare.dt.unaids, use.names = T)
+  plot.dt[,model := factor(model)]
+  color.list <- c('blue', 'red', 'purple', 'green')
+  names(color.list) <- c(run.name, 'GBD2017', 'UNAIDS18', compare.run)
+
   plot.dt[,model := factor(model)]
   # color.list <- c('blue', 'red', 'purple', 'green')
   # names(color.list) <- c(run.name, 'GBD2018', 'UNAIDS18', compare.run)
@@ -344,6 +348,7 @@ plot_age_specific <- function(loc, run.name.old, compare.run = '191002_sitar', p
     data <- fread(paste0('/share/hiv/epp_input/gbd19/', run.name.old, '/fit_data/', loc1, '.csv'))
   } else {
     data <- fread(paste0('/share/hiv/epp_input/gbd19/', run.name.old, '/fit_data/', loc, '.csv'))
+
   }
   
   if('Case Report' %in% data$model & c.metric == 'Rate'){
@@ -419,6 +424,7 @@ plot_age_specific <- function(loc, run.name.old, compare.run = '191002_sitar', p
   
   cur.dt <- fread(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name.new, '/compiled/', loc, '.csv'))
   cur.dt <- get_summary(cur.dt,  loc, run.name.old = run.name.old, run.name.new = run.name.new, paediatric)
+
   cur.dt <- cur.dt[measure %in% c('Incidence', 'Prevalence', 'Deaths') & metric == c.metric,
                    .(age, sex, type = 'line', year, indicator = measure, model = run.name, mean, lower, upper)]
   
@@ -437,6 +443,7 @@ plot_age_specific <- function(loc, run.name.old, compare.run = '191002_sitar', p
   for(c.indicator in c('Incidence', 'Prevalence', 'Deaths')){
     if(!dir.exists(paste0('ihme/hiv/epp_output/', gbdyear, '/', run.name.new, '/age_specific_plots/', c.indicator, '/'))){dir.create(paste0('ihme/hiv/epp_output/', gbdyear, '/', run.name.new, '/age_specific_plots/', c.indicator, '/'), recursive = TRUE)}
     pdf(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name.new, '/age_specific_plots/', c.indicator, '/', loc, '.pdf'), width = 10, height = 6)
+
     for(c.sex in c('male', 'female', 'both')){
       plot.dt <- both.dt[sex == c.sex & indicator == c.indicator]
       gg <- ggplot()
@@ -470,6 +477,7 @@ plot_age_specific <- function(loc, run.name.old, compare.run = '191002_sitar', p
 }
 plot_birthprev <- function(loc, run.name.old, run.name.new){
   cur.dt <- fread(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name.new, '/compiled/', loc, '.csv'))
+
   cur.dt <- cur.dt[,.(birth_prev = sum(birth_prev), hiv_births = sum(hiv_births), total_births = sum(total_births)), by = c('year', 'run_num')]
   cur.dt <- cur.dt[,.(birth_prev = mean(birth_prev), hiv_births = mean(hiv_births), total_births = mean(total_births)), by = c('year')]
   cur.dt[, model := run.name.new]
