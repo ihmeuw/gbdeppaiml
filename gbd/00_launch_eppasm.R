@@ -12,11 +12,11 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 library(data.table)
 
 ## Arguments
-run.name <- "190630_rhino2"
+run.name <- "190630_rhino"
 spec.name <- "190630_rhino"
 compare.run <- NA
 proj.end <- 2019
-n.draws <- 1000
+n.draws <- 1
 run.group2 <- FALSE
 paediatric <- TRUE
 cluster.project <- "proj_hiv"
@@ -24,6 +24,7 @@ plot_ART <- FALSE
 est_India <- FALSE
 reckon_prep <- TRUE
 decomp.step <- "step4"
+
 
 
 ### Paths
@@ -114,7 +115,7 @@ if(!file.exists(paste0(input.dir, 'art_prop.csv'))){
 for(loc in loc.list) {    ## Run EPPASM
 
       epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q all.q -P ", cluster.project, " ",
-                           "-e /share/homes/djahag/errors ",
+                           "-e /share/homes/mwalte10/errors ",
                            "-o /share/temp/sgeoutput/", user, "/output ",
                            "-N ", loc, "_eppasm ",
                            "-t 1:", n.draws, " ",
@@ -125,29 +126,29 @@ for(loc in loc.list) {    ## Run EPPASM
       print(epp.string)
       system(epp.string)
 
-    # # ## Draw compilation
-     draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
-                           "-e /share/homes/djahag/errors ",
-                           "-o /share/temp/sgeoutput/", user, "/output ",
-                           "-N ", loc, "_save_draws ",
-                           "-hold_jid ", loc, "_eppasm ",
-                          code.dir, "gbd/singR_shell.sh ",
-                           code.dir, "gbd/compile_draws.R ",
-                           run.name, " ", loc, ' ', n.draws, ' TRUE ', paediatric)
-     print(draw.string)
-     system(draw.string)
- 
-     plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
-                           "-e /share/homes/djahag/errors ",
-                           "-o /share/temp/sgeoutput/", user, "/output ",
-                           "-N ", loc, "_plot_eppasm ",
-                           "-hold_jid ", loc, "_save_draws ",
-                           code.dir, "gbd/singR_shell.sh ",
-                           code.dir, "gbd/main_plot_output.R ",
-                           loc, " ", run.name, ' ', paediatric, ' ', compare.run)
-     print(plot.string)
-     system(plot.string)
-     
+    # # # ## Draw compilation
+    #  draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
+    #                        "-e /share/homes/djahag/errors ",
+    #                        "-o /share/temp/sgeoutput/", user, "/output ",
+    #                        "-N ", loc, "_save_draws ",
+    #                        "-hold_jid ", loc, "_eppasm ",
+    #                       code.dir, "gbd/singR_shell.sh ",
+    #                        code.dir, "gbd/compile_draws.R ",
+    #                        run.name, " ", loc, ' ', n.draws, ' TRUE ', paediatric)
+    #  print(draw.string)
+    #  system(draw.string)
+    # 
+    #  plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
+    #                        "-e /share/homes/djahag/errors ",
+    #                        "-o /share/temp/sgeoutput/", user, "/output ",
+    #                        "-N ", loc, "_plot_eppasm ",
+    #                        "-hold_jid ", loc, "_save_draws ",
+    #                        code.dir, "gbd/singR_shell.sh ",
+    #                        code.dir, "gbd/main_plot_output.R ",
+    #                        loc, " ", run.name, ' ', paediatric, ' ', compare.run)
+    #  print(plot.string)
+    #  system(plot.string)
+    #  
  
      
 }
