@@ -28,7 +28,7 @@ if(length(args) > 0) {
 }
 
 run.table <- fread(paste0('/share/hiv/epp_input/gbd20/', run.name, '/eppasm_run_table.csv'))
-# c.args <- run.table[run_name==run.name]
+c.args <- run.table[run_name==run.name]
 
 
 ### Arguments
@@ -43,10 +43,9 @@ sexincrr.sub <- TRUE
 plot.draw <- FALSE
 anc.prior.sub <- TRUE
 lbd.anc <- T
-geoadjust <- c.args[['anc_sub']]
+geoadjust <- c.args[['geoadjust']]
 anc.sub <- c.args[['anc_sub']]
 anc.backcast <- c.args[['anc_backcast']]
-
 age.prev <- c.args[['age_prev']]
 popadjust <- c.args[['popadjust']]
 anc.rt <- c.args[['anc_rt']]
@@ -89,7 +88,7 @@ if(!loc %in% unlist(strsplit(list.files('/share/hiv/data/PJNZ_EPPASM_prepped_sub
 dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub, 
                        pop.sub, anc.sub, anc.backcast, prev.sub = TRUE, art.sub = TRUE, 
                        sexincrr.sub = TRUE,  age.prev = age.prev, paediatric = TRUE, 
-                       anc.prior.sub = TRUE, lbd.anc, geoadjust = geoadjust)
+                       anc.prior.sub = TRUE, lbd.anc, geoadjust = geoadjust, use_2019 = TRUE)
 #check_inputs(dt)
 if(geoadjust){
   attr(dt, 'eppd')$ancsitedat$offset <- attr(dt, 'eppd')$ancsitedat$offset %>% as.numeric()

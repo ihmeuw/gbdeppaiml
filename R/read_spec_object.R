@@ -3,7 +3,7 @@
 read_spec_object <- function(loc, j, start.year = 1970, stop.year, trans.params.sub = TRUE, 
                              pop.sub = TRUE,  prev.sub = TRUE, art.sub = TRUE, sexincrr.sub = TRUE, 
                              popadjust = TRUE, age.prev = FALSE, paediatric, anc.rt = FALSE, geoadjust=TRUE,
-anc.prior.sub = TRUE, lbd.anc = FALSE){
+anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE){
 
   
   print(age.prev)

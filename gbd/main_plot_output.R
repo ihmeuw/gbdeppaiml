@@ -97,8 +97,7 @@ plot_birthprev(loc, run.name)
 # setnames(comb2,c("variable","value"),c("sex_id","perc_change"))
 # comb2[,sex_id := as.integer(sex_id)]
 # combined.dt <- merge(combined.dt,comb2,by=c("year_id","sex_id"))
-<<<<<<< HEAD
-=======
+
 # 
 # comb2 <- dcast(combined.dt[,.(run,mean_value, year_id,sex_id)], year_id ~ run + sex_id , value.var = c("mean_value"))
 # comb2[,perc_ch1 := (GBD17_1-GBD19_1)]
@@ -124,7 +123,6 @@ plot_birthprev(loc, run.name)
 #     ggtitle(plot_title) + theme_bw() 
 # print(gg)
 # dev.off()
->>>>>>> 2019_decomp4
 # 
 # comb2 <- dcast(combined.dt[,.(run,mean_value, year_id,sex_id)], year_id ~ run + sex_id , value.var = c("mean_value"))
 # comb2[,perc_ch1 := (GBD17_1-GBD19_1)]
