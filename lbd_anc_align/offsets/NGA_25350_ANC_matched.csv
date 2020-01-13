@@ -1,0 +1,34 @@
+"clinic","year_id","used","n","type","agegr","age","agspan","site_pred","adm0_mean","adm0_lower","adm0_upper","ihme_loc_id","lbd_areal","lbd_missing","iso3","adm1_mean","adm1_lower","adm1_upper","iso3_adm1","loc_id_adm1"
+"Rivers (Bonny)",1995,TRUE,191,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Bori)",1999,TRUE,290,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Isiokpo)",1995,TRUE,259,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Nchia)",1995,TRUE,193,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Pt. Harcourt)",1999,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Pt. Harcourt)",1995,TRUE,756,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Bonny)",2001,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Bori)",2001,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Pt. Harcourt)",2001,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Bonny)",2003,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Bori)",2003,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Edeoha)",2003,TRUE,42,"ancss","15-49","15","35",0,0,0,0,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Pt. Harcourt)",2003,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Bonny)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Bori)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Ebere)",2005,TRUE,149,"ancss","15-49","15","35",0,0,0,0,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Edeoha)",2005,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Pt. Harcourt)",2005,TRUE,350,"ancss","15-49","15","35",0,0,0,0,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Bonny)",2008,TRUE,290,"ancss","15-49","15","35",0,0,0,0,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Bori)",2008,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Ebere)",2008,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Edeoha)",2008,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Pt. Harcourt)",2008,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Bonny)",2010,TRUE,304,"ancss","15-49","15","35",0,0,0,0,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Bori)",2010,TRUE,299,"ancss","15-49","15","35",0,0,0,0,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Ebere)",2010,TRUE,154,"ancss","15-49","15","35",0,0,0,0,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Edeoha)",2010,TRUE,158,"ancss","15-49","15","35",0,0,0,0,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Pt. Harcourt)",2010,TRUE,310,"ancss","15-49","15","35",0,0,0,0,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Bonny)",2014,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Bori)",2014,TRUE,317,"ancss","15-49","15","35",0,0,0,0,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Ebere)",2014,TRUE,170,"ancss","15-49","15","35",0,0,0,0,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Edeoha)",2014,TRUE,170,"ancss","15-49","15","35",0,0,0,0,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA
+"Rivers (Pt. Harcourt)",2014,TRUE,366,"ancss","15-49","15","35",0,0,0,0,"NGA_25350",0,0,"NGA_25350",NA,NA,NA,NA,NA

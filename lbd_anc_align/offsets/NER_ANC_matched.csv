@@ -1,0 +1,118 @@
+"clinic","year_id","used","n","type","agegr","age","agspan","site_pred","adm0_mean","adm0_lower","adm0_upper","ihme_loc_id","lbd_areal","lbd_missing","iso3","adm1_mean","adm1_lower","adm1_upper","iso3_adm1","loc_id_adm1"
+"Site 1 : Maradi",1995,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 1 : Maradi",1990,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 1 : Maradi",1993,TRUE,904,"ancss","15-49","15","35",NA,NA,NA,NA,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 2 : Niamey",1995,TRUE,680,"ancss","15-49","15","35",NA,NA,NA,NA,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 2 : Niamey",1999,TRUE,399,"ancss","15-49","15","35",NA,NA,NA,NA,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 2 : Niamey",1992,TRUE,800,"ancss","15-49","15","35",NA,NA,NA,NA,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 2 : Niamey",1993,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 3 : Tahoua",1993,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 3 : Tahoua",1995,TRUE,640,"ancss","15-49","15","35",NA,NA,NA,NA,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 3 : Tahoua",1992,TRUE,650,"ancss","15-49","15","35",NA,NA,NA,NA,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 3 : Tahoua",1999,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 4 : Zinder",1992,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 4 : Zinder",1994,TRUE,172,"ancss","15-49","15","35",NA,NA,NA,NA,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 4 : Zinder",1999,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 5 : Agadez",1997,TRUE,395,"ancss","15-49","15","35",NA,NA,NA,NA,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site  6 : Dosso",2000,TRUE,400,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 1 : Maradi",2000,TRUE,400,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 2 : Niamey",2000,TRUE,400,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 3 : Tahoua",2000,TRUE,400,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 4 : Zinder",2000,TRUE,400,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site7 : Konni",2000,TRUE,400,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site  16 : Tanout",2009,TRUE,247,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site  20 : Dakoro",2009,TRUE,249,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site  29 : Magaria",2009,TRUE,249,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site  30 : Miriah",2009,TRUE,251,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site  31 : Téssaoua",2009,TRUE,254,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 1 : Maradi",2009,TRUE,252,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 10 : Diffa",2009,TRUE,249,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 11 : Arlit",2009,TRUE,200,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 12  : Say",2009,TRUE,200,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 13 : Ouallam",2009,TRUE,112,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 14  : Dogondoutchi",2009,TRUE,250,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 15 : N'Guinguimi",2009,TRUE,133,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 17  : Bouza",2009,TRUE,251,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 18 : Niamey Commune 2",2009,TRUE,210,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 19  : Niamey Commune 1",2009,TRUE,200,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 21 : Gaya",2009,TRUE,250,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 22 : Loga",2009,TRUE,250,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 23 : Mayahi",2009,TRUE,251,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 24 : Niamey Commune 3",2009,TRUE,200,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 25 : Abalak",2009,TRUE,139,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 26 : Boboye",2009,TRUE,252,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 27 : Illéla",2009,TRUE,202,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 28 : Maïnésoroa",2009,TRUE,205,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 3 : Tahoua",2009,TRUE,250,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 32 : Fillingué",2009,TRUE,200,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 33 : Matameye",2009,TRUE,240,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 34 : Tchirozérine",2009,TRUE,162,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 35 : Téra",2009,TRUE,199,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 5 : Agadez",2009,TRUE,108,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 8 : Madaoua",2009,TRUE,249,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 9  : Gouré",2009,TRUE,180,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site7 : Konni",2009,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site  16 : Tanout",2012,TRUE,255,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site  20 : Dakoro",2012,TRUE,499,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site  29 : Magaria",2012,TRUE,253,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site  30 : Miriah",2012,TRUE,248,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site  31 : Téssaoua",2012,TRUE,468,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 1 : Maradi",2012,TRUE,525,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 10 : Diffa",2012,TRUE,442,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 11 : Arlit",2012,TRUE,309,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 12  : Say",2012,TRUE,446,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 13 : Ouallam",2012,TRUE,500,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 14  : Dogondoutchi",2012,TRUE,495,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 15 : N'Guinguimi",2012,TRUE,241,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 17  : Bouza",2012,TRUE,250,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 18 : Niamey Commune 2",2012,TRUE,368,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 19  : Niamey Commune 1",2012,TRUE,250,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 21 : Gaya",2012,TRUE,499,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 22 : Loga",2012,TRUE,497,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 23 : Mayahi",2012,TRUE,500,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 24 : Niamey Commune 3",2012,TRUE,502,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 25 : Abalak",2012,TRUE,188,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 26 : Boboye",2012,TRUE,490,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 27 : Illéla",2012,TRUE,50,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 28 : Maïnésoroa",2012,TRUE,368,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 3 : Tahoua",2012,TRUE,164,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 32 : Fillingué",2012,TRUE,503,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 33 : Matameye",2012,TRUE,277,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 34 : Tchirozérine",2012,TRUE,476,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 35 : Téra",2012,TRUE,495,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 5 : Agadez",2012,TRUE,362,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 8 : Madaoua",2012,TRUE,281,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 9  : Gouré",2012,TRUE,229,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site7 : Konni",2012,TRUE,259,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site  16 : Tanout",2014,TRUE,226,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site  20 : Dakoro",2014,TRUE,499,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site  29 : Magaria",2014,TRUE,472,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site  30 : Miriah",2014,TRUE,500,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site  31 : Téssaoua",2014,TRUE,501,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 1 : Maradi",2014,TRUE,500,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 10 : Diffa",2014,TRUE,500,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 11 : Arlit",2014,TRUE,369,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 12  : Say",2014,TRUE,449,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 13 : Ouallam",2014,TRUE,461,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 14  : Dogondoutchi",2014,TRUE,372,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 15 : N'Guinguimi",2014,TRUE,445,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 17  : Bouza",2014,TRUE,500,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 18 : Niamey Commune 2",2014,TRUE,582,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 19  : Niamey Commune 1",2014,TRUE,498,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 21 : Gaya",2014,TRUE,444,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 22 : Loga",2014,TRUE,444,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 23 : Mayahi",2014,TRUE,375,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 24 : Niamey Commune 3",2014,TRUE,500,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 25 : Abalak",2014,TRUE,265,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 26 : Boboye",2014,TRUE,451,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 27 : Illéla",2014,TRUE,506,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 28 : Maïnésoroa",2014,TRUE,504,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 3 : Tahoua",2014,TRUE,473,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 32 : Fillingué",2014,TRUE,505,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 33 : Matameye",2014,TRUE,498,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 34 : Tchirozérine",2014,TRUE,309,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 35 : Téra",2014,TRUE,493,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 5 : Agadez",2014,TRUE,466,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 8 : Madaoua",2014,TRUE,401,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site 9  : Gouré",2014,TRUE,256,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA
+"Site7 : Konni",2014,TRUE,253,"ancss","15-49","15","35",0,0,0,0,"NER",0,0,"NER",NA,NA,NA,NA,NA

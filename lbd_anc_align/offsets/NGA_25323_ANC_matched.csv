@@ -1,0 +1,24 @@
+"clinic","year_id","used","n","type","agegr","age","agspan","site_pred","adm0_mean","adm0_lower","adm0_upper","ihme_loc_id","lbd_areal","lbd_missing","iso3","adm1_mean","adm1_lower","adm1_upper","iso3_adm1","loc_id_adm1"
+"Bayelsa (Sagbama)",1999,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25323",0,0,"NGA_25323",NA,NA,NA,NA,NA
+"Bayelsa (Yenogoa)",1999,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25323",0,0,"NGA_25323",NA,NA,NA,NA,NA
+"Bayelsa (Sagbama)",2001,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25323",0,0,"NGA_25323",NA,NA,NA,NA,NA
+"Bayelsa (Yenogoa)",2001,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25323",0,0,"NGA_25323",NA,NA,NA,NA,NA
+"Bayelsa (Brass)",2003,TRUE,50,"ancss","15-49","15","35",0,0,0,0,"NGA_25323",0,0,"NGA_25323",NA,NA,NA,NA,NA
+"Bayelsa (Sagbama)",2003,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25323",0,0,"NGA_25323",NA,NA,NA,NA,NA
+"Bayelsa (Yenogoa)",2003,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25323",0,0,"NGA_25323",NA,NA,NA,NA,NA
+"Bayelsa (Amassoma)",2005,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25323",0,0,"NGA_25323",NA,NA,NA,NA,NA
+"Bayelsa (Brass)",2005,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25323",0,0,"NGA_25323",NA,NA,NA,NA,NA
+"Bayelsa (Sagbama)",2005,TRUE,299,"ancss","15-49","15","35",0,0,0,0,"NGA_25323",0,0,"NGA_25323",NA,NA,NA,NA,NA
+"Bayelsa (Yenogoa)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25323",0,0,"NGA_25323",NA,NA,NA,NA,NA
+"Bayelsa (Amassoma)",2008,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25323",0,0,"NGA_25323",NA,NA,NA,NA,NA
+"Bayelsa (Brass)",2008,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25323",0,0,"NGA_25323",NA,NA,NA,NA,NA
+"Bayelsa (Sagbama)",2008,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25323",0,0,"NGA_25323",NA,NA,NA,NA,NA
+"Bayelsa (Yenogoa)",2008,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25323",0,0,"NGA_25323",NA,NA,NA,NA,NA
+"Bayelsa (Amassoma)",2010,TRUE,141,"ancss","15-49","15","35",0,0,0,0,"NGA_25323",0,0,"NGA_25323",NA,NA,NA,NA,NA
+"Bayelsa (Brass)",2010,TRUE,92,"ancss","15-49","15","35",0,0,0,0,"NGA_25323",0,0,"NGA_25323",NA,NA,NA,NA,NA
+"Bayelsa (Sagbama)",2010,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25323",0,0,"NGA_25323",NA,NA,NA,NA,NA
+"Bayelsa (Yenogoa)",2010,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25323",0,0,"NGA_25323",NA,NA,NA,NA,NA
+"Bayelsa (Amassoma)",2014,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25323",0,0,"NGA_25323",NA,NA,NA,NA,NA
+"Bayelsa (Brass)",2014,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25323",0,0,"NGA_25323",NA,NA,NA,NA,NA
+"Bayelsa (Sagbama)",2014,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25323",0,0,"NGA_25323",NA,NA,NA,NA,NA
+"Bayelsa (Yenogoa)",2014,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25323",0,0,"NGA_25323",NA,NA,NA,NA,NA

@@ -42,6 +42,15 @@ gbd_sim_mod <-  function(fit, rwproj=fit$fp$eppmod == "rspline", VERSION = 'C'){
       ## replace rvec with random-walk simulated rvec
       fit$param <- lapply(fit$param, function(par){par$rvec <- epp:::sim_rvec_rwproj(par$rvec, firstidx, lastidx, dt); par})
     }
+    
+    if(dim(fit$fp$incrr_age)[3] < fit$fp$SIM_YEARS){
+      diff <- dim(fit$fp$incrr_age)[3] < fit$fp$SIM_YEARS
+      while(diff != 0 ){
+        fit$fp$incrr_age <- abind::abind(fit$fp$incrr_age, fit$fp$incrr_age[,,dim(fit$fp$incrr_age)[3]])
+        diff <- dim(fit$fp$incrr_age)[3] < fit$fp$SIM_YEARS
+        
+      }
+    }
     fit$fp$incrr_age <- fit$fp$incrr_age[,,1:fit$fp$SIM_YEARS]
     fp.list <- lapply(fit$param, function(par) update(fit$fp, list=par, keep.attr = FALSE))
     fp.draw <- fp.list[[rand.draw]]
@@ -328,9 +337,16 @@ get_summary <- function(output, loc, run.name.old, run.name.new, paediatric = FA
   output[age >= 5,age_gbd :=  age - age%%5]
   output[age %in% 1:4, age_gbd := 1]
   output[age == 0, age_gbd := 0 ]
-  output <- output[,.(pop = sum(pop), hiv_deaths = sum(hiv_deaths), non_hiv_deaths = sum(non_hiv_deaths), new_hiv = sum(new_hiv), pop_neg = sum(pop_neg),
-                      total_births = sum(total_births), hiv_births = sum(hiv_births), birth_prev = sum(birth_prev),
-                      pop_art = sum(pop_art), pop_gt350 = sum(pop_gt350), pop_200to350 = sum(pop_200to350), pop_lt200 = sum(pop_lt200)), by = c('age_gbd', 'sex', 'year', 'run_num')]
+  if(any(colnames(output) == 'pop')){
+    output <- output[,.(pop = sum(pop), hiv_deaths = sum(hiv_deaths), non_hiv_deaths = sum(non_hiv_deaths), new_hiv = sum(new_hiv), pop_neg = sum(pop_neg),
+                        total_births = sum(total_births), hiv_births = sum(hiv_births), birth_prev = sum(birth_prev),
+                        pop_art = sum(pop_art), pop_gt350 = sum(pop_gt350), pop_200to350 = sum(pop_200to350), pop_lt200 = sum(pop_lt200)), by = c('age_gbd', 'sex', 'year', 'run_num')]
+  }else{
+    output <- output[,.(hiv_deaths = sum(hiv_deaths),  new_hiv = sum(new_hiv), pop_neg = sum(pop_neg),
+                        total_births = sum(total_births), hiv_births = sum(hiv_births), birth_prev = sum(birth_prev),
+                        pop_art = sum(pop_art), pop_gt350 = sum(pop_gt350), pop_200to350 = sum(pop_200to350), pop_lt200 = sum(pop_lt200)), by = c('age_gbd', 'sex', 'year', 'run_num')]
+  }
+
   setnames(output, 'age_gbd', 'age')
   if(paediatric){
     output.u1 <- split_u1(output[age == 0], loc, run.name.old, run.name.new)
@@ -339,10 +355,16 @@ get_summary <- function(output, loc, run.name.old, run.name.new, paediatric = FA
   }
   output[, hivpop := pop_art + pop_gt350 + pop_200to350 + pop_lt200]
   output[,c('pop_gt350', 'pop_200to350', 'pop_lt200', 'birth_prev', 'pop_neg', 'hiv_births', 'total_births') := NULL]
-  output.count <- melt(output, id.vars = c('age', 'sex', 'year', 'pop', 'run_num'))
+  if(any(colnames(output) == 'pop')){
+    output.count <- melt(output, id.vars = c('age', 'sex', 'year', 'pop', 'run_num'))
+    
+  }else{
+    output.count <- melt(output, id.vars = c('age', 'sex', 'year',  'run_num'))
+    
+  }
   
 
-  age.map <- fread(paste0('/ihme/hiv/epp_input/gbd19/', run.name.old, "/age_map.csv"))
+  age.map <- fread(paste0('/ihme/hiv/epp_input/gbd19', '/', run.name.old, "/age_map.csv"))
   age.map[age_group_name_short == 'All', age_group_name_short := 'All']
   if(!paediatric){
     age.spec <- age.map[age_group_id %in% 8:21,.(age_group_id, age = age_group_name_short)]
@@ -354,16 +376,35 @@ get_summary <- function(output, loc, run.name.old, run.name.new, paediatric = FA
   output.count[, age := NULL]
   
   # Collapse to both sex
-  both.sex.dt <- output.count[,.(value = sum(value), pop = sum(pop)), by = c('year', 'variable', 'age_group_id', 'run_num')]
+  if(any(colnames(output) == 'pop')){
+    both.sex.dt <- output.count[,.(value = sum(value), pop = sum(pop)), by = c('year', 'variable', 'age_group_id', 'run_num')]
+    
+  }else{
+    both.sex.dt <- output.count[,.(value = sum(value)),  by = c('year', 'variable', 'age_group_id', 'run_num')]
+    
+  }
+  
   both.sex.dt[, sex := 'both']
   all.sex.dt <- rbind(output.count, both.sex.dt)
   
   # Collapse to all-ages and adults
-  all.age.dt <- all.sex.dt[,.(value = sum(value), pop = sum(pop)), by = c('year', 'variable', 'sex','run_num')]
-  all.age.dt[, age_group_id := 22]
+  if(any(colnames(output) == 'pop')){
+    all.age.dt <- all.sex.dt[,.(value = sum(value), pop = sum(pop)), by = c('year', 'variable', 'sex','run_num')]
+    all.age.dt[, age_group_id := 22]
+    
+    adult.dt <- all.sex.dt[age_group_id %in% 8:14, .(value = sum(value), pop = sum(pop)), by = c('year', 'variable', 'sex', 'run_num')]
+    adult.dt[, age_group_id := 24]
+    
+  }else{
+    all.age.dt <- all.sex.dt[,.(value = sum(value)), by = c('year', 'variable', 'sex','run_num')]
+    all.age.dt[, age_group_id := 22]
+    
+    adult.dt <- all.sex.dt[age_group_id %in% 8:14, .(value = sum(value)), by = c('year', 'variable', 'sex', 'run_num')]
+    adult.dt[, age_group_id := 24]
+    
+  }
   
-  adult.dt <- all.sex.dt[age_group_id %in% 8:14, .(value = sum(value), pop = sum(pop)), by = c('year', 'variable', 'sex', 'run_num')]
-  adult.dt[, age_group_id := 24]
+
   
   age.dt <- rbindlist(list(all.sex.dt, all.age.dt, adult.dt), use.names = T)
   

@@ -15,7 +15,29 @@ read_spec_object <- function(loc, j, start.year = 1970, stop.year, trans.params.
   }
 
   if(lbd.anc){
-    attr(dt, 'eppd')$ancsitedat <- as.data.frame(readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/offset/', loc, '.rds')))
+    rt <- subset(attr(dt, 'eppd')$ancsitedat, type == 'ancrt')
+    if(nrow(rt) != 0){
+      replace <- as.data.frame(readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/offset/', loc, '.rds')))
+      replace <- as.data.table(replace)
+      replace[,'age' := as.numeric(replace[,age])]
+      replace[,'agspan' := as.numeric(replace[,agspan])]
+      replace[,'site' := as.character(replace[,site])]
+      rt <- as.data.table(rt)
+      rt[,'site' := as.character(site)]
+      rt <- rt[,c('adm0_mean', 'adm0_upper', 'adm0_lower', 'site_pred',  'site_year', 'ihme_loc_id', 'country') := NA]
+      rt <- rt[,c('high_risk') := FALSE]
+      
+      attr(dt, 'eppd')$ancsitedat <- rbind(rt, replace)
+    }else{
+      replace <- as.data.frame(readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/offset/', loc, '.rds')))
+      replace <- as.data.table(replace)
+      replace[,'age' := as.numeric(replace[,age])]
+      replace[,'agspan' := as.numeric(replace[,agspan])]
+      replace[,'site' := as.character(replace[,site])]
+      attr(dt, 'eppd')$ancsitedat <- replace
+      
+    }
+
   }
 
  ## Substitute IHME data
@@ -37,7 +59,7 @@ read_spec_object <- function(loc, j, start.year = 1970, stop.year, trans.params.
   ## Pediatric inputs
   if(paediatric){
     print('Preparing paediatric module inputs')
-    dt <- sub.paeds(dt, loc, j, start.year = 1970, stop.year = 2020)
+    dt <- sub.paeds(dt, loc, j, start.year = 1970, stop.year = stop.year)
   }
   ## Transition parameters
   if(trans.params.sub) {
@@ -68,8 +90,8 @@ read_spec_object <- function(loc, j, start.year = 1970, stop.year, trans.params.
     }
     
     ##adding in another placeholder arg
-    geoadjust <- TRUE
     ## ANC data
+
     if(geoadjust){
       
       print("Merging ANC bias offsets")
@@ -211,6 +233,31 @@ update_spectrum_fixpar <- function(specfp, hiv_steps_per_year = 10L, proj_start 
   specfp$SIM_YEARS <- ss$PROJ_YEARS
   specfp$proj.steps <- proj_start + 0.5 + 0:(ss$hiv_steps_per_year * (specfp$SIM_YEARS-1)) / ss$hiv_steps_per_year
   
+  ##extend fertility rate ratios if necessary
+  if(dim(specfp$frr_cd4)[3] < specfp$SIM_YEARS){
+    diff <-  specfp$SIM_YEARS - dim(specfp$frr_cd4)[3]
+    table <- matrix(specfp$frr_cd4[,,dim(specfp$frr_cd4)[3]], nrow = 7, ncol = 8)
+    while(diff != 0){
+      specfp$frr_cd4 <- abind::abind(specfp$frr_cd4, table)
+      diff <-  specfp$SIM_YEARS - dim(specfp$frr_cd4)[3]
+      
+    }
+
+  }
+  
+  if(dim(specfp$frr_art)[4] < specfp$SIM_YEARS){
+    diff <-  specfp$SIM_YEARS - dim(specfp$frr_art)[4]
+    table <- specfp$frr_art[,,,dim(specfp$frr_art)[4]]
+    while(diff != 0){
+      specfp$frr_art <- abind::abind(specfp$frr_art, table)
+      diff <-  specfp$SIM_YEARS - dim(specfp$frr_art)[4]
+      
+    }
+    
+  }
+  
+  
+
   specfp$frr_cd4 = specfp$frr_cd4[,,1:specfp$SIM_YEARS]
   specfp$frr_art = specfp$frr_art[,,,1:specfp$SIM_YEARS]
   ## ######################## ##

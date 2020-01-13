@@ -1,0 +1,109 @@
+"clinic","year_id","used","n","type","agegr","age","agspan","site_pred","adm0_mean","adm0_lower","adm0_upper","ihme_loc_id","lbd_areal","lbd_missing","iso3","adm1_mean","adm1_lower","adm1_upper","iso3_adm1","loc_id_adm1"
+"Mafeteng",1994,TRUE,325,"ancss","15-49","15","35",NA,NA,NA,NA,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Mafeteng",1991,TRUE,325,"ancss","15-49","15","35",NA,NA,NA,NA,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Mafeteng",1992,TRUE,325,"ancss","15-49","15","35",NA,NA,NA,NA,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Mafeteng",1993,TRUE,325,"ancss","15-49","15","35",NA,NA,NA,NA,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Mafeteng",1996,TRUE,325,"ancss","15-49","15","35",NA,NA,NA,NA,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Maluti",1991,TRUE,325,"ancss","15-49","15","35",NA,NA,NA,NA,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Maluti",1994,TRUE,325,"ancss","15-49","15","35",NA,NA,NA,NA,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Maluti",1996,TRUE,325,"ancss","15-49","15","35",NA,NA,NA,NA,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Maluti",1992,TRUE,325,"ancss","15-49","15","35",NA,NA,NA,NA,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Maluti",1993,TRUE,325,"ancss","15-49","15","35",NA,NA,NA,NA,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Motebang",1996,TRUE,325,"ancss","15-49","15","35",NA,NA,NA,NA,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Motebang",1991,TRUE,325,"ancss","15-49","15","35",NA,NA,NA,NA,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Motebang",1992,TRUE,325,"ancss","15-49","15","35",NA,NA,NA,NA,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Motebang",1993,TRUE,325,"ancss","15-49","15","35",NA,NA,NA,NA,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Motebang",1994,TRUE,325,"ancss","15-49","15","35",NA,NA,NA,NA,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Queen II",1992,TRUE,325,"ancss","15-49","15","35",NA,NA,NA,NA,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Queen II",1993,TRUE,325,"ancss","15-49","15","35",NA,NA,NA,NA,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Queen II",1994,TRUE,325,"ancss","15-49","15","35",NA,NA,NA,NA,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Queen II",1991,TRUE,325,"ancss","15-49","15","35",NA,NA,NA,NA,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Queen II",1996,TRUE,325,"ancss","15-49","15","35",NA,NA,NA,NA,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Quthing",1991,TRUE,325,"ancss","15-49","15","35",NA,NA,NA,NA,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Quthing",1992,TRUE,325,"ancss","15-49","15","35",NA,NA,NA,NA,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Quthing",1993,TRUE,325,"ancss","15-49","15","35",NA,NA,NA,NA,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Quthing",1996,TRUE,325,"ancss","15-49","15","35",NA,NA,NA,NA,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Quthing",1994,TRUE,325,"ancss","15-49","15","35",NA,NA,NA,NA,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Mafeteng",2000,TRUE,343,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Maluti",2000,TRUE,520,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Mokhotlong",2000,TRUE,407,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Motebang",2000,TRUE,461,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Queen II",2000,TRUE,500,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Quthing",2000,TRUE,400,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Mafeteng",2003,TRUE,400,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Maluti",2003,TRUE,407,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Mokhotlong",2003,TRUE,358,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Motebang",2003,TRUE,375,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Queen II",2003,TRUE,800,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Quthing",2003,TRUE,326,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Berea",2005,TRUE,466,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Mafeteng",2005,TRUE,446,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Maluti",2005,TRUE,498,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Mokhotlong",2005,TRUE,510,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Motebang",2005,TRUE,461,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Nts'ekhe (Mohale's Hoek)",2005,TRUE,417,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Paray",2005,TRUE,211,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Queen II",2005,TRUE,798,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Quthing",2005,TRUE,461,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"St.James",2005,TRUE,274,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Berea",2009,TRUE,181,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Butha-Buthe",2009,TRUE,146,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Machabeng",2009,TRUE,148,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Mafeteng",2009,TRUE,349,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Maluti",2009,TRUE,158,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Mokhotlong",2009,TRUE,348,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Motebang",2009,TRUE,345,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Nts'ekhe (Mohale's Hoek)",2009,TRUE,301,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Paray",2009,TRUE,205,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Queen II",2009,TRUE,496,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Quthing",2009,TRUE,326,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Seboche",2009,TRUE,197,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"St.James",2009,TRUE,134,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Tebellong",2009,TRUE,141,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Berea",2011,TRUE,350,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Butha-Buthe",2011,TRUE,264,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Machabeng",2011,TRUE,174,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Mafeteng",2011,TRUE,397,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Maluti",2011,TRUE,341,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Mokhotlong",2011,TRUE,294,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Motebang",2011,TRUE,311,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Nts'ekhe (Mohale's Hoek)",2011,TRUE,362,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Paray",2011,TRUE,251,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Quthing",2011,TRUE,288,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Scott",2011,TRUE,325,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Seboche",2011,TRUE,214,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"St Joseph",2011,TRUE,325,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"St.James",2011,TRUE,154,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Tebellong",2011,TRUE,56,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Berea",2013,TRUE,312,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Butha-Buthe",2013,TRUE,254,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Machabeng",2013,TRUE,168,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Mafeteng",2013,TRUE,349,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Maluti",2013,TRUE,316,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Mamohau",2013,TRUE,232,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Mokhotlong",2013,TRUE,296,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Motebang",2013,TRUE,366,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Nts'ekhe (Mohale's Hoek)",2013,TRUE,304,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Paray",2013,TRUE,265,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Quthing",2013,TRUE,326,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Scott",2013,TRUE,325,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Seboche",2013,TRUE,280,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"St Joseph",2013,TRUE,303,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"St.James",2013,TRUE,153,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Tebellong",2013,TRUE,91,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Berea",2016,TRUE,349,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Butha-Buthe",2016,TRUE,227,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Machabeng",2016,TRUE,184,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Mafeteng",2016,TRUE,389,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Maluti",2016,TRUE,368,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Mamohau",2016,TRUE,325,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Mokhotlong",2016,TRUE,369,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Motebang",2016,TRUE,401,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Nts'ekhe (Mohale's Hoek)",2016,TRUE,251,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Paray",2016,TRUE,332,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Queen II",2016,TRUE,381,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Quthing",2016,TRUE,265,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Scott",2016,TRUE,314,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"Seboche",2016,TRUE,274,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"St Joseph",2016,TRUE,245,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA
+"St.James",2016,TRUE,127,"ancss","15-49","15","35",0,0,0,0,"LSO",0,0,"LSO",NA,NA,NA,NA,NA

@@ -1,0 +1,661 @@
+"clinic","year_id","used","n","type","agegr","age","agspan","site_pred","adm0_mean","adm0_lower","adm0_upper","ihme_loc_id","lbd_areal","lbd_missing","iso3","adm1_mean","adm1_lower","adm1_upper","iso3_adm1","loc_id_adm1"
+"Dar es Salaam (Magomeni)",1989,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar es Salaam (Magomeni)",1990,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar es Salaam (Magomeni)",1992,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar es Salaam (Magomeni)",1993,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar es Salaam (Magomeni)",1994,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar es Salaam (Magomeni)",1996,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar es Salaam (Magomeni)",1988,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar es Salaam (Magomeni)",1995,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar es Salaam (Magomeni)",1997,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar es Salaam (Magomeni)",1986,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar es Salaam (Magomeni)",1991,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar-es-Salaam (Kasorobo-Temeke)",1999,TRUE,412,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar-es-Salaam (Kasorobo-Temeke)",1993,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar-es-Salaam (Kasorobo-Temeke)",1995,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar-es-Salaam (Kasorobo-Temeke)",1991,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar-es-Salaam (Kigamboni-Temeke)",1999,TRUE,455,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Iringa (Mafinga)",1991,TRUE,200,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Iringa (Mafinga)",1992,TRUE,200,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Iringa (Mafinga)",1999,TRUE,287,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Bukoba Town)",1990,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Bukoba Town)",1991,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Bukoba Town)",1994,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Bukoba Town)",1996,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Bukoba Town)",1999,TRUE,287,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Bukoba Town)",1993,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Bukoba Town)",1992,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Umbwe)",1991,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Umbwe)",1992,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Umbwe)",1996,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Umbwe)",1997,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Umbwe)",1998,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Umbwe)",1999,TRUE,240,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mara (Nyasho)",1991,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mara (Nyasho)",1992,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mara (Nyasho)",1993,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mara (Nyasho)",1995,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Chimala)",1988,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Chimala)",1989,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Chimala)",1992,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Chimala)",1993,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Chimala)",1990,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Chimala)",1995,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Chimala)",1996,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Chimala)",1997,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Chimala)",1994,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Chimala)",1999,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Chimala)",1991,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Chimala)",1998,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Isoko)",1988,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Isoko)",1990,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Isoko)",1992,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Isoko)",1989,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Isoko)",1994,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Isoko)",1991,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Isoko)",1996,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Isoko)",1997,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Isoko)",1998,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Isoko)",1995,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Isoko)",1993,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Isoko)",1999,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Itete)",1988,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Itete)",1990,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Itete)",1992,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Itete)",1989,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Itete)",1994,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Itete)",1991,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Itete)",1996,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Itete)",1997,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Itete)",1998,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Itete)",1995,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Itete)",1999,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Itete)",1993,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kiwanjampaka)",1993,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kiwanjampaka)",1994,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kiwanjampaka)",1996,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kiwanjampaka)",1992,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kiwanjampaka)",1998,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kiwanjampaka)",1999,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kiwanjampaka)",1989,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kiwanjampaka)",1997,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kiwanjampaka)",1988,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kyela)",1991,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kyela)",1994,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kyela)",1995,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kyela)",1992,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kyela)",1997,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kyela)",1998,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kyela)",1999,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kyela)",1996,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kyela)",1989,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kyela)",1990,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kyela)",1993,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Mbozi)",1997,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Mbozi)",1995,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Mbozi)",1994,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Mbozi)",1996,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Meta)",1988,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Meta)",1992,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Meta)",1994,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Meta)",1996,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Meta)",1997,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Meta)",1993,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Meta)",1998,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Meta)",1999,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Meta)",1989,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Mwanbani)",1992,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Mwanbani)",1989,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Mwanbani)",1990,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Mwanbani)",1996,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Mwanbani)",1993,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Mwanbani)",1994,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Mwanbani)",1995,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Mwanbani)",1997,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Mwanbani)",1998,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Mwanbani)",1991,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Mwanbani)",1999,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Mwanjelwa)",1989,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Mwanjelwa)",1988,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Mwanjelwa)",1992,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Mwanjelwa)",1993,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Mwanjelwa)",1994,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya(Ruanda)",1997,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya(Ruanda)",1998,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya(Ruanda)",1999,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya(Ruanda)",1996,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Morogoro (Morogoro)",1999,TRUE,490,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Morogoro (Turiani)",1999,TRUE,398,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Musoma regional hospital (Mara)",1992,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Musoma regional hospital (Mara)",1993,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Musoma regional hospital (Mara)",1991,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mwanza (Makongoro)",1990,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mwanza (Makongoro)",1989,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mwanza (Makongoro)",1992,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mwanza (Makongoro)",1993,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mwanza (Makongoro)",1994,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mwanza (Makongoro)",1991,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mwanza (Makongoro)",1995,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mwanza (Makongoro)",1988,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mwanza (Mkula)",1992,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mwanza (Mkula)",1993,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mwanza (Mkula)",1995,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mwanza (Mkula)",1991,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Rukwa (Namanyere)",1993,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Rukwa (Namanyere)",1994,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Rukwa (Namanyere)",1995,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Rukwa (Namanyere)",1992,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Rukwa (Namanyere)",1997,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Rukwa (Sumbawanga)",1992,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Rukwa (Sumbawanga)",1995,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Rukwa (Sumbawanga)",1997,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Rukwa (Sumbawanga)",1993,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Ruvuma (Madaba)",1993,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Ruvuma (Madaba)",1992,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Ruvuma (Namtumbo)",1993,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Ruvuma (Namtumbo)",1992,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Ruvuma (Namtumbo)",1997,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Ruvuma (Namtumbo)",1995,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Ruvuma (Namtumbo)",1994,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Ruvuma (Songea)",1992,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Ruvuma (Songea)",1994,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Ruvuma (Songea)",1995,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Ruvuma (Songea)",1997,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Ruvuma (Songea)",1993,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Chake Chake)",1996,TRUE,35,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Chake Chake)",1999,TRUE,320,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Kivunge)",1995,TRUE,63,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Kivunge)",1996,TRUE,336,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Kivunge)",1997,TRUE,106,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Kivunge)",1999,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Makunduchi)",1997,TRUE,79,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Micheweni)",1995,TRUE,101,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Micheweni)",1996,TRUE,45,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Micheweni)",1999,TRUE,280,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Mkoani)",1996,TRUE,37,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Mnazi mmoja)",1995,TRUE,1883,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Mnazi mmoja)",1996,TRUE,871,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Mnazi mmoja)",1997,TRUE,791,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Mnazi mmoja)",1999,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar-es-Salaam (Kasorobo-Temeke)",2000,TRUE,273,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar-es-Salaam (Kigamboni-Temeke)",2000,TRUE,405,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Iringa (Mafinga)",2000,TRUE,578,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Bukoba Town)",2000,TRUE,288,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Umbwe)",2000,TRUE,288,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Chimala)",2000,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Isoko)",2000,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Itete)",2000,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kiwanjampaka)",2000,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kyela)",2000,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Mbozi)",2000,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Meta)",2000,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Mwanbani)",2000,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya(Ruanda)",2000,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mwanza (Igekemaja)",2000,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mwanza (Igoma)",2000,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mwanza (Kisesa)",2000,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mwanza (Makongoro)",2000,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Chake Chake)",2000,TRUE,214,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Kivunge)",2000,TRUE,208,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Micheweni)",2000,TRUE,200,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Mnazi mmoja)",2000,TRUE,400,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar es Salaam (Buguruni - Ilala)",2001,TRUE,571,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar es Salaam (Oyesterbay - Kinondoni)",2001,TRUE,512,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar-es-Salaam (Kasorobo-Temeke)",2001,TRUE,280,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar-es-Salaam (Kigamboni-Temeke)",2001,TRUE,334,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dodoma (Bahi)",2001,TRUE,173,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dodoma (Handali)",2001,TRUE,204,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dodoma (Kibaigwa)",2001,TRUE,181,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dodoma (Makole)",2001,TRUE,330,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Bukoba Town)",2001,TRUE,516,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Katoro)",2001,TRUE,333,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Kimeya)",2001,TRUE,181,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Nkwenda)",2001,TRUE,464,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Hedaru)",2001,TRUE,294,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Majengo)",2001,TRUE,424,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Masama)",2001,TRUE,133,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Umbwe)",2001,TRUE,114,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Chimala)",2001,TRUE,217,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Ilembo)",2001,TRUE,211,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kiwanjampaka)",2001,TRUE,568,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kyela)",2001,TRUE,373,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mtwara (Ligula)",2001,TRUE,305,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mtwara (Mangaka)",2001,TRUE,279,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mtwara (Nanyamba)",2001,TRUE,125,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mtwara (Tandahimba)",2001,TRUE,153,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Chake Chake)",2002,TRUE,400,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Kivunge)",2002,TRUE,400,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Micheweni)",2002,TRUE,171,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Mnazi mmoja)",2002,TRUE,405,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar es Salaam (Buguruni - Ilala)",2003,TRUE,884,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar es Salaam (Kimara)",2003,TRUE,361,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar es Salaam (Kiwalani)",2003,TRUE,421,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar es Salaam (Oyesterbay - Kinondoni)",2003,TRUE,466,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar-es-Salaam (Kasorobo-Temeke)",2003,TRUE,446,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar-es-Salaam (Kigamboni-Temeke)",2003,TRUE,386,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dodoma (Bahi)",2003,TRUE,181,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dodoma (Handali)",2003,TRUE,228,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dodoma (Kibaigwa)",2003,TRUE,203,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dodoma (Makole)",2003,TRUE,339,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dodoma (Mpwapwa)",2003,TRUE,319,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dodoma (Wajenzi)",2003,TRUE,351,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Bukoba Town)",2003,TRUE,410,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Katoro)",2003,TRUE,245,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Kimeya)",2003,TRUE,241,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Nkwenda)",2003,TRUE,452,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Nyamiaga)",2003,TRUE,182,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Rwamishemi)",2003,TRUE,296,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kigoma (Kibondo)",2003,TRUE,217,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kigoma (Kiganamo)",2003,TRUE,326,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kigoma (Kigoma)",2003,TRUE,301,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kigoma (Nyakitonto)",2003,TRUE,163,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kigoma (Ujiji)",2003,TRUE,342,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Hedaru)",2003,TRUE,221,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Huruma)",2003,TRUE,323,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Majengo)",2003,TRUE,323,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Masama)",2003,TRUE,268,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Pasua)",2003,TRUE,191,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Umbwe)",2003,TRUE,103,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Lindi (Chumo)",2003,TRUE,141,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Lindi (Liwale)",2003,TRUE,307,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Lindi (Nachingwea)",2003,TRUE,227,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Lindi (Nyangao)",2003,TRUE,233,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Lindi (Sokoine)",2003,TRUE,119,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Lindi (Town Clinic)",2003,TRUE,113,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mara (Bweri)",2003,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mara (Nyasho)",2003,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Chimala)",2003,TRUE,249,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Igamba)",2003,TRUE,228,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Ilembo)",2003,TRUE,188,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kiwanjampaka)",2003,TRUE,726,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kyela)",2003,TRUE,323,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya(Ruanda)",2003,TRUE,728,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Morogoro (Hembeti)",2003,TRUE,99,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Morogoro (Mkuyuni)",2003,TRUE,173,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Morogoro (Morogoro)",2003,TRUE,559,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Morogoro (Uhuru)",2003,TRUE,799,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mtwara (Ligula)",2003,TRUE,389,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mtwara (Likombe)",2003,TRUE,165,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mtwara (Mangaka)",2003,TRUE,267,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mtwara (Mkunya)",2003,TRUE,135,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mtwara (Nanyamba)",2003,TRUE,176,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mtwara (Tandahimba)",2003,TRUE,147,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tanga (Handeni)",2003,TRUE,403,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tanga (Kwamkono)",2003,TRUE,168,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tanga (Lushoto)",2003,TRUE,246,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tanga (Makorola)",2003,TRUE,545,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tanga (Ngamiani)",2003,TRUE,547,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tanga (magoma)",2003,TRUE,175,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Arusha (Kaloleni)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Arusha (Karatu)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Arusha (Mbuguni)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Arusha (Monduli)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Arusha (Ngarenaro)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Arusha (Oldonyosambu)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar es Salaam (Buguruni - Ilala)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar es Salaam (Kimara)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar es Salaam (Kiwalani)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar es Salaam (Oyesterbay - Kinondoni)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar-es-Salaam (Kasorobo-Temeke)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar-es-Salaam (Kigamboni-Temeke)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dodoma (Bahi)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dodoma (Handali)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dodoma (Kibaigwa)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dodoma (Makole)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dodoma (Mpwapwa)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dodoma (Wajenzi)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Iringa (Iringa Regional Hospital)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Iringa (Kasanga)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Iringa (Mafinga)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Iringa (Matamba)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Iringa (Ngome)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Iringa (Njombe)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Bukoba Town)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Katoro)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Kimeya)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Nkwenda)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Nyamiaga)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Rwamishemi)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kigoma (Keza)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kigoma (Kibondo)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kigoma (Kiganamo)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kigoma (Kigoma)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kigoma (Nyakitonto)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kigoma (Ujiji)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Hedaru)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Huruma)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Majengo)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Masama)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Pasua)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Umbwe)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Lindi (Chumo)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Lindi (Liwale)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Lindi (Nachingwea)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Lindi (Nyangao)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Lindi (Sokoine)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Lindi (Town Clinic)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mara (Bweri)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mara (Mugumu)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mara (Murangi)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mara (Nyasho)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mara (Tarime)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mara (Utegi)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Chimala)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Igamba)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Ilembo)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kiwanjampaka)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kyela)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya(Ruanda)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Morogoro (Gairo)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Morogoro (Hembeti)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Morogoro (Mkuyuni)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Morogoro (Morogoro)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Morogoro (St. Francis)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Morogoro (Turiani)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Morogoro (Uhuru)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mtwara (Ligula)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mtwara (Likombe)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mtwara (Mangaka)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mtwara (Mkunya)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mtwara (Nanyamba)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mtwara (Tandahimba)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Shinyanga (Kahama)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Shinyanga (Kambarage)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Shinyanga (Nindo)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Shinyanga (Nkololo)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Shinyanga (Regional Hospital)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Shinyanga (Ushirombo)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tabora (Igunga)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tabora (Ilolanguru)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tabora (Isevya)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tabora (Nzega)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tabora (Songambele)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tabora (Tabora)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tanga (Handeni)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tanga (Kwamkono)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tanga (Lushoto)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tanga (Makorola)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tanga (Ngamiani)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tanga (magoma)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Chake Chake)",2005,TRUE,399,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Changa)",2005,TRUE,391,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (KMKM)",2005,TRUE,401,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Kivunge)",2005,TRUE,400,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Makunduchi)",2005,TRUE,200,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Micheweni)",2005,TRUE,382,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Mkoani)",2005,TRUE,408,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Mnazi mmoja)",2005,TRUE,407,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Arusha (Kaloleni)",2008,TRUE,798,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Arusha (Karatu)",2008,TRUE,277,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Arusha (Mbuguni)",2008,TRUE,126,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Arusha (Monduli)",2008,TRUE,199,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Arusha (Ngarenaro)",2008,TRUE,1612,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Arusha (Oldonyosambu)",2008,TRUE,197,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Babati",2008,TRUE,474,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Bagamoyo",2008,TRUE,276,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Bakwata",2008,TRUE,165,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Bukoli",2008,TRUE,568,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Bungu",2008,TRUE,179,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Butimba",2008,TRUE,554,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Chalinze",2008,TRUE,488,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar es Salaam (Buguruni - Ilala)",2008,TRUE,891,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar es Salaam (Kimara)",2008,TRUE,475,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar es Salaam (Kiwalani)",2008,TRUE,469,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar es Salaam (Oyesterbay - Kinondoni)",2008,TRUE,525,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar-es-Salaam (Kasorobo-Temeke)",2008,TRUE,243,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar-es-Salaam (Kigamboni-Temeke)",2008,TRUE,355,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dodoma (Bahi)",2008,TRUE,286,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dodoma (Handali)",2008,TRUE,151,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dodoma (Kibaigwa)",2008,TRUE,194,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dodoma (Makole)",2008,TRUE,385,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dodoma (Mpwapwa)",2008,TRUE,171,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dodoma (Wajenzi)",2008,TRUE,342,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dongobeshi",2008,TRUE,149,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Iguguno",2008,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Ihanja",2008,TRUE,184,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Iringa (Iringa Regional Hospital)",2008,TRUE,485,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Iringa (Kasanga)",2008,TRUE,134,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Iringa (Mafinga)",2008,TRUE,507,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Iringa (Matamba)",2008,TRUE,133,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Iringa (Ngome)",2008,TRUE,233,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Iringa (Njombe)",2008,TRUE,341,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Bukoba Town)",2008,TRUE,209,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Katoro)",2008,TRUE,294,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Kimeya)",2008,TRUE,275,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Nkwenda)",2008,TRUE,395,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Nyamiaga)",2008,TRUE,257,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Rwamishemi)",2008,TRUE,247,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kasulo Dispensary",2008,TRUE,59,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Katumba",2008,TRUE,313,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kazuramimba",2008,TRUE,220,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kibaya/Kiteto",2008,TRUE,524,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kibiti",2008,TRUE,372,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kigoma (Keza)",2008,TRUE,84,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kigoma (Kibondo)",2008,TRUE,226,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kigoma (Kiganamo)",2008,TRUE,331,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kigoma (Kigoma)",2008,TRUE,219,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kigoma (Nyakitonto)",2008,TRUE,173,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kigoma (Ujiji)",2008,TRUE,203,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kikubiji",2008,TRUE,357,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Hedaru)",2008,TRUE,243,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Huruma)",2008,TRUE,185,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Majengo)",2008,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Masama)",2008,TRUE,95,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Pasua)",2008,TRUE,227,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Umbwe)",2008,TRUE,80,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Lindi (Chumo)",2008,TRUE,152,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Lindi (Liwale)",2008,TRUE,258,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Lindi (Nachingwea)",2008,TRUE,255,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Lindi (Nyangao)",2008,TRUE,146,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Lindi (Sokoine)",2008,TRUE,79,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Lindi (Town Clinic)",2008,TRUE,102,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Lugufu",2008,TRUE,380,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Lukole Refugee",2008,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Magu",2008,TRUE,452,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Magugu",2008,TRUE,336,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Manyoni",2008,TRUE,319,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mara (Bweri)",2008,TRUE,335,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mara (Mugumu)",2008,TRUE,348,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mara (Murangi)",2008,TRUE,224,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mara (Nyasho)",2008,TRUE,365,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mara (Tarime)",2008,TRUE,335,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mara (Utegi)",2008,TRUE,225,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Masquarada",2008,TRUE,137,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Matui-azimio",2008,TRUE,233,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mazwi",2008,TRUE,486,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Chimala)",2008,TRUE,338,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Igamba)",2008,TRUE,253,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Ilembo)",2008,TRUE,166,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kiwanjampaka)",2008,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kyela)",2008,TRUE,351,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya(Ruanda)",2008,TRUE,1218,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbinga",2008,TRUE,406,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mererani",2008,TRUE,56,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mkiu",2008,TRUE,121,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Morogoro (Gairo)",2008,TRUE,594,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Morogoro (Hembeti)",2008,TRUE,129,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Morogoro (Mkuyuni)",2008,TRUE,165,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Morogoro (Morogoro)",2008,TRUE,496,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Morogoro (St. Francis)",2008,TRUE,527,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Morogoro (Turiani)",2008,TRUE,243,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Morogoro (Uhuru)",2008,TRUE,517,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mpanda",2008,TRUE,537,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Msange",2008,TRUE,168,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mtama",2008,TRUE,60,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mtwara (Ligula)",2008,TRUE,203,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mtwara (Likombe)",2008,TRUE,162,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mtwara (Mangaka)",2008,TRUE,213,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mtwara (Mkunya)",2008,TRUE,199,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mtwara (Nanyamba)",2008,TRUE,181,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mtwara (Tandahimba)",2008,TRUE,185,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Muhukuru",2008,TRUE,127,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mwalusembe",2008,TRUE,157,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mwanza (Makongoro)",2008,TRUE,738,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Nakapanya",2008,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Nkomoro",2008,TRUE,432,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Ruvuma (Namtumbo)",2008,TRUE,346,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Ruvuma (Songea)",2008,TRUE,387,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Sengerema",2008,TRUE,415,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Shinyanga (Kahama)",2008,TRUE,918,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Shinyanga (Kambarage)",2008,TRUE,299,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Shinyanga (Nindo)",2008,TRUE,660,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Shinyanga (Nkololo)",2008,TRUE,442,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Shinyanga (Regional Hospital)",2008,TRUE,120,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Shinyanga (Ushirombo)",2008,TRUE,270,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Singida reg. hosp",2008,TRUE,463,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Sokoine",2008,TRUE,334,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tabora (Igunga)",2008,TRUE,319,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tabora (Ilolanguru)",2008,TRUE,202,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tabora (Isevya)",2008,TRUE,231,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tabora (Nzega)",2008,TRUE,276,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tabora (Songambele)",2008,TRUE,347,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tabora (Tabora)",2008,TRUE,531,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tanga (Handeni)",2008,TRUE,423,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tanga (Kwamkono)",2008,TRUE,162,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tanga (Lushoto)",2008,TRUE,319,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tanga (Makorola)",2008,TRUE,527,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tanga (Ngamiani)",2008,TRUE,414,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tanga (magoma)",2008,TRUE,194,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tumbi",2008,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Chake Chake)",2008,TRUE,400,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Changa)",2008,TRUE,197,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (KMKM)",2008,TRUE,200,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Kivunge)",2008,TRUE,490,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Makunduchi)",2008,TRUE,334,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Micheweni)",2008,TRUE,401,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Mkoani)",2008,TRUE,399,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Zanzibar (Mnazi mmoja)",2008,TRUE,521,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Arusha (Kaloleni)",2011,TRUE,931,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Arusha (Karatu)",2011,TRUE,931,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Arusha (Mbuguni)",2011,TRUE,113,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Arusha (Monduli District Hosp)",2011,TRUE,139,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Arusha (Ngarenaro)",2011,TRUE,1180,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Arusha (Oldonyosambu)",2011,TRUE,250,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Babati",2011,TRUE,499,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Bagamoyo",2011,TRUE,346,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Bakwata",2011,TRUE,412,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Bukoli",2011,TRUE,348,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Bungu",2011,TRUE,124,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Butimba",2011,TRUE,647,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Chalinze HC",2011,TRUE,379,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Chimala Mission Hospital",2011,TRUE,239,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Coastal Region (Kibiti)",2011,TRUE,204,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar es Salaam (Buguruni - Ilala)",2011,TRUE,1037,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar es Salaam (Kimara)",2011,TRUE,806,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar es Salaam (Kiwalani)",2011,TRUE,632,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar es Salaam (Oyesterbay - Kinondoni)",2011,TRUE,520,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar-es-Salaam (Kasorobo-Temeke)",2011,TRUE,318,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dar-es-Salaam (Kigamboni-Temeke)",2011,TRUE,467,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dodoma (Bahi)",2011,TRUE,392,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dodoma (Handali)",2011,TRUE,141,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dodoma (Kibaigwa)",2011,TRUE,231,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dodoma (Makole)",2011,TRUE,635,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dodoma (Mpwapwa)",2011,TRUE,117,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dodoma (Wajenzi)",2011,TRUE,273,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Dongobeshi",2011,TRUE,172,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Handeni MCH",2011,TRUE,264,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Iguga Dist Hosp",2011,TRUE,450,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Igunguno Disp",2011,TRUE,250,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Ihanja",2011,TRUE,117,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Iringa (Iringa Regional Hospital)",2011,TRUE,310,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Iringa (Kasanga)",2011,TRUE,94,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Iringa (Matamba)",2011,TRUE,62,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Iringa (Ngome)",2011,TRUE,172,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Iringa (Njombe)",2011,TRUE,279,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera ( Katoro)",2011,TRUE,104,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Bukoba Town)",2011,TRUE,127,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Kasulo dispensary)",2011,TRUE,96,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Kimeya)",2011,TRUE,255,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Nkwenda)",2011,TRUE,390,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Nyamiaga dispensary)",2011,TRUE,184,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kagera (Rwamishemi)",2011,TRUE,277,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kahama District Hosp",2011,TRUE,1182,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Katumba",2011,TRUE,167,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kibaya",2011,TRUE,461,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kiganamo  HC",2011,TRUE,325,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kigoma (Kazulamimba)",2011,TRUE,160,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kigoma (Keza)",2011,TRUE,85,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kigoma (Kibondo)",2011,TRUE,194,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kigoma (Kigoma)",2011,TRUE,218,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kigoma (Nyakitonto)",2011,TRUE,126,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kigoma (Ujiji)",2011,TRUE,185,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kikubiji",2011,TRUE,367,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Hedaru)",2011,TRUE,190,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Huruma Hospital)",2011,TRUE,170,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Majengo)",2011,TRUE,378,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Masama)",2011,TRUE,99,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Pasua)",2011,TRUE,360,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Umbwe)",2011,TRUE,72,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kyela District Hosp",2011,TRUE,400,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Lindi (Chumo)",2011,TRUE,139,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Lindi (Liwale)",2011,TRUE,238,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Lindi (Nachingwea)",2011,TRUE,265,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Lindi (Nyangao)",2011,TRUE,83,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Lindi (Sokoine)",2011,TRUE,108,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Lindi (Town Clinic)",2011,TRUE,157,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Lukole Refugee",2011,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Lushoto Hospital",2011,TRUE,248,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mafinga Dist Hospital",2011,TRUE,304,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Magu Dist Hosp",2011,TRUE,434,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Magugu",2011,TRUE,220,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mangaka Disp",2011,TRUE,165,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Manyoni",2011,TRUE,288,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mara (Bweri)",2011,TRUE,114,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mara (Murangi)",2011,TRUE,208,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mara (Nyasho)",2011,TRUE,187,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mara (Tarime Dist Hosp)",2011,TRUE,306,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mara (Utegi)",2011,TRUE,135,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Masquarada",2011,TRUE,109,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Matui-azimio",2011,TRUE,304,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mazwi",2011,TRUE,462,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Igamba)",2011,TRUE,162,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Ilembo)",2011,TRUE,217,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya (Kiwanjampaka)",2011,TRUE,608,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbeya(Ruanda)",2011,TRUE,937,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mbinga Hosp",2011,TRUE,410,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mirerani",2011,TRUE,114,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mkiu",2011,TRUE,86,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Morogoro (Gairo HC)",2011,TRUE,405,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Morogoro (Hembeti)",2011,TRUE,44,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Morogoro (Mkuyuni)",2011,TRUE,95,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Morogoro (Morogoro)",2011,TRUE,327,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Morogoro (St. Francis)",2011,TRUE,327,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Morogoro (Turiani)",2011,TRUE,107,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Morogoro (Uhuru)",2011,TRUE,396,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mpanda Town clinic",2011,TRUE,350,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Msange",2011,TRUE,140,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mtama",2011,TRUE,81,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mtwara (Ligula)",2011,TRUE,140,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mtwara (Likombe)",2011,TRUE,189,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mtwara (Mkunya)",2011,TRUE,106,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mtwara (Nanyamba)",2011,TRUE,93,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mtwara (Tandahimba)",2011,TRUE,174,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mugumu MCH B",2011,TRUE,299,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Muhukuru",2011,TRUE,141,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mwalusembe",2011,TRUE,241,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Mwanza (Makongoro)",2011,TRUE,648,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Nakapanya",2011,TRUE,158,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Nkomolo HC",2011,TRUE,272,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Nzenga Dist Hosp",2011,TRUE,460,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Ruvuma (Namtumbo)",2011,TRUE,310,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Ruvuma (Songea)",2011,TRUE,288,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Sengerema",2011,TRUE,525,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Shinyanga (Kambarage)",2011,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Shinyanga (Nindo)",2011,TRUE,486,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Shinyanga (Nkololo)",2011,TRUE,808,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Shinyanga (Regional Hospital)",2011,TRUE,251,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Singida reg. hosp",2011,TRUE,326,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Sokoine",2011,TRUE,308,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tabora (Ilolanguru)",2011,TRUE,132,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tabora (Isevya)",2011,TRUE,222,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tabora (Songambele)",2011,TRUE,287,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tabora (Tabora)",2011,TRUE,326,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tanga (Kwamkono)",2011,TRUE,167,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tanga (Makorola)",2011,TRUE,400,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tanga (Ngamiani)",2011,TRUE,385,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tanga (magoma)",2011,TRUE,134,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Tumbi",2011,TRUE,468,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Ushirombo clinic",2011,TRUE,358,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Masama)",2014,TRUE,364,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Masama)",2015,TRUE,330,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA
+"Kilimanjaro (Masama)",2016,TRUE,341,"ancss","15-49","15","35",0,0,0,0,"TZA",0,0,"TZA",NA,NA,NA,NA,NA

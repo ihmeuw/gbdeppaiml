@@ -1,0 +1,65 @@
+"clinic","year_id","used","n","type","agegr","age","agspan","site_pred","adm0_mean","adm0_lower","adm0_upper","ihme_loc_id","lbd_areal","lbd_missing","iso3","adm1_mean","adm1_lower","adm1_upper","iso3_adm1","loc_id_adm1"
+"Kenema",2003,TRUE,281,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Kissy Urban centre",2003,TRUE,273,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Lumley",2003,TRUE,113,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Makeni",2003,TRUE,297,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Marie stopes",2003,TRUE,297,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Moyamba",2003,TRUE,179,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"PCMH",2003,TRUE,297,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Rokupa",2003,TRUE,200,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Kailahun",2006,TRUE,124,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Kambia",2006,TRUE,270,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Kenema",2006,TRUE,241,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Kissy Urban centre",2006,TRUE,334,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Koidu",2006,TRUE,262,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Lunsar",2006,TRUE,90,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Makeni",2006,TRUE,236,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Marie stopes",2006,TRUE,271,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Mattru UBC",2006,TRUE,265,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Moyamba",2006,TRUE,270,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Pujehun",2006,TRUE,180,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Kailahun",2007,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Kambia",2007,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Kenema",2007,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Kissy Urban centre",2007,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Koidu",2007,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Makeni",2007,TRUE,286,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Marie stopes",2007,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Mattru UBC",2007,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Moyamba",2007,TRUE,90,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Newton",2007,TRUE,72,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"PCMH",2007,TRUE,227,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Pujehun",2007,TRUE,292,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Kailahun",2008,TRUE,297,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Kambia",2008,TRUE,212,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Kenema",2008,TRUE,234,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Kissy Urban centre",2008,TRUE,299,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Koidu",2008,TRUE,280,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Lunsar",2008,TRUE,282,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Makeni",2008,TRUE,269,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Marie stopes",2008,TRUE,299,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Mattru UBC",2008,TRUE,269,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Moyamba",2008,TRUE,210,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Newton",2008,TRUE,142,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"PCMH",2008,TRUE,264,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Pujehun",2008,TRUE,267,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"34 Military",2010,TRUE,338,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Bo",2010,TRUE,320,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Kabala",2010,TRUE,323,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Kailahun",2010,TRUE,305,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Kamakwie",2010,TRUE,319,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Kambia",2010,TRUE,307,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Kenema",2010,TRUE,317,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Kissy Urban centre",2010,TRUE,348,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Koidu",2010,TRUE,352,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Lunsar",2010,TRUE,324,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Magburuka",2010,TRUE,340,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Makeni",2010,TRUE,358,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Marie stopes",2010,TRUE,331,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Mattru UBC",2010,TRUE,431,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Moyamba",2010,TRUE,310,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"PCMH",2010,TRUE,350,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Panguma",2010,TRUE,268,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Port Loko",2010,TRUE,325,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Pujehun",2010,TRUE,347,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA
+"Segbwema",2010,TRUE,310,"ancss","15-49","15","35",0,0,0,0,"SLE",0,0,"SLE",NA,NA,NA,NA,NA

@@ -12,18 +12,18 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 library(data.table)
 
 ## Arguments
-run.name <- "191002_sitar"
+run.name <- "191224_trumpet"
 spec.name <- "191002_sitar"
 compare.run <- "190630_rhino2"
-proj.end <- 2020
-n.draws <- 1
+proj.end <- 2022
+n.draws <- 5
 run.group2 <- FALSE
 paediatric <- TRUE
 cluster.project <- "proj_hiv"
 plot_ART <- FALSE
 est_India <- FALSE
 reckon_prep <- TRUE
-decomp.step <- "step4"
+decomp.step <- "step`"
 gbdyear <- "gbd20"
 
 ### Paths
@@ -56,16 +56,25 @@ for(loc in loc.list) {
                        "-o /share/temp/sgeoutput/", user, "/output ",
                        "-N ", loc, "_plot_art ",
                        code.dir, "gbd/singR_shell.sh ",
-                       paste0(paste0("/ihme/homes/", user), "/hiv_gbd2019/01_prep/plot_ART.R "),
+                       paste0(paste0("/ihme/homes/", user), "/hiv_gbd2019/01_prep/plot_ART.R ",
                        "2019 ", loc, " ", "2017", " ",run.name)
-  print(art.string )
-  system(art.string )
+  print(art.string)
+  system(art.string)
+
 }
 
 plot.dir <- paste0("/ihme/hiv/epp_input/", gbdyear, '/',run.name,"/art_plots/")
 setwd(plot.dir)
 # Combine location-specific plots
 system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=art_plots.pdf -f *"))
+system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=Deaths_plots.pdf -f *"))
+
+
+plot.dir <- paste0("/ihme/hiv/epp_output/", gbdyear, '/',run.name,"/15to49_plots/")
+setwd(plot.dir)
+# Combine location-specific plots
+system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=15to49_plots.pdf -f *"))
+
 # Move to parent directory
 system(paste0("mv ", plot.dir, "/art_plots.pdf ",input.dir,"/"))
 # Delete location specific plots
@@ -108,8 +117,6 @@ if(!file.exists(paste0(input.dir, 'art_prop.csv'))){
   system(prop.job)
 }
 
-
-
 ## Launch EPP
 for(loc in loc.list) {    ## Run EPPASM
 
@@ -125,29 +132,30 @@ for(loc in loc.list) {    ## Run EPPASM
       print(epp.string)
       system(epp.string)
 
-    # # ## Draw compilation
-     draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
-                           "-e /share/homes/", user,"/errors ",
-                           "-o /share/temp/sgeoutput/", user, "/output ",
-                           "-N ", loc, "_save_draws ",
-                           "-hold_jid ", loc, "_eppasm ",
+
+    ## Draw compilation
+    draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
+                          "-e /share/homes/", user,"/errors ",
+                          "-o /share/temp/sgeoutput/", user, "/output ",
+                          "-N ", loc, "_save_draws ",
+                          "-hold_jid ", loc, "_eppasm ",
+                         code.dir, "gbd/singR_shell.sh ",
+                          code.dir, "gbd/compile_draws.R ",
+                          run.name, " ", loc, ' ', n.draws, ' TRUE ', paediatric)
+    print(draw.string)
+    system(draw.string)
+
+    plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
+                          "-e /share/homes/", user, "/errors ",
+                          "-o /share/temp/sgeoutput/", user, "/output ",
+                          "-N ", loc, "_plot_eppasm ",
+                          "-hold_jid ", loc, "_save_draws ",
                           code.dir, "gbd/singR_shell.sh ",
-                           code.dir, "gbd/compile_draws.R ",
-                           run.name, " ", loc, ' ', n.draws, ' TRUE ', paediatric)
-     print(draw.string)
-     system(draw.string)
- 
-     plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
-                           "-e /share/homes/", user, "/errors ",
-                           "-o /share/temp/sgeoutput/", user, "/output ",
-                           "-N ", loc, "_plot_eppasm ",
-                           "-hold_jid ", loc, "_save_draws ",
-                           code.dir, "gbd/singR_shell.sh ",
-                           code.dir, "gbd/main_plot_output.R ",
-                           loc, " ", run.name, ' ', paediatric, ' ', compare.run)
-     print(plot.string)
-     system(plot.string)
-     
+                          code.dir, "gbd/main_plot_output.R ",
+                          loc, " ", run.name, ' ', paediatric, ' ', compare.run)
+    print(plot.string)
+    system(plot.string)
+
  
      
 }

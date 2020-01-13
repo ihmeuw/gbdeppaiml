@@ -1,0 +1,10 @@
+"clinic","year_id","used","n","type","agegr","age","agspan","site_pred","adm0_mean","adm0_lower","adm0_upper","ihme_loc_id","lbd_areal","lbd_missing","iso3","adm1_mean","adm1_lower","adm1_upper","iso3_adm1","loc_id_adm1"
+"Lodwar",2001,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"KEN_35659",0,0,"KEN_35659",NA,NA,NA,NA,NA
+"Lodwar",2002,TRUE,224,"ancss","15-49","15","35",0,0,0,0,"KEN_35659",0,0,"KEN_35659",NA,NA,NA,NA,NA
+"Lodwar",2003,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"KEN_35659",0,0,"KEN_35659",NA,NA,NA,NA,NA
+"Lodwar",2004,TRUE,124,"ancss","15-49","15","35",0,0,0,0,"KEN_35659",0,0,"KEN_35659",NA,NA,NA,NA,NA
+"Lodwar",2005,TRUE,176,"ancss","15-49","15","35",0,0,0,0,"KEN_35659",0,0,"KEN_35659",NA,NA,NA,NA,NA
+"Lodwar",2006,TRUE,234,"ancss","15-49","15","35",0,0,0,0,"KEN_35659",0,0,"KEN_35659",NA,NA,NA,NA,NA
+"Lodwar",2009,TRUE,149,"ancss","15-49","15","35",0,0,0,0,"KEN_35659",0,0,"KEN_35659",NA,NA,NA,NA,NA
+"Lodwar",2010,TRUE,314,"ancss","15-49","15","35",0,0,0,0,"KEN_35659",0,0,"KEN_35659",NA,NA,NA,NA,NA
+"Lodwar",2011,TRUE,315,"ancss","15-49","15","35",0,0,0,0,"KEN_35659",0,0,"KEN_35659",NA,NA,NA,NA,NA

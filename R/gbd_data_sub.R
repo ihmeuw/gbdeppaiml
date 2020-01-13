@@ -15,6 +15,82 @@ extend.years <- function(dt, years){
   return(dt)
 }
 
+extrapolate_years <- function(dt, end_year, years_to_average = 5, trans_vars, id_vars = c('location_id', 'age_group_id', 'sex_id')){
+  
+  # Check to make sure year or year_id are not present in id_vars
+  if ("year_id" %in% id_vars) stop("Years cannot be used to identify variables in the data set.")
+  
+  # But we do need years somewhere!
+  if(!("year_id" %in% names(dt))) stop("The data table must contain a year_id variable")
+  
+  
+  # We'll only need years between start and end years
+  #value_var = "hiv_deaths"
+  max_year <- max(dt$year_id)
+  start_year <- max_year - years_to_average
+  dt$year_id <- as.numeric(dt$year_id)
+  
+  all <- lapply(trans_vars,function(value_var){
+    print(value_var)
+    
+    output <- dt[between(year_id, start_year, max_year), c(value_var,id_vars,"year_id"),with=FALSE]
+    dt_var <- dt[,.SD, .SDcols=c(id_vars, value_var, 'year_id')]
+    
+    # Key on id_vars, and order by year
+    setkeyv(output, id_vars)
+    output <- output[order(year_id), .SD, by=id_vars]
+    # Find rate of change using shift
+    output[, roc := log(get(value_var) / shift(get(value_var), type='lag')), by=id_vars]
+    
+    # Find average of roc by group, to join on later
+    group_change <- output[, .(mean_change = mean(roc, na.rm=T)), by=id_vars]
+    
+    # For forecasting, we'll cast it wide and add columns.
+    form <- as.formula(paste0(paste(id_vars, collapse="+"), "~ year_id"))
+    output_wide <- data.table::dcast(output, form, value.var = value_var)
+
+    # Merge averaged ROC onto output
+    
+    output_wide <- output_wide[group_change, on=id_vars]
+    
+    # Forecasting part
+    
+    for (yr in c((max_year+1):end_year)) {
+      interval <- yr - max_year
+      output_wide[, as.character(yr) := lapply(.SD, function(x) exp(interval*mean_change)*x), .SDcols= as.character(max_year)]
+    }
+    
+    # Melt back to long
+    yr_cols <- grep("^[0-9]{4}$", names(output_wide), value=T)
+    output <- melt(output_wide, id.vars = id_vars, measure.vars = yr_cols, variable.name = "year_id", value.name = value_var)
+    
+    
+    # Coerce year_id back to integer, and bind back to original table
+    output[, year_id := as.integer(levels(year_id))[year_id]]
+    output <- output[between(year_id, max_year + 1, end_year)]
+    # Drop unused columns - output will have only id_vars, value_var, and year_id\
+    dt_var <- dt_var[, .SD, .SDcols=c(id_vars, value_var, 'year_id')]
+    
+    ##Replace infinate values with 0, e.g. male births is always 0
+    output[is.nan(get(value_var)),paste(value_var) := 0]
+    
+    # Rbind and sort before returning
+    dt_var <- rbind(dt_var, output, use.names=T)
+    setkeyv(dt_var, c(id_vars, 'year_id'))
+    return(dt_var)
+    
+  })
+  
+  
+  dt <- Reduce(merge,all)
+  
+  
+  
+  
+  return(dt)
+  
+}
+
 append.ciba.incrr <- function(dt, loc, run.name){
   ciba.incrr.prior <- fread(paste0('/share/hiv/ciba_temp/180531_numbat_adj/', loc, '_SPU_inc_draws.csv'))
   ciba.incrr.prior <- melt(ciba.incrr.prior, id.vars = c('year', 'single.age', 'sex'))
@@ -319,8 +395,12 @@ sub.paeds <- function(dt, loc, k, start.year = 1970, stop.year = stop.year){
   }else{
     art <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/paeds/childARTcoverage/', loc, '.csv'))
   }
-
-  art <- extend.years(art, years)
+  setnames(art, old = 'year', new = 'year_id')
+  art <- extrapolate_years(art, end_year = stop.year, id_vars = c('ART_cov_pct', 'Cotrim_cov_pct', 'Cotrim_cov_num'), trans_vars = 'ART_cov_num')
+  
+  #art <- extend.years(art, years)
+  setnames(art, old = 'year_id', new = 'year')
+  
   if(min(art$year) > start.year){
     backfill <- data.table(year = start.year:(min(art$year) - 1))
     backfill <- backfill[, names(art)[!names(art) == 'year'] := 0]
@@ -812,10 +892,24 @@ geo_adj <- function(loc, dt, i, uncertainty) {
     print("using LBD Adjustment")
     
     ##Bring in the matched data - reading in as CSV rather then fread because the latter seems to add quotations when there are escape characters, which messes up the matching
+    #######change the directory here
+  if(lbd.anc){
+    if(file.exists(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/offset/', loc, '.csv'))){ 
+      anc.dt.all <- read.csv(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/offset/', loc, '.csv'))  
+    if(any(colnames(anc.dt.all) == 'X')){
+      anc.dt.all <- anc.dt.all[,-which(colnames(anc.dt.all) == 'X')]
+    }}
+
+  }else{
     anc.dt.all <- read.csv(paste0('/share/hiv/data/lbd_anc/', loc, '_ANC_matched.csv'))  
+    
+  }
     anc.dt.all <- as.data.table(anc.dt.all)
-    anc.dt.all  <- anc.dt.all[,c( "clinic","year_id","mean","site_pred","adm0_mean","adm0_lower", "adm0_upper","subpop","high_risk")]
-    setnames(anc.dt.all,c("clinic","year_id"),c("site","year"))
+    if(!lbd.anc){
+      anc.dt.all  <- anc.dt.all[,c( "clinic","year_id","mean","site_pred","adm0_mean","adm0_lower", "adm0_upper","subpop","high_risk")]
+      setnames(anc.dt.all,c("clinic","year_id"),c("site","year"))
+      
+    }
     eppd <- attr(dt, "eppd")
   
     # Collapse up to single provincial ANC site for ZAF and SWZ - NEED TO DECIDE WHETHER TO DO THIS GOING FORWARD
@@ -885,66 +979,80 @@ geo_adj <- function(loc, dt, i, uncertainty) {
     
 
     ##Generate the local:national offest term as the probit difference between national and predicted site prevalence - by subpopulation to avoid duplicates
-    all.anc <- list()
+    all.anc <- data.table()
     
-    for(subpop2 in unique(anc.dt.all$subpop)){
-      
-      if(subpop2 %in% unique(eppd$ancsitedat$subpop)){
-      anc.dt <- anc.dt.all[subpop == subpop2] 
-      site.dat <- eppd$ancsitedat[eppd$ancsitedat$subpop==subpop2,]
-      site.dat <- as.data.table(site.dat)
-      } else {
-       anc.dt <- anc.dt.all
-       site.dat <- eppd$ancsitedat
-       site.dat <- as.data.table(site.dat)
-      }
-     
-      anc.dt  <- anc.dt[,offset := qnorm(adm0_mean)-qnorm(site_pred)]
-      #Copy year 2000 or otherwise earliest year to fill in  early years where GBD has data but LBD does not  
-      post.2000 <- anc.dt[year >=2000]
-      min.dt <- post.2000[year == min(year),.(offset), by = 'site']
-      
-      if(subpop2 %in% unique(eppd$ancsitedat$subpop)){
-      temp.dat <- merge(site.dat,anc.dt[,.(site,subpop,year,site_pred,adm0_mean,adm0_lower,adm0_upper,offset,high_risk)], by=c("site","subpop","year"),all.x=TRUE)
-      } else {
-      temp.dat <- merge(site.dat,anc.dt[,.(site,year,site_pred,adm0_mean,adm0_lower,adm0_upper,offset,high_risk)], by=c("site","year"),all.x=TRUE)
+   
+      for(subpop2 in unique(anc.dt.all$subpop)){
         
-      }
-      #Duplicate issue with 'pseudo sites' in Mozambique
-      if(loc == "MOZ"){
-        min.dt <- unique(min.dt)
-      }
+        if(subpop2 %in% unique(eppd$ancsitedat$subpop)){
+          anc.dt <- anc.dt.all[subpop == subpop2] 
+          site.dat <- eppd$ancsitedat[eppd$ancsitedat$subpop==subpop2,]
+          site.dat <- as.data.table(site.dat)
+        } else {
+          anc.dt <- anc.dt.all
+          site.dat <- eppd$ancsitedat
+          site.dat <- as.data.table(site.dat)
+        }
+        
+        anc.dt  <- anc.dt[,offset := qnorm(adm0_mean)-qnorm(site_pred)]
+        #Copy year 2000 or otherwise earliest year to fill in  early years where GBD has data but LBD does not  
+        post.2000 <- anc.dt[year >=2000]
+        min.dt <- post.2000[year == min(year),.(offset), by = 'site']
+        anc.dt[,'adm0_mean' := as.numeric(anc.dt[,adm0_mean])]
+        anc.dt[,'adm0_lower' := as.numeric(anc.dt[,adm0_lower])]
+        anc.dt[,'adm0_upper' := as.numeric(anc.dt[,adm0_upper])]
+        anc.dt[,'site_pred' := as.numeric(anc.dt[,site_pred])]
+        
+        
+        
+        if(subpop2 %in% unique(eppd$ancsitedat$subpop)){
+          temp.dat <- merge(site.dat,anc.dt[,.(site,subpop,year,site_pred,adm0_mean,adm0_lower,adm0_upper,offset,high_risk)], by=c("site","subpop","year", 'adm0_mean', 'adm0_upper', 'adm0_lower', 'site_pred', 'high_risk'),all.x=TRUE)
+        } else {
+          temp.dat <- merge(site.dat,anc.dt[,.(site,year,site_pred,adm0_mean,adm0_lower,adm0_upper,offset,high_risk)], by=c("site","year"),all.x=TRUE)
+          
+        }
+        #Duplicate issue with 'pseudo sites' in Mozambique
+        if(loc == "MOZ"){
+          min.dt <- unique(min.dt)
+        }
+        
+        merge.dt <- copy(temp.dat[year < 2000 & !is.na(prev)])[,offset := NULL]
+        merge.dt <- merge(merge.dt, min.dt, by = 'site')
+        
+        
+        temp.dat <- temp.dat[year >= 2000 & !is.na(prev)]
+        temp.dat <- rbind(temp.dat, merge.dt, use.names = T, fill = TRUE)
+        
+        all.anc <- rbind(all.anc,temp.dat)
+        
+        
       
-      merge.dt <- copy(temp.dat[year < 2000 & !is.na(prev)])[,offset := NULL]
-      merge.dt <- merge(merge.dt, min.dt, by = 'site')
-
       
-      temp.dat <- temp.dat[year >= 2000 & !is.na(prev)]
-      temp.dat <- rbind(temp.dat, merge.dt, use.names = T, fill = TRUE)
-      
-      all.anc <- rbind(all.anc,temp.dat)
-      
-    
     }
+    
       
      nrow(all.anc) == nrow(eppd$ancsitedat)
+     any(is.na(all.anc[,'offset']))
      all.anc[is.na(offset), offset := 0]
      all.anc[offset > 0.15, offset := 0.15]
      all.anc[offset < -0.15, offset := -0.15]
-     all.anc[is.na(high_risk),high_risk := FALSE]
+    if(!lbd.anc){ all.anc[is.na(high_risk),high_risk := FALSE]
+      all.anc <- all.anc[!high_risk==TRUE]
+      all.anc[,c('site_pred','adm0_mean','adm0_lower','adm0_upper','high_risk') := NULL]}else{
+        all.anc[,c('adm0_mean','adm0_lower','adm0_upper') := NULL] 
+        
+      }
      
      ##This corrects a mistake in the file generation - should be corrected in the initial generation
      if(loc=="NGA_25332"){
        all.anc[,high_risk := FALSE]
      }
-     
-     all.anc <- all.anc[!high_risk==TRUE]
-     all.anc[,c('site_pred','adm0_mean','adm0_lower','adm0_upper','high_risk') := NULL]
+
      
      all.anc <- as.data.frame(all.anc)
      
      
-     eppd$ancsitedat <- all.anc
+     eppd$ancsitedat <- unique(all.anc)
      
      attr(dt, "eppd") <- eppd
 
@@ -961,7 +1069,8 @@ geo_adj <- function(loc, dt, i, uncertainty) {
     
     #Still need to split 2019 to sublocations
     for(c.year in c('UNAIDS_2019', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
-      art.path <-paste0(root, "WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/extrapolate_ART/PV_testing/", c.year, "/", temp.loc, "_Adult_ART_cov.csv") 
+      #art.path <-paste0(root, "WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/extrapolate_ART/PV_testing/", c.year, "/", temp.loc, "_Adult_ART_cov.csv") 
+      art.path <-paste0('/ihme/homes/mwalte10/', "04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/extrapolate_ART/PV_testing/", c.year, "/", temp.loc, "_Adult_ART_cov.csv") 
       if(file.exists(art.path)){
         print(c.year)
         art.dt <- fread(art.path)

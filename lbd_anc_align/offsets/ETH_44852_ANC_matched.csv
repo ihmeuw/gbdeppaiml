@@ -1,0 +1,70 @@
+"clinic","year_id","used","n","type","agegr","age","agspan","site_pred","adm0_mean","adm0_lower","adm0_upper","ihme_loc_id","lbd_areal","lbd_missing","iso3","adm1_mean","adm1_lower","adm1_upper","iso3_adm1","loc_id_adm1"
+"Enda Mariam Kanaro (Tigray)",1992,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Adigrat",2001,TRUE,400,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Maychew",2001,TRUE,303,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Mekele",2001,TRUE,400,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Mekele",2002,TRUE,400,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Abi Adi-Urban",2003,TRUE,208,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Adigrat",2003,TRUE,351,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Atsbi",2003,TRUE,400,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Edaga Arbi",2003,TRUE,400,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Maychew",2003,TRUE,258,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Mekele",2003,TRUE,429,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Abi Adi-Urban",2005,TRUE,261,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Adigrat",2005,TRUE,306,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Atsbi",2005,TRUE,405,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Edaga Arbi",2005,TRUE,415,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Maychew",2005,TRUE,271,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Mekele",2005,TRUE,306,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Semema",2005,TRUE,405,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Zana",2005,TRUE,322,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Abi Adi-Urban",2007,TRUE,250,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Adigoshu",2007,TRUE,313,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Adigrat",2007,TRUE,375,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Atsbi",2007,TRUE,500,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Chercher",2007,TRUE,307,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Edaga Arbi",2007,TRUE,540,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Maychew",2007,TRUE,291,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Mekele",2007,TRUE,268,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Semema",2007,TRUE,401,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Zana",2007,TRUE,446,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Abi Adi-Urban",2009,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Adigoshu",2009,TRUE,314,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Adigrat",2009,TRUE,500,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Atsbi",2009,TRUE,401,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Chercher",2009,TRUE,327,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Edaga Arbi",2009,TRUE,459,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Maychew",2009,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Mekele",2009,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Semema",2009,TRUE,321,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Zana",2009,TRUE,465,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Abi Adi-Urban",2012,TRUE,308,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Adigoshu",2012,TRUE,419,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Adigrat",2012,TRUE,499,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Atsbi",2012,TRUE,400,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Chercher",2012,TRUE,403,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Edaga Arbi",2012,TRUE,440,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Maychew",2012,TRUE,307,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Mekele",2012,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Semema",2012,TRUE,405,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Zana",2012,TRUE,400,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Abi Adi-Urban",2014,TRUE,370,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Adigoshu",2014,TRUE,470,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Adigrat",2014,TRUE,500,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Atsbi",2014,TRUE,500,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Chercher",2014,TRUE,474,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Edaga Arbi",2014,TRUE,563,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Maychew",2014,TRUE,370,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Mekele",2014,TRUE,380,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Semema",2014,TRUE,477,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Zana",2014,TRUE,470,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Abi Adi-Urban",2016,TRUE,383,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Adigoshu",2016,TRUE,460,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Adigrat",2016,TRUE,311,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Atsbi",2016,TRUE,500,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Chercher",2016,TRUE,253,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Edaga Arbi",2016,TRUE,500,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Maychew",2016,TRUE,311,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Mekele",2016,TRUE,370,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Semema",2016,TRUE,483,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA
+"Zana",2016,TRUE,387,"ancss","15-49","15","35",0,0,0,0,"ETH_44852",0,0,"ETH_44852",NA,NA,NA,NA,NA

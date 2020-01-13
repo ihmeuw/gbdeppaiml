@@ -1,0 +1,13 @@
+"clinic","year_id","used","n","type","agegr","age","agspan","site_pred","adm0_mean","adm0_lower","adm0_upper","ihme_loc_id","lbd_areal","lbd_missing","iso3","adm1_mean","adm1_lower","adm1_upper","iso3_adm1","loc_id_adm1"
+"Njambini",1998,TRUE,219,"ancss","15-49","15","35",NA,NA,NA,NA,"KEN_35651",0,0,"KEN_35651",NA,NA,NA,NA,NA
+"Njambini",1997,TRUE,334,"ancss","15-49","15","35",NA,NA,NA,NA,"KEN_35651",0,0,"KEN_35651",NA,NA,NA,NA,NA
+"Njambini",2000,TRUE,97,"ancss","15-49","15","35",0,0,0,0,"KEN_35651",0,0,"KEN_35651",NA,NA,NA,NA,NA
+"Njambini",2001,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"KEN_35651",0,0,"KEN_35651",NA,NA,NA,NA,NA
+"Njambini",2002,TRUE,166,"ancss","15-49","15","35",0,0,0,0,"KEN_35651",0,0,"KEN_35651",NA,NA,NA,NA,NA
+"Njambini",2003,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"KEN_35651",0,0,"KEN_35651",NA,NA,NA,NA,NA
+"Njambini",2004,TRUE,101,"ancss","15-49","15","35",0,0,0,0,"KEN_35651",0,0,"KEN_35651",NA,NA,NA,NA,NA
+"Njambini",2005,TRUE,228,"ancss","15-49","15","35",0,0,0,0,"KEN_35651",0,0,"KEN_35651",NA,NA,NA,NA,NA
+"Njambini",2006,TRUE,230,"ancss","15-49","15","35",0,0,0,0,"KEN_35651",0,0,"KEN_35651",NA,NA,NA,NA,NA
+"Njambini",2009,TRUE,191,"ancss","15-49","15","35",0,0,0,0,"KEN_35651",0,0,"KEN_35651",NA,NA,NA,NA,NA
+"Njambini",2010,TRUE,313,"ancss","15-49","15","35",0,0,0,0,"KEN_35651",0,0,"KEN_35651",NA,NA,NA,NA,NA
+"Njambini",2011,TRUE,315,"ancss","15-49","15","35",0,0,0,0,"KEN_35651",0,0,"KEN_35651",NA,NA,NA,NA,NA

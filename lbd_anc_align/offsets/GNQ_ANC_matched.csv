@@ -1,0 +1,20 @@
+"clinic","year_id","used","mean","n","type","agegr","age","agspan","ihme_loc_id","lbd_areal","lbd_missing","iso3","site_pred","adm0_mean","adm0_lower","adm0_upper","adm1_mean","adm1_lower","adm1_upper","iso3_adm1","loc_id_adm1"
+"Todo el país",1996,TRUE,0.072,300,"ancss","15-49","15","35","GNQ",0,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Todo el país",1997,TRUE,0.037,300,"ancss","15-49","15","35","GNQ",0,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Todo el país",1999,TRUE,0.033,300,"ancss","15-49","15","35","GNQ",0,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Todo el país",2000,TRUE,0.065,300,"ancss","15-49","15","35","GNQ",0,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Todo el país",2001,TRUE,0.087,300,"ancss","15-49","15","35","GNQ",0,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Todo el país",2002,TRUE,0.035,300,"ancss","15-49","15","35","GNQ",0,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Todo el país",2003,TRUE,0.086,300,"ancss","15-49","15","35","GNQ",0,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Todo el país",2004,TRUE,0.076,300,"ancss","15-49","15","35","GNQ",0,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Todo el país",2005,TRUE,0.1,300,"ancss","15-49","15","35","GNQ",0,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Todo el país",2007,TRUE,0.114,300,"ancss","15-49","15","35","GNQ",0,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Bioko Norte",2008,TRUE,0.094,541,"ancss","15-49","15","35","GNQ",0,0,"GNQ",NA,0.0581736900859644,0.0453709929514196,0.0745950239925263,NA,NA,NA,NA,NA
+"Bioko Sur",2008,TRUE,0.067,60,"ancss","15-49","15","35","GNQ",0,0,"GNQ",NA,0.0581736900859644,0.0453709929514196,0.0745950239925263,NA,NA,NA,NA,NA
+"Centro Sur",2008,TRUE,0.07,143,"ancss","15-49","15","35","GNQ",0,0,"GNQ",0.0492981404268162,0.0581736900859644,0.0453709929514196,0.0745950239925263,NA,NA,NA,NA,NA
+"Encuesta de seroprevalencia VIH Gestantes-2008",2008,TRUE,0.073,300,"ancss","15-49","15","35","GNQ",0,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Kie Ntem",2008,TRUE,0.066,350,"ancss","15-49","15","35","GNQ",0,0,"GNQ",0.0529678002690188,0.0581736900859644,0.0453709929514196,0.0745950239925263,NA,NA,NA,NA,NA
+"Litoral",2008,TRUE,0.052,402,"ancss","15-49","15","35","GNQ",0,0,"GNQ",NA,0.0581736900859644,0.0453709929514196,0.0745950239925263,NA,NA,NA,NA,NA
+"Todo el país",2010,TRUE,0.099,300,"ancss","15-49","15","35","GNQ",0,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Todo el país",2011,TRUE,0.11,300,"ancss","15-49","15","35","GNQ",0,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Todo el país",2012,TRUE,0.074,300,"ancss","15-49","15","35","GNQ",0,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA

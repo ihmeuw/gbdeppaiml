@@ -1,0 +1,15 @@
+"clinic","year_id","used","n","type","agegr","age","agspan","site_pred","adm0_mean","adm0_lower","adm0_upper","ihme_loc_id","lbd_areal","lbd_missing","iso3","adm1_mean","adm1_lower","adm1_upper","iso3_adm1","loc_id_adm1"
+"Sokoto (Illeha)",1994,TRUE,398,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25351",0,0,"NGA_25351",NA,NA,NA,NA,NA
+"Sokoto (Sokoto)",1994,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25351",0,0,"NGA_25351",NA,NA,NA,NA,NA
+"Sokoto (Sokoto)",1999,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25351",0,0,"NGA_25351",NA,NA,NA,NA,NA
+"Sokoto (Sokoto)",2001,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25351",0,0,"NGA_25351",NA,NA,NA,NA,NA
+"Sokoto (Gwadabawa)",2003,TRUE,50,"ancss","15-49","15","35",0,0,0,0,"NGA_25351",0,0,"NGA_25351",NA,NA,NA,NA,NA
+"Sokoto (Sokoto)",2003,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25351",0,0,"NGA_25351",NA,NA,NA,NA,NA
+"Sokoto (Gwadabawa)",2005,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25351",0,0,"NGA_25351",NA,NA,NA,NA,NA
+"Sokoto (Sokoto)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25351",0,0,"NGA_25351",NA,NA,NA,NA,NA
+"Sokoto (Gwadabawa)",2008,TRUE,149,"ancss","15-49","15","35",0,0,0,0,"NGA_25351",0,0,"NGA_25351",NA,NA,NA,NA,NA
+"Sokoto (Sokoto)",2008,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25351",0,0,"NGA_25351",NA,NA,NA,NA,NA
+"Sokoto (Gwadabawa)",2010,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25351",0,0,"NGA_25351",NA,NA,NA,NA,NA
+"Sokoto (Sokoto)",2010,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25351",0,0,"NGA_25351",NA,NA,NA,NA,NA
+"Sokoto (Gwadabawa)",2014,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25351",0,0,"NGA_25351",NA,NA,NA,NA,NA
+"Sokoto (Sokoto)",2014,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25351",0,0,"NGA_25351",NA,NA,NA,NA,NA

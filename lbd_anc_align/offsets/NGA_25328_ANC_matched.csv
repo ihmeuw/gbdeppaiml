@@ -1,0 +1,27 @@
+"clinic","year_id","used","n","type","agegr","age","agspan","site_pred","adm0_mean","adm0_lower","adm0_upper","ihme_loc_id","lbd_areal","lbd_missing","iso3","adm1_mean","adm1_lower","adm1_upper","iso3_adm1","loc_id_adm1"
+"Ebonyi (Abakaliki)",1995,TRUE,200,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25328",0,0,"NGA_25328",NA,NA,NA,NA,NA
+"Ebonyi (Abakaliki)",1994,TRUE,439,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25328",0,0,"NGA_25328",NA,NA,NA,NA,NA
+"Ebonyi (Abakaliki)",1999,TRUE,153,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25328",0,0,"NGA_25328",NA,NA,NA,NA,NA
+"Ebonyi (Abakaliki)",1992,TRUE,151,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25328",0,0,"NGA_25328",NA,NA,NA,NA,NA
+"Ebonyi (Onueke)",1999,TRUE,160,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25328",0,0,"NGA_25328",NA,NA,NA,NA,NA
+"Ebonyi (Abakaliki)",2001,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25328",0,0,"NGA_25328",NA,NA,NA,NA,NA
+"Ebonyi (Afikpo)",2001,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25328",0,0,"NGA_25328",NA,NA,NA,NA,NA
+"Ebonyi (Abakaliki)",2003,TRUE,324,"ancss","15-49","15","35",0,0,0,0,"NGA_25328",0,0,"NGA_25328",NA,NA,NA,NA,NA
+"Ebonyi (Afikpo)",2003,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25328",0,0,"NGA_25328",NA,NA,NA,NA,NA
+"Ebonyi (Ndubia)",2003,TRUE,60,"ancss","15-49","15","35",0,0,0,0,"NGA_25328",0,0,"NGA_25328",NA,NA,NA,NA,NA
+"Ebonyi  (Itim Ukwu)",2005,TRUE,148,"ancss","15-49","15","35",0,0,0,0,"NGA_25328",0,0,"NGA_25328",NA,NA,NA,NA,NA
+"Ebonyi (Abakaliki)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25328",0,0,"NGA_25328",NA,NA,NA,NA,NA
+"Ebonyi (Afikpo)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25328",0,0,"NGA_25328",NA,NA,NA,NA,NA
+"Ebonyi (Ndubia)",2005,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25328",0,0,"NGA_25328",NA,NA,NA,NA,NA
+"Ebonyi  (Itim Ukwu)",2008,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25328",0,0,"NGA_25328",NA,NA,NA,NA,NA
+"Ebonyi (Abakaliki)",2008,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25328",0,0,"NGA_25328",NA,NA,NA,NA,NA
+"Ebonyi (Afikpo)",2008,TRUE,299,"ancss","15-49","15","35",0,0,0,0,"NGA_25328",0,0,"NGA_25328",NA,NA,NA,NA,NA
+"Ebonyi (Ndubia)",2008,TRUE,115,"ancss","15-49","15","35",0,0,0,0,"NGA_25328",0,0,"NGA_25328",NA,NA,NA,NA,NA
+"Ebonyi  (Itim Ukwu)",2010,TRUE,156,"ancss","15-49","15","35",0,0,0,0,"NGA_25328",0,0,"NGA_25328",NA,NA,NA,NA,NA
+"Ebonyi (Abakaliki)",2010,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25328",0,0,"NGA_25328",NA,NA,NA,NA,NA
+"Ebonyi (Afikpo)",2010,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25328",0,0,"NGA_25328",NA,NA,NA,NA,NA
+"Ebonyi (Ndubia)",2010,TRUE,153,"ancss","15-49","15","35",0,0,0,0,"NGA_25328",0,0,"NGA_25328",NA,NA,NA,NA,NA
+"Ebonyi  (Itim Ukwu)",2014,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25328",0,0,"NGA_25328",NA,NA,NA,NA,NA
+"Ebonyi (Abakaliki)",2014,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25328",0,0,"NGA_25328",NA,NA,NA,NA,NA
+"Ebonyi (Afikpo)",2014,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25328",0,0,"NGA_25328",NA,NA,NA,NA,NA
+"Ebonyi (Ndubia)",2014,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25328",0,0,"NGA_25328",NA,NA,NA,NA,NA

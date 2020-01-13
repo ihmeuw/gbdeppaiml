@@ -1,0 +1,15 @@
+"clinic","year_id","used","n","type","agegr","age","agspan","site_pred","adm0_mean","adm0_lower","adm0_upper","ihme_loc_id","lbd_areal","lbd_missing","iso3","adm1_mean","adm1_lower","adm1_upper","iso3_adm1","loc_id_adm1"
+"Maragua",1998,TRUE,384,"ancss","15-49","15","35",NA,NA,NA,NA,"KEN_35645",0,0,"KEN_35645",NA,NA,NA,NA,NA
+"Maragua",1995,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"KEN_35645",0,0,"KEN_35645",NA,NA,NA,NA,NA
+"Maragua",1997,TRUE,130,"ancss","15-49","15","35",NA,NA,NA,NA,"KEN_35645",0,0,"KEN_35645",NA,NA,NA,NA,NA
+"Maragua",1994,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"KEN_35645",0,0,"KEN_35645",NA,NA,NA,NA,NA
+"Maragua",2000,TRUE,444,"ancss","15-49","15","35",0,0,0,0,"KEN_35645",0,0,"KEN_35645",NA,NA,NA,NA,NA
+"Maragua",2001,TRUE,301,"ancss","15-49","15","35",0,0,0,0,"KEN_35645",0,0,"KEN_35645",NA,NA,NA,NA,NA
+"Maragua",2002,TRUE,414,"ancss","15-49","15","35",0,0,0,0,"KEN_35645",0,0,"KEN_35645",NA,NA,NA,NA,NA
+"Maragua",2003,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"KEN_35645",0,0,"KEN_35645",NA,NA,NA,NA,NA
+"Maragua",2004,TRUE,126,"ancss","15-49","15","35",0,0,0,0,"KEN_35645",0,0,"KEN_35645",NA,NA,NA,NA,NA
+"Maragua",2005,TRUE,298,"ancss","15-49","15","35",0,0,0,0,"KEN_35645",0,0,"KEN_35645",NA,NA,NA,NA,NA
+"Maragua",2006,TRUE,291,"ancss","15-49","15","35",0,0,0,0,"KEN_35645",0,0,"KEN_35645",NA,NA,NA,NA,NA
+"Maragua",2009,TRUE,289,"ancss","15-49","15","35",0,0,0,0,"KEN_35645",0,0,"KEN_35645",NA,NA,NA,NA,NA
+"Maragua",2010,TRUE,315,"ancss","15-49","15","35",0,0,0,0,"KEN_35645",0,0,"KEN_35645",NA,NA,NA,NA,NA
+"Maragua",2011,TRUE,313,"ancss","15-49","15","35",0,0,0,0,"KEN_35645",0,0,"KEN_35645",NA,NA,NA,NA,NA

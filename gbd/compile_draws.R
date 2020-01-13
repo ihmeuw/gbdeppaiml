@@ -6,25 +6,27 @@ user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 code.dir <- paste0(ifelse(windows, "H:", paste0("/homes/", user)), "/gbdeppaiml/")
 ## Packages
 library(data.table); library(mvtnorm); library(survey);library(assertable)
+print('Packages loaded')
 
 ## Arguments
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) > 0) {
-  # run.name <- args[1]
-  run.name <- "191002_sitar"
+   run.name <- args[1]
+  #run.name <- "191002_sitar"
   loc <- args[2]
   n <- as.integer(args[3])
   draw.fill <- as.logical(args[4])
   paediatric <- as.logical(args[5])
   gbdyear <- 'gbd20'
 } else {
-  run.name <- "190630_rhino2"
-  loc <- "MWI"
+  run.name <- "191224_trumpet"
+  loc <- "AGO"
   n <- 1
   draw.fill <- TRUE
   paediatric <- TRUE
 }
+gbdyear <- 'gbd20'
 
 ## Functions
 fill_draws <- function(fill.dt,type=NULL){
@@ -50,56 +52,80 @@ fill_draws <- function(fill.dt,type=NULL){
   return(fill.dt)
 }
 
-draw.path <- paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, "/", loc)
-draw.list <- list.files(draw.path)
-## subset out additional outputs (theta, under-1 splits)
-## this could probably be tidied up
-draw.list <- draw.list[grepl('.csv', draw.list) & !grepl('theta_', draw.list) & !grepl('under_', draw.list)]
-draw.list <- draw.list[gsub('.csv', '', draw.list) %in% 1:n]
+### Tables
+loc.table <- fread(paste0('/share/hiv/epp_input/gbd20/', run.name, '/location_table.csv'))
+print('loc.table loaded')
 
-dt <- lapply(draw.list, function(draw){
-draw.dt <- fread(paste0(draw.path, '/', draw))
-})
+#loc.table <- data.table(get_locations(hiv_metadata = T))
 
-##Sometimes there are negative values, need to replace
-
-dt.check <- lapply(dt,function(draw.dt)
-  try(assert_values(draw.dt,colnames(draw.dt),test="gte",0))
-)
-
-dt.check <- unlist(lapply(dt.check,function(check) !class(check)=="try-error"))
-dt <- rbindlist(dt[dt.check])
+### Code
 
 
-if(draw.fill){
-  dt <- fill_draws(dt,type="adult")
-}
 
-compiled.path <- paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, "/compiled/")
-dir.create(compiled.path, recursive = TRUE, showWarnings = FALSE)
-write.csv(dt, paste0(compiled.path, loc, '.csv'), row.names = F)
+# for(loc in loc.list){ 
+#   
+#   tryCatch({
+    draw.path <- paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, "/", loc)
+    draw.list <- list.files(draw.path)
+    print('draw.list exists')
+    ## subset out additional outputs (theta, under-1 splits)
+    ## this could probably be tidied up
+    draw.list <- draw.list[grepl('.csv', draw.list) & !grepl('theta_', draw.list) & !grepl('under_', draw.list)]
+    draw.list <- draw.list[gsub('.csv', '', draw.list) %in% 1:n]
+    
+    dt <- lapply(draw.list, function(draw){
+      draw.dt <- fread(paste0(draw.path, '/', draw))
+    })
+    
+    ##Sometimes there are negative values, need to replace
+    
+    dt.check <- lapply(dt,function(draw.dt)
+      try(assert_values(draw.dt,colnames(draw.dt),test="gte",0))
+    )
+    
+    dt.check <- unlist(lapply(dt.check,function(check) !class(check)=="try-error"))
+    dt <- rbindlist(dt[dt.check])
+    print('negative values replaced if necessary')
+    
+    if(draw.fill){
+      dt <- fill_draws(dt,type="adult")
+    }
+    
+    print('fill_draws done')
+    compiled.path <- paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, "/compiled/")
+    dir.create(compiled.path, recursive = TRUE, showWarnings = FALSE)
+    write.csv(dt, paste0(compiled.path, loc, '.csv'), row.names = F)
+    print('first file saved')
+    print(compiled.path)
+    
+    ## under 1 splits
+    if(paediatric){
+      split.list <- list.files(draw.path)
+      split.list <- split.list[grepl('under_', split.list)]
+      split.dt <- lapply(split.list, function(draw){
+        draw.dt <- fread(paste0(draw.path, '/', draw))
+      })
+      
+      
+      dt.check <- lapply(split.dt,function(draw.dt)
+        try(assert_values(draw.dt,colnames(draw.dt),test="gte",0))
+      )
+      
+      dt.check <- unlist(lapply(dt.check,function(check) !class(check)=="try-error"))
+      split.dt <- rbindlist(split.dt[dt.check])
+      
+      if(draw.fill){
+        split.dt <- fill_draws(split.dt,type="child")
+      }
+      
+      write.csv(split.dt, paste0(compiled.path, loc, '_under1_splits.csv'), row.names = F)
+    }
+  # }, error=function(e){})
+  # 
+  # 
+  # 
+  # 
+  # }
 
 
-## under 1 splits
-if(paediatric){
-  split.list <- list.files(draw.path)
-  split.list <- split.list[grepl('under_', split.list)]
-  split.dt <- lapply(split.list, function(draw){
-  draw.dt <- fread(paste0(draw.path, '/', draw))
-  })
-  
-  
-  dt.check <- lapply(split.dt,function(draw.dt)
-    try(assert_values(draw.dt,colnames(draw.dt),test="gte",0))
-  )
-  
-  dt.check <- unlist(lapply(dt.check,function(check) !class(check)=="try-error"))
-  split.dt <- rbindlist(split.dt[dt.check])
-  
-  if(draw.fill){
-    split.dt <- fill_draws(split.dt,type="child")
-  }
-  
-  write.csv(split.dt, paste0(compiled.path, loc, '_under1_splits.csv'), row.names = F)
-}
 

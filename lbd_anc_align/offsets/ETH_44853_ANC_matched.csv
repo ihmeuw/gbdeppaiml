@@ -1,0 +1,37 @@
+"clinic","year_id","used","n","type","agegr","age","agspan","site_pred","adm0_mean","adm0_lower","adm0_upper","ihme_loc_id","lbd_areal","lbd_missing","iso3","adm1_mean","adm1_lower","adm1_upper","iso3_adm1","loc_id_adm1"
+"Aysaita",2001,TRUE,356,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Aysaita",2003,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Chifra",2003,TRUE,465,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Dubti",2003,TRUE,250,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Aysaita",2005,TRUE,400,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Dubti",2005,TRUE,363,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Aboala HC",2007,TRUE,400,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Aysaita",2007,TRUE,241,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Chifra",2007,TRUE,400,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Dubti",2007,TRUE,357,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Aboala HC",2009,TRUE,399,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Aysaita",2009,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Chifra",2009,TRUE,399,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Delfage HC",2009,TRUE,367,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Dubti",2009,TRUE,299,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Aboala HC",2012,TRUE,400,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Aysaita",2012,TRUE,336,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Chifra",2012,TRUE,435,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Delfage HC",2012,TRUE,402,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Dubti",2012,TRUE,374,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Kelewan HC",2012,TRUE,401,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Werer HC",2012,TRUE,405,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Aboala HC",2014,TRUE,449,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Aysaita",2014,TRUE,451,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Chifra",2014,TRUE,459,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Delfage HC",2014,TRUE,449,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Dubti",2014,TRUE,435,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Kelewan HC",2014,TRUE,461,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Werer HC",2014,TRUE,448,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Aboala HC",2016,TRUE,438,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Aysaita",2016,TRUE,460,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Chifra",2016,TRUE,450,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Delfage HC",2016,TRUE,460,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Dubti",2016,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Kelewan HC",2016,TRUE,451,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA
+"Werer HC",2016,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"ETH_44853",0,0,"ETH_44853",NA,NA,NA,NA,NA

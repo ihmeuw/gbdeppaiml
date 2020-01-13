@@ -1,0 +1,29 @@
+"clinic","year_id","used","n","type","agegr","age","agspan","site_pred","adm0_mean","adm0_lower","adm0_upper","ihme_loc_id","lbd_areal","lbd_missing","iso3","adm1_mean","adm1_lower","adm1_upper","iso3_adm1","loc_id_adm1"
+"Calabar",1992,TRUE,278,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25326",0,0,"NGA_25326",NA,NA,NA,NA,NA
+"Calabar",1995,TRUE,487,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25326",0,0,"NGA_25326",NA,NA,NA,NA,NA
+"Calabar",1999,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25326",0,0,"NGA_25326",NA,NA,NA,NA,NA
+"Calabar",1994,TRUE,401,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25326",0,0,"NGA_25326",NA,NA,NA,NA,NA
+"Ikom",1999,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25326",0,0,"NGA_25326",NA,NA,NA,NA,NA
+"Ikom",1994,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25326",0,0,"NGA_25326",NA,NA,NA,NA,NA
+"Ikom",1992,TRUE,75,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25326",0,0,"NGA_25326",NA,NA,NA,NA,NA
+"Rivers (Akampa)",1992,TRUE,42,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25326",0,0,"NGA_25326",NA,NA,NA,NA,NA
+"Rivers (Ogoja)",1995,TRUE,88,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25326",0,0,"NGA_25326",NA,NA,NA,NA,NA
+"Rivers (Ogoja)",1992,TRUE,26,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25326",0,0,"NGA_25326",NA,NA,NA,NA,NA
+"Rivers (Ogoja)",1994,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25326",0,0,"NGA_25326",NA,NA,NA,NA,NA
+"Calabar",2001,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25326",0,0,"NGA_25326",NA,NA,NA,NA,NA
+"Ikom",2001,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25326",0,0,"NGA_25326",NA,NA,NA,NA,NA
+"Akamkpa",2003,TRUE,50,"ancss","15-49","15","35",0,0,0,0,"NGA_25326",0,0,"NGA_25326",NA,NA,NA,NA,NA
+"Calabar",2003,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25326",0,0,"NGA_25326",NA,NA,NA,NA,NA
+"Ikom",2003,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25326",0,0,"NGA_25326",NA,NA,NA,NA,NA
+"Akamkpa",2005,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25326",0,0,"NGA_25326",NA,NA,NA,NA,NA
+"Calabar",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25326",0,0,"NGA_25326",NA,NA,NA,NA,NA
+"Ikom",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25326",0,0,"NGA_25326",NA,NA,NA,NA,NA
+"Akamkpa",2008,TRUE,148,"ancss","15-49","15","35",0,0,0,0,"NGA_25326",0,0,"NGA_25326",NA,NA,NA,NA,NA
+"Calabar",2008,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25326",0,0,"NGA_25326",NA,NA,NA,NA,NA
+"Ikom",2008,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25326",0,0,"NGA_25326",NA,NA,NA,NA,NA
+"Akamkpa",2010,TRUE,151,"ancss","15-49","15","35",0,0,0,0,"NGA_25326",0,0,"NGA_25326",NA,NA,NA,NA,NA
+"Calabar",2010,TRUE,308,"ancss","15-49","15","35",0,0,0,0,"NGA_25326",0,0,"NGA_25326",NA,NA,NA,NA,NA
+"Ikom",2010,TRUE,309,"ancss","15-49","15","35",0,0,0,0,"NGA_25326",0,0,"NGA_25326",NA,NA,NA,NA,NA
+"Akamkpa",2014,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25326",0,0,"NGA_25326",NA,NA,NA,NA,NA
+"Calabar",2014,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25326",0,0,"NGA_25326",NA,NA,NA,NA,NA
+"Ikom",2014,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25326",0,0,"NGA_25326",NA,NA,NA,NA,NA

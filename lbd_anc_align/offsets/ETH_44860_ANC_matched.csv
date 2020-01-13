@@ -1,0 +1,25 @@
+"clinic","year_id","used","n","type","agegr","age","agspan","site_pred","adm0_mean","adm0_lower","adm0_upper","ihme_loc_id","lbd_areal","lbd_missing","iso3","adm1_mean","adm1_lower","adm1_upper","iso3_adm1","loc_id_adm1"
+"Gambella",1999,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"ETH_44860",0,0,"ETH_44860",NA,NA,NA,NA,NA
+"Gambella",1997,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"ETH_44860",0,0,"ETH_44860",NA,NA,NA,NA,NA
+"Gambella",2001,TRUE,252,"ancss","15-49","15","35",0,0,0,0,"ETH_44860",0,0,"ETH_44860",NA,NA,NA,NA,NA
+"Gambella",2002,TRUE,286,"ancss","15-49","15","35",0,0,0,0,"ETH_44860",0,0,"ETH_44860",NA,NA,NA,NA,NA
+"Gambella",2003,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"ETH_44860",0,0,"ETH_44860",NA,NA,NA,NA,NA
+"Gambella",2005,TRUE,254,"ancss","15-49","15","35",0,0,0,0,"ETH_44860",0,0,"ETH_44860",NA,NA,NA,NA,NA
+"Pynido HC",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"ETH_44860",0,0,"ETH_44860",NA,NA,NA,NA,NA
+"Gambella",2007,TRUE,260,"ancss","15-49","15","35",0,0,0,0,"ETH_44860",0,0,"ETH_44860",NA,NA,NA,NA,NA
+"Gambella",2009,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"ETH_44860",0,0,"ETH_44860",NA,NA,NA,NA,NA
+"Itang HC",2009,TRUE,313,"ancss","15-49","15","35",0,0,0,0,"ETH_44860",0,0,"ETH_44860",NA,NA,NA,NA,NA
+"Korgang HC",2009,TRUE,307,"ancss","15-49","15","35",0,0,0,0,"ETH_44860",0,0,"ETH_44860",NA,NA,NA,NA,NA
+"Mettin HC",2009,TRUE,304,"ancss","15-49","15","35",0,0,0,0,"ETH_44860",0,0,"ETH_44860",NA,NA,NA,NA,NA
+"Pynido HC",2009,TRUE,302,"ancss","15-49","15","35",0,0,0,0,"ETH_44860",0,0,"ETH_44860",NA,NA,NA,NA,NA
+"Gambella",2012,TRUE,320,"ancss","15-49","15","35",0,0,0,0,"ETH_44860",0,0,"ETH_44860",NA,NA,NA,NA,NA
+"Itang HC",2012,TRUE,398,"ancss","15-49","15","35",0,0,0,0,"ETH_44860",0,0,"ETH_44860",NA,NA,NA,NA,NA
+"Korgang HC",2012,TRUE,423,"ancss","15-49","15","35",0,0,0,0,"ETH_44860",0,0,"ETH_44860",NA,NA,NA,NA,NA
+"Mettin HC",2012,TRUE,416,"ancss","15-49","15","35",0,0,0,0,"ETH_44860",0,0,"ETH_44860",NA,NA,NA,NA,NA
+"Pynido HC",2012,TRUE,232,"ancss","15-49","15","35",0,0,0,0,"ETH_44860",0,0,"ETH_44860",NA,NA,NA,NA,NA
+"Gambella",2014,TRUE,389,"ancss","15-49","15","35",0,0,0,0,"ETH_44860",0,0,"ETH_44860",NA,NA,NA,NA,NA
+"Itang HC",2014,TRUE,427,"ancss","15-49","15","35",0,0,0,0,"ETH_44860",0,0,"ETH_44860",NA,NA,NA,NA,NA
+"Korgang HC",2014,TRUE,450,"ancss","15-49","15","35",0,0,0,0,"ETH_44860",0,0,"ETH_44860",NA,NA,NA,NA,NA
+"Mettin HC",2014,TRUE,463,"ancss","15-49","15","35",0,0,0,0,"ETH_44860",0,0,"ETH_44860",NA,NA,NA,NA,NA
+"Pynido HC",2014,TRUE,280,"ancss","15-49","15","35",0,0,0,0,"ETH_44860",0,0,"ETH_44860",NA,NA,NA,NA,NA
+"Gambella",2016,TRUE,379,"ancss","15-49","15","35",0,0,0,0,"ETH_44860",0,0,"ETH_44860",NA,NA,NA,NA,NA

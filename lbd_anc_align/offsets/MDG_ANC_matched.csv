@@ -1,0 +1,458 @@
+"clinic","year_id","used","n","type","agegr","age","agspan","site_pred","adm0_mean","adm0_lower","adm0_upper","ihme_loc_id","lbd_areal","lbd_missing","iso3","adm1_mean","adm1_lower","adm1_upper","iso3_adm1","loc_id_adm1"
+"Antananarivo",1990,TRUE,697,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antananarivo",1991,TRUE,428,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antananarivo",1992,TRUE,345,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antananarivo",1993,TRUE,115,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antananarivo",1996,TRUE,11,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antananarivo",1995,TRUE,632,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antananarivo",1994,TRUE,293,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsirabe",1994,TRUE,134,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsirabe",1995,TRUE,15,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsiranana",1992,TRUE,118,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsiranana",1990,TRUE,293,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsiranana",1991,TRUE,269,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsiranana",1994,TRUE,248,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsiranana",1996,TRUE,529,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsiranana",1993,TRUE,110,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsiranana",1995,TRUE,109,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Fianarantsoa",1994,TRUE,179,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Fianarantsoa",1995,TRUE,57,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Fianarantsoa",1993,TRUE,90,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Fianarantsoa",1996,TRUE,534,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Fianarantsoa",1992,TRUE,95,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Fianarantsoa",1991,TRUE,139,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Fianarantsoa",1990,TRUE,41,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Mahajanga",1990,TRUE,17,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Mahajanga",1992,TRUE,140,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Mahajanga",1996,TRUE,543,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Mahajanga",1993,TRUE,157,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Mahajanga",1994,TRUE,201,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Mahajanga",1991,TRUE,219,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Mahajanga",1995,TRUE,369,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Manakara",1996,TRUE,89,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Manakara",1995,TRUE,99,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Manakara",1994,TRUE,132,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Manakara",1992,TRUE,23,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Nosy Be",1990,TRUE,17,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Nosy Be",1995,TRUE,76,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Nosy Be",1994,TRUE,55,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Nosy Be",1993,TRUE,52,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Nosy Be",1992,TRUE,42,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sainte Marie",1995,TRUE,11,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sainte Marie",1996,TRUE,28,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sainte Marie",1992,TRUE,18,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sainte Marie",1993,TRUE,126,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sainte Marie",1994,TRUE,34,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sainte Marie",1990,TRUE,36,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sambava",1990,TRUE,101,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tolagnaro",1994,TRUE,119,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tolagnaro",1995,TRUE,124,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tolagnaro",1990,TRUE,70,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tolagnaro",1992,TRUE,45,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tolagnaro",1993,TRUE,43,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tsiroanomandidy",1994,TRUE,187,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tsiroanomandidy",1995,TRUE,56,"ancss","15-49","15","35",NA,NA,NA,NA,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antananarivo",2003,TRUE,414,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsiranana",2003,TRUE,72,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Fianarantsoa",2003,TRUE,50,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Mahajanga",2003,TRUE,198,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antananarivo",2005,TRUE,476,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsirabe",2005,TRUE,677,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsiranana",2005,TRUE,335,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Fianarantsoa",2005,TRUE,528,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Mahajanga",2005,TRUE,695,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Morondava",2005,TRUE,396,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Nosy Be",2005,TRUE,243,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sainte Marie",2005,TRUE,96,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sambava",2005,TRUE,463,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Toamasina",2005,TRUE,546,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tolagnaro",2005,TRUE,356,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Toliary",2005,TRUE,295,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tsiroanomandidy",2005,TRUE,168,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Alakamisy Itenina",2007,TRUE,259,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambatondrazaka",2007,TRUE,248,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambohibary",2007,TRUE,726,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambohimandroso",2007,TRUE,168,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambondromamy",2007,TRUE,175,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambositra",2007,TRUE,329,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambovombe",2007,TRUE,195,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ampandriankilandy",2007,TRUE,67,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Analaiva",2007,TRUE,185,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Andriba",2007,TRUE,112,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Anivorano Nord",2007,TRUE,250,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Anosibe Ifanja",2007,TRUE,240,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antananarivo",2007,TRUE,363,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsirabe",2007,TRUE,1005,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsiranana",2007,TRUE,389,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsohihy",2007,TRUE,321,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Belobaka",2007,TRUE,257,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Betanatanana",2007,TRUE,75,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Farafangana",2007,TRUE,456,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Fianarantsoa",2007,TRUE,363,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Foulpointe",2007,TRUE,185,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Fénérive Est",2007,TRUE,303,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ifarantsa",2007,TRUE,128,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ihosy",2007,TRUE,461,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ilaka",2007,TRUE,207,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Imerimandroso",2007,TRUE,138,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Lokomby",2007,TRUE,178,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Maevatanana",2007,TRUE,362,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Mahajanga",2007,TRUE,752,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Mahambo",2007,TRUE,113,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Maintirano",2007,TRUE,124,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Manakara",2007,TRUE,218,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Miarinarivo",2007,TRUE,70,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Miary",2007,TRUE,106,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Morondava",2007,TRUE,564,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Namehana",2007,TRUE,195,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Nosy Be",2007,TRUE,334,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sainte Marie",2007,TRUE,120,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sakalalina",2007,TRUE,237,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sambava",2007,TRUE,356,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tanambao Daouda",2007,TRUE,206,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Toamasina",2007,TRUE,585,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tolagnaro",2007,TRUE,466,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Toliary",2007,TRUE,166,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tsiroanomandidy",2007,TRUE,520,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Alakamisy Itenina",2010,TRUE,237,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambatondrazaka",2010,TRUE,264,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambohibary",2010,TRUE,560,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambohimandroso",2010,TRUE,138,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambondro",2010,TRUE,52,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambondromamy",2010,TRUE,182,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambositra",2010,TRUE,333,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambovombe",2010,TRUE,154,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ampandriankilandy",2010,TRUE,73,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Analaiva",2010,TRUE,195,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Andriba",2010,TRUE,116,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Anivorano Nord",2010,TRUE,274,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Anosibe Ifanja",2010,TRUE,210,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antananarivo",2010,TRUE,364,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsirabe",2010,TRUE,661,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsiranana",2010,TRUE,399,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsohihy",2010,TRUE,337,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Belobaka",2010,TRUE,261,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Betanatanana",2010,TRUE,78,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Farafangana",2010,TRUE,456,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Fianarantsoa",2010,TRUE,376,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Foulpointe",2010,TRUE,191,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Fénérive Est",2010,TRUE,306,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ifarantsa",2010,TRUE,136,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ihosy",2010,TRUE,465,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ilaka",2010,TRUE,176,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Imerimandroso",2010,TRUE,159,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Lokomby",2010,TRUE,181,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Maevatanana",2010,TRUE,372,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Mahajanga",2010,TRUE,719,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Mahambo",2010,TRUE,117,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Maintirano",2010,TRUE,130,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Manakara",2010,TRUE,225,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Miarinarivo",2010,TRUE,106,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Miary",2010,TRUE,111,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Morondava",2010,TRUE,548,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Namehana",2010,TRUE,200,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Nosy Be",2010,TRUE,378,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sainte Marie",2010,TRUE,124,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sakalalina",2010,TRUE,241,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sambava",2010,TRUE,366,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tanambao Daouda",2010,TRUE,217,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Toamasina",2010,TRUE,574,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tolagnaro",2010,TRUE,471,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Toliary",2010,TRUE,175,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tsiroanomandidy",2010,TRUE,511,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Alakamisy Itenina",2011,TRUE,510,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambatondrazaka",2011,TRUE,592,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambohibary",2011,TRUE,1471,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambohimandroso",2011,TRUE,318,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambondro",2011,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambondromamy",2011,TRUE,521,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambositra",2011,TRUE,735,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ampandriankilandy",2011,TRUE,158,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Analaiva",2011,TRUE,957,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Andriba",2011,TRUE,133,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Anivorano Nord",2011,TRUE,606,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Anosibe Ifanja",2011,TRUE,578,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antananarivo",2011,TRUE,1711,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsirabe",2011,TRUE,1008,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsiranana",2011,TRUE,2640,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsohihy",2011,TRUE,744,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Belobaka",2011,TRUE,589,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Betanatanana",2011,TRUE,472,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Farafangana",2011,TRUE,1201,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Foulpointe",2011,TRUE,615,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Fénérive Est",2011,TRUE,519,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ifarantsa",2011,TRUE,65,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ihosy",2011,TRUE,1237,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ilaka",2011,TRUE,591,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Imerimandroso",2011,TRUE,311,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Lokomby",2011,TRUE,335,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Maevatanana",2011,TRUE,280,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Mahajanga",2011,TRUE,1238,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Mahambo",2011,TRUE,417,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Maintirano",2011,TRUE,535,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Manakara",2011,TRUE,926,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Miarinarivo",2011,TRUE,235,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Miary",2011,TRUE,147,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Morondava",2011,TRUE,1726,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Namehana",2011,TRUE,944,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Nosy Be",2011,TRUE,1169,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sainte Marie",2011,TRUE,106,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sakalalina",2011,TRUE,435,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sambava",2011,TRUE,414,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tanambao Daouda",2011,TRUE,142,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tolagnaro",2011,TRUE,435,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Toliary",2011,TRUE,798,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tsiroanomandidy",2011,TRUE,1232,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Alakamisy Itenina",2012,TRUE,185,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambatondrazaka",2012,TRUE,603,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambohibary",2012,TRUE,1445,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambohimandroso",2012,TRUE,182,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambondro",2012,TRUE,51,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambondromamy",2012,TRUE,49,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambositra",2012,TRUE,654,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambovombe",2012,TRUE,92,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ampandriankilandy",2012,TRUE,263,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Analaiva",2012,TRUE,171,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Andriba",2012,TRUE,140,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Anivorano Nord",2012,TRUE,344,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Anosibe Ifanja",2012,TRUE,107,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antananarivo",2012,TRUE,1405,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsirabe",2012,TRUE,599,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsiranana",2012,TRUE,2017,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsohihy",2012,TRUE,175,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Belobaka",2012,TRUE,147,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Betanatanana",2012,TRUE,121,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Farafangana",2012,TRUE,336,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Fianarantsoa",2012,TRUE,661,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Foulpointe",2012,TRUE,535,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Fénérive Est",2012,TRUE,155,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ihosy",2012,TRUE,562,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ilaka",2012,TRUE,198,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Imerimandroso",2012,TRUE,230,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Lokomby",2012,TRUE,273,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Maevatanana",2012,TRUE,376,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Mahajanga",2012,TRUE,836,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Mahambo",2012,TRUE,261,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Maintirano",2012,TRUE,123,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Manakara",2012,TRUE,613,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Miarinarivo",2012,TRUE,111,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Miary",2012,TRUE,119,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Morondava",2012,TRUE,339,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Namehana",2012,TRUE,589,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Nosy Be",2012,TRUE,959,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sainte Marie",2012,TRUE,72,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sakalalina",2012,TRUE,387,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sambava",2012,TRUE,219,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tolagnaro",2012,TRUE,39,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Toliary",2012,TRUE,391,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tsiroanomandidy",2012,TRUE,350,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Alakamisy Itenina",2013,TRUE,92,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambatondrazaka",2013,TRUE,540,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambohibary",2013,TRUE,1151,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambohimandroso",2013,TRUE,393,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambondro",2013,TRUE,212,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambondromamy",2013,TRUE,185,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambositra",2013,TRUE,520,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambovombe",2013,TRUE,893,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ampandriankilandy",2013,TRUE,277,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Analaiva",2013,TRUE,460,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Andriba",2013,TRUE,158,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Anivorano Nord",2013,TRUE,183,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Anosibe Ifanja",2013,TRUE,409,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antananarivo",2013,TRUE,1940,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsirabe",2013,TRUE,1926,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsiranana",2013,TRUE,2758,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsohihy",2013,TRUE,458,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Belobaka",2013,TRUE,143,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Betanatanana",2013,TRUE,284,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Farafangana",2013,TRUE,961,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Fianarantsoa",2013,TRUE,594,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Foulpointe",2013,TRUE,550,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Fénérive Est",2013,TRUE,86,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ifarantsa",2013,TRUE,67,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ihosy",2013,TRUE,497,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ilaka",2013,TRUE,248,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Imerimandroso",2013,TRUE,222,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Lokomby",2013,TRUE,383,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Maevatanana",2013,TRUE,81,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Mahajanga",2013,TRUE,640,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Mahambo",2013,TRUE,127,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Maintirano",2013,TRUE,508,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Manakara",2013,TRUE,752,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Miarinarivo",2013,TRUE,230,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Miary",2013,TRUE,116,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Morondava",2013,TRUE,1040,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Namehana",2013,TRUE,721,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Nosy Be",2013,TRUE,1264,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sainte Marie",2013,TRUE,136,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sakalalina",2013,TRUE,402,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sambava",2013,TRUE,374,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tanambao Daouda",2013,TRUE,63,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Toamasina",2013,TRUE,1249,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tolagnaro",2013,TRUE,707,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Toliary",2013,TRUE,975,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tsiroanomandidy",2013,TRUE,699,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Alakamisy Itenina",2014,TRUE,193,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambatondrazaka",2014,TRUE,291,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambohibary",2014,TRUE,821,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambohimandroso",2014,TRUE,387,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambondro",2014,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambondromamy",2014,TRUE,206,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambositra",2014,TRUE,545,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambovombe",2014,TRUE,915,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ampandriankilandy",2014,TRUE,220,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Analaiva",2014,TRUE,605,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Andriba",2014,TRUE,161,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Anivorano Nord",2014,TRUE,257,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Anosibe Ifanja",2014,TRUE,245,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antananarivo",2014,TRUE,846,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsirabe",2014,TRUE,424,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsiranana",2014,TRUE,1479,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsohihy",2014,TRUE,424,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Belobaka",2014,TRUE,176,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Betanatanana",2014,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Farafangana",2014,TRUE,474,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Fianarantsoa",2014,TRUE,289,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Foulpointe",2014,TRUE,600,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Fénérive Est",2014,TRUE,386,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ifarantsa",2014,TRUE,206,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ihosy",2014,TRUE,256,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ilaka",2014,TRUE,439,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Imerimandroso",2014,TRUE,159,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Lokomby",2014,TRUE,174,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Maevatanana",2014,TRUE,531,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Mahajanga",2014,TRUE,193,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Mahambo",2014,TRUE,218,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Maintirano",2014,TRUE,381,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Manakara",2014,TRUE,350,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Miarinarivo",2014,TRUE,190,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Miary",2014,TRUE,49,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Morondava",2014,TRUE,1153,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Namehana",2014,TRUE,575,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Nosy Be",2014,TRUE,1216,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sainte Marie",2014,TRUE,213,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sakalalina",2014,TRUE,462,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sambava",2014,TRUE,193,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tanambao Daouda",2014,TRUE,35,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Toamasina",2014,TRUE,895,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tolagnaro",2014,TRUE,943,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Toliary",2014,TRUE,500,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tsiroanomandidy",2014,TRUE,617,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Alakamisy Itenina",2015,TRUE,294,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambohibary",2015,TRUE,261,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambohimandroso",2015,TRUE,35,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambondro",2015,TRUE,83,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambovombe",2015,TRUE,126,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ampandriankilandy",2015,TRUE,54,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Analaiva",2015,TRUE,507,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Anosibe Ifanja",2015,TRUE,90,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antananarivo",2015,TRUE,274,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsiranana",2015,TRUE,2362,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsohihy",2015,TRUE,317,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Fianarantsoa",2015,TRUE,221,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Foulpointe",2015,TRUE,345,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Fénérive Est",2015,TRUE,658,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ilaka",2015,TRUE,66,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Imerimandroso",2015,TRUE,92,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Lokomby",2015,TRUE,161,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Mahajanga",2015,TRUE,651,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Mahambo",2015,TRUE,158,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Miarinarivo",2015,TRUE,105,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Morondava",2015,TRUE,935,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Namehana",2015,TRUE,359,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Nosy Be",2015,TRUE,857,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sainte Marie",2015,TRUE,147,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Toamasina",2015,TRUE,1174,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tolagnaro",2015,TRUE,239,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Alakamisy Itenina",2016,TRUE,215,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambatondrazaka",2016,TRUE,632,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambohibary",2016,TRUE,641,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambohimandroso",2016,TRUE,169,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambondro",2016,TRUE,153,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambondromamy",2016,TRUE,341,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambositra",2016,TRUE,449,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambovombe",2016,TRUE,777,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ampandriankilandy",2016,TRUE,25,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Analaiva",2016,TRUE,692,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Andriba",2016,TRUE,83,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Anivorano Nord",2016,TRUE,178,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Anosibe Ifanja",2016,TRUE,410,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antananarivo",2016,TRUE,711,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsirabe",2016,TRUE,274,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsiranana",2016,TRUE,3135,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsohihy",2016,TRUE,73,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Belobaka",2016,TRUE,625,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Betanatanana",2016,TRUE,229,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Farafangana",2016,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Fianarantsoa",2016,TRUE,296,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Foulpointe",2016,TRUE,609,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Fénérive Est",2016,TRUE,947,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ifarantsa",2016,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ihosy",2016,TRUE,501,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ilaka",2016,TRUE,269,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Imerimandroso",2016,TRUE,270,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Lokomby",2016,TRUE,222,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Maevatanana",2016,TRUE,599,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Mahajanga",2016,TRUE,710,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Mahambo",2016,TRUE,234,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Maintirano",2016,TRUE,404,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Manakara",2016,TRUE,162,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Miarinarivo",2016,TRUE,156,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Miary",2016,TRUE,569,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Morondava",2016,TRUE,1578,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Namehana",2016,TRUE,634,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Nosy Be",2016,TRUE,1192,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sainte Marie",2016,TRUE,171,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sakalalina",2016,TRUE,387,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sambava",2016,TRUE,244,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tanambao Daouda",2016,TRUE,52,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Toamasina",2016,TRUE,1157,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tolagnaro",2016,TRUE,661,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Toliary",2016,TRUE,645,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tsiroanomandidy",2016,TRUE,968,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Alakamisy Itenina",2017,TRUE,232,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambatondrazaka",2017,TRUE,601,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambohibary",2017,TRUE,473,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambohimandroso",2017,TRUE,200,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambondro",2017,TRUE,380,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambondromamy",2017,TRUE,117,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambositra",2017,TRUE,582,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ambovombe",2017,TRUE,1296,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ampandriankilandy",2017,TRUE,94,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Analaiva",2017,TRUE,463,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Andriba",2017,TRUE,246,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Anivorano Nord",2017,TRUE,323,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Anosibe Ifanja",2017,TRUE,356,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antananarivo",2017,TRUE,708,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsirabe",2017,TRUE,1039,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsiranana",2017,TRUE,2119,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Antsohihy",2017,TRUE,227,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Belobaka",2017,TRUE,605,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Betanatanana",2017,TRUE,200,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Farafangana",2017,TRUE,311,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Fianarantsoa",2017,TRUE,293,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Foulpointe",2017,TRUE,468,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Fénérive Est",2017,TRUE,542,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ifarantsa",2017,TRUE,310,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ihosy",2017,TRUE,633,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Ilaka",2017,TRUE,200,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Imerimandroso",2017,TRUE,151,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Lokomby",2017,TRUE,220,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Maevatanana",2017,TRUE,865,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Mahajanga",2017,TRUE,664,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Mahambo",2017,TRUE,67,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Maintirano",2017,TRUE,278,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Manakara",2017,TRUE,375,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Miarinarivo",2017,TRUE,276,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Miary",2017,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Morondava",2017,TRUE,1023,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Namehana",2017,TRUE,573,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Nosy Be",2017,TRUE,776,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sainte Marie",2017,TRUE,156,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sakalalina",2017,TRUE,251,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Sambava",2017,TRUE,101,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tanambao Daouda",2017,TRUE,58,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Toamasina",2017,TRUE,403,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tolagnaro",2017,TRUE,555,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Toliary",2017,TRUE,579,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA
+"Tsiroanomandidy",2017,TRUE,938,"ancss","15-49","15","35",0,0,0,0,"MDG",0,0,"MDG",NA,NA,NA,NA,NA

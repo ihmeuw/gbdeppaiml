@@ -1,0 +1,28 @@
+"clinic","year_id","used","n","type","agegr","age","agspan","site_pred","adm0_mean","adm0_lower","adm0_upper","ihme_loc_id","lbd_areal","lbd_missing","iso3","adm1_mean","adm1_lower","adm1_upper","iso3_adm1","loc_id_adm1"
+"Jigawa (Birnin Kudu)",1995,TRUE,203,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25335",0,0,"NGA_25335",NA,NA,NA,NA,NA
+"Jigawa (Dutse)",1999,TRUE,299,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25335",0,0,"NGA_25335",NA,NA,NA,NA,NA
+"Jigawa (Gumel)",1995,TRUE,140,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25335",0,0,"NGA_25335",NA,NA,NA,NA,NA
+"Jigawa (Hadejia)",1992,TRUE,208,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25335",0,0,"NGA_25335",NA,NA,NA,NA,NA
+"Jigawa (Hadejia)",1995,TRUE,60,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25335",0,0,"NGA_25335",NA,NA,NA,NA,NA
+"Jigawa (Hadejia)",1999,TRUE,3.01,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25335",0,0,"NGA_25335",NA,NA,NA,NA,NA
+"Jigawa (Dutse)",2001,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25335",0,0,"NGA_25335",NA,NA,NA,NA,NA
+"Jigawa (Hadejia)",2001,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25335",0,0,"NGA_25335",NA,NA,NA,NA,NA
+"Jigawa (Dutse)",2003,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25335",0,0,"NGA_25335",NA,NA,NA,NA,NA
+"Jigawa (Hadejia)",2003,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25335",0,0,"NGA_25335",NA,NA,NA,NA,NA
+"Jigawa (Mallam Madori)",2003,TRUE,50,"ancss","15-49","15","35",0,0,0,0,"NGA_25335",0,0,"NGA_25335",NA,NA,NA,NA,NA
+"Jigawa (Dutse)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25335",0,0,"NGA_25335",NA,NA,NA,NA,NA
+"Jigawa (Hadejia)",2005,TRUE,299,"ancss","15-49","15","35",0,0,0,0,"NGA_25335",0,0,"NGA_25335",NA,NA,NA,NA,NA
+"Jigawa (Mallam Madori)",2005,TRUE,141,"ancss","15-49","15","35",0,0,0,0,"NGA_25335",0,0,"NGA_25335",NA,NA,NA,NA,NA
+"Jigawa (Taura)",2005,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25335",0,0,"NGA_25335",NA,NA,NA,NA,NA
+"Jigawa (Dutse)",2008,TRUE,299,"ancss","15-49","15","35",0,0,0,0,"NGA_25335",0,0,"NGA_25335",NA,NA,NA,NA,NA
+"Jigawa (Hadejia)",2008,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25335",0,0,"NGA_25335",NA,NA,NA,NA,NA
+"Jigawa (Mallam Madori)",2008,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25335",0,0,"NGA_25335",NA,NA,NA,NA,NA
+"Jigawa (Taura)",2008,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25335",0,0,"NGA_25335",NA,NA,NA,NA,NA
+"Jigawa (Dutse)",2010,TRUE,309,"ancss","15-49","15","35",0,0,0,0,"NGA_25335",0,0,"NGA_25335",NA,NA,NA,NA,NA
+"Jigawa (Hadejia)",2010,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25335",0,0,"NGA_25335",NA,NA,NA,NA,NA
+"Jigawa (Mallam Madori)",2010,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25335",0,0,"NGA_25335",NA,NA,NA,NA,NA
+"Jigawa (Taura)",2010,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25335",0,0,"NGA_25335",NA,NA,NA,NA,NA
+"Jigawa (Dutse)",2014,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25335",0,0,"NGA_25335",NA,NA,NA,NA,NA
+"Jigawa (Hadejia)",2014,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25335",0,0,"NGA_25335",NA,NA,NA,NA,NA
+"Jigawa (Mallam Madori)",2014,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25335",0,0,"NGA_25335",NA,NA,NA,NA,NA
+"Jigawa (Taura)",2014,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25335",0,0,"NGA_25335",NA,NA,NA,NA,NA

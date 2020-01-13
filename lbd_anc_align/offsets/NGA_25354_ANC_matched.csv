@@ -1,0 +1,24 @@
+"clinic","year_id","used","n","type","agegr","age","agspan","site_pred","adm0_mean","adm0_lower","adm0_upper","ihme_loc_id","lbd_areal","lbd_missing","iso3","adm1_mean","adm1_lower","adm1_upper","iso3_adm1","loc_id_adm1"
+"Zamfara (Gusau)",1999,TRUE,299,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25354",0,0,"NGA_25354",NA,NA,NA,NA,NA
+"Zamfara (Talata-Marafa)",1999,TRUE,298,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25354",0,0,"NGA_25354",NA,NA,NA,NA,NA
+"Zamfara (Gusau)",2001,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25354",0,0,"NGA_25354",NA,NA,NA,NA,NA
+"Zamfara (Talata-Marafa)",2001,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25354",0,0,"NGA_25354",NA,NA,NA,NA,NA
+"Zamfara (Gusau)",2003,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25354",0,0,"NGA_25354",NA,NA,NA,NA,NA
+"Zamfara (Kotorkoshi)",2003,TRUE,50,"ancss","15-49","15","35",0,0,0,0,"NGA_25354",0,0,"NGA_25354",NA,NA,NA,NA,NA
+"Zamfara (Talata-Marafa)",2003,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25354",0,0,"NGA_25354",NA,NA,NA,NA,NA
+"Zamfara (Gusau)",2005,TRUE,299,"ancss","15-49","15","35",0,0,0,0,"NGA_25354",0,0,"NGA_25354",NA,NA,NA,NA,NA
+"Zamfara (Kotorkoshi)",2005,TRUE,148,"ancss","15-49","15","35",0,0,0,0,"NGA_25354",0,0,"NGA_25354",NA,NA,NA,NA,NA
+"Zamfara (Ruwa Doruwa)",2005,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25354",0,0,"NGA_25354",NA,NA,NA,NA,NA
+"Zamfara (Talata-Marafa)",2005,TRUE,299,"ancss","15-49","15","35",0,0,0,0,"NGA_25354",0,0,"NGA_25354",NA,NA,NA,NA,NA
+"Zamfara (Gusau)",2008,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25354",0,0,"NGA_25354",NA,NA,NA,NA,NA
+"Zamfara (Kotorkoshi)",2008,TRUE,147,"ancss","15-49","15","35",0,0,0,0,"NGA_25354",0,0,"NGA_25354",NA,NA,NA,NA,NA
+"Zamfara (Ruwa Doruwa)",2008,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25354",0,0,"NGA_25354",NA,NA,NA,NA,NA
+"Zamfara (Talata-Marafa)",2008,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25354",0,0,"NGA_25354",NA,NA,NA,NA,NA
+"Zamfara (Gusau)",2010,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25354",0,0,"NGA_25354",NA,NA,NA,NA,NA
+"Zamfara (Kotorkoshi)",2010,TRUE,144,"ancss","15-49","15","35",0,0,0,0,"NGA_25354",0,0,"NGA_25354",NA,NA,NA,NA,NA
+"Zamfara (Ruwa Doruwa)",2010,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25354",0,0,"NGA_25354",NA,NA,NA,NA,NA
+"Zamfara (Talata-Marafa)",2010,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25354",0,0,"NGA_25354",NA,NA,NA,NA,NA
+"Zamfara (Gusau)",2014,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25354",0,0,"NGA_25354",NA,NA,NA,NA,NA
+"Zamfara (Kotorkoshi)",2014,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25354",0,0,"NGA_25354",NA,NA,NA,NA,NA
+"Zamfara (Ruwa Doruwa)",2014,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25354",0,0,"NGA_25354",NA,NA,NA,NA,NA
+"Zamfara (Talata-Marafa)",2014,TRUE,287,"ancss","15-49","15","35",0,0,0,0,"NGA_25354",0,0,"NGA_25354",NA,NA,NA,NA,NA

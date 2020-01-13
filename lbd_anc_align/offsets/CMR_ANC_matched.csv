@@ -1,0 +1,325 @@
+"clinic","year_id","used","n","type","agegr","age","agspan","site_pred","adm0_mean","adm0_lower","adm0_upper","ihme_loc_id","lbd_areal","lbd_missing","iso3","adm1_mean","adm1_lower","adm1_upper","iso3_adm1","loc_id_adm1"
+"Bafoussam (Mifi)",1992,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bamenda (Nkwen)",1990,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bamenda (Nkwen)",1991,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bamenda (Nkwen)",1989,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bamenda (Nkwen)",1993,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bamenda (Nkwen)",1994,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bamenda (Nkwen)",1992,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bamenda (Nkwen)",1997,TRUE,411,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bamenda (Nkwen)",1995,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bamenda (Nkwen)",1996,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bamenda (Nkwen)",1998,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bertoua",1992,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bertoua",1994,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bertoua",1995,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bertoua",1996,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Douala (Ad Lucem, Bonabéri)",1990,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Douala (Ad Lucem, Bonabéri)",1992,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Douala (Ad Lucem, Bonabéri)",1996,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Douala (Ad Lucem, Bonabéri)",1993,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Douala (Ad Lucem, Bonabéri)",1994,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Fondation Chantal Biya",1990,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Fondation Chantal Biya",1991,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Fondation Chantal Biya",1989,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Fondation Chantal Biya",1992,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Fondation Chantal Biya",1993,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Fondation Chantal Biya",1994,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Fondation Chantal Biya",1995,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Fondation Chantal Biya",1988,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Fondation Chantal Biya",1996,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Fondation Chantal Biya",1998,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HD Kumba",1989,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HD Kumba",1992,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HD Kumba",1991,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Garoua",1991,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Garoua",1995,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Garoua",1992,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Garoua",1993,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Garoua",1994,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Garoua",1997,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Garoua",1998,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Garoua",1996,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Limbé",1995,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Limbé",1996,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Limbé",1997,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Limbé",1998,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Limbé",1993,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Limbé",1990,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Limbé",1991,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Limbé",1992,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Limbé",1994,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Ngaoundéré",1992,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Abong Mbang",2000,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bafoussam (Mifi)",2000,TRUE,183,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bamenda (Bali)",2000,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bamenda (Nkwen)",2000,TRUE,200,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Batouri",2000,TRUE,73,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bertoua",2000,TRUE,166,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Buea(CMA Mua)",2000,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Douala (HD Deido)",2000,TRUE,76,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Dschang",2000,TRUE,164,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Edea",2000,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Fondation Chantal Biya",2000,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Foumban",2000,TRUE,87,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Gashiga",2000,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HD Kumba",2000,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Ebolowa",2000,TRUE,180,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Garoua",2000,TRUE,200,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Limbé",2000,TRUE,199,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Maroua",2000,TRUE,169,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Ngaoundéré",2000,TRUE,330,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Lolodorf",2000,TRUE,54,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Mbanga",2000,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Mfou",2000,TRUE,103,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Molokol (Mokong)",2000,TRUE,66,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ndop",2000,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ngong",2000,TRUE,117,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Sangmelima",2000,TRUE,88,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Yagoua",2000,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Abong Mbang",2002,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ambam",2002,TRUE,96,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ayos",2002,TRUE,99,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bafia",2002,TRUE,99,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bafoussam (Mifi)",2002,TRUE,99,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bafut",2002,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bagangté",2002,TRUE,88,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bamenda (Bali)",2002,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bamenda (Nkwen)",2002,TRUE,186,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bandjoun",2002,TRUE,110,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Banso",2002,TRUE,99,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Batibo",2002,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Batouri",2002,TRUE,73,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bazou",2002,TRUE,81,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Buea(CMA Mua)",2002,TRUE,92,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"CSI (Zokol) Maroua",2002,TRUE,200,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"CSI Djarengol (Maroua)",2002,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Djoungolo",2002,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Douala (Ad Lucem, Bonabéri)",2002,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Douala (HD Congo II)",2002,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Douala (HD Deido)",2002,TRUE,200,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Dourbeye",2002,TRUE,67,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Dschang",2002,TRUE,86,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ebolowa (CSI Urbain)",2002,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ekondo titi",2002,TRUE,97,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Fondation Chantal Biya",2002,TRUE,295,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Foumban",2002,TRUE,82,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Garoua (Kolere)",2002,TRUE,202,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Garoua (Laindé)",2002,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Gashiga",2002,TRUE,87,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HD Kumba",2002,TRUE,51,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Ebolowa",2002,TRUE,98,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Garoua",2002,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Limbé",2002,TRUE,197,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Maroua",2002,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Ngaoundéré",2002,TRUE,97,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Hprot Ngaoundéré",2002,TRUE,200,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Kolofata",2002,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Lolodorf",2002,TRUE,59,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Lounpeu J",2002,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Mamfé",2002,TRUE,99,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Manyemen",2002,TRUE,96,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Mayo Oulo",2002,TRUE,85,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Mbanga",2002,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Mbengwi",2002,TRUE,93,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Metet",2002,TRUE,94,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Mfou",2002,TRUE,76,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Molokol (Mokong)",2002,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Moutourwa",2002,TRUE,89,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ndop",2002,TRUE,92,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ngaoumbela",2002,TRUE,200,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ngaoundal",2002,TRUE,99,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ngaoundéré Sabongari",2002,TRUE,98,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ngong",2002,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ngoulmakong",2002,TRUE,18,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Nkolvone",2002,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Nyasoso",2002,TRUE,93,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Pouma",2002,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Saa",2002,TRUE,99,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Sangmelima",2002,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Suzza",2002,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Tibati",2002,TRUE,60,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Tokombéré",2002,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Tonga",2002,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bamenda (Bali)",2007,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bamenda (Nkwen)",2007,TRUE,199,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Cass Nkolndongo",2007,TRUE,148,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Doual (HD Nylon)",2007,TRUE,202,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Douala (Ad Lucem, Bonabéri)",2007,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Douala (Hop St Alexandre le Grand)",2007,TRUE,99,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ebolowa (CSI Urbain)",2007,TRUE,148,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Fondation Chantal Biya",2007,TRUE,202,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HD Cité Verte",2007,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Ngaoundéré",2007,TRUE,202,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Hprot Ngaoundéré",2007,TRUE,199,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ndop",2007,TRUE,105,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Sangmelima",2007,TRUE,101,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Abong Mbang",2009,TRUE,57,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ambam",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bafia",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bafoussam (Mifi)",2009,TRUE,200,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bafut",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bamenda (Bali)",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bamenda (Nkwen)",2009,TRUE,200,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bandjoun",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Banso",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Batibo",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bertoua",2009,TRUE,357,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Betare Oya",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Buea(CMA Mua)",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"CSI (Zokol) Maroua",2009,TRUE,97,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"CSI Djarengol (Maroua)",2009,TRUE,200,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Djoungolo",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Douala (Ad Lucem, Bonabéri)",2009,TRUE,154,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Douala (HD Congo II)",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Douala (HD Deido)",2009,TRUE,99,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Dschang",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ebolowa (CSI Urbain)",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ekondo titi",2009,TRUE,79,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Fondation Chantal Biya",2009,TRUE,200,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Foumban",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Garoua (Kolere)",2009,TRUE,200,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Garoua (Laindé)",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Garoua boulai",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Gashiga",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HD Kumba",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Bamenda",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Ebolowa",2009,TRUE,200,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Garoua",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Limbé",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Maroua",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Ngaoundéré",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Hp Bangoua",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Hprot Ngaoundéré",2009,TRUE,200,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Kolofata",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Lolodorf",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Manyemen",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Mayo Oulo",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Mbanga",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Metet",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Mfou",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Molokol (Mokong)",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ngaoumbela",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ngaoundal",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ngaoundéré Sabongari",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ngong",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Nkolvone",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Nyasoso",2009,TRUE,52,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Pouma",2009,TRUE,37,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Saa",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Sangmelima",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Tibati",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Tokombéré",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Tonga",2009,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Abong Mbang",2012,TRUE,117,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ambam",2012,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bafia",2012,TRUE,103,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bafoussam (Mifi)",2012,TRUE,195,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bafut",2012,TRUE,99,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bamenda (Bali)",2012,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bamenda (Nkwen)",2012,TRUE,196,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bandjoun",2012,TRUE,93,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Batibo",2012,TRUE,103,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Betare Oya",2012,TRUE,111,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Buea(CMA Mua)",2012,TRUE,101,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"CSI (Zokol) Maroua",2012,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"CSI Djarengol (Maroua)",2012,TRUE,182,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Djoungolo",2012,TRUE,39,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Doual (HD Nylon)",2012,TRUE,86,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Douala (Ad Lucem, Bonabéri)",2012,TRUE,139,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Douala (HD Congo II)",2012,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Douala (HD Deido)",2012,TRUE,161,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ebolowa (CSI Urbain)",2012,TRUE,175,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ekondo titi",2012,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Fondation Chantal Biya",2012,TRUE,189,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Foumban",2012,TRUE,99,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Garoua (Kolere)",2012,TRUE,158,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Garoua (Laindé)",2012,TRUE,162,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Garoua boulai",2012,TRUE,99,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Gashiga",2012,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HD Cité Verte",2012,TRUE,89,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HD Kumba",2012,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Bamenda",2012,TRUE,96,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Ebolowa",2012,TRUE,99,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Garoua",2012,TRUE,107,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Limbé",2012,TRUE,179,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Maroua",2012,TRUE,101,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Ngaoundéré",2012,TRUE,107,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Hp Bangoua",2012,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Hprot Ngaoundéré",2012,TRUE,203,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Kolofata",2012,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Manyemen",2012,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Mayo Oulo",2012,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Mbanga",2012,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Molokol (Mokong)",2012,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ngaoumbela",2012,TRUE,101,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ngaoundal",2012,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ngaoundéré Sabongari",2012,TRUE,102,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ngong",2012,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Nkolvone",2012,TRUE,19,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Pouma",2012,TRUE,85,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Saa",2012,TRUE,60,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Sangmelima",2012,TRUE,47,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Tibati",2012,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Tokombéré",2012,TRUE,97,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Tonga",2012,TRUE,101,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Abong Mbang",2016,TRUE,67,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ambam",2016,TRUE,56,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bafia",2016,TRUE,99,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bafoussam (Mifi)",2016,TRUE,74,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bafut",2016,TRUE,63,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bamenda (Bali)",2016,TRUE,103,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bamenda (Nkwen)",2016,TRUE,204,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bandjoun",2016,TRUE,93,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Banso",2016,TRUE,106,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Batibo",2016,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Bertoua",2016,TRUE,73,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Betare Oya",2016,TRUE,58,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Buea(CMA Mua)",2016,TRUE,92,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"CMA Belabo",2016,TRUE,65,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"CSI  Mokolo I",2016,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"CSI (Zokol) Maroua",2016,TRUE,54,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"CSI Djarengol (Maroua)",2016,TRUE,68,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Cass Nkolndongo",2016,TRUE,96,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"DH Tombel",2016,TRUE,49,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Doual (HD Nylon)",2016,TRUE,94,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Douala (Ad Lucem, Bonabéri)",2016,TRUE,99,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Douala (HD Congo II)",2016,TRUE,43,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Douala (HD Deido)",2016,TRUE,91,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Dschang",2016,TRUE,206,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ebolowa (CSI Urbain)",2016,TRUE,131,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ekondo titi",2016,TRUE,81,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Fondation Chantal Biya",2016,TRUE,214,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Foumban",2016,TRUE,67,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Garoua (Kolere)",2016,TRUE,219,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Garoua (Laindé)",2016,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Garoua boulai",2016,TRUE,77,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Gashiga",2016,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HD Cité Verte",2016,TRUE,113,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HD Kumba",2016,TRUE,199,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Bamenda",2016,TRUE,101,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Ebolowa",2016,TRUE,33,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Garoua",2016,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Limbé",2016,TRUE,74,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Maroua",2016,TRUE,34,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"HR Ngaoundéré",2016,TRUE,99,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Hp Bangoua",2016,TRUE,94,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Hprot Ngaoundéré",2016,TRUE,218,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Hôpital sainte Rosaire Mbalmayo",2016,TRUE,98,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Kolofata",2016,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Lolodorf",2016,TRUE,62,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Manyemen",2016,TRUE,104,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Mayo Oulo",2016,TRUE,100,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Mbanga",2016,TRUE,97,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Molokol (Mokong)",2016,TRUE,55,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ngaoumbela",2016,TRUE,42,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ngaoundal",2016,TRUE,108,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ngaoundéré Sabongari",2016,TRUE,98,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Ngong",2016,TRUE,99,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Nkolvone",2016,TRUE,94,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Pouma",2016,TRUE,40,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Saa",2016,TRUE,54,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Sangmelima",2016,TRUE,57,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Tibati",2016,TRUE,111,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Tokombéré",2016,TRUE,49,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA
+"Tonga",2016,TRUE,42,"ancss","15-49","15","35",0,0,0,0,"CMR",0,0,"CMR",NA,NA,NA,NA,NA

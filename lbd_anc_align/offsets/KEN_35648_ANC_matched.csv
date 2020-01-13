@@ -1,0 +1,16 @@
+"clinic","year_id","used","n","type","agegr","age","agspan","site_pred","adm0_mean","adm0_lower","adm0_upper","ihme_loc_id","lbd_areal","lbd_missing","iso3","adm1_mean","adm1_lower","adm1_upper","iso3_adm1","loc_id_adm1"
+"Mosoriot",1999,TRUE,249,"ancss","15-49","15","35",NA,NA,NA,NA,"KEN_35648",0,0,"KEN_35648",NA,NA,NA,NA,NA
+"Mosoriot",1994,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"KEN_35648",0,0,"KEN_35648",NA,NA,NA,NA,NA
+"Mosoriot",1995,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"KEN_35648",0,0,"KEN_35648",NA,NA,NA,NA,NA
+"Mosoriot",1998,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"KEN_35648",0,0,"KEN_35648",NA,NA,NA,NA,NA
+"Mosoriot",1997,TRUE,394,"ancss","15-49","15","35",NA,NA,NA,NA,"KEN_35648",0,0,"KEN_35648",NA,NA,NA,NA,NA
+"Mosoriot",2000,TRUE,96,"ancss","15-49","15","35",0,0,0,0,"KEN_35648",0,0,"KEN_35648",NA,NA,NA,NA,NA
+"Mosoriot",2001,TRUE,328,"ancss","15-49","15","35",0,0,0,0,"KEN_35648",0,0,"KEN_35648",NA,NA,NA,NA,NA
+"Mosoriot",2002,TRUE,405,"ancss","15-49","15","35",0,0,0,0,"KEN_35648",0,0,"KEN_35648",NA,NA,NA,NA,NA
+"Mosoriot",2003,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"KEN_35648",0,0,"KEN_35648",NA,NA,NA,NA,NA
+"Mosoriot",2004,TRUE,261,"ancss","15-49","15","35",0,0,0,0,"KEN_35648",0,0,"KEN_35648",NA,NA,NA,NA,NA
+"Mosoriot",2005,TRUE,394,"ancss","15-49","15","35",0,0,0,0,"KEN_35648",0,0,"KEN_35648",NA,NA,NA,NA,NA
+"Mosoriot",2006,TRUE,298,"ancss","15-49","15","35",0,0,0,0,"KEN_35648",0,0,"KEN_35648",NA,NA,NA,NA,NA
+"Mosoriot",2009,TRUE,180,"ancss","15-49","15","35",0,0,0,0,"KEN_35648",0,0,"KEN_35648",NA,NA,NA,NA,NA
+"Mosoriot",2010,TRUE,313,"ancss","15-49","15","35",0,0,0,0,"KEN_35648",0,0,"KEN_35648",NA,NA,NA,NA,NA
+"Mosoriot",2011,TRUE,259,"ancss","15-49","15","35",0,0,0,0,"KEN_35648",0,0,"KEN_35648",NA,NA,NA,NA,NA

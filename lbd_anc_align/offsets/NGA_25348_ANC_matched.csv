@@ -1,0 +1,36 @@
+"clinic","year_id","used","n","type","agegr","age","agspan","site_pred","adm0_mean","adm0_lower","adm0_upper","ihme_loc_id","lbd_areal","lbd_missing","iso3","adm1_mean","adm1_lower","adm1_upper","iso3_adm1","loc_id_adm1"
+"Oyo  (Ogbomosho)",1992,TRUE,200,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo  (Ogbomosho)",1995,TRUE,147,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo (Ibadan)",1994,TRUE,484,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo (Ibadan)",1992,TRUE,611,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo (Ibadan)",1999,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo (Ibadan)",1995,TRUE,668,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo (Saki)",1999,TRUE,300,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo (Saki)",1995,TRUE,240,"ancss","15-49","15","35",NA,NA,NA,NA,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo  (Ogbomosho)",2001,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo (Ibadan)",2001,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo (Saki)",2001,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo  (Ogbomosho)",2003,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo (Ibadan)",2003,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo (Lagun/Lageli)",2003,TRUE,50,"ancss","15-49","15","35",0,0,0,0,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo (Saki)",2003,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo  (Aado Awaye)",2005,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo  (Ogbomosho)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo (Ibadan)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo (Lagun/Lageli)",2005,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo (Saki)",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo  (Aado Awaye)",2008,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo  (Ogbomosho)",2008,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo (Ibadan)",2008,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo (Lagun/Lageli)",2008,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo (Saki)",2008,TRUE,299,"ancss","15-49","15","35",0,0,0,0,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo  (Aado Awaye)",2010,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo  (Ogbomosho)",2010,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo (Ibadan)",2010,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo (Lagun/Lageli)",2010,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo (Saki)",2010,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo  (Aado Awaye)",2014,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo  (Ogbomosho)",2014,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo (Ibadan)",2014,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo (Lagun/Lageli)",2014,TRUE,150,"ancss","15-49","15","35",0,0,0,0,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA
+"Oyo (Saki)",2014,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"NGA_25348",0,0,"NGA_25348",NA,NA,NA,NA,NA

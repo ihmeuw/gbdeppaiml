@@ -1,0 +1,325 @@
+"clinic","year_id","used","n","type","agegr","age","agspan","site_pred","adm0_mean","adm0_lower","adm0_upper","ihme_loc_id","lbd_areal","lbd_missing","iso3","adm1_mean","adm1_lower","adm1_upper","iso3_adm1","loc_id_adm1"
+"Antelope Hosp",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Banket",1992,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Beitbridge",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Beitbridge",1994,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bindura (Chipadze)",1994,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bindura (Chipadze)",1995,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bindura (Chipadze)",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Binga Hosp",1994,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Binga Hosp",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Binga Hosp",1999,TRUE,287,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Binga Hosp",1992,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Birchenough Bridge",1992,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Birchenough Bridge",1993,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo City (Nkulumane)",1991,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo City (Nkulumane)",1995,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo City (Nkulumane)",1993,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo City (Nkulumane)",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo City (Nkulumane)",1989,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Duplicate",1989,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Duplicate",1991,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Duplicate",1993,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Duplicate",1995,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Duplicate",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Pseudo Site",1989,TRUE,964,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Pseudo Site",1990,TRUE,887,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Pseudo Site",1991,TRUE,791,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Pseudo Site",1992,TRUE,698,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Pseudo Site",1993,TRUE,625,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Pseudo Site",1994,TRUE,580,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Pseudo Site",1995,TRUE,558,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Pseudo Site",1996,TRUE,550,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Pseudo Site",1997,TRUE,544,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Pseudo Site",1998,TRUE,535,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Pseudo Site",1999,TRUE,521,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Chinotimba (Vic Falls)",1999,TRUE,274,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Chinotimba (Vic Falls)",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Chipinge",1993,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Chitsungo",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Chitungwiza City",1992,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Chitungwiza City",1994,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Eastern Highlands Tea",1993,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Edith Oppoman Clin",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Edith Oppoman Clin",1990,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gokwe District",1992,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gokwe District",1993,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gokwe District",1991,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gokwe District",1994,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gokwe North",1991,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gokwe North",1992,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gokwe North",1993,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gokwe North",1994,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gutu Mission",1994,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gutu Mission",1995,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gwanda",1992,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gwanda",1993,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gwanda",1991,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gwanda",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gweru City",1995,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gweru City",1992,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gweru City",1993,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gweru City",1991,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gweru Private",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Hauna Growth Point",1993,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Hwange Hospital",1991,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Hwange Hospital",1992,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Hwange Hospital",1994,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Hwange Hospital",1999,TRUE,267,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Hwange Hospital",1990,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Hwange Hospital",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Karanda Hosp",1994,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Karanda Hosp",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Karanda Hosp",1993,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Karanda Hosp",1995,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Karirangwe",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Kezi/Matobo Dist",1994,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Kwekwe",1991,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Kwekwe",1992,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Kwekwe",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Kwekwe",1993,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Kwekwe Commercial Farm Workers",1993,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Kwekwe Commercial Farm Workers",1994,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Kwekwe Commercial Farm Workers",1992,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mary Mount Hosp",1993,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mary Mount Hosp",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mashoko Mission",1995,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mashoko Mission",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mashoko Mission",1994,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Masvingo City",1992,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Masvingo City",1996,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Masvingo City",1991,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Masvingo City",1994,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mberengwa Rural",1992,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mberengwa Rural",1994,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mberengwa Rural",1993,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mbizo 11 Clinic",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mkoba 1",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mkoba Polyclinic",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mnene/Musume Hosp",1992,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mnene/Musume Hosp",1993,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mnene/Musume Hosp",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mnene/Musume Hosp/Mberengwa",1993,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mnene/Musume Hosp/Mberengwa",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mnene/Musume Hosp/Mberengwa",1992,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Murambinda (Buhera)",1990,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Murambinda (Buhera)",1995,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Murambinda (Buhera)",1991,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mutare City (Sakubva)",1995,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mutare City (Sakubva)",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mutoko District",1992,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mutoko District",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Plumtree Hosp",1991,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Plumtree Hosp",1992,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Rusape Hospital",1990,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Rusape Hospital",1991,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Rusape Hospital",1995,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Rusape Hospital",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Sadza (Chivhu)",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Sanyati Hosp",1992,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Seke North Clinic",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Shabanie Mines",1991,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Shurugwi Mines",1991,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Shurugwi Mines",1992,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Shurugwi Mines",1993,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"St. Alberts Hosp",1995,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"St. Alberts Hosp",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"St. Mary's Clinic",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Vengere Clinic",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Zvimba/Kadoma",1997,TRUE,333,"ancss","15-49","15","35",NA,NA,NA,NA,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Beitbridge",2000,TRUE,213,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bindura (Chipadze)",2000,TRUE,325,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo City (Nkulumane)",2000,TRUE,496,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Duplicate",2000,TRUE,496,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Pseudo Site",2000,TRUE,505,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gutu Mission",2000,TRUE,302,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gwanda",2000,TRUE,200,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gweru City",2000,TRUE,111,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Kadoma",2000,TRUE,319,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Karanda Hosp",2000,TRUE,280,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Kuwadzana",2000,TRUE,512,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Murambinda (Buhera)",2000,TRUE,319,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mutare City (Sakubva)",2000,TRUE,313,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mutoko District",2000,TRUE,317,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Sadza (Chivhu)",2000,TRUE,315,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"St. Mary's Clinic",2000,TRUE,308,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Banket",2001,TRUE,326,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Beitbridge",2001,TRUE,324,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bindura (Chipadze)",2001,TRUE,325,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Binga Hosp",2001,TRUE,327,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo City (Nkulumane)",2001,TRUE,541,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Duplicate",2001,TRUE,541,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Pseudo Site",2001,TRUE,494,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Chinotimba (Vic Falls)",2001,TRUE,274,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Chiredzi",2001,TRUE,329,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gutu Mission",2001,TRUE,321,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gwanda",2001,TRUE,328,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gweru City",2001,TRUE,331,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Kadoma",2001,TRUE,330,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Karanda Hosp",2001,TRUE,328,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Kuwadzana",2001,TRUE,538,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mnene/Musume Hosp",2001,TRUE,330,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mnene/Musume Hosp/Mberengwa",2001,TRUE,330,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Murambinda (Buhera)",2001,TRUE,329,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mutare City (Sakubva)",2001,TRUE,329,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mutoko District",2001,TRUE,329,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Sadza (Chivhu)",2001,TRUE,329,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"St. Mary's Clinic",2001,TRUE,508,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Banket",2002,TRUE,329,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Beitbridge",2002,TRUE,322,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bindura (Chipadze)",2002,TRUE,328,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Binga Hosp",2002,TRUE,326,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo City (Nkulumane)",2002,TRUE,551,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Duplicate",2002,TRUE,551,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Pseudo Site",2002,TRUE,493,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Chinotimba (Vic Falls)",2002,TRUE,325,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Chiredzi",2002,TRUE,330,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gutu Mission",2002,TRUE,326,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gwanda",2002,TRUE,328,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gweru City",2002,TRUE,336,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Kadoma",2002,TRUE,327,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Karanda Hosp",2002,TRUE,321,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Kuwadzana",2002,TRUE,548,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mnene/Musume Hosp",2002,TRUE,332,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mnene/Musume Hosp/Mberengwa",2002,TRUE,332,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Murambinda (Buhera)",2002,TRUE,326,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mutare City (Sakubva)",2002,TRUE,321,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mutoko District",2002,TRUE,337,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Sadza (Chivhu)",2002,TRUE,330,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"St. Mary's Clinic",2002,TRUE,549,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Pseudo Site",2003,TRUE,508,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Banket",2004,TRUE,328,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Beitbridge",2004,TRUE,329,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bindura (Chipadze)",2004,TRUE,333,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Binga Hosp",2004,TRUE,346,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo City (Nkulumane)",2004,TRUE,550,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Duplicate",2004,TRUE,550,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Pseudo Site",2004,TRUE,534,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Chinotimba (Vic Falls)",2004,TRUE,329,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Chiredzi",2004,TRUE,340,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gutu Mission",2004,TRUE,346,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gwanda",2004,TRUE,332,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gweru City",2004,TRUE,315,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Kadoma",2004,TRUE,339,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Karanda Hosp",2004,TRUE,333,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Kuwadzana",2004,TRUE,545,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mnene/Musume Hosp",2004,TRUE,349,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mnene/Musume Hosp/Mberengwa",2004,TRUE,349,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Murambinda (Buhera)",2004,TRUE,345,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mutare City (Sakubva)",2004,TRUE,347,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mutoko District",2004,TRUE,330,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Sadza (Chivhu)",2004,TRUE,349,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"St. Mary's Clinic",2004,TRUE,577,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Pseudo Site",2005,TRUE,565,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Banket",2006,TRUE,330,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Beitbridge",2006,TRUE,332,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bindura (Chipadze)",2006,TRUE,351,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Binga Hosp",2006,TRUE,348,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo City (Nkulumane)",2006,TRUE,600,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Duplicate",2006,TRUE,600,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Pseudo Site",2006,TRUE,593,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Chinotimba (Vic Falls)",2006,TRUE,338,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Chiredzi",2006,TRUE,348,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gutu Mission",2006,TRUE,392,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gwanda",2006,TRUE,333,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gweru City",2006,TRUE,334,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Kadoma",2006,TRUE,340,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Karanda Hosp",2006,TRUE,340,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Kuwadzana",2006,TRUE,553,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mnene/Musume Hosp",2006,TRUE,360,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mnene/Musume Hosp/Mberengwa",2006,TRUE,360,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Murambinda (Buhera)",2006,TRUE,331,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mutare City (Sakubva)",2006,TRUE,333,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mutoko District",2006,TRUE,328,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Sadza (Chivhu)",2006,TRUE,397,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"St. Mary's Clinic",2006,TRUE,574,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Pseudo Site",2007,TRUE,613,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Pseudo Site",2008,TRUE,625,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Banket",2009,TRUE,341,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Beitbridge",2009,TRUE,351,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bindura (Chipadze)",2009,TRUE,339,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Binga Hosp",2009,TRUE,339,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo City (Nkulumane)",2009,TRUE,567,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Duplicate",2009,TRUE,567,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Pseudo Site",2009,TRUE,636,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Chinotimba (Vic Falls)",2009,TRUE,344,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Chiredzi",2009,TRUE,351,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gutu Mission",2009,TRUE,336,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gwanda",2009,TRUE,350,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gweru City",2009,TRUE,351,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Kadoma",2009,TRUE,357,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Karanda Hosp",2009,TRUE,336,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Kuwadzana",2009,TRUE,586,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mnene/Musume Hosp",2009,TRUE,331,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mnene/Musume Hosp/Mberengwa",2009,TRUE,331,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Murambinda (Buhera)",2009,TRUE,354,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mutare City (Sakubva)",2009,TRUE,342,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mutoko District",2009,TRUE,355,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Sadza (Chivhu)",2009,TRUE,345,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"St. Mary's Clinic",2009,TRUE,655,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Pseudo Site",2010,TRUE,654,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Pseudo Site",2011,TRUE,688,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Banket",2012,TRUE,333,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Beitbridge",2012,TRUE,331,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bindura (Chipadze)",2012,TRUE,333,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Binga Hosp",2012,TRUE,334,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo City (Nkulumane)",2012,TRUE,596,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Duplicate",2012,TRUE,596,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Pseudo Site",2012,TRUE,745,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Chimhanda",2012,TRUE,324,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Chinhoyi",2012,TRUE,332,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Chinotimba (Vic Falls)",2012,TRUE,339,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Chiredzi",2012,TRUE,319,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Chivi Hospital",2012,TRUE,323,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Concession hospital",2012,TRUE,334,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Epworth",2012,TRUE,340,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Filabusi",2012,TRUE,334,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Glenview",2012,TRUE,333,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gokwe District",2012,TRUE,336,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gokwe North",2012,TRUE,336,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gokwe South",2012,TRUE,336,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Guruve hospital",2012,TRUE,330,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gutu Mission",2012,TRUE,340,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gwanda",2012,TRUE,331,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Gweru City",2012,TRUE,340,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Hatcliffe",2012,TRUE,339,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Hauna Growth Point",2012,TRUE,224,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Hwedza",2012,TRUE,337,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Inyathi Hospital",2012,TRUE,339,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Kadoma",2012,TRUE,332,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Karanda Hosp",2012,TRUE,339,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Karoi",2012,TRUE,339,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Kuwadzana",2012,TRUE,599,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Kwekwe",2012,TRUE,340,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Makumbe",2012,TRUE,326,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Marondera",2012,TRUE,337,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Masvingo",2012,TRUE,338,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mkoba Polyclinic",2012,TRUE,340,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mnene/Musume Hosp",2012,TRUE,278,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mnene/Musume Hosp/Mberengwa",2012,TRUE,278,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Murambinda (Buhera)",2012,TRUE,339,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Murehwa Hospital",2012,TRUE,333,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mutambara",2012,TRUE,299,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mutare City (Sakubva)",2012,TRUE,336,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mutoko District",2012,TRUE,340,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mvuma Hospital",2012,TRUE,332,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Mvuma Hospital/Chirumhwanzu",2012,TRUE,332,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Ndanga Hospital",2012,TRUE,337,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Neshuro Hospital",2012,TRUE,331,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Nkayi Hospital",2012,TRUE,265,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Nyamandlovu Hospital",2012,TRUE,334,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Nyanga Hospital",2012,TRUE,274,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Plumtree Hosp",2012,TRUE,334,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Rusape Hospital",2012,TRUE,114,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Sadza (Chivhu)",2012,TRUE,339,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Shamva Hosp",2012,TRUE,337,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Shurugwi Mines",2012,TRUE,321,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Siveira Hosp",2012,TRUE,326,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"St. Alberts Hosp",2012,TRUE,314,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"St. Mary's Clinic",2012,TRUE,600,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Zvishavane",2012,TRUE,338,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Pseudo Site",2013,TRUE,813,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Duplicate",2014,TRUE,600,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Pseudo Site",2014,TRUE,846,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Duplicate",2015,TRUE,600,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA
+"Bulawayo Duplicate",2016,TRUE,600,"ancss","15-49","15","35",0,0,0,0,"ZWE",0,0,"ZWE",NA,NA,NA,NA,NA

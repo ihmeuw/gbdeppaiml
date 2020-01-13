@@ -1,0 +1,288 @@
+"clinic","year_id","used","n","type","agegr","age","agspan","site_pred","adm0_mean","adm0_lower","adm0_upper","ihme_loc_id","lbd_areal","lbd_missing","iso3","adm1_mean","adm1_lower","adm1_upper","iso3_adm1","loc_id_adm1"
+"Blantyre",1990,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Blantyre",1991,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Blantyre",1992,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Blantyre",1989,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Blantyre",1985,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Blantyre",1993,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Blantyre",1987,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Blantyre Limbe HC",1994,TRUE,250,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Blantyre Limbe HC",1995,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Blantyre Limbe HC",1996,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Blantyre Limbe HC",1997,TRUE,617,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Blantyre Limbe HC",1998,TRUE,677,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Blantyre Limbe HC",1999,TRUE,681,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Gawanani HC",1994,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Gawanani HC",1999,TRUE,66,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Gawanani HC",1998,TRUE,114,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Gawanani HC",1996,TRUE,145,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Gawanani HC",1997,TRUE,134,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kamboni HC",1997,TRUE,75,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kamboni HC",1999,TRUE,171,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kamboni HC",1994,TRUE,101,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kapolo HC",1994,TRUE,84,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kapolo HC",1998,TRUE,136,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kapolo HC",1999,TRUE,172,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kapolo HC",1995,TRUE,94,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kapolo HC",1996,TRUE,87,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kasina HC",1997,TRUE,55,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kasina HC",1998,TRUE,76,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kasina HC",1996,TRUE,126,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kasina HC",1994,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kasina HC",1999,TRUE,110,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Lilongwe",1994,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Lilongwe",1995,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Lilongwe",1996,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Lilongwe",1999,TRUE,610,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Lilongwe",1997,TRUE,600,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Lilongwe",1998,TRUE,800,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mangochi",1998,TRUE,500,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mangochi",1999,TRUE,499,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mangochi",1994,TRUE,200,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mangochi",1995,TRUE,250,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mangochi",1996,TRUE,250,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mangochi",1997,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mbalachanda HC",1995,TRUE,124,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mbalachanda HC",1996,TRUE,102,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mbalachanda HC",1997,TRUE,134,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mbalachanda HC",1999,TRUE,137,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mbalachanda HC",1992,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mbalachanda HC",1993,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mbalachanda HC",1998,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mbalachanda HC",1994,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mchinji",1997,TRUE,350,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mchinji",1996,TRUE,250,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mchinji",1998,TRUE,500,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mchinji",1995,TRUE,250,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mchinji",1999,TRUE,500,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mchinji",1994,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mianga HC",1992,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mianga HC",1995,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mianga HC",1998,TRUE,105,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mianga HC",1999,TRUE,106,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mianga HC",1993,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mianga HC",1994,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mianga HC",1997,TRUE,65,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mianga HC",1996,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Milepa HC",1994,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Milepa HC",1999,TRUE,191,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Milepa HC",1997,TRUE,158,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Milepa HC",1996,TRUE,150,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Milepa HC",1995,TRUE,147,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Milepa HC",1998,TRUE,174,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mulanje",1999,TRUE,510,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mulanje Mission Hospital",1996,TRUE,250,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mulanje Mission Hospital",1997,TRUE,398,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mulanje Mission Hospital",1998,TRUE,511,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mulanje Mission Hospital",1995,TRUE,250,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mulanje Mission Hospital",1994,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mzuzu",1994,TRUE,250,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mzuzu",1996,TRUE,397,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mzuzu",1997,TRUE,600,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mzuzu",1995,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mzuzu",1998,TRUE,595,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mzuzu",1999,TRUE,500,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nkhatabay",1994,TRUE,200,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nkhatabay",1995,TRUE,250,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nkhatabay",1997,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nkhatabay",1999,TRUE,476,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nkhatabay",1998,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nkhatabay",1996,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nkhotakota",1998,TRUE,500,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nkhotakota",1999,TRUE,448,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nkhotakota",1997,TRUE,404,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nkhotakota",1995,TRUE,250,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nkhotakota",1996,TRUE,250,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nkhotakota",1994,TRUE,200,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nsanje",1994,TRUE,200,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nsanje",1997,TRUE,394,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nsanje",1996,TRUE,250,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nsanje",1995,TRUE,251,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nsanje",1998,TRUE,500,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nsanje",1999,TRUE,427,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Ntcheu",1996,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Ntcheu",1995,TRUE,250,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Ntcheu",1997,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Ntcheu",1999,TRUE,500,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Ntcheu",1994,TRUE,200,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Ntcheu",1998,TRUE,500,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Rumphi",1996,TRUE,250,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Rumphi",1995,TRUE,250,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Rumphi",1998,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Rumphi",1999,TRUE,477,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Rumphi",1997,TRUE,400,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Rumphi",1994,TRUE,188,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"St. John's",1999,TRUE,610,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"St. John's",1997,TRUE,600,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Thonje HC",1994,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Thonje HC",1995,TRUE,150,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Thonje HC",1992,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Thonje HC",1993,TRUE,100,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Thonje HC",1998,TRUE,110,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Thonje HC",1999,TRUE,191,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Thonje HC",1996,TRUE,150,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Thonje HC",1997,TRUE,119,"ancss","15-49","15","35",NA,NA,NA,NA,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Blantyre Limbe HC",2001,TRUE,650,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Gawanani HC",2001,TRUE,135,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kamboni HC",2001,TRUE,158,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kapolo HC",2001,TRUE,190,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kasina HC",2001,TRUE,161,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Lilongwe",2001,TRUE,602,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mangochi",2001,TRUE,542,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mbalachanda HC",2001,TRUE,172,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mchinji",2001,TRUE,500,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mianga HC",2001,TRUE,201,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Milepa HC",2001,TRUE,202,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mulanje Mission Hospital",2001,TRUE,497,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mzuzu",2001,TRUE,597,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nkhatabay",2001,TRUE,510,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nkhotakota",2001,TRUE,528,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nsanje",2001,TRUE,500,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Ntcheu",2001,TRUE,515,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Rumphi",2001,TRUE,540,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Thonje HC",2001,TRUE,156,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Blantyre Limbe HC",2003,TRUE,804,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Gawanani HC",2003,TRUE,206,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"HR Limbé",2003,TRUE,804,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kamboni HC",2003,TRUE,238,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kapolo HC",2003,TRUE,210,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kasina HC",2003,TRUE,153,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Lilongwe",2003,TRUE,810,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mangochi",2003,TRUE,510,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mbalachanda HC",2003,TRUE,193,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mchinji",2003,TRUE,548,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mianga HC",2003,TRUE,203,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Milepa HC",2003,TRUE,205,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mulanje Mission Hospital",2003,TRUE,510,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mzuzu",2003,TRUE,846,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nkhatabay",2003,TRUE,522,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nkhotakota",2003,TRUE,272,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nsanje",2003,TRUE,511,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Ntcheu",2003,TRUE,500,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Rumphi",2003,TRUE,517,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Thonje HC",2003,TRUE,219,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Blantyre Limbe HC",2005,TRUE,847,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Gawanani HC",2005,TRUE,301,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kamboni HC",2005,TRUE,297,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kapolo HC",2005,TRUE,307,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kasina HC",2005,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Lilongwe",2005,TRUE,867,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mangochi",2005,TRUE,502,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mbalachanda HC",2005,TRUE,312,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mchinji",2005,TRUE,522,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mianga HC",2005,TRUE,321,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Milepa HC",2005,TRUE,311,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mulanje Mission Hospital",2005,TRUE,524,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mzuzu",2005,TRUE,849,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nkhatabay",2005,TRUE,520,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nkhotakota",2005,TRUE,500,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nsanje",2005,TRUE,429,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Ntcheu",2005,TRUE,500,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Rumphi",2005,TRUE,539,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Thonje HC",2005,TRUE,205,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Balaka",2007,TRUE,524,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Blantyre Limbe HC",2007,TRUE,887,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Bolero HC",2007,TRUE,179,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Chikwawa",2007,TRUE,399,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Chilipa HC",2007,TRUE,296,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Chinthenche HC",2007,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Chiradzulu",2007,TRUE,321,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Chitipa",2007,TRUE,495,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Chonde HC",2007,TRUE,318,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Dedza",2007,TRUE,405,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Domasi HC",2007,TRUE,207,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Gawanani HC",2007,TRUE,207,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kalemba HC",2007,TRUE,190,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kamboni HC",2007,TRUE,319,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kapiri HC",2007,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kapolo HC",2007,TRUE,323,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Karonga",2007,TRUE,413,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kasina HC",2007,TRUE,260,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kasinje HC",2007,TRUE,294,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kasungu",2007,TRUE,500,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Khombedza HC",2007,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kunenekude HC",2007,TRUE,299,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Lilongwe",2007,TRUE,842,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Machinga",2007,TRUE,520,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Makhuwira HC",2007,TRUE,305,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Malomo HC",2007,TRUE,305,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mangochi",2007,TRUE,495,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Matawale",2007,TRUE,785,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mbalachanda HC",2007,TRUE,299,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mbela HC",2007,TRUE,322,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mchinji",2007,TRUE,500,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mianga HC",2007,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Milepa HC",2007,TRUE,288,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mitundu HC",2007,TRUE,331,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mpemba HC",2007,TRUE,299,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mponela",2007,TRUE,509,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mulanje Mission Hospital",2007,TRUE,523,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mwansambo HC",2007,TRUE,305,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mwanza",2007,TRUE,444,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mzimba",2007,TRUE,500,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mzuzu",2007,TRUE,812,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Neno",2007,TRUE,289,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nkhatabay",2007,TRUE,458,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nkhotakota",2007,TRUE,499,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nkhulambe HC",2007,TRUE,304,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nsanje",2007,TRUE,512,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Ntcheu",2007,TRUE,498,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Ntchisi",2007,TRUE,465,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nthalire HC",2007,TRUE,299,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Phalombe",2007,TRUE,350,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Rumphi",2007,TRUE,500,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Salima",2007,TRUE,501,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Thonje HC",2007,TRUE,236,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Thyolo",2007,TRUE,510,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Balaka",2010,TRUE,500,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Blantyre Limbe HC",2010,TRUE,805,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Bolero HC",2010,TRUE,320,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Chikwawa",2010,TRUE,529,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Chilipa HC",2010,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Chinthenche HC",2010,TRUE,313,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Chiradzulu",2010,TRUE,530,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Chitipa",2010,TRUE,495,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Chonde HC",2010,TRUE,306,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Dedza",2010,TRUE,618,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Domasi HC",2010,TRUE,363,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Gawanani HC",2010,TRUE,374,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kalemba HC",2010,TRUE,302,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kapiri HC",2010,TRUE,328,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kapolo HC",2010,TRUE,357,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Karonga",2010,TRUE,496,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kasina HC",2010,TRUE,302,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kasinje HC",2010,TRUE,297,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kasungu",2010,TRUE,577,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Khombedza HC",2010,TRUE,301,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Kunenekude HC",2010,TRUE,221,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Lilongwe",2010,TRUE,867,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Machinga",2010,TRUE,532,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Makhuwira HC",2010,TRUE,320,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Malomo HC",2010,TRUE,299,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mangochi",2010,TRUE,501,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Matawale",2010,TRUE,617,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mbalachanda HC",2010,TRUE,244,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mbela HC",2010,TRUE,312,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mchinji",2010,TRUE,510,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Milepa HC",2010,TRUE,315,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mitundu HC",2010,TRUE,300,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mpemba HC",2010,TRUE,318,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mponela",2010,TRUE,542,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mulanje Mission Hospital",2010,TRUE,526,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mwansambo HC",2010,TRUE,292,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mwanza",2010,TRUE,530,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mzimba",2010,TRUE,540,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Mzuzu",2010,TRUE,801,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Neno",2010,TRUE,297,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nkhatabay",2010,TRUE,511,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nkhotakota",2010,TRUE,505,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nkhulambe HC",2010,TRUE,376,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nsanje",2010,TRUE,504,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Ntcheu",2010,TRUE,510,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Ntchisi",2010,TRUE,518,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Nthalire HC",2010,TRUE,378,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Phalombe",2010,TRUE,542,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Rumphi",2010,TRUE,529,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Salima",2010,TRUE,513,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Thonje HC",2010,TRUE,310,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
+"Thyolo",2010,TRUE,540,"ancss","15-49","15","35",0,0,0,0,"MWI",0,0,"MWI",NA,NA,NA,NA,NA
