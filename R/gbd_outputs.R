@@ -289,8 +289,8 @@ split_u5_gbd2017 <- function(dt){
   
 }
 
-split_u1 <- function(dt, loc, run.name.old, run.name.new){
-  pop <- data.table(fread(paste0('/ihme/hiv/epp_input/gbd19/', run.name.old, "/population_splits/", loc, '.csv')))
+split_u1 <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd19"){
+  pop <- data.table(fread(paste0('/ihme/hiv/epp_input/',gbdyear,"/" ,run.name.old, "/population_splits/", loc, '.csv')))
   u1.pop <- pop[age_group_id < 5]
   u1.pop[,pop_total := sum(population), by = c('sex_id', 'year_id')]
   u1.pop[,pop_prop := population/sum(population), by = c('sex_id', 'year_id')]

@@ -1,4 +1,5 @@
 find_pjnz <- function(loc){
+
   if(grepl("KEN", loc) & loc.table[ihme_loc_id == loc, level] == 5) {
       temp.loc <- loc.table[location_id == loc.table[ihme_loc_id == loc, parent_id], ihme_loc_id]
   } else if(grepl('ZAF', loc)){
@@ -7,10 +8,16 @@ find_pjnz <- function(loc){
     temp.loc <- loc
   } 
   
-  
   loc.name <- loc.table[ihme_loc_id == temp.loc, location_name]
   
   unaids.year <- loc.table[ihme_loc_id == temp.loc, unaids_recent]
+  unaids.year <- 2018
+ 
+  #Subnational files are stored in national folders
+  if(grepl("ETH",loc)){temp.loc <- "ETH"}
+  if(grepl("NGA",loc)){temp.loc <- "NGA"}
+  if(grepl("KEN",loc)){temp.loc <- "KEN"}
+  
   if(temp.loc == 'NAM'){unaids.year = 2017}
   ## TODO: What is wrong with the 2018 ZAF file?
   if(grepl('ZAF', loc)){unaids.year = 2017}
@@ -29,7 +36,7 @@ find_pjnz <- function(loc){
     
     file.list <- grep(temp.loc, pjnz.list, value = T)
     if(length(file.list) == 0){file.list <- grep(temp.loc, pjn.list, value = T)}
-    if(loc == "NGA") file.list <- c()
+
   } else {
     one.up <- paste(head(unlist(tstrsplit(dir, "/")), -1), collapse = "/")
     dir.list <- list.files(one.up, pattern = loc, full.names = T)
@@ -38,12 +45,73 @@ find_pjnz <- function(loc){
     }))
   }
   
-  if(loc.name=="Central"){
-    file.list <-  pjnz.list[which(grepl(paste0("Kenya-", loc.name), pjnz.list))]
+  if(grepl("ETH",loc)){
+    if(loc.name == "Afar"){
+      loc.name <- "Affar"
+    }   
+    if(loc.name == "Oromia"){
+      loc.name <- "Oromiya"
+    } 
+    if(loc.name == "Benishangul-Gumuz"){
+      loc.name <- "Benis_Gumz"
+    } 
+    if(loc.name == "Southern Nations, Nationalities, and Peoples"){
+      loc.name <- "Southern_Nations_Nationalities"
+    }
+    if(loc.name == "Gambella"){
+      loc.name <- "Gambela"
+    }
+    if(loc.name == "Addis Ababa"){
+      #probably a spelling mistake on the end of data services
+      loc.name <- "Addisabana"
+    }
+    if(loc.name == "Dire Dawa"){
+      #probably a spelling mistake on the end of data services
+      loc.name <- "Dire_Dawa"
+    }
+    file.list <-  pjnz.list[which(grepl(paste0(toupper(loc.name),"_"), pjnz.list))]
+   
   }
-  if(loc.name=="Plateau"){
-    file.list <-  pjnz.list[which(grepl(paste0("Nigeria_", loc.name), pjnz.list))]
+    
+  if(grepl("NGA",loc)){
+    if(loc.name == "FCT (Abuja)"){
+    loc.name <- "Abuja"
+    file.list <-  file.list[which(grepl(paste0(loc.name), file.list))]
+    }   
+    if(loc.name == "Akwa Ibom"){
+      loc.name <- "AKWALBOM"
+      file.list <-  file.list[which(grepl(paste0(loc.name), file.list))]
+    } 
+    
+    if(loc.name == "Cross River"){
+      loc.name <- "Cross_River"
+      file.list <-  file.list[which(grepl(paste0(loc.name), file.list))]
+    } 
+    file.list <-  pjnz.list[which(grepl(paste0(toupper(loc.name),"_"), pjnz.list))]
+    
   }
+      
+  if(grepl("KEN",loc)){
+    if(loc.name == "Rift Valley"){
+      loc.name <- "Rift_Valley"
+    }   
+    
+    if(loc.name == "North Eastern"){
+      loc.name <- "North_Eastern"
+    }   
+  
+    file.list <-  file.list[which(grepl(paste0(toupper(loc.name),"_"), file.list))]
+    
+    if(loc.name == "Eastern"){
+      file.list <-  file.list[!grepl("NORTH",file.list)]
+    }  
+    
+  }
+  
+
+  # if(loc.name=="Plateau"){
+  #   file.list <-  pjnz.list[which(grepl(paste0("Nigeria_", loc.name), pjnz.list))]
+  # }
   
   ##This may be requried for the 2018 files, or just rename
   # if(loc.name=="Niger" | loc.name=="Guinea"| 
@@ -51,20 +119,20 @@ find_pjnz <- function(loc){
   #   file.list <-  pjnz.list[which(grepl(paste0("/", loc.name,"_"), pjnz.list))]
   # }
   
-  if(loc.name=="Niger" ){
-    file.list <-  pjnz.list[which(grepl(paste0("/", loc.name,"_"), pjnz.list))]
-  }
+  # if(loc.name=="Niger" ){
+  #   file.list <-  pjnz.list[which(grepl(paste0("/", loc.name,"_"), pjnz.list))]
+  # }
   
-  if(temp.loc =="NGA_25344"){
-    loc.name <- 'Nigeria_Niger'
-    file.list <- grep(loc.name, pjnz.list, value = T)    
-  }
-  
-  if(temp.loc =="NGA_25332"){
-    loc.name <- 'FCT_Abuja'
-    file.list <- grep(loc.name, pjnz.list, value = T)    
-  }
-  
+  # if(temp.loc =="NGA_25344"){
+  #   loc.name <- 'Nigeria_Niger'
+  #   file.list <- grep(loc.name, pjnz.list, value = T)    
+  # }
+  # 
+  # if(temp.loc =="NGA_25332"){
+  #   loc.name <- 'FCT_Abuja'
+  #   file.list <- grep(loc.name, pjn.list, value = T)    
+  # }
+  # 
   
   if(length(file.list) == 0) {
     loc.name <- loc.table[ihme_loc_id == temp.loc, location_name]
@@ -109,29 +177,29 @@ collapse_epp <- function(loc){
   
   cc <- attr(eppd.list[[1]], 'country_code')
 
-  subpop.tot <- loc
+  #subpop.tot <- loc
   
-  eppd.tot <- eppd.list
-  names(eppd.tot) <- names(eppd.list)
-  
-  if(length(file.list) > 1){
-    add_index <<- TRUE
-    for(kk in 1:length(eppd.list)){
-      attr(eppd.tot[[kk]],"subpop") <-   names(eppd.list[[kk]])[1]
-    }
-  } else {
-    add_index <<- FALSE
-    eppd.tot <- eppd.list[[1]]
-    names(eppd.tot) <- names(eppd.list[[1]])
-    
-    for(kk in 1:length(names(eppd.tot))){
-      attr(eppd.tot[[kk]],"subpop") <- names(eppd.tot)[[kk]]
-    }
-    
-  }
+  # eppd.tot <- eppd.list
+  # names(eppd.tot) <- names(eppd.list[[1]])
+  # 
+  # if(length(file.list) > 1){
+  #   add_index <<- TRUE
+  #   for(kk in 1:length(eppd.list)){
+  #     attr(eppd.tot[[kk]],"subpop") <-   names(eppd.list[[kk]][1])
+  #   }
+  # } else {
+  #   add_index <<- FALSE
+  #   eppd.tot <- eppd.list[[1]]
+  #   names(eppd.tot) <- names(eppd.list[[1]])
+  #   
+  #   for(kk in 1:length(names(eppd.tot))){
+  #     attr(eppd.tot[[kk]],"subpop") <- names(eppd.tot)[[kk]]
+  #   }
+  #   
+  # }
 
-  ancsitedat <- melt_ancsite_data(eppd.tot, add_index = add_index)
-  hhsdat <-  tidy_hhs_data(eppd.tot, add_index = add_index)
+  ancsitedat <- melt_ancsite_data(eppd = eppd.list)
+  hhsdat <-  tidy_hhs_data(eppd.list, add_index = add_index)
   
   eppd.list <- unlist(eppd.list,recursive = FALSE)
   eppd.tot <- eppd.list[1]
@@ -241,9 +309,15 @@ collapse_epp <- function(loc){
   ## epp.input
   if(length(file.list) > 1) {
     epp.input.list <- lapply(file.list, function(file) {
+      print(file)
       pjnz <- file
-      epp.input<- epp::read_epp_input(pjnz)
-    })
+      if(pjnz %in% c("/home/j/DATA/UNAIDS_ESTIMATES/2019/CIV//CIV_OUEST_UNAIDS_SPECTRUM_2019_OUEST_2019_29042019_Y2019M08D05.PJNZ")){
+        epp.input <- read_epp_input_fixes(pjnz)
+      } else {
+        epp.input<- epp::read_epp_input(pjnz)
+      
+      } })
+    
     epp.input.tot <- epp.input.list[[1]]
     attr(epp.input.tot,"country") <- subpop.tot
 
@@ -299,14 +373,21 @@ collapse_epp <- function(loc){
 
     # epp.art (sum and mean) ** beware of percentages!!! also not sure whether 1stto2ndline is count or percent
     epp.art.temp <- rbindlist(lapply(epp.input.list, function(epp.input) {
+      
       epp.art <- epp.input$epp.art
     }), fill = T)
-    epp.art.temp[is.na(m.isperc), m.isperc := "N"]
-    epp.art.temp[is.na(f.isperc), f.isperc := "N"]
+
     if("P" %in% unique(c(epp.art.temp$m.isperc, epp.art.temp$f.isperc))) {
       # Add prevalence
       epp.prev <- unlist(lapply(file.list, function(pjnz) {
-        spu <- epp::read_spu(pjnz)$prev
+        print(pjnz)
+        if(pjnz %in% c("/home/j/DATA/UNAIDS_ESTIMATES/2019/TGO//TGO_MARITIME_UNAIDS_SPECTRUM_2019_V5_756_10052019_13H42_Y2019M08D05.PJNZ")){
+          spu <- read_spu_fixes(pjnz)$prev
+        } else {
+          spu <- epp::read_spu(pjnz)$prev
+          
+        }
+       
         mean.spu <- rowMeans(spu)
       }))
       epp.prev.subset <- epp.prev[names(epp.prev) %in% paste0(unique(epp.art.temp$year))]
@@ -314,7 +395,7 @@ collapse_epp <- function(loc){
       if(nrow(epp.art.temp) != length(epp.prev.subset)) {
         stop("ART collapse problem")
       }
-      epp.art.temp[, prev := epp.prev.subset]
+      epp.art.temp$prev <- epp.prev.subset
 
       # Add population
       pop <- epp.pop.temp[year %in% unique(epp.art.temp$year)]
