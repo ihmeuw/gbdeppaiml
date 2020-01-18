@@ -11,7 +11,7 @@ h_root <- '/homes/mwalte10/'
 lib.loc <- paste0(h_root,"R/",R.Version()$platform,"/",R.Version()$major,".",R.Version()$minor)
 dir.create(lib.loc,recursive=T, showWarnings = F)
 .libPaths(c(lib.loc,.libPaths()))
-packages <- c("data.table","sp", 'sf', "stringr", 'tidyverse', 'lwgeom')
+packages <- c("data.table","sp", 'sf', "stringr", 'tidyverse', 'lwgeom', 'doParallel')
 library(gridExtra)
 for(p in packages){
   if(p %in% rownames(installed.packages())==FALSE){
@@ -26,7 +26,7 @@ print(args)
 if(length(args) > 0) {
   loc <- args[1]
 } else {
-  loc <- "BWA"
+  loc <- "PNG"
 }
 
 
@@ -66,7 +66,6 @@ loc.list <- unique(lbd_map$iso3)
 #     writeOGR(obj=loc_shp, dsn=out_dir_geo, layer=paste0(shp,"_limited.shp"), driver="ESRI Shapefile")
 #    }
 # }   
-loc <- "BWA"
 # Load cell pred object - DO THIS OUTSIDE THE FUNCTION
 message("Load cell pred object")
 rd <- "2019_02_26_20_11_35"
@@ -88,6 +87,7 @@ for(loc in loc.list){
   
   for (shp in shp_path){
     print(shp)
+    shapefile_path <- paste0(shapefile_directory, shp,".shp")
     
     if (is.na(shp) | !file.exists(shapefile_path)){
       print(paste0("no geofile for ",loc))
@@ -95,7 +95,6 @@ for(loc in loc.list){
     }
     
     #shp <- shp_path[1]
-    #shapefile_path <- paste0(shapefile_directory, shp,".shp")
     
     
     if(shp %in% c("gadm_36_ad1","admin2013_2","admin2013_1")){
@@ -156,8 +155,8 @@ anc.prior.sub <- TRUE
 lbd.anc <- TRUE
 age.prev <- FALSE
 gbdyear <- 'gbd20'
-run.name <- '191002_sitar'
-stop.year <- 2020
+run.name <- '191224_trumpet'
+stop.year <- 2022
 j <- 1
 anc.sub <- FALSE
 
@@ -171,12 +170,12 @@ gen.pop.dict <- c("General Population", "General population", "GP",
 if(grepl("ZAF",loc) | grepl("IND",loc)){
   dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))
 } else {
-  dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/', loc, '.rds'))
+  dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/2019/', loc, '.rds'))
 }
 
 anc.dt <- dt %>% data.table()
 
-new.anc <- readRDS("/home/j/WORK/11_geospatial/10_mbg/hiv/unaids_anc/anc_data_2018_10_26.rds")
+new.anc <- readRDS("/home/j/WORK/11_geospatial/10_mbg/hiv/unaids_anc/anc_data_2019_08_13.rds")
 loc1 <- substring(loc,1,3)
 new.anc <- setDT(new.anc)[country==loc]
 setnames(new.anc,c("country"),c("iso3"))

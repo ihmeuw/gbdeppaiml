@@ -16,7 +16,7 @@ run.name <- "191224_trumpet"
 spec.name <- "191002_sitar"
 compare.run <- "190630_rhino2"
 proj.end <- 2022
-n.draws <- 5
+n.draws <- 100
 run.group2 <- FALSE
 paediatric <- TRUE
 cluster.project <- "proj_hiv"
@@ -64,9 +64,11 @@ for(loc in loc.list) {
 }
 
 plot.dir <- paste0("/ihme/hiv/epp_input/gbd19/",run.name,"/art_plots/")
+
 setwd(plot.dir)
 # Combine location-specific plots
 system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=art_plots.pdf -f *"))
+
 # Move to parent directory
 system(paste0("mv ", plot.dir, "/art_plots.pdf ",input.dir,"/"))
 # Delete location specific plots
@@ -109,24 +111,23 @@ if(!file.exists(paste0(input.dir, 'art_prop.csv'))){
   system(prop.job)
 }
 
-
 ## Launch EPP
 for(loc in loc.list) {    ## Run EPPASM
+# 
+    epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q all.q -P ", cluster.project, " ",
+                         "-e /share/homes/", user, "/errors ",
+                         "-o /share/temp/sgeoutput/", user, "/output ",
+                         "-N ", loc, "_eppasm ",
+                         "-t 1:", n.draws, " ",
+                         "-hold_jid eppasm_prep_inputs_", run.name," ",
+                         code.dir, "gbd/singR_shell.sh ",
+                         code.dir, "gbd/main.R ",
+                         run.name, " ", loc, " ", proj.end, " ", paediatric)
+    print(epp.string)
+    system(epp.string)
 
-      epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q all.q -P ", cluster.project, " ",
-                           "-e /share/homes/", user, "/errors ",
-                           "-o /share/temp/sgeoutput/", user, "/output ",
-                           "-N ", loc, "_eppasm ",
-                           "-t 1:", n.draws, " ",
-                           "-hold_jid eppasm_prep_inputs_", run.name," ",
-                           code.dir, "gbd/singR_shell.sh ",
-                           code.dir, "gbd/main.R ",
-                           run.name, " ", loc, " ", proj.end, " ", paediatric)
-      print(epp.string)
-      system(epp.string)
 
-
-    ## Draw compilation
+    #Draw compilation
     draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
                           "-e /share/homes/", user,"/errors ",
                           "-o /share/temp/sgeoutput/", user, "/output ",
@@ -137,7 +138,7 @@ for(loc in loc.list) {    ## Run EPPASM
                           run.name, " ", loc, ' ', n.draws, ' TRUE ', paediatric)
     print(draw.string)
     system(draw.string)
-
+#
     plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
                           "-e /share/homes/", user, "/errors ",
                           "-o /share/temp/sgeoutput/", user, "/output ",

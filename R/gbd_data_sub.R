@@ -388,14 +388,24 @@ sub.paeds <- function(dt, loc, k, start.year = 1970, stop.year = stop.year){
     }
   }
   
-  
-  art.path <-paste0(root, "WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/AIM_assumptions/program_stats/ART_children/UNAIDS_2019/", loc, "_Child_ART_cov.csv") 
+  if(file.exists(paste0('/ihme/hiv/data/UNAIDS_extract/childARTcoverage/UNAIDS_2019/',
+                        loc, '_Child_ART_cov.csv'))){
+    art.path <- paste0('/ihme/hiv/data/UNAIDS_extract/childARTcoverage/UNAIDS_2019/',
+                       loc, '_Child_ART_cov.csv')
+  }else{
+    art.path <-paste0(root, "WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/AIM_assumptions/program_stats/ART_children/UNAIDS_2019/", loc, "_Child_ART_cov.csv") 
+    
+  }
   if(file.exists(art.path)){
     art <- fread(art.path)
   }else{
     art <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/paeds/childARTcoverage/', loc, '.csv'))
   }
   setnames(art, old = 'year', new = 'year_id')
+  if('ART_Cov_pct' %in% colnames(art)){
+    setnames(art, old = 'ART_Cov_pct', new = 'ART_cov_pct')
+    
+  }
   art <- extrapolate_years(art, end_year = stop.year, id_vars = c('ART_cov_pct', 'Cotrim_cov_pct', 'Cotrim_cov_num'), trans_vars = 'ART_cov_num')
   
   #art <- extend.years(art, years)
@@ -455,7 +465,16 @@ sub.paeds <- function(dt, loc, k, start.year = 1970, stop.year = stop.year){
   names(infdist) <- 1:7
   attr(dt, 'specfp')$paed_distnewinf <- infdist
   
+  
   pmtct <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/paeds/PMTCT/', loc, '.csv'))
+  
+    if( file.exists(paste0('/ihme/hiv/data/UNAIDS_extrapolated/UNAIDS_2019/', loc, '_PMTCT_ART_cov.csv'))){
+      pmtct <- fread(paste0('/ihme/hiv/data/UNAIDS_extrapolated/UNAIDS_2019/', loc, '_PMTCT_ART_cov.csv'))
+    }
+    if( file.exists(paste0('/ihme/hiv/data/UNAIDS_extrapolated/UNAIDS_2018/', loc, '_PMTCT_ART_cov.csv'))){
+      pmtct <- fread(paste0('/ihme/hiv/data/UNAIDS_extrapolated/UNAIDS_20198', loc, '_PMTCT_ART_cov.csv'))
+    }
+  
   pmtct <- pmtct[year %in% years]
   pmtct <- extend.years(pmtct, years)
   if(min(pmtct$year) > start.year){
@@ -711,8 +730,17 @@ add_frr_noage_fp <- function(obj){
 
 sub.prev.granular <- function(dt, loc){
   ## TODO: Add this to cache prev
-  age.prev.dt <- fread(paste0("/ihme/hiv/epp_input/", gbdyear, '/', run.name, "/prev_surveys.csv"))
+  age.prev.dt <- fread(paste0("/share/hiv/epp_input/gbd20/prev_surveys.csv"))
   age.prev.dt <- age.prev.dt[iso3 == loc]
+  age.prev.dt[,loc_year := paste0(iso3, '_', year)]
+  
+  copied_site_years <- intersect(age.prev.dt[age_year %in% c("15"), unique(loc_year)], age.prev.dt[age_year %in% c("15-49"), unique(loc_year)])
+  age.prev.dt <- age.prev.dt[loc_year %in% copied_site_years & (age_year %in% c('15-49', '15-64')), age_year := 'drop']
+  age.prev.dt <- age.prev.dt[age_year != 'drop',]
+  # 
+
+
+  ##this step makes it so that it is just all ages (15 - 64)
   age.prev.dt <- age.prev.dt[age_year %in% 15:59 | age_year == '15-49' | age_year == '15-64']
   age.prev.dt[!age_year %in% c('15-49', '15-64'), agegr := paste0(age_year, '-', as.numeric(age_year)+4)]
   age.prev.dt[age_year == '15-49', agegr := '15-49']
@@ -895,23 +923,15 @@ geo_adj <- function(loc, dt, i, uncertainty) {
     
     ##Bring in the matched data - reading in as CSV rather then fread because the latter seems to add quotations when there are escape characters, which messes up the matching
     #######change the directory here
-  if(lbd.anc){
-    if(file.exists(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/offset/', loc, '.csv'))){ 
-      anc.dt.all <- read.csv(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/offset/', loc, '.csv'))  
-    if(any(colnames(anc.dt.all) == 'X')){
-      anc.dt.all <- anc.dt.all[,-which(colnames(anc.dt.all) == 'X')]
-    }}
 
-  }else{
     anc.dt.all <- read.csv(paste0('/share/hiv/data/lbd_anc/', loc, '_ANC_matched.csv'))  
     
-  }
+  
     anc.dt.all <- as.data.table(anc.dt.all)
-    if(!lbd.anc){
       anc.dt.all  <- anc.dt.all[,c( "clinic","year_id","mean","site_pred","adm0_mean","adm0_lower", "adm0_upper","subpop","high_risk")]
       setnames(anc.dt.all,c("clinic","year_id"),c("site","year"))
       
-    }
+    
 
     eppd <- attr(dt, "eppd")
   
@@ -1006,7 +1026,7 @@ geo_adj <- function(loc, dt, i, uncertainty) {
         anc.dt[,'adm0_lower' := as.numeric(anc.dt[,adm0_lower])]
         anc.dt[,'adm0_upper' := as.numeric(anc.dt[,adm0_upper])]
         anc.dt[,'site_pred' := as.numeric(anc.dt[,site_pred])]
-        
+        site.dat <- site.dat[,.(site, year, used, prev, n, subpop, type, agegr, age, agspan)]
         
         
         if(subpop2 %in% unique(eppd$ancsitedat$subpop)){
@@ -1040,12 +1060,9 @@ geo_adj <- function(loc, dt, i, uncertainty) {
      all.anc[is.na(offset), offset := 0]
      all.anc[offset > 0.15, offset := 0.15]
      all.anc[offset < -0.15, offset := -0.15]
-    if(!lbd.anc){ all.anc[is.na(high_risk),high_risk := FALSE]
+      all.anc[is.na(high_risk),high_risk := FALSE]
       all.anc <- all.anc[!high_risk==TRUE]
-      all.anc[,c('site_pred','adm0_mean','adm0_lower','adm0_upper','high_risk') := NULL]}else{
-        all.anc[,c('adm0_mean','adm0_lower','adm0_upper') := NULL] 
-        
-      }
+      all.anc[,c('site_pred','adm0_mean','adm0_lower','adm0_upper','high_risk') := NULL]
 
      
      ##This corrects a mistake in the file generation - should be corrected in the initial generation
@@ -1072,18 +1089,24 @@ geo_adj <- function(loc, dt, i, uncertainty) {
     # } else {
       temp.loc <- loc
     # }
-    
-    #Still need to split 2019 to sublocations
-    for(c.year in c('UNAIDS_2019', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
-      #art.path <-paste0(root, "WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/extrapolate_ART/PV_testing/", c.year, "/", temp.loc, "_Adult_ART_cov.csv") 
-      art.path <-paste0('/ihme/homes/mwalte10/', "04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/extrapolate_ART/PV_testing/", c.year, "/", temp.loc, "_Adult_ART_cov.csv") 
 
-      if(file.exists(art.path)){
-        print(c.year)
-        art.dt <- fread(art.path)
-        break;
+    if(file.exists(paste0('/ihme/hiv/data/UNAIDS_extrapolated/UNAIDS_2019/', loc, '_Adult_ART_cov.csv'))){
+      art.dt <- fread(paste0('/ihme/hiv/data/UNAIDS_extrapolated/UNAIDS_2019/', loc, '_Adult_ART_cov.csv'))
+      
+    }else{
+      for(c.year in c('UNAIDS_2019', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
+        #art.path <-paste0(root, "WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/extrapolate_ART/PV_testing/", c.year, "/", temp.loc, "_Adult_ART_cov.csv") 
+        art.path <-paste0('/ihme/homes/mwalte10/', "04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/extrapolate_ART/PV_testing/", c.year, "/", temp.loc, "_Adult_ART_cov.csv") 
+        
+        if(file.exists(art.path)){
+          print(c.year)
+          art.dt <- fread(art.path)
+          break;
+        }
       }
+      
     }
+      
     art.dt[is.na(art.dt)] <- 0
     ##Need this to be logical later
     art.dt[, type := ifelse(ART_cov_pct > 0, TRUE, FALSE)]	
@@ -1127,9 +1150,10 @@ geo_adj <- function(loc, dt, i, uncertainty) {
   }
   
   #We use a different prior for MDG or else the curve goes to 0. It is worth rethinking this strategy for all no-survey locations.
+  #We use a different prior for no-survey locs (except PNG which has enough ANC data)
   sub.anc.prior <- function(dt,loc){
-   if(loc %in%  c( "MDG" )){
-      ancbias.pr.mean <<- 0.0
+    if(loc %in%  c("SDN","SSD","SOM","GNB","MDG", "PNG")){
+      ancbias.pr.mean <<- 0.15
       ancbias.pr.sd <<- 0.001
     } else {
       ancbias.pr.mean <<- 0.15
@@ -1137,9 +1161,6 @@ geo_adj <- function(loc, dt, i, uncertainty) {
     }
     return(dt)
   }
-  
-  
-  
   
   
   

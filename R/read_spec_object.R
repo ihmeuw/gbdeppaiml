@@ -9,39 +9,45 @@ anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE){
   print(age.prev)
   #Do this for now as something is weird with the new PJNZ files - don't need subpop anyway
   #Eventually these hsould all be regenerated with subpopulations
-  if(grepl("ZAF",loc) | grepl("IND",loc) | grepl("SDN",loc)){
-    dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))
-  } else {
-    dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', loc, '.rds'))
-  }
-  
-  if(use_2019){
+  if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))){
     dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))
+    
+  }else{
+    if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2018/', loc, '.rds'))){
+      dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2018/', loc, '.rds'))
+      
+    }else{
+      if(file.exists(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', loc, '.rds'))){
+        dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', loc, '.rds'))
+      }else{
+        if(file.exists(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))){
+          dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))
+        }
+      }
+    }
   }
 
+  
+  # if(grepl("ZAF",loc) | grepl("IND",loc) | grepl("SDN",loc)){
+  #   dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))
+  # } else {
+  #   dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', loc, '.rds'))
+  # }
+  # 
+  # if(use_2019 & loc != 'SWZ'){
+  #   #search 2019, then 2018, then subpop, then prep
+  #   dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))
+  # }
+
   if(lbd.anc){
-    rt <- subset(attr(dt, 'eppd')$ancsitedat, type == 'ancrt')
-    if(nrow(rt) != 0){
-      replace <- as.data.frame(readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/offset/', loc, '.rds')))
-      replace <- as.data.table(replace)
+      replace <- as.data.table(readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/2019/offset/', loc, '.rds')))
       replace[,'age' := as.numeric(replace[,age])]
       replace[,'agspan' := as.numeric(replace[,agspan])]
       replace[,'site' := as.character(replace[,site])]
-      rt <- as.data.table(rt)
-      rt[,'site' := as.character(site)]
-      rt <- rt[,c('adm0_mean', 'adm0_upper', 'adm0_lower', 'site_pred',  'site_year', 'ihme_loc_id', 'country') := NA]
-      rt <- rt[,c('high_risk') := FALSE]
-      
-      attr(dt, 'eppd')$ancsitedat <- rbind(rt, replace)
-    }else{
-      replace <- as.data.frame(readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/offset/', loc, '.rds')))
-      replace <- as.data.table(replace)
-      replace[,'age' := as.numeric(replace[,age])]
-      replace[,'agspan' := as.numeric(replace[,agspan])]
-      replace[,'site' := as.character(replace[,site])]
+      replace[,'high_risk' := FALSE]
+
       attr(dt, 'eppd')$ancsitedat <- replace
-      
-    }
+  
 
   }
 
@@ -123,24 +129,24 @@ anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE){
     }
     
     ## Subsetting KEN counties from province
-    if(grepl('KEN', loc)){
-      ken.anc.path <- paste0('/share/hiv/epp_input/gbd19/kenya_anc_map.csv')
-      ken.anc <- fread(ken.anc.path)
-      county.sites <- ken.anc[ihme_loc_id == loc, site]
-      prov.sites <- row.names(attr(dt, "eppd")$anc.prev)
-      keep.index <- which(prov.sites %in% county.sites  | grepl(loc.table[ihme_loc_id == loc, location_name], prov.sites))
-      attr(dt, "eppd")$anc.used[] <- FALSE
-      if(length(keep.index) > 0) {
-        attr(dt, "eppd")$anc.used[keep.index] <- TRUE
-      }
-      ##TODO - need to update mapping, take out grepl on location name
-      attr(dt, 'eppd')$ancsitedat$used[!(attr(dt, 'eppd')$ancsitedat$site %in% county.sites | grepl(loc.table[ihme_loc_id == loc, location_name], attr(dt, 'eppd')$ancsitedat$site))] <- FALSE
-      # ART
-      prop.path <- paste0("/share/hiv/epp_input/gbd19/KEN_ART_props.csv")
-      prop.dt <- fread(prop.path)
-      prop <- prop.dt[ihme_loc_id == loc, prop_pepfar]
-      attr(dt,"specfp")$art15plus_num <- attr(dt,"specfp")$art15plus_num * prop
-    }
+    # if(grepl('KEN', loc)){
+    #   ken.anc.path <- paste0('/share/hiv/epp_input/gbd19/kenya_anc_map.csv')
+    #   ken.anc <- fread(ken.anc.path)
+    #   county.sites <- ken.anc[ihme_loc_id == loc, site]
+    #   prov.sites <- row.names(attr(dt, "eppd")$anc.prev)
+    #   keep.index <- which(prov.sites %in% county.sites  | grepl(loc.table[ihme_loc_id == loc, location_name], prov.sites))
+    #   attr(dt, "eppd")$anc.used[] <- FALSE
+    #   if(length(keep.index) > 0) {
+    #     attr(dt, "eppd")$anc.used[keep.index] <- TRUE
+    #   }
+    #   ##TODO - need to update mapping, take out grepl on location name
+    #   attr(dt, 'eppd')$ancsitedat$used[!(attr(dt, 'eppd')$ancsitedat$site %in% county.sites | grepl(loc.table[ihme_loc_id == loc, location_name], attr(dt, 'eppd')$ancsitedat$site))] <- FALSE
+    #   # ART
+    #   prop.path <- paste0("/share/hiv/epp_input/gbd19/KEN_ART_props.csv")
+    #   prop.dt <- fread(prop.path)
+    #   prop <- prop.dt[ihme_loc_id == loc, prop_pepfar]
+    #   attr(dt,"specfp")$art15plus_num <- attr(dt,"specfp")$art15plus_num * prop
+    # }
       
   
     # if(!anc.rt){

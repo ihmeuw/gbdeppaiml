@@ -247,7 +247,7 @@ get_daly_hivpop <- function(hivpop1){
 ## Under-5 splits using GBD 2017 methods
 ## We don't want to do it this way in the long run, but just for the sake of comparison
 split_u5_gbd2017 <- function(dt){
-  pop <- fread(paste0('/ihme/hiv/epp_input/gbd19/', run.name, "/population_splits/", loc, '.csv'))
+  pop <- fread(paste0('/ihme/hiv/epp_input/gbd19/', run.name.old, "/population_splits/", loc, '.csv'))
   u5.pop <- pop[age_group_id <= 5]
   u5.pop[,pop_total := sum(population), by = c('sex_id', 'year_id')]
   u5.pop[,pop_prop := population/sum(population), by = c('sex_id', 'year_id')]
@@ -290,7 +290,7 @@ split_u5_gbd2017 <- function(dt){
 }
 
 split_u1 <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd19"){
-  pop <- data.table(fread(paste0('/ihme/hiv/epp_input/',gbdyear,"/" ,run.name.old, "/population_splits/", loc, '.csv')))
+  pop <- data.table(fread(paste0('/ihme/hiv/epp_input/','gbd19',"/" ,run.name.old, "/population_splits/", loc, '.csv')))
 
   u1.pop <- pop[age_group_id < 5]
   u1.pop[,pop_total := sum(population), by = c('sex_id', 'year_id')]
@@ -320,7 +320,7 @@ split_u1 <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd19"){
   spec_u1[, age_group_id := NULL]
   
   ## pull in incidence proportions from eppasm
-  split.dt <- fread(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name.new ,'/compiled/', loc, '_under1_splits.csv'))
+  split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/', run.name.new ,'/compiled/', loc, '_under1_splits.csv'))
   split.dt <- melt(split.dt, id.vars = c('year', 'run_num'))
   setnames(split.dt, 'variable', 'age')
   spec_u1 <- merge(spec_u1, split.dt, by = c('year', 'run_num', 'age'))

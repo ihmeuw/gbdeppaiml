@@ -21,7 +21,7 @@ if(length(args) > 0) {
   paediatric <- as.logical(args[4])
 } else {
 	run.name <- '191224_trumpet'
-	loc <- 'AGO'
+	loc <- 'BWA'
 	stop.year <- 2022
 	j <- 1
 	paediatric <- TRUE
@@ -79,7 +79,14 @@ if(geoadjust & !loc %in% no_geo_adj){
   geoadjust  <- FALSE
 }
 
-if(!loc %in% unlist(strsplit(list.files('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/'), '.rds'))){
+if(!loc %in% unlist(strsplit(list.files('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/2019/'), '.rds'))){
+  lbd.anc <- FALSE
+}
+
+if(grepl('ZAF', loc)){
+  lbd.anc <- FALSE
+}
+if(grepl('PNG', loc)){
   lbd.anc <- FALSE
 }
 #debug(read_spec_object)
@@ -89,6 +96,14 @@ dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
                        pop.sub, anc.sub, anc.backcast, prev.sub = TRUE, art.sub = TRUE, 
                        sexincrr.sub = TRUE,  age.prev = age.prev, paediatric = TRUE, 
                        anc.prior.sub = TRUE, lbd.anc, geoadjust = geoadjust, use_2019 = TRUE)
+##this is a quick fix, will need to correct later
+if(lbd.anc){
+  attr(dt, 'eppd')$ancsitedat$prev <- attr(dt, 'eppd')$ancsitedat$prev / 0.01
+}
+
+if(grepl('ETH', loc)){
+  attr(dt, 'eppd')$hhs <-  subset(attr(dt, 'eppd')$hhs, year != '2018')
+}
 #check_inputs(dt)
 if(geoadjust){
   attr(dt, 'eppd')$ancsitedat$offset <- attr(dt, 'eppd')$ancsitedat$offset %>% as.numeric()
@@ -130,8 +145,9 @@ if(grepl("IND",loc)){
   }
   attr(dt, 'specfp')$art_alloc_mxweight <- 0.5
 }
+
 ## Fit model
-fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e1, B = 1e3, number_k = 2)
+fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500)
 data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc, '.csv')
 if(!file.exists(data.path)){save_data(loc, attr(dt, 'eppd'), run.name)}
 if(file.exists(data.path)){save_data(loc, attr(dt, 'eppd'), run.name)}
