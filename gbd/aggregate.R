@@ -27,9 +27,9 @@ if(length(args) > 0) {
   ncores <- args[4]
   
 } else {
-  parent <- "IND"
+  parent <- "KEN"
   run.name <- "190630_rhino2"
-  spec.run.name <- "190630_rhino"
+  spec.run.name <- "190630_rhino_combined"
   ncores <- 2
 }
 
@@ -45,11 +45,11 @@ single.age.dir <- paste0('/ihme/hiv/spectrum_draws/', spec.run.name,'/detailed_d
 library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
 source(paste0(root, "Project/Mortality/shared/functions/get_age_map.r"))
 source(paste0(root, "Project/Mortality/shared/functions/get_locations.r"))
-source(paste0(root, "temp/central_comp/libraries/current/r/get_population.R"))
+source(paste0("/share/cc_resources/libraries/current/r/get_population.R"))
 
 ### Tables
 age.table <- data.table(get_age_map(type="all"))
-loc.table <- as.data.table(get_locations(hiv_metadata = T))
+loc.table <- as.data.table(get_locations(hiv_metadata = T, gbd_year=2019))
 
 ### Code
 ## Find  children

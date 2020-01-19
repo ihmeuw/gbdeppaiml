@@ -957,13 +957,23 @@ geo_adj <- function(loc, dt, i, uncertainty) {
     
     #Still need to split 2019 to sublocations
     for(c.year in c('UNAIDS_2019', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
-      art.path <-paste0(root, "WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/extrapolate_ART/PV_testing/", c.year, "/", temp.loc, "_Adult_ART_cov.csv") 
+      art.path <-paste0(root, "/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/extrapolate_ART/PV_testing/", c.year, "/", temp.loc, "_Adult_ART_cov.csv") 
       if(file.exists(art.path)){
         print(c.year)
         art.dt <- fread(art.path)
         break;
       }
     }
+    
+    # if(loc == "SDN"){
+    #   print("using percent for SDN")
+    #   art.dt = fread("/share/homes/djahag/sdn_alternate_art.csv")
+    #   art.dt = art.dt[,.(year,sex,ART_cov_pct,ART_cov_num)]
+    #   art.dt = art.dt[year <= 2019]
+    #   art.dt = art.dt[order(year)]
+    # }
+    # 
+      
     art.dt[is.na(art.dt)] <- 0
     ##Need this to be logical later
     art.dt[, type := ifelse(ART_cov_pct > 0, TRUE, FALSE)]	
@@ -1006,10 +1016,10 @@ geo_adj <- function(loc, dt, i, uncertainty) {
     return(dt)
   }
   
-  #We use a different prior for MDG or else the curve goes to 0. It is worth rethinking this strategy for all no-survey locations.
+  #We use a different prior for no-survey locs (except PNG which has enough ANC data)
   sub.anc.prior <- function(dt,loc){
-   if(loc %in%  c( "MDG" )){
-      ancbias.pr.mean <<- 0.0
+   if(loc %in%  c("SDN","SSD","SOM","GNB","MDG")){
+      ancbias.pr.mean <<- 0.15
       ancbias.pr.sd <<- 0.001
     } else {
       ancbias.pr.mean <<- 0.15

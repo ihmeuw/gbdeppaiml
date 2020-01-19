@@ -60,7 +60,7 @@ setwd(code.dir)
 devtools::load_all()
 
 ### Tables
-loc.table <- fread(paste0('/share/hiv/epp_input/gbd19/', run.name, '/location_table.csv'))
+loc.table <- get_locations(hiv_metadata = TRUE, gbd_year=2019)
 
 # These locations do not have information from LBD team estimates
 # ZAF ANC data are considered nationally representative so no GeoADjust - this could be challenged in the future
@@ -76,7 +76,8 @@ if(geoadjust & !loc %in% no_geo_adj){
 ### Code
 ## Read in spectrum object, sub in GBD parameters
 dt <- read_spec_object(loc, i, start.year, stop.year, trans.params.sub, pop.sub, prev.sub, art.sub, sexincrr.sub, popadjust, age.prev, paediatric, anc.rt, geoadjust, anc.prior.sub)
-
+anc = attr(dt,"eppd")$ancsitedat
+nrow(attr(dt,"eppd")$hhs)
 
 if(epp.mod == 'rspline'){attr(dt, 'specfp')$equil.rprior <- TRUE}
 
@@ -113,7 +114,7 @@ if(grepl("IND",loc)){
 }
 
 ## Fit model
-fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500)
+fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e4, B = 1e3, number_k = 200)
 
 
 data.path <- paste0('/share/hiv/epp_input/gbd19/', run.name, '/fit_data/', loc, '.csv')

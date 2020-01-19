@@ -129,7 +129,7 @@ nid.dt <- unique(data3[, .(int_year, iso3, nid)])
 nid.dt[, year := as.numeric(int_year)]
 temp <- merge(data4, nid.dt, by = c("year", "iso3"), all.x = T)
 out.dt <- rbind(temp, supp.survey, fill = T)
-
+out.dt = temp
 # Check for duplicates
 loc.years <- data.table(melt(table(out.dt[, .(iso3, year)])))
 loc.years[value == 2]
@@ -137,6 +137,7 @@ loc.years[value == 2]
 # Outlier surveys
 out.dt <- out.dt[!(grepl("ZAF", iso3) & year %in% c(2002, 2008))]
 out.dt <- out.dt[!(iso3 %in% c("KEN_35623", "KEN_35662") & year == 2008)]
+temp[iso3 == "MWI"]
 
 write.csv(out.dt, out.path, row.names = F)
 
