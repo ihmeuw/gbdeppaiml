@@ -924,16 +924,22 @@ geo_adj <- function(loc, dt, i, uncertainty) {
     ##Bring in the matched data - reading in as CSV rather then fread because the latter seems to add quotations when there are escape characters, which messes up the matching
     #######change the directory here
 
-    anc.dt.all <- read.csv(paste0('/share/hiv/data/lbd_anc/', loc, '_ANC_matched.csv'))  
+    anc.dt.all <- read.csv(paste0('/ihme/hiv/data/PJNZ_prepped/lbd_anc/2019/', loc, '_ANC_matched.csv'))  
+    setnames(anc.dt.all, old = 'prev', new = 'mean')
+    sites <- anc.dt.all$site
+    anc.dt.all <- as.data.table(anc.dt.all)
+    anc.dt.all <- anc.dt.all[,site := NULL]
+    anc.dt.all <- anc.dt.all[,clinic := sites]
+  
+    
     
   
     anc.dt.all <- as.data.table(anc.dt.all)
       anc.dt.all  <- anc.dt.all[,c( "clinic","year_id","mean","site_pred","adm0_mean","adm0_lower", "adm0_upper","subpop","high_risk")]
-      setnames(anc.dt.all,c("clinic","year_id"),c("site","year"))
-      
-    
+     
 
     eppd <- attr(dt, "eppd")
+
   
     # Collapse up to single provincial ANC site for ZAF and SWZ - NEED TO DECIDE WHETHER TO DO THIS GOING FORWARD
     # Extract first year of data and use that site as provincial site
@@ -1020,12 +1026,14 @@ geo_adj <- function(loc, dt, i, uncertainty) {
         
         anc.dt  <- anc.dt[,offset := qnorm(adm0_mean)-qnorm(site_pred)]
         #Copy year 2000 or otherwise earliest year to fill in  early years where GBD has data but LBD does not  
-        post.2000 <- anc.dt[year >=2000]
-        min.dt <- post.2000[year == min(year),.(offset), by = 'site']
+        post.2000 <- anc.dt[year_id >=2000]
+        setnames(post.2000, 'clinic', 'site')
+        min.dt <- post.2000[year_id == min(year_id),.(offset), by = 'site']
         anc.dt[,'adm0_mean' := as.numeric(anc.dt[,adm0_mean])]
         anc.dt[,'adm0_lower' := as.numeric(anc.dt[,adm0_lower])]
         anc.dt[,'adm0_upper' := as.numeric(anc.dt[,adm0_upper])]
         anc.dt[,'site_pred' := as.numeric(anc.dt[,site_pred])]
+        setnames(anc.dt, 'year_id', 'year')
         site.dat <- site.dat[,.(site, year, used, prev, n, subpop, type, agegr, age, agspan)]
         
         
@@ -1092,7 +1100,11 @@ geo_adj <- function(loc, dt, i, uncertainty) {
 
     if(file.exists(paste0('/ihme/hiv/data/UNAIDS_extrapolated/UNAIDS_2019/', loc, '_Adult_ART_cov.csv'))){
       art.dt <- fread(paste0('/ihme/hiv/data/UNAIDS_extrapolated/UNAIDS_2019/', loc, '_Adult_ART_cov.csv'))
-      
+      # art.dt <- art.dt[year <= 2019,]
+      # 
+      # art.dt <- extrapolate_years(art.dt[,.(year_id = year, sex,ART_cov_num)], years_to_average = 10, end_year = 2022, trans_vars = 'ART_cov_num',
+      #                   id_vars = 'sex')
+      # art.dt[,ART_cov_pct := 0]
     }else{
       for(c.year in c('UNAIDS_2019', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
         #art.path <-paste0(root, "WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/extrapolate_ART/PV_testing/", c.year, "/", temp.loc, "_Adult_ART_cov.csv") 
@@ -1152,7 +1164,7 @@ geo_adj <- function(loc, dt, i, uncertainty) {
   #We use a different prior for MDG or else the curve goes to 0. It is worth rethinking this strategy for all no-survey locations.
   #We use a different prior for no-survey locs (except PNG which has enough ANC data)
   sub.anc.prior <- function(dt,loc){
-    if(loc %in%  c("SDN","SSD","SOM","GNB","MDG", "PNG")){
+    if(loc %in%  c("SDN","SSD","SOM","GNB","MDG")){
       ancbias.pr.mean <<- 0.15
       ancbias.pr.sd <<- 0.001
     } else {

@@ -31,7 +31,7 @@ colnames(lat_long_table) <- c('ihme_loc_id','longitude', 'latitude')
 tracking_sheet <- list()
 nrow_sheet <- list()
   
-libs <- c("data.table", "openxlsx", "raster", "foreign", "rgdal", "geosphere", "fossil", "dplyr", "rgeos", "car","plyr")
+libs <- c("data.table", "openxlsx", "raster", "foreign", "rgdal", "geosphere", "fossil", "dplyr", "rgeos", "car","plyr", 'sf')
 sapply(libs, require, character.only = T)
 
 ## Bind all UNAIDS Survaillance files together---------------------------------------------------------------------------------------------
@@ -64,30 +64,57 @@ if(T){
   loc.list <- loc.list[!grepl("IND",loc.list)]
 }
 #################
-#lbd only has 2017 for ZAF so going to use that
+#we don't do this for zaf and png
+loc.list <- loc.list[!grepl('ZAF', loc.list)]
+loc.list <- loc.list[-which(loc.list == 'PNG')]
 
 
+use_2019 <- T
+use_2018 <- F
+use_subpop <- T 
+use_prepped <- F
 for (countries in loc.list) {
 
-  if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', countries, '.rds'))){
-    df <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2019/', countries, '.rds'))
+  if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', countries, '.rds')) & !grepl('ETH', countries)){
+    df.2019 <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2019/', countries, '.rds'))
+    df.2019 <- attr(df.2019, 'eppd')$ancsitedat
     
-  }else{
+  }
     if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2018/', countries, '.rds'))){
-      df <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2018/', countries, '.rds'))
+      df.2018 <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2018/', countries, '.rds'))
+      df.2018 <- attr(df.2018, 'eppd')$ancsitedat
       
-    }else{
-      if(file.exists(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', countries, '.rds'))){
-        df <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', countries, '.rds'))
-      }else{
-        if(file.exists(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', countries, '.rds'))){
-          df <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', countries, '.rds'))
-        }
-      }
+      
     }
+      if(file.exists(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', countries, '.rds'))){
+        df.subpop <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', countries, '.rds'))
+        df.subpop <- attr(df.subpop, 'eppd')$ancsitedat
+        
+      }
+        if(file.exists(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', countries, '.rds'))){
+          df.prepped <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', countries, '.rds'))
+          df.prepped <- attr(df.prepped, 'eppd')$ancsitedat
+          df.prepped <- as.data.table(df.prepped)
+          df.prepped[,subpop := 'NA']
+          
+        }
+  
+  if(!exists("df.2019") | !use_2019){
+    df.2019 <- NULL
+  }
+  if(!exists("df.2018") | !use_2018){
+    df.2018 <- NULL
+  }
+  if(!exists("df.subpop") | !use_subpop){
+    df.subpop <- NULL
+  }
+  if(!exists("df.prepped") | !use_prepped){
+    df.prepped <- NULL
   }
   
-  df <- attr(df, 'eppd')$ancsitedat
+  df <- rbind(df.2019, df.2018, df.subpop, df.prepped)
+  df <- as.data.table(df)
+  
   #df <- subset(df, type == 'ancss')
   df$country <- countries
   df$ihme_loc_id <- countries
@@ -389,7 +416,7 @@ for (countries in loc.list) {
   # all_mapped$latitude[all_mapped$point == 0] <- NA
   # all_mapped$longitude[all_mapped$point == 0] <- NA
   all_mapped <- transform(all_mapped)
-  all_mapped$prev <- all_mapped$prev * .01
+  all_mapped$prev <- all_mapped$prev 
   all_mapped <- unique(all_mapped)
   all_mapped$cluster_id <- 1:dim(all_mapped)[1]
   
@@ -421,7 +448,7 @@ for (countries in loc.list) {
     # all_mapped$location_code <- as.numeric(all_mapped$location_code)
     # all_mapped$source <- paste0("UNAIDS files - ", all_mapped$data_source)
     all_mapped <- all
-    all_mapped$prev <- all_mapped$prev * .01
+    all_mapped$prev <- all_mapped$prev
     all_mapped <- unique(all_mapped)
     all_mapped$cluster_id <- 1:dim(all_mapped)[1]
     
@@ -462,7 +489,7 @@ for (countries in loc.list) {
       anc_point_dat[, age := "15"]
       anc_point_dat[, agspan := "35"]
       ##not sure how to get region
-      anc_point_dat[, subpop := NA]
+      #anc_point_dat[, subpop := NA]
       anc_point_dat[, used := TRUE]
       anc_point_dat[, offset := NA]
       anc_point_dat[, country := countries]

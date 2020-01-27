@@ -21,7 +21,7 @@ if(length(args) > 0) {
   paediatric <- as.logical(args[4])
 } else {
 	run.name <- '191224_trumpet'
-	loc <- 'BWA'
+	loc <- 'AGO'
 	stop.year <- 2022
 	j <- 1
 	paediatric <- TRUE
@@ -96,10 +96,19 @@ dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
                        pop.sub, anc.sub, anc.backcast, prev.sub = TRUE, art.sub = TRUE, 
                        sexincrr.sub = TRUE,  age.prev = age.prev, paediatric = TRUE, 
                        anc.prior.sub = TRUE, lbd.anc, geoadjust = geoadjust, use_2019 = TRUE)
-##this is a quick fix, will need to correct later
+
+
+
 if(lbd.anc){
   attr(dt, 'eppd')$ancsitedat$prev <- attr(dt, 'eppd')$ancsitedat$prev / 0.01
 }
+if(any(attr(dt, 'eppd')$ancsitedat$prev > 1)){
+  print('some prevelances greater than 100%')
+  attr(dt, 'eppd')$ancsitedat <- as.data.frame(as.data.table(attr(dt, 'eppd')$ancsitedat)[prev  <1,])
+  
+}
+##this is a quick fix, will need to correct later
+
 
 if(grepl('ETH', loc)){
   attr(dt, 'eppd')$hhs <-  subset(attr(dt, 'eppd')$hhs, year != '2018')
@@ -121,6 +130,8 @@ if(grepl('NGA', loc)){
   attr(dt, 'specfp')$paedsurv_artcd4dist <- temp
 }
 
+
+
 ## Replace on-ART mortality RR for TZA and UGA
 if(loc %in% c('UGA', 'TZA')){
   temp <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/MWI.rds'))
@@ -137,6 +148,11 @@ if(run.name %in% c("190630_fixonARTIND","190630_fixonARTIND_tightprior")){
 attr(dt, 'eppd')$ancsitedat = unique(attr(dt, 'eppd')$ancsitedat)
 ## TODO - fix se = 0 data points in ZAF
 attr(dt, 'eppd')$hhs <- attr(dt, 'eppd')$hhs[!attr(dt, 'eppd')$hhs$se == 0,]
+if(loc == 'GNQ'){
+  attr(dt, 'eppd')$hhs <- subset(attr(dt, 'eppd')$hhs, sex == 'both')
+  
+}
+
 attr(dt, 'specfp')$relinfectART <- 0.3
 
 if(grepl("IND",loc)){
@@ -147,6 +163,7 @@ if(grepl("IND",loc)){
 }
 
 ## Fit model
+
 fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500)
 data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc, '.csv')
 if(!file.exists(data.path)){save_data(loc, attr(dt, 'eppd'), run.name)}
@@ -300,6 +317,54 @@ if(dim( fit$fp$entrantartcov)[2] < fit$fp$SIM_YEARS){
     diff <- dim( fit$fp$entrantartcov)[2] - fit$fp$SIM_YEARS
 
   }
+}
+
+if(length(fit$fp$artpaed_isperc) < fit$fp$SIM_YEARS){
+  diff <- fit$fp$SIM_YEARS - length(fit$fp$artpaed_isperc) 
+    add_names <- setdiff(seq(start.year, stop.year), as.numeric(names(fit$fp$artpaed_isperc)))
+    add <- rep(FALSE, length(add_names))
+    names(add) <- add_names
+    new <- c(fit$fp$artpaed_isperc, add)
+    new <- new[order(names(new))]
+    fit$fp$artpaed_isperc <-  new
+
+  
+}
+
+if(length(fit$fp$artpaed_num) < fit$fp$SIM_YEARS){
+  diff <- fit$fp$SIM_YEARS - length(fit$fp$artpaed_num) 
+  add_names <- setdiff(seq(start.year, stop.year), as.numeric(names(fit$fp$artpaed_num)))
+  add <- rep(0, length(add_names))
+  names(add) <- add_names
+  new <- c(fit$fp$artpaed_num, add)
+  new <- new[order(names(new))]
+  fit$fp$artpaed_num <-  new
+  
+  
+}
+
+if(length(fit$fp$cotrim_isperc) < fit$fp$SIM_YEARS){
+  diff <- fit$fp$SIM_YEARS - length(fit$fp$cotrim_isperc) 
+  add_names <- setdiff(seq(start.year, stop.year), as.numeric(names(fit$fp$cotrim_isperc)))
+  add <- rep(FALSE, length(add_names))
+  names(add) <- add_names
+  new <- c(fit$fp$cotrim_isperc, add)
+  new <- new[order(names(new))]
+  fit$fp$cotrim_isperc <-  new
+  
+  
+}
+
+if(length(fit$fp$cotrim_num) < fit$fp$SIM_YEARS){
+  diff <- fit$fp$SIM_YEARS - length(fit$fp$cotrim_num) 
+  add_names <- setdiff(seq(start.year, stop.year), as.numeric(names(fit$fp$cotrim_num)))
+  add <- rep(0, length(add_names))
+  names(add) <- add_names
+  new <- c(fit$fp$cotrim_num, add)
+  new <- new[order(names(new))]
+  fit$fp$cotrim_num <-  new
+  
+  
 }
 
 ## Simulate model for all resamples, choose a random draw, get gbd outputs

@@ -14,19 +14,26 @@ loc.list <- loc.list[-which(loc.list == 'DJI')]
 if(!est_India){
   loc.list <- loc.list[!grepl("IND",loc.list)]
 }
-loc.list <- gsub('.rds', '', list.files('/ihme/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/2019/'))
-loc.list <- loc.list[-which(loc.list == 'offset')]
-loc.list <- loc.list[-which(loc.list == 'NA')]
+loc.list.gbd <- gsub('.rds', '', list.files('/ihme/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/2019/'))
+loc.list.gbd <- loc.list.gbd[-which(loc.list == 'offset')]
+loc.list.gbd <- loc.list.gbd[-which(loc.list == 'NA')]
 
 check_diff_plot <- function(new_name = '191224_trumpet', old_name = '190630_rhino2', loc){
   if(!file.exists(paste0('/ihme/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/2019/', loc, '.rds'))){stop(paste0('new ', loc, ' not generated'))}
   new <- readRDS(paste0('/ihme/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/2019/', loc, '.rds'))
   old <- readRDS(paste0('/ihme/hiv/data/PJNZ_EPPASM_prepped_subpop/', loc, '.rds'))
+  # old <- fread(paste0('/home/j/WORK/11_geospatial/10_mbg/hiv/unaids_anc/anc_epp_extractions/2019/', loc, '/', loc, '_2019_UNAIDS_ANC_EXTRACTION.csv'))
+  
   #old <- readRDS(paste0('/ihme/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))
   
   old <- attr(old, 'eppd')$ancsitedat
   old <- as.data.table(old)
   ##fix those that end with a space
+  # setnames(old, 'Site', 'site')
+  # setnames(old, 'Year', 'year')
+  # setnames(old, 'Prev', 'prev')
+  # setnames(old, 'N', 'n')
+  # setnames(old, 'Group', 'subpop')
   old[,site := unlist(lapply(strsplit(as.character(old[,site]), split = ' '), paste, collapse = ' '))]
   ##fix those that start with a space
   old[unlist(lapply(strsplit(as.character(old[,site]), split = ' '), function(x) (x[1] == ''))), site := lapply(strsplit(as.character(old[,site]), split = ' ')[unlist(lapply(strsplit(as.character(old[,site]), split = ' '), function(x) (x[1] == '')))], function(x) paste(x[-1], collapse = ' '))]
@@ -34,8 +41,9 @@ check_diff_plot <- function(new_name = '191224_trumpet', old_name = '190630_rhin
   new <- as.data.table(new)
   old[,site_year := paste0(site, year, '_', prev)]
   new[,site_year := paste0(site, year, '_', prev)]
-  new[,source := new_name]
-  old[,source := old_name]
+  new <- subset(new, type == 'ancss')
+  new[,source := 'gbd']
+  old[,source := 'lbd']
   
   old.only <- old[site_year %in% setdiff(old[,site_year], new[,site_year]),]
   new.only <- new[site_year %in% setdiff(new[,site_year], old[,site_year]),]

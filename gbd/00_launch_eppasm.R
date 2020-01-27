@@ -16,7 +16,7 @@ run.name <- "191224_trumpet"
 spec.name <- "191002_sitar"
 compare.run <- "190630_rhino2"
 proj.end <- 2022
-n.draws <- 100
+n.draws <- 10
 run.group2 <- FALSE
 paediatric <- TRUE
 cluster.project <- "proj_hiv"

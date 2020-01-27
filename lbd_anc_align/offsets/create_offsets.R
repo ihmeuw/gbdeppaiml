@@ -26,7 +26,7 @@ print(args)
 if(length(args) > 0) {
   loc <- args[1]
 } else {
-  loc <- "PNG"
+  loc <- "BWA"
 }
 
 
@@ -68,7 +68,7 @@ loc.list <- unique(lbd_map$iso3)
 # }   
 # Load cell pred object - DO THIS OUTSIDE THE FUNCTION
 message("Load cell pred object")
-rd <- "2019_02_26_20_11_35"
+rd <- "2019_02_26_30_11_35"
 rr <- "sssa"
 mod.dir <- paste0("/share/geospatial/mbg/hiv/hiv_test/output/",rd,"/")
 region_draws <- paste0("hiv_test_cell_draws_eb_bin0_",rr,"_0.RData") 
@@ -160,7 +160,7 @@ stop.year <- 2022
 j <- 1
 anc.sub <- FALSE
 
-
+for(loc in loc.list[119:length(loc.list)]){
 gen.pop.dict <- c("General Population", "General population", "GP", 
                   "GENERAL POPULATION", "GEN. POPL.", "General population(Low Risk)", 
                   "Remaining Pop", "population feminine restante","Pop féminine restante","Rift Valley", 
@@ -175,9 +175,18 @@ if(grepl("ZAF",loc) | grepl("IND",loc)){
 
 anc.dt <- dt %>% data.table()
 
-new.anc <- readRDS("/home/j/WORK/11_geospatial/10_mbg/hiv/unaids_anc/anc_data_2019_08_13.rds")
+new.anc <- readRDS("/home/j/WORK/11_geospatial/10_mbg/hiv/unaids_anc/anc_data_2020_01_23.rds")
 loc1 <- substring(loc,1,3)
-new.anc <- setDT(new.anc)[country==loc]
+if(grepl('ETH', loc) | grepl('KEN', loc) | grepl('NGA', loc)){
+  country <- unlist(strsplit(loc, split = '_'))[1]
+  new.anc <- setDT(new.anc)[country==country]
+  full_geo <- fread(paste0(geo_repository,"/anc/2_geomatching/final_geo_codebook.csv"))[iso3==country]
+  full_geo[,data_source := paste0("UNAIDS files - ",UNAIDS_year)]
+}else{
+  new.anc <- setDT(new.anc)[country==loc]
+  full_geo <- fread(paste0(geo_repository,"/anc/2_geomatching/final_geo_codebook.csv"))[iso3==loc]
+  full_geo[,data_source := paste0("UNAIDS files - ",UNAIDS_year)]
+}
 setnames(new.anc,c("country"),c("iso3"))
 
 all.dat <- new.anc
@@ -199,14 +208,20 @@ anc.dt$site_year <- paste0(anc.dt$site,anc.dt$year)
 
 
 ##Merge with source
-full_geo <- fread(paste0(geo_repository,"/anc/2_geomatching/final_geo_codebook.csv"))[iso3==loc]
-full_geo[,data_source := paste0("UNAIDS files - ",UNAIDS_year)]
+
 
 lbd.anc <- read.csv("/snfs1/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/lbd_extraction/04_04_2019_extraction/anc_mean_est_final.csv") %>% data.table()
-lbd.anc <- lbd.anc[iso3==loc]
-setnames(new.anc,c("country"),c("iso3"))
-all.dat <- merge(new.anc,lbd.anc,all.x=TRUE)
+if(grepl('ETH', loc) | grepl('KEN', loc) | grepl('NGA', loc)){
+  lbd.anc <- lbd.anc[iso3_adm1 == loc]
+}else{
+  lbd.anc <- lbd.anc[iso3==loc]
+}
+all.dat <- merge(all.dat,lbd.anc,all.x=TRUE)
+if(grepl('ETH', loc) | grepl('KEN', loc) | grepl('NGA', loc)){
+  all.dat <- all.dat[,iso3 := iso3_adm1]
+}
 
+#setnames(all.dat, 'N', 'n')
 
 
 
@@ -224,82 +239,97 @@ subpop_names <- list()
 # Do not try to match to high risk populations because LBD does not have 
 ## Code
 # Prep data and collapse location subpopulations
-for(loc in sub_locs){
-  print(loc)
-  
-  dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub, 
-                         pop.sub, anc.sub, anc.backcast, prev.sub = TRUE, art.sub = TRUE, 
-                         sexincrr.sub = TRUE, popadjust, age.prev = age.prev, paediatric = TRUE, 
-                         anc.prior.sub = TRUE, lbd.anc =T)
-  site.dat.subpop <- list()
-  
-  
-  gen.pop.dict <- c("General Population", "General population", "GP", 
-                    "GENERAL POPULATION", "GEN. POPL.", "General population(Low Risk)", 
-                    "Remaining Pop", "population feminine restante","Pop féminine restante","Rift Valley", 
-                    "Western","Eastern","Central","Coast","Nyanza","Nairobi",
-                    "Female remaining pop")
-  
-  
-  #Formatting
-    #site.dat <- attr(dt[[subpop]], "eppd")$anc.prev
-    site.dat <- attr(dt, "eppd")$ancsitedat
-    site.dat.subpop <- site.dat
+# for(loc in sub_locs){
+#   print(loc)
+# 
+#   dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/2019/', loc, '.rds'))
+#   site.dat.subpop <- list()
+# 
+# 
+#   gen.pop.dict <- c("General Population", "General population", "GP",
+#                     "GENERAL POPULATION", "GEN. POPL.", "General population(Low Risk)",
+#                     "Remaining Pop", "population feminine restante","Pop féminine restante","Rift Valley",
+#                     "Western","Eastern","Central","Coast","Nyanza","Nairobi",
+#                     "Female remaining pop")
+# 
+# 
+#   #Formatting
+#     #site.dat <- attr(dt[[subpop]], "eppd")$anc.prev
+#     site.dat.subpop <- dt
+# 
+# 
+#   site.dat.list <- rbind(dt,site.dat.list)
+#   loc_ids <- rbind(loc_ids,matrix(rep(loc,nrow(site.dat.subpop)),ncol=1))
+# 
+# }
 
-  
-  site.dat.list <- site.dat.subpop
-  loc_ids <- rbind(loc_ids,matrix(rep(loc,nrow(site.dat.subpop)),ncol=1))
-  
-}
+site.dat.list <- anc.dt
 
 
-years <- site.dat.list$year;  ihme_loc_id <- loc_ids
-site.dat <- as.data.frame(site.dat.list)
-site.dat$site <- site.dat.list$site
-site.dat$ihme_loc_id <- unlist(ihme_loc_id)
-site.dat <- data.table(unique(site.dat))
-gbd.anc.all <- cbind(as.character(site.dat$site), site.dat$year, site.dat$prev, site.dat$ihme_loc_id, site.dat$n, site.dat$type,
-                     site.dat$agegr, site.dat$age, site.dat$agspan) %>% as.data.table()
-colnames(gbd.anc.all) <- c('site', 'year_id', 'mean', 'ihme_loc_id', 'n', 'type', 'agegr' ,'age','agspan')
+years <- site.dat.list$year;  ihme_loc_id <- loc
+gbd.anc.all  <- data.table(unique(site.dat.list))
 
 
 ##Flag high risk data that will not get matched to LBD data
 gbd.anc.all[,high_risk := FALSE]
-gbd.anc.all[!subpop %in% c(loc,sub_locs,gen.pop.dict),high_risk := TRUE] 
-gbd.anc.all[clinic_match %in% c("Pseudo site","Pseudo sites","pseudo site"),high_risk:=TRUE]
-
+gbd.anc.all[!subpop %in% c(loc,sub_locs,gen.pop.dict, 'Urban', 'Rural'),high_risk := TRUE] 
+gbd.anc.all[is.na(subpop),high_risk:=FALSE]
 #Remove high risk data to complete LBD matching (but bind it later)
 gbd.anc <- gbd.anc.all[high_risk==FALSE]
 
-loc <- lbd_loc
-lbd.anc <- read.csv("/snfs1/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/lbd_extraction/04_04_2019_extraction/anc_mean_est_final.csv") %>% data.table()
-lbd.anc <- lbd.anc[iso3==loc]
-
+lbd.anc <- all.dat
 #######################################
 ######  General character fixes  ######
 #######################################
 lbd.anc$site <- gsub("&apos;",'\'',lbd.anc$site) 
 lbd.anc$site <- gsub("\xe9","é", lbd.anc$site)
 
-new.sites <- c()
-for (i in 1:length(lbd.anc$site)) {
-  test.length <- length(unlist(strsplit(as.character(lbd.anc$site[i]), split = " ")))
-  if(test.length > 2){
-    new.sites[i] <- paste(unlist(strsplit(as.character(lbd.anc$site[i]), split = " "))[1], unlist(strsplit(as.character(lbd.anc$site[i]), split = " "))[(length(unlist(strsplit(as.character(lbd.anc$site[i]), split = " "))) - 1)])
-  }else{
-    new.sites[i] <- unlist(strsplit(as.character(lbd.anc$site[i]), split = " "))[1]
-  }
-}
 
-lbd.anc$site <- new.sites
 
 ######################################
 ######  Loc specific  fixes     ######
 ######################################
 
-if (loc == "UGA"){
-  gbd.anc$clinic_match <- gsub(substr(gbd.anc$clinic_match,1,1),'',gbd.anc$clinic_match)
+if(loc == "LBR"){
+  lbd.anc$site[lbd.anc$iso3 == "LBR" & lbd.anc$site == "Barclay.Health.Center"] <- "Barclay Health Center"
+  lbd.anc$site[lbd.anc$iso3 == "LBR" & lbd.anc$site == "C.B..Dunbar.Health.Center...."] <- "C.B. Dunbar Health Center (%)"
+  lbd.anc$site[lbd.anc$iso3 == "LBR" & lbd.anc$site == "C.H..Rennie.Hospital...."] <- "C.H. Rennie Hospital (%)"
+  lbd.anc$site[lbd.anc$iso3 == "LBR" & lbd.anc$site == "Duport.Road.Health.Center...."] <- "Duport Road Health Center (%)"
+  lbd.anc$site[lbd.anc$iso3 == "LBR" & lbd.anc$site == "Firestone.Hospital"] <- "Firestone Hospital"
+  lbd.anc$site[lbd.anc$iso3 == "LBR" & lbd.anc$site == "Fish.Town.Health.Center"] <- "Fish Town Health Center"
+  lbd.anc$site[lbd.anc$iso3 == "LBR" & lbd.anc$site == "Ganta.Hospital"] <- "Ganta Hospital"
+  lbd.anc$site[lbd.anc$iso3 == "LBR" & lbd.anc$site == "JJ.Dossen.Hospital"] <- "JJ Dossen Hospital"
+  lbd.anc$site[lbd.anc$iso3 == "LBR" & lbd.anc$site == "John.F.Kennedy.Hospital"] <- "John F Kennedy Hospital"
+  lbd.anc$site[lbd.anc$iso3 == "LBR" & lbd.anc$site == "Liberia.Govt..Hospital.Tubmanburg"] <- "Liberia Govt. Hospital-Tubmanburg"
+  lbd.anc$site[lbd.anc$iso3 == "LBR" & lbd.anc$site == "Liberia.Govt.Hosp.Buchanan"] <- "Liberia Govt Hosp-Buchanan"
+  lbd.anc$site[lbd.anc$iso3 == "LBR" & lbd.anc$site == "Martha.Tubman.Hospital"] <- "Martha Tubman Hospital"
+  lbd.anc$site[lbd.anc$iso3 == "LBR" & lbd.anc$site == "Phebe.Hospital"] <- "Phebe Hospital"
+  lbd.anc$site[lbd.anc$iso3 == "LBR" & lbd.anc$site == "Redemption.Hospital"] <- "Redemption Hospital"
+  lbd.anc$site[lbd.anc$iso3 == "LBR" & lbd.anc$site == "site.22"] <- "site 22"
+  lbd.anc$site[lbd.anc$iso3 == "LBR" & lbd.anc$site == "St.Francis.Hospital"] <- "St Francis Hospital"
+  lbd.anc$site[lbd.anc$iso3 == "LBR" & lbd.anc$site == "Star.of.the.Sea.Health.Center"] <- "Star of the Sea Health Center"
+  lbd.anc$site[lbd.anc$iso3 == "LBR" & lbd.anc$site == "Voinjama.Health.Center"] <- "Voinjama Health Center"
+}
+if(loc == "MDG"){
+  lbd.anc$site[lbd.anc$iso3 == "MDG" & lbd.anc$site == "Miarinarivo (%)"] <- "Miarinarivo (%)" # niot working
+  lbd.anc$site[lbd.anc$iso3 == "MDG" & lbd.anc$site == "Sambava  (%)"] <- "Sambava (%)"
+  lbd.anc$site[lbd.anc$iso3 == "MDG" & lbd.anc$site == "Antsirabe  (%)"] <- "Antsirabe (%)"
+}
+if(loc == "NGA"){
+  lbd.anc$site[lbd.anc$iso3 == "NGA" & lbd.anc$site == "Osun  (Iragbere)"] <- "Osun (Iragbere)"
+}
+if(loc == "ZAF"){
+  lbd.anc$site[lbd.anc$iso3 == "ZAF" & lbd.anc$site == "NULL"] <- "KWAZULU-NATAL PROVINCE" 
   
+}
+if(loc == "COG"){
+  lbd.anc$site[lbd.anc$iso3 == "COG" & lbd.anc$site == "Cuvette.ouest"] <- "Cuvette ouest"
+  lbd.anc$site[lbd.anc$iso3 == "COG" & lbd.anc$site == "Mouyondzi...."] <- "Mouyondzi (%)"
+  lbd.anc$site[lbd.anc$iso3 == "COG" & lbd.anc$site == "Owando...."] <- "Owando (%)"
+  lbd.anc$site[lbd.anc$iso3 == "COG" & lbd.anc$site == "Sibiti...."] <- "Sibiti (%)"
+}
+if(loc == "CMR"){
+  lbd.anc$site[lbd.anc$iso3 == "CMR" & lbd.anc$site == "CMA  Tyo"] <- "CMA Tyo"
 }
 
 if (loc=="BEN"){
@@ -322,6 +352,10 @@ if (loc=="MLI"){
   lbd.anc[site=="CSCOM KLELE",site:="CSCOM KLELA"]
 }
 
+if(loc == 'ZAF'){lbd.anc$site[lbd.anc$iso3 == "ZAF" & lbd.anc$site =="NULL"] <- "KWAZULU-NATAL PROVINCE"
+}
+
+
 if (loc=="SDN"){
   dict <- data.table(site=c("Umrowaba  N Kordofan","Muglad  S Kordofan","Sinnar  Sinnar","Dabah  Northern","Barbar  River Nile","Sinkat  Red Sea"),revised=c("Umrowaba_N Kordofan","Muglad_S Kordofan","Sinnar_Sinnar","Dabah_Northern","Barbar_River Nile","Sinkat_Red Sea"))
   lbd.anc <- lbd.anc %>% left_join(dict) %>% data.table()
@@ -338,41 +372,49 @@ if (loc=="MDG"){
 }
 
 if (loc=="RWA"){
-  gbd.anc$clinic_match <- gsub("\\\"","",gbd.anc$clinic_match)
+  gbd.anc$site <- gsub("\\\"","",gbd.anc$site)
+}
+
+if(loc == 'RWA' | loc == 'TZA'){
+  lbd.anc <- subset(lbd.anc, !(iso3 == "RWA" & site == "Gikondo A"& year != 2013))
+  lbd.anc$site[lbd.anc$iso3 == "RWA"& lbd.anc$site == "Gikondo A"] <- "Gikondo"
+  lbd.anc <- subset(lbd.anc, !(iso3 == "RWA" & site == "Biryogo A"& year != 2013))
+  lbd.anc$site[lbd.anc$iso3 == "RWA"& lbd.anc$site == "Biryogo A"] <- "Biryogo"
+  lbd.anc$site[lbd.anc$iso3 == "RWA"& lbd.anc$site == "CHK"] <- "Kigali CHK"
+  lbd.anc$site[lbd.anc$iso3 == "RWA"& lbd.anc$site == "Ruhengeri 2"] <- "Ruhengeri"
+  lbd.anc$site[lbd.anc$iso3 == "TZA"& lbd.anc$site == "Kagera (Lukole Refugee Camp)"] <- "Lukole Refugee"
+
 }
 
 #Check for differences
-gbd_diff <- setdiff(unique(gbd.anc$clinic_match), unique(lbd.anc$site))
-#setdiff(unique(lbd.anc$site), unique(gbd.anc$clinic_match))
+gbd_diff <- setdiff(unique(gbd.anc$site), unique(lbd.anc$site))
+#setdiff(unique(lbd.anc$site), unique(gbd.anc$site))
 gbd.anc[,lbd_areal := 0]
 gbd.anc[,lbd_missing := 0]
 
-if(loc=="NGA"){
-  gbd.anc$clinic_match[gbd.anc$clinic_match %in% gbd_diff] <- gsub(substr(gbd_diff,1,1),'',gbd_diff) 
+if(loc1=="NGA" & length(gbd_diff) != 0){
+  gbd.anc$site[gbd.anc$site %in% gbd_diff] <- gsub(substr(gbd_diff,1,1),'',gbd_diff) 
   lbd.anc[site=="Osun (Iragbere)",site := "Osun  (Iragbere)"]
-  gbd_diff <- setdiff(unique(gbd.anc$clinic_match), unique(lbd.anc$site))
+  gbd_diff <- setdiff(unique(gbd.anc$site), unique(lbd.anc$site))
 }
 
 ##ID areal data from original geo codebook (which is usually why GBD sites > LBD sites; the areal data gets dropped when original geo codebook merged)
-if(length(gbd_diff) > 0){
-  full_geo <- fread(paste0(geo_repository,"/anc/2_geomatching/final_geo_codebook.csv"))[iso3==loc]
-  areal <- full_geo[site %in% gbd_diff & is.na(latitude)]
-  remaining_diff <- gbd_diff[!gbd_diff %in% areal$site]
-  if(length(remaining_diff) > 0){
-    warning("Remaining Differences: ",paste0(remaining_diff))
-  }
-  gbd.anc[site %in% areal$site, lbd_areal := 1]
-  gbd.anc[site %in% remaining_diff, lbd_missing := 1]
-  #write.csv(areal, paste0('/snfs1/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/lbd_extraction/04_04_2019_extraction/areal_sites/',loc, '.csv'), row.names=FALSE)
-  
-}
+# if(length(gbd_diff) > 0){
+#   full_geo <- fread(paste0(geo_repository,"/anc/2_geomatching/final_geo_codebook.csv"))[iso3==loc]
+#   areal <- full_geo[site %in% gbd_diff & is.na(latitude)]
+#   remaining_diff <- gbd_diff[!gbd_diff %in% areal$site]
+#   if(length(remaining_diff) > 0){
+#     warning("Remaining Differences: ",paste0(remaining_diff))
+#   }
+#   gbd.anc[site %in% areal$site, lbd_areal := 1]
+#   gbd.anc[site %in% remaining_diff, lbd_missing := 1]
+#   #write.csv(areal, paste0('/snfs1/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/lbd_extraction/04_04_2019_extraction/areal_sites/',loc, '.csv'), row.names=FALSE)
+#   
+# }
 
 ##ID missingness from LBD
 missing <- lbd.anc[is.na(site_pred) & site %in% gbd.anc$site]
 
-if(nrow(missing) > 0){
-  write.csv(missing,paste0('/snfs1/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/lbd_extraction/04_04_2019_extraction/missing_lbd_preds/',loc, '.csv'), row.names=FALSE)
-}
 
 ##Add back subpopulations
 if(nrow(gbd.anc) != nrow(gbd.anc.all)){
@@ -384,9 +426,7 @@ if(nrow(gbd.anc) != nrow(gbd.anc.all)){
 ###############################
 ######  Combined data    ######
 ###############################
-setnames(lbd.anc, c('site', 'year'), c('clinic', 'year_id'))
-setnames(gbd.anc, c('site'), c('clinic'))
-lbd.anc[,iso3 := ifelse(!is.na(iso3_adm1), as.character(iso3_adm1),as.character(iso3))]
+setnames(lbd.anc, c('site'), c('clinic'))
 
 
 lbd.anc <- unique(lbd.anc)
@@ -396,27 +436,35 @@ if(length(unique(lbd.anc$iso3)) > 1){
 }
 
 lbd.anc[,c('loc_id', 'subnational', 'country') := NULL]
+lbd.anc[,site_year := paste0(clinic, year)]
 ## Pre 2000 we don't have any LBD estimates, so we just merge on the clinic metadata
 ####NOTE, I TOOK OUT THE MATCH ON LATITUDE AND LONGITUDE HERE BECAUSE IT CAN BE MISSING OR MULTIPLE VALUES
 #################NOT SURE WHAT TO DO HERE NOW
-# pre.2000 <- merge(gbd.anc[year_id < 2000], unique(lbd.anc[,.(clinic,iso3)]), by.x= c('clinic','ihme_loc_id'), by.y=c('clinic','iso3'),all.x = TRUE)
-# pre.2000[,c('site_pred', 'adm0_mean', 'adm0_lower', 'adm0_upper','adm1_mean', 'adm1_lower', 'adm1_upper') := NA]
-# pre.2000[,c("iso3_adm1" ,  "loc_id_adm1") := NA]
+setnames(gbd.anc, 'site','clinic')
+if('group' %in% colnames(lbd.anc)){
+  setnames(lbd.anc, 'group','subpop')
+  
+}
+pre.2000 <- merge(gbd.anc[year < 2000], unique(lbd.anc), by= c('site_year', 'year', 'subpop','clinic', 'n'), all.x = TRUE)
+pre.2000[,c('adm1_mean', 'adm1_lower', 'adm1_upper') := NULL]
+pre.2000[,c("iso3_adm1" ,  "loc_id_adm1") := NA]
 
 ## Post 2000 merge on site-years
-gbd.anc$year_id <- as.integer(gbd.anc$year_id)
-post.2000 <- merge(gbd.anc[year_id >= 2000], lbd.anc, by.x = c('year_id', 'clinic', 'ihme_loc_id'), by.y = c('year_id', 'clinic','iso3'),all.x = TRUE)
+post.2000 <- merge(gbd.anc[year >= 2000], lbd.anc, by = c('site_year', 'year','subpop','clinic','n'), all.x = TRUE)
 post.2000[,c('latitude','longitude') := NULL]
+post.2000[,c('adm1_mean', 'adm1_lower', 'adm1_upper') := NULL]
+
 
 setdiff(colnames(post.2000),colnames(pre.2000))
-#both.dt <- rbind(pre.2000, post.2000, use.names = T)
-both.dt <- rbind( post.2000, use.names = T)
-both.dt[,clinic_match := NULL]
+both.dt <- rbind(pre.2000, post.2000, use.names = T, fill = T)
 
 both.dt <- unique(both.dt)
+both.dt <- rbind(both.dt, gbd.anc[clinic %in% setdiff(gbd.anc$site,both.dt$clinic),],fill = T)
 
 ###FINAL CHECK for site names
-setdiff(site.dat$site,both.dt$clinic)
+setdiff(gbd.anc$clinic,both.dt$clinic)
+setnames(both.dt, 'year', 'year_id')
+both.dt <- both.dt[,.(site, year_id, used, prev, n, clinic, subpop, type, agegr, age, agspan, offset, ihme_loc_id, high_risk, site_pred, adm0_mean, adm0_lower, adm0_upper)]
 
 #######################################
 ######   Check for duplicates    ######
@@ -425,39 +473,31 @@ split.list <- split(both.dt,both.dt$ihme_loc_id)
 lapply(split.list,function(x) aggregate(year_id ~ clinic, data = x, function(x) x[duplicated(x)]))
 
 ##Save files out at the estimation level
-lapply(split.list, function(x) write.csv(x, paste0('/homes/mwalte10/hiv_gbd2019/lbd_anc_align/offsets/', loc, '_ANC_matched.csv'), row.names = F))
+lapply(split.list, function(x) write.csv(x, paste0('/share/hiv/data/PJNZ_prepped/lbd_anc/2019/', loc, '_ANC_matched.csv'), row.names = F))
 
 ##Figure out quantiles for capping 
-all.dat <- rbindlist(lapply(list.files(paste0("/homes/mwalte10/hiv_gbd2019/lbd_anc_align/offsets/"),pattern=".csv"),function(file){
-  gg <- fread(paste0("/homes/mwalte10/hiv_gbd2019/lbd_anc_align/offsets/",file))
+all.dat <- rbindlist(lapply(list.files(paste0("/share/hiv/data/PJNZ_prepped/lbd_anc/2019/"),pattern=".csv"),function(file){
+  gg <- fread(paste0("/share/hiv/data/PJNZ_prepped/lbd_anc/2019/",file))
   gg[,offset := qnorm(adm0_mean)-qnorm(site_pred)]
   return(gg)
 }),fill=TRUE)
 
-all.dt <- all.dat[!is.na(offset)]
-anc_site_dat.colnames <- c('site', 'year', 'used', 'prev','n' ,'subpop','type' ,'agegr' ,'age','agspan','offset', 'country')
-setnames(all.dt, 'year_id', 'year')
-setnames(all.dt, 'ihme_loc_id', 'country')
-setnames(all.dt, 'mean', 'prev')
-setnames(all.dt, 'clinic', 'site')
+all.dt <- as.data.table(split.list)
+colnames(all.dt) <- gsub(paste0(loc, '.'),'',colnames(all.dat))
+# setnames(all.dt, 'year_id', 'year')
+# setnames(all.dt, 'ihme_loc_id', 'country')
 all.dt[,'lbd_areal' := NULL]
 all.dt[,'lbd_missing' := NULL]
 all.dt[,'iso3_adm1' := NULL]
 all.dt[,'loc_id_adm1' := NULL]
-all.dt[,'adm0_mean' := NULL]
-all.dt[,'adm0_lower' := NULL]
-all.dt[,'adm0_upper' := NULL]
 all.dt[,'adm1_mean' := NULL]
 all.dt[,'adm1_lower' := NULL]
 all.dt[,'adm1_upper' := NULL]
 all.dt[,'used' := TRUE]
 
 
-save(all.dt, file = paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/offset/', loc, '.rds'))
-quantile(all.dt$offset,c(0.15,0.85))
-
-
-
+saveRDS(all.dt, file = paste0('/share/hiv/data/PJNZ_prepped/lbd_anc/2019/', loc, '.rds'))
+}
 
 
 
