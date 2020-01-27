@@ -6,7 +6,7 @@ user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 code.dir <- paste0(ifelse(windows, "H:", paste0("/homes/", user)), "/gbdeppaiml/")
 ## Packages
 library(data.table); library(mvtnorm); library(survey);library(assertable)
-print('Packages loaded')
+library(mortdb, lib = "/share/mortality/shared/r")
 
 
 ## Arguments
@@ -55,7 +55,7 @@ fill_draws <- function(fill.dt,type=NULL){
 }
 
 ### Tables
-loc.table <- fread(paste0('/share/hiv/epp_input/gbd20/', run.name, '/location_table.csv'))
+loc.table <- data.table(get_locations(hiv_metadata = T))
 print('loc.table loaded')
 
 #loc.table <- data.table(get_locations(hiv_metadata = T))

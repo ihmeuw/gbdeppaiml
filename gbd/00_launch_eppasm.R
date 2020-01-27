@@ -12,18 +12,18 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 library(data.table)
 
 ## Arguments
-run.name <- "191224_trumpet"
+run.name <- "200119_ukelele"
 spec.name <- "191002_sitar"
-compare.run <- "190630_rhino2"
+compare.run <- NA
 proj.end <- 2022
-n.draws <- 100
+n.draws <-5
 run.group2 <- FALSE
 paediatric <- TRUE
 cluster.project <- "proj_hiv"
 plot_ART <- FALSE
 est_India <- FALSE
 reckon_prep <- TRUE
-decomp.step <- "step`"
+decomp.step <- "step3"
 gbdyear <- "gbd20"
 
 ### Paths
@@ -42,7 +42,7 @@ loc.table <- data.table(get_locations(hiv_metadata = T))
 
 ### Code
 epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
-loc.list <- epp.list
+loc.list <- c("STP","MRT")
 
 #We did not use EPP-ASM for India in GBD19, instead EPP + Spectrum
 if(!est_India){
@@ -115,7 +115,7 @@ if(!file.exists(paste0(input.dir, 'art_prop.csv'))){
 for(loc in loc.list) {    ## Run EPPASM
 # 
     epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q all.q -P ", cluster.project, " ",
-                         "-e /share/homes/", user, "/errors ",
+                         "-e /share/temp/sgeoutput/", user, "/errors ",
                          "-o /share/temp/sgeoutput/", user, "/output ",
                          "-N ", loc, "_eppasm ",
                          "-t 1:", n.draws, " ",
@@ -126,10 +126,10 @@ for(loc in loc.list) {    ## Run EPPASM
     print(epp.string)
     system(epp.string)
 
-
+   
     #Draw compilation
     draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
-                          "-e /share/homes/", user,"/errors ",
+                          "-e /share/temp/sgeoutput/", user, "/errors ",
                           "-o /share/temp/sgeoutput/", user, "/output ",
                           "-N ", loc, "_save_draws ",
                           "-hold_jid ", loc, "_eppasm ",
@@ -138,9 +138,9 @@ for(loc in loc.list) {    ## Run EPPASM
                           run.name, " ", loc, ' ', n.draws, ' TRUE ', paediatric)
     print(draw.string)
     system(draw.string)
-#
+  
     plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
-                          "-e /share/homes/", user, "/errors ",
+                          "-e /share/temp/sgeoutput/", user, "/errors ",
                           "-o /share/temp/sgeoutput/", user, "/output ",
                           "-N ", loc, "_plot_eppasm ",
                           "-hold_jid ", loc, "_save_draws ",

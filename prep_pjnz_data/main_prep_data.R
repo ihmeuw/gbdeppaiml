@@ -15,7 +15,7 @@ if(length(args) > 0) {
   loc <- args[1]
   unaids_year <- args[2]
 } else {
-  loc <- "SSD"
+  loc <- "COG"
   unaids_year <- 2019
 
 
@@ -29,12 +29,17 @@ devtools::load_all()
 
 ### Tables
 loc.table <- data.table(get_locations(hiv_metadata = T))
-dir.create(paste0("/share/hiv/data/PJNZ_prepped/",unaids_year,"/"),recursive = TRUE)
+
+##MAR IS NOT WORKING
+for(loc in c("MRT","COM")){
+unaids_year <- loc.table[ihme_loc_id==loc, unaids_recent]
+dir.create(paste0("/share/hiv/data/PJNZ_prepped/",unaids_year,"/"),recursive = TRUE, showWarnings = FALSE)
 
 
 if(grepl('1', loc.table[ihme_loc_id == loc, group])){
   if(!grepl('IND', loc)){
     val <- prepare_spec_object(loc)
+    print(attr(val,"country"))
   }else{
     val <- prepare_spec_object_ind(loc)
   }
@@ -42,13 +47,11 @@ if(grepl('1', loc.table[ihme_loc_id == loc, group])){
   val <- prepare_spec_object_group2(loc)
 }
 
-loc.list = loc.table[unaids_recent==2019 & grepl("1",group) & epp==1,ihme_loc_id]
 
-for(loc in loc.list[!loc.list %in% c("TGO")]){
-print(loc)
-val <- prepare_spec_object(loc)
 saveRDS(val, paste0("/share/hiv/data/PJNZ_prepped/",unaids_year,"/", loc, '.rds'))
 
 }
+cal = readRDS(paste0("/share/hiv/data/PJNZ_EPPASM_prepped/", loc, '.rds'))
+nrow(unique(attr(cal,"eppd")$ancsitedat))
 
 

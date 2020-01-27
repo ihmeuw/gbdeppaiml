@@ -42,15 +42,6 @@ gbd_sim_mod <-  function(fit, rwproj=fit$fp$eppmod == "rspline", VERSION = 'C'){
       ## replace rvec with random-walk simulated rvec
       fit$param <- lapply(fit$param, function(par){par$rvec <- epp:::sim_rvec_rwproj(par$rvec, firstidx, lastidx, dt); par})
     }
-    
-    if(dim(fit$fp$incrr_age)[3] < fit$fp$SIM_YEARS){
-      diff <- dim(fit$fp$incrr_age)[3] < fit$fp$SIM_YEARS
-      while(diff != 0 ){
-        fit$fp$incrr_age <- abind::abind(fit$fp$incrr_age, fit$fp$incrr_age[,,dim(fit$fp$incrr_age)[3]])
-        diff <- dim(fit$fp$incrr_age)[3] < fit$fp$SIM_YEARS
-        
-      }
-    }
     fit$fp$incrr_age <- fit$fp$incrr_age[,,1:fit$fp$SIM_YEARS]
     fp.list <- lapply(fit$param, function(par) update(fit$fp, list=par, keep.attr = FALSE))
     fp.draw <- fp.list[[rand.draw]]
@@ -80,7 +71,7 @@ gbd_sim_mod <-  function(fit, rwproj=fit$fp$eppmod == "rspline", VERSION = 'C'){
 }
 
 get_gbd_outputs <- function(mod, fp, paediatric = FALSE) {
-
+  
   mod <- mod_dimnames(mod, fp$ss, paediatric)
   hp1 <- hivpop_singleage(mod, fp$ss)
   
@@ -101,11 +92,11 @@ get_gbd_outputs <- function(mod, fp, paediatric = FALSE) {
   
   pop_art <- as.data.frame.table(colSums(hp1$artpop1,,2), responseName = "pop_art")
   setnames(pop_art, 'agegr', 'age')
-
+  
   hivpop_daly <- as.data.frame.table(get_daly_hivpop(hp1$hivpop), responseName = "value")
   hivpop_daly <- data.table::dcast(hivpop_daly, ... ~ cd4daly)
   setnames(hivpop_daly, 'agegr', 'age')
-
+  
   v <- pop
   v <- merge(v, hiv_deaths, all.x=TRUE)
   v <- merge(v, non_hiv_deaths, all.x=TRUE)
@@ -118,7 +109,7 @@ get_gbd_outputs <- function(mod, fp, paediatric = FALSE) {
   v$birth_prev <- 0                         # HIV prevalence among newborns
   v <- merge(v, pop_art, all.x=TRUE)
   v <- merge(v, hivpop_daly, all.x=TRUE)
-
+  
   v <- data.table(v)
   for(var in c('total_births', 'hiv_births')){
     v[is.na(get(var)), (var) := 0.0]
@@ -177,7 +168,7 @@ get_gbd_outputs <- function(mod, fp, paediatric = FALSE) {
     
     
   }
-
+  
   v <- v[order(year, sex, age)]
   
   return(v)
@@ -211,10 +202,10 @@ de_factor <- function(dt){
 #' Births by single age
 #' 
 get_births <- function(mod, fp){
-
+  
   py <- fp$ss$PROJ_YEARS
   fertpop <- apply(mod[fp$ss$p.fert.idx, fp$ss$f.idx, , ] +
-                   mod[fp$ss$p.fert.idx, fp$ss$f.idx, , c(1, 1:(py-1))],
+                     mod[fp$ss$p.fert.idx, fp$ss$f.idx, , c(1, 1:(py-1))],
                    c(1, 3), sum) / 2
   fertpop * fp$asfr
 }
@@ -223,7 +214,7 @@ get_births <- function(mod, fp){
 #' HIV prevalence among pregant women by single age
 #' 
 get_pregprev <- function(mod, fp, hp1){
-
+  
   ss <- fp$ss
   py <- fp$ss$PROJ_YEARS
   expand_idx <- rep(fp$ss$h.fert.idx, fp$ss$h.ag.span[fp$ss$h.fert.idx])
@@ -232,7 +223,7 @@ get_pregprev <- function(mod, fp, hp1){
   art_w <- colSums(hp1$artpop[ , , ss$p.fert.idx, ss$f.idx, ] * fp$frr_art[ , , expand_idx, 1:py],,2)
   denom_w <- hivn_w + hivp_w + art_w
   pregprev_a <- 1 - (hivn_w + hivn_w[ , c(1, 1:(py-1))]) / (denom_w + denom_w[ , c(1, 1:(py-1))])
-
+  
   pregprev_a
 }
 
@@ -247,7 +238,7 @@ get_daly_hivpop <- function(hivpop1){
 ## Under-5 splits using GBD 2017 methods
 ## We don't want to do it this way in the long run, but just for the sake of comparison
 split_u5_gbd2017 <- function(dt){
-  pop <- fread(paste0('/ihme/hiv/epp_input/gbd19/', run.name.old, "/population_splits/", loc, '.csv'))
+  pop <- fread(paste0('/ihme/hiv/epp_input/gbd20/', run.name, "/population_splits/", loc, '.csv'))
   u5.pop <- pop[age_group_id <= 5]
   u5.pop[,pop_total := sum(population), by = c('sex_id', 'year_id')]
   u5.pop[,pop_prop := population/sum(population), by = c('sex_id', 'year_id')]
@@ -262,7 +253,7 @@ split_u5_gbd2017 <- function(dt){
   setnames(u5.pop, 'year_id', 'year')
   u5.pop[,sex := ifelse(sex_id == 1, 'male', 'female')]
   u5.pop <- u5.pop[,list(sex,year,age_group_id,pop_total,pop_prop,pop_prop_inc,pop_prop_death)]
-
+  
   spec_u5 <- merge(dt,u5.pop,by=c("year","sex"), allow.cartesian=T)
   # Split all variables that can be split by population without age restrictions for 1-4 age cat
   pop_weight_all <- function(x) return(x*spec_u5[['pop_prop']])
@@ -289,9 +280,8 @@ split_u5_gbd2017 <- function(dt){
   
 }
 
-split_u1 <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd19"){
-  pop <- data.table(fread(paste0('/ihme/hiv/epp_input/','gbd19',"/" ,run.name.old, "/population_splits/", loc, '.csv')))
-
+split_u1 <- function(dt, loc, run.name){
+  pop <- data.table(fread(paste0('/ihme/hiv/epp_input/gbd20/', run.name, "/population_splits/", loc, '.csv')))
   u1.pop <- pop[age_group_id < 5]
   u1.pop[,pop_total := sum(population), by = c('sex_id', 'year_id')]
   u1.pop[,pop_prop := population/sum(population), by = c('sex_id', 'year_id')]
@@ -320,7 +310,7 @@ split_u1 <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd19"){
   spec_u1[, age_group_id := NULL]
   
   ## pull in incidence proportions from eppasm
-  split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/', run.name.new ,'/compiled/', loc, '_under1_splits.csv'))
+  split.dt <- fread(paste0('/share/hiv/epp_output/gbd20/', run.name ,'/compiled/', loc, '_under1_splits.csv'))
   split.dt <- melt(split.dt, id.vars = c('year', 'run_num'))
   setnames(split.dt, 'variable', 'age')
   spec_u1 <- merge(spec_u1, split.dt, by = c('year', 'run_num', 'age'))
@@ -333,39 +323,26 @@ split_u1 <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd19"){
   
 }
 
-get_summary <- function(output, loc, run.name.old, run.name.new, paediatric = FALSE){
+get_summary <- function(output, loc, run.name, paediatric = FALSE){
   ## create gbd age groups
   output[age >= 5,age_gbd :=  age - age%%5]
   output[age %in% 1:4, age_gbd := 1]
   output[age == 0, age_gbd := 0 ]
-  if(any(colnames(output) == 'pop')){
-    output <- output[,.(pop = sum(pop), hiv_deaths = sum(hiv_deaths), non_hiv_deaths = sum(non_hiv_deaths), new_hiv = sum(new_hiv), pop_neg = sum(pop_neg),
-                        total_births = sum(total_births), hiv_births = sum(hiv_births), birth_prev = sum(birth_prev),
-                        pop_art = sum(pop_art), pop_gt350 = sum(pop_gt350), pop_200to350 = sum(pop_200to350), pop_lt200 = sum(pop_lt200)), by = c('age_gbd', 'sex', 'year', 'run_num')]
-  }else{
-    output <- output[,.(hiv_deaths = sum(hiv_deaths),  new_hiv = sum(new_hiv), pop_neg = sum(pop_neg),
-                        total_births = sum(total_births), hiv_births = sum(hiv_births), birth_prev = sum(birth_prev),
-                        pop_art = sum(pop_art), pop_gt350 = sum(pop_gt350), pop_200to350 = sum(pop_200to350), pop_lt200 = sum(pop_lt200)), by = c('age_gbd', 'sex', 'year', 'run_num')]
-  }
-
+  output <- output[,.(pop = sum(pop), hiv_deaths = sum(hiv_deaths), non_hiv_deaths = sum(non_hiv_deaths), new_hiv = sum(new_hiv), pop_neg = sum(pop_neg),
+                      total_births = sum(total_births), hiv_births = sum(hiv_births), birth_prev = sum(birth_prev),
+                      pop_art = sum(pop_art), pop_gt350 = sum(pop_gt350), pop_200to350 = sum(pop_200to350), pop_lt200 = sum(pop_lt200)), by = c('age_gbd', 'sex', 'year', 'run_num')]
   setnames(output, 'age_gbd', 'age')
   if(paediatric){
-    output.u1 <- split_u1(output[age == 0], loc, run.name.old, run.name.new)
+    output.u1 <- split_u1(output[age == 0], loc, run.name)
     output <- output[age != 0]
     output <- rbind(output, output.u1, use.names = T)    
   }
   output[, hivpop := pop_art + pop_gt350 + pop_200to350 + pop_lt200]
   output[,c('pop_gt350', 'pop_200to350', 'pop_lt200', 'birth_prev', 'pop_neg', 'hiv_births', 'total_births') := NULL]
-  if(any(colnames(output) == 'pop')){
-    output.count <- melt(output, id.vars = c('age', 'sex', 'year', 'pop', 'run_num'))
-    
-  }else{
-    output.count <- melt(output, id.vars = c('age', 'sex', 'year',  'run_num'))
-    
-  }
+  output.count <- melt(output, id.vars = c('age', 'sex', 'year', 'pop', 'run_num'))
   
-
-  age.map <- fread(paste0('/ihme/hiv/epp_input/gbd19', '/', run.name.old, "/age_map.csv"))
+  
+  age.map <- fread(paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/age_map.csv'))
   age.map[age_group_name_short == 'All', age_group_name_short := 'All']
   if(!paediatric){
     age.spec <- age.map[age_group_id %in% 8:21,.(age_group_id, age = age_group_name_short)]
@@ -377,35 +354,16 @@ get_summary <- function(output, loc, run.name.old, run.name.new, paediatric = FA
   output.count[, age := NULL]
   
   # Collapse to both sex
-  if(any(colnames(output) == 'pop')){
-    both.sex.dt <- output.count[,.(value = sum(value), pop = sum(pop)), by = c('year', 'variable', 'age_group_id', 'run_num')]
-    
-  }else{
-    both.sex.dt <- output.count[,.(value = sum(value)),  by = c('year', 'variable', 'age_group_id', 'run_num')]
-    
-  }
-  
+  both.sex.dt <- output.count[,.(value = sum(value), pop = sum(pop)), by = c('year', 'variable', 'age_group_id', 'run_num')]
   both.sex.dt[, sex := 'both']
   all.sex.dt <- rbind(output.count, both.sex.dt)
   
   # Collapse to all-ages and adults
-  if(any(colnames(output) == 'pop')){
-    all.age.dt <- all.sex.dt[,.(value = sum(value), pop = sum(pop)), by = c('year', 'variable', 'sex','run_num')]
-    all.age.dt[, age_group_id := 22]
-    
-    adult.dt <- all.sex.dt[age_group_id %in% 8:14, .(value = sum(value), pop = sum(pop)), by = c('year', 'variable', 'sex', 'run_num')]
-    adult.dt[, age_group_id := 24]
-    
-  }else{
-    all.age.dt <- all.sex.dt[,.(value = sum(value)), by = c('year', 'variable', 'sex','run_num')]
-    all.age.dt[, age_group_id := 22]
-    
-    adult.dt <- all.sex.dt[age_group_id %in% 8:14, .(value = sum(value)), by = c('year', 'variable', 'sex', 'run_num')]
-    adult.dt[, age_group_id := 24]
-    
-  }
+  all.age.dt <- all.sex.dt[,.(value = sum(value), pop = sum(pop)), by = c('year', 'variable', 'sex','run_num')]
+  all.age.dt[, age_group_id := 22]
   
-
+  adult.dt <- all.sex.dt[age_group_id %in% 8:14, .(value = sum(value), pop = sum(pop)), by = c('year', 'variable', 'sex', 'run_num')]
+  adult.dt[, age_group_id := 24]
   
   age.dt <- rbindlist(list(all.sex.dt, all.age.dt, adult.dt), use.names = T)
   
@@ -436,11 +394,11 @@ get_summary <- function(output, loc, run.name.old, run.name.new, paediatric = FA
   out.dt <- merge(out.dt, age.map[,.(age_group_id, age = age_group_name_short)], by = 'age_group_id')
   out.dt <- out.dt[,.(mean = mean(value), lower = quantile(value, 0.025), upper = quantile(value, 0.975)), by = c('age_group_id', 'sex', 'year', 'measure', 'metric', 'age')]
   return(out.dt)
-  }
+}
 
 ## Get data from eppd object, save for future plotting
 save_data <- function(loc, eppd, run.name){
-  age.map <-  fread(paste0('/ihme/hiv/epp_input/', gbdyear, '/', run.name, "/age_map.csv"))
+  age.map <-  fread(paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/age_map.csv'))
   if(nrow(eppd$hhs) > 0){
     prevdata <- data.table(eppd$hhs)
     prevdata <- prevdata[,.(sex, agegr, type = 'point', model = 'Household Survey', indicator = 'Prevalence', mean = prev, upper = prev + (1.96 * se), lower = ifelse(prev - (1.96 * se) < 0, 0, prev - (1.96 * se)), year)]
@@ -458,16 +416,16 @@ save_data <- function(loc, eppd, run.name){
     prevdata <- NULL
   }
   if(exists("ancsitedat",where=eppd)){
-  ancdata <- data.table(eppd$ancsitedat)
-  ancdata <- ancdata[type=="ancss",.(sex = 'female', age = agegr, type = 'point', model = 'ANC Site', indicator = 'Prevalence', mean = prev, upper = NA, lower = NA, year, age_group_id = 24)]
+    ancdata <- data.table(eppd$ancsitedat)
+    ancdata <- ancdata[type=="ancss",.(sex = 'female', age = agegr, type = 'point', model = 'ANC Site', indicator = 'Prevalence', mean = prev, upper = NA, lower = NA, year, age_group_id = 24)]
   } else {
     ancdata <- NULL
   }
   output <- rbind(prevdata, ancdata, use.names = T)
   output[, metric := 'Rate']
   output[, ihme_loc_id := loc]
-  path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc, '.csv')
-  dir.create(paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/'), recursive = TRUE, showWarnings = FALSE)
+  path <- paste0('/share/hiv/epp_input/gbd20/', run.name, '/fit_data/', loc, '.csv')
+  dir.create(paste0('/share/hiv/epp_input/gbd20/', run.name, '/fit_data/'), recursive = TRUE, showWarnings = FALSE)
   write.csv(output, path, row.names = F)
   return(output)
 }

@@ -11,8 +11,7 @@ find_pjnz <- function(loc){
   loc.name <- loc.table[ihme_loc_id == temp.loc, location_name]
   
   unaids.year <- loc.table[ihme_loc_id == temp.loc, unaids_recent]
-  unaids.year <- 2018
- 
+
   #Subnational files are stored in national folders
   if(grepl("ETH",loc)){temp.loc <- "ETH"}
   if(grepl("NGA",loc)){temp.loc <- "NGA"}
@@ -168,44 +167,31 @@ collapse_epp <- function(loc){
     eppd <- epp::read_epp_data(pjnz)
   })
   
-  cc <- attr(eppd.list[[1]], 'country_code')
-
-
-  subpop.tot <- loc
+  ##Length of eppd.tot reflects number of files (> 1 if collapsing)
+  ##First element of eppd.tot contains data
   
-  eppd.tot <- eppd.list
-  names(eppd.tot) <- names(eppd.list)
-  
-  if(length(file.list) > 1){
-    add_index <<- TRUE
-    for(kk in 1:length(eppd.list)){
-      attr(eppd.tot[[kk]],"subpop") <-   names(eppd.list[[kk]])[1]
+  eppd.tot <- list()
+  for(jj in 1:length(eppd.list)){
+      eppd.tot <- rbind(eppd.tot,eppd.list[jj])
+      for(kk in 1:length(eppd.tot[[1]])){
+        attr(eppd.tot[[1]][[kk]],"subpop") <- names(eppd.tot[[1]])[[kk]]
+      }
     }
-  } else {
-    add_index <<- FALSE
-    eppd.tot <- eppd.list[[1]]
-    names(eppd.tot) <- names(eppd.list[[1]])
-    
-    for(kk in 1:length(names(eppd.tot))){
-      attr(eppd.tot[[kk]],"subpop") <- names(eppd.tot)[[kk]]
-    }
-    
-  }
 
-  ancsitedat <- melt_ancsite_data(eppd.tot, add_index = add_index)
-  hhsdat <-  tidy_hhs_data(eppd.tot, add_index = add_index)
+  ancsitedat <- melt_ancsite_data(eppd.tot)
+  hhsdat <-  tidy_hhs_data(eppd.tot)
 
   eppd.list <- unlist(eppd.list,recursive = FALSE)
-  eppd.tot <- eppd.list[1]
+  #eppd.tot <- eppd.list
   subpop.tot <- loc
   names(eppd.tot) <- subpop.tot
   eppd.tot[[subpop.tot]]$ancsitedat <- ancsitedat
   eppd.tot[[subpop.tot]]$hhs <- hhsdat
-
+  
+  cc <- attr(eppd.list[[1]], 'country_code')
   
   ##########REMOVE START HERE################
   # region
-  eppd.tot[[subpop.tot]]$region <- subpop.tot
   eppd.tot[[subpop.tot]]$region <- subpop.tot
 
   #country

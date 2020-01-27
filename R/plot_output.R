@@ -83,9 +83,10 @@ plot_15to49_draw <- function(loc, output, eppd, run.name, compare.run = '190630_
   dev.off()
 }
 
-plot_15to49 <- function(loc="IND_4854", run.name.old="190630_rhino2",  compare.run = '191002_sitar', new.run = '191224_trumpet',
+plot_15to49 <- function(loc="STP",  compare.run = NA, new.run = '200119_ukelele',
                         paediatric =TRUE, plot.deaths = FALSE, compare.gbd17=TRUE, 
-                        compare.stage2 = TRUE){
+                        compare.stage2 = FALSE, gbdyear = "gbd20"){
+  
   if(loc %in% loc.table[grepl("IND",ihme_loc_id) & epp != 1,ihme_loc_id]){
     parent_id1 <- loc.table[ihme_loc_id==loc,parent_id]
     loc1 <- loc.table[location_id==parent_id1,ihme_loc_id]
@@ -109,14 +110,27 @@ plot_15to49 <- function(loc="IND_4854", run.name.old="190630_rhino2",  compare.r
   compare.dt.unaids <- fread('/share/hiv/data/UNAIDS_extract/UNAIDS_results_2018.csv')
   compare.dt.unaids <- compare.dt.unaids[age_group_id == 24 & sex_id == 3 & measure %in% meas.list &
                                            metric == 'Rate' & ihme_loc_id==loc]
-  compare.dt.unaids <- compare.dt.unaids[,.(type = 'line', year = year_id, indicator = measure, model = "UNAIDS18",
+  compare.dt.unaids <- compare.dt.unaids[,.(type = 'line', year = year_id, indicator = measure, model = "UNAIDS",
                                             mean, lower, upper)]
 
   if(nrow(compare.dt.unaids) <=1 ){
     compare.dt.unaids <- NULL
   }
   
+  lbd.unraked <- fread("/ihme/geospatial/mbg/hiv/hiv_adult_prev/output/2019_12_09_13_15_59/pred_derivatives/admin_summaries/hiv_adult_prev_admin_0_unraked_summary.csv")
+  location_name = loc.table[ihme_loc_id==loc,location_name]
+  if(loc == "STP"){
+    lbd.unraked = lbd.unraked[ADM0_CODE==207,
+                              .(year,mean,lower,upper,model = "LBD Unraked", indicator = "Prevalence",type="line")]
+    
+  } else {
+  lbd.unraked = lbd.unraked[ADM0_NAME==location_name,
+                            .(year,mean,lower,upper,model = "LBD Unraked", 
+                              indicator = "Prevalence",type="line")]
+  }
+
   ## GBD 2017
+  
 
   
   # if(compare.stage2){
@@ -129,16 +143,17 @@ plot_15to49 <- function(loc="IND_4854", run.name.old="190630_rhino2",  compare.r
   #   
   #    }else{
   #   compare.dt.s2 = NULL
-  #   if(compare.gbd17){
-  #     if(file.exists(paste0('/snfs1/WORK/04_epi/01_database/02_data/hiv/spectrum/summary/190630_rhino/locations/', loc, '_spectrum_prep.csv'))){
-  #       compare.dt.17 <- fread(paste0('/snfs1/WORK/04_epi/01_database/02_data/hiv/spectrum/summary/190630_rhino/locations/', loc, '_spectrum_prep.csv'))
-  #       compare.dt.17 <- compare.dt.17[age_group_id == 24 & sex_id == 3 & measure %in% meas.list & metric == "Rate"]
-  #       compare.dt.17 <- compare.dt.17[,.(type = 'line', year = year_id, indicator = measure, model = 'GBD2017', mean, lower, upper)]
-  #     }else{
-  #       compare.dt.17 <- NULL
-  #     }
-  #   }
-    compare.run <- '190630_rhino2'
+    if(compare.gbd17){
+      if(file.exists(paste0('/snfs1/WORK/04_epi/01_database/02_data/hiv/spectrum/summary/190630_rhino_combined/locations/', loc, '_spectrum_prep.csv'))){
+        compare.dt.17 <- fread(paste0('/snfs1/WORK/04_epi/01_database/02_data/hiv/spectrum/summary/190630_rhino_combined/locations/', loc, '_spectrum_prep.csv'))
+        compare.dt.17 <- compare.dt.17[age_group_id == 24 & sex_id == 3 & measure %in% meas.list & metric == "Rate"]
+        compare.dt.17 <- compare.dt.17[,.(type = 'line', year = year_id, indicator = measure, 
+                                          model = 'GBD2019', mean, lower, upper)]
+      }else{
+        compare.dt.17 <- NULL
+      }
+    }
+
     if(!is.na(compare.run)){
       compare.dt <- fread(paste0('/share/hiv/epp_output/gbd19/', compare.run, '/compiled/', loc, '.csv'))
       compare.dt <- get_summary(compare.dt, loc, run.name.old = compare.run, run.name.new = new.run, paediatric)
@@ -176,17 +191,17 @@ plot_15to49 <- function(loc="IND_4854", run.name.old="190630_rhino2",  compare.r
   
  
   data[, c('sex', 'age') := NULL]
-  compare.run <- '190630_rhino2'
-  
-  cur.dt <- get_summary(cur.dt, loc, run.name.old = compare.run, run.name.new = new.run,  paediatric)
-  cur.dt <- cur.dt[age_group_id == 24 & sex == 'both' & measure %in% meas.list & metric == "Rate",.(type = 'line', year, indicator = measure, model = run.name, mean, lower, upper)]
+
+  cur.dt <- get_summary(cur.dt, loc,  new.run,  paediatric)
+  cur.dt <- cur.dt[age_group_id == 24 & sex == 'both' & measure %in% meas.list & 
+                     metric == "Rate",.(type = 'line', year, indicator = measure, model =  new.run, mean, lower, upper)]
   
 
   
-  plot.dt <- rbind(data,  compare.dt, cur.dt, compare.dt.unaids, use.names = T)
+  plot.dt <- rbind(data,  compare.dt.17, cur.dt,compare.dt.unaids,lbd.unraked, use.names = T)
   plot.dt[,model := factor(model)]
-  color.list <- c('blue', 'red', 'purple', 'green')
-  names(color.list) <- c(run.name, 'GBD2019', 'UNAIDS18', compare.run)
+  color.list <- c('blue', 'red', 'purple','orange')
+  names(color.list) <- c(new.run, 'GBD2019', 'UNAIDS','LBD Unraked')
 
   plot.dt[,model := factor(model)]
   # color.list <- c('blue', 'red', 'purple', 'green')
@@ -200,9 +215,8 @@ plot_15to49 <- function(loc="IND_4854", run.name.old="190630_rhino2",  compare.r
   #   
   # }
   
-
-  if(!dir.exists(paste0('/ihme/hiv/epp_output/', gbdyear, '/', new.run, '/15to49_plots/'))){dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', new.run, '/15to49_plots/'), recursive = TRUE)}
- {pdf(paste0('/ihme/hiv/epp_output/', gbdyear, '/', new.run, '/15to49_plots/', loc, '.pdf'), width = 10, height = 6)
+dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/15to49_plots/'), recursive = TRUE)
+ pdf(paste0('/ihme/hiv/epp_output/', gbdyear, '/', new.run, '/15to49_plots/', loc, '.pdf'), width = 10, height = 6)
   gg <- ggplot()
   if(nrow(plot.dt[model == 'ANC Site']) > 0){
     gg <- gg + geom_point(data = plot.dt[model == 'ANC Site'], aes(x = year, y = mean, shape = 'ANC Site'), alpha = 0.2)
@@ -228,9 +242,9 @@ plot_15to49 <- function(loc="IND_4854", run.name.old="190630_rhino2",  compare.r
   
   print(gg)
   dev.off()
-  }
   
-  }
+  
+}
 
 ## intended for comparing eppasm fits for group 2 countries to ciba/spectrum
 plot_spec_compare <- function(loc, run.name, paediatric = FALSE, c.metric = 'Rate'){
@@ -343,17 +357,21 @@ plot_spec_compare <- function(loc, run.name, paediatric = FALSE, c.metric = 'Rat
   }
 }
 
-plot_age_specific <- function(loc, run.name.old, compare.run = '191002_sitar', paediatric = FALSE, c.metric = 'Rate', run.name.new){
+plot_age_specific <- function(loc="STP",compare.run = NA, paediatric = TRUE, c.metric = 'Rate', 
+                              run.name = "200119_ukelele", gbd_year_new = "gbd20", gbd_year_old = "gbd19"){
   ##will need to be changed
-  age.map <- fread(paste0('/ihme/hiv/epp_input/gbd19/', run.name.old, "/age_map.csv"))
-  if(loc %in% loc.table[grepl("IND",ihme_loc_id) & epp != 1,ihme_loc_id]){
-    parent_id1 <- loc.table[ihme_loc_id==loc,parent_id]
-    loc1 <- loc.table[location_id==parent_id1,ihme_loc_id]
-    data <- fread(paste0('/share/hiv/epp_input/gbd19/', run.name.old, '/fit_data/', loc1, '.csv'))
-  } else {
-    data <- fread(paste0('/share/hiv/epp_input/gbd19/', run.name.old, '/fit_data/', loc, '.csv'))
-
-  }
+  gbdyear <- gbd_year_new
+  age.map <- fread(paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/age_map.csv'))
+  
+    if(loc %in% loc.table[grepl("IND",ihme_loc_id) & epp != 1,ihme_loc_id]){
+      parent_id1 <- loc.table[ihme_loc_id==loc,parent_id]
+      loc1 <- loc.table[location_id==parent_id1,ihme_loc_id]
+      data <- fread(paste0('/share/hiv/epp_input/',gbd_year_new,'/',run.name, '/fit_data/', loc1, '.csv'))
+    } else {
+      data <- fread(paste0('/share/hiv/epp_input/',gbd_year_new,'/',run.name, '/fit_data/', loc, '.csv'))
+  
+    }
+  
   
   if('Case Report' %in% data$model & c.metric == 'Rate'){
     pop.dt <- fread(paste0('/share/hiv/epp_input/gbd19/', run.name.old, '/population_single_age/', loc, '.csv'))
@@ -395,22 +413,23 @@ plot_age_specific <- function(loc, run.name.old, compare.run = '191002_sitar', p
   }
   
   ## Comparison run
-  if(file.exists(paste0('/snfs1/WORK/04_epi/01_database/02_data/hiv/spectrum/summary/180702_numbat_combined/locations/', loc, '_spectrum_prep.csv'))){
-    compare.dt.17 <- fread(paste0('/snfs1/WORK/04_epi/01_database/02_data/hiv/spectrum/summary/180702_numbat_combined/locations/', loc, '_spectrum_prep.csv'))
-    compare.dt.17 <- compare.dt.17[!age_group_id > 24 & measure %in% c('Incidence', 'Prevalence', 'Deaths') & metric == c.metric]
-    compare.dt.17 <- merge(compare.dt.17, age.map[,.(age_group_id,age = age_group_name_short)], by = 'age_group_id', all.x = T)
-    compare.dt.17[sex_id == 1, sex := 'male']
-    compare.dt.17[sex_id == 2, sex := 'female']
-    compare.dt.17[sex_id == 3, sex := 'both']
-    compare.dt.17[age_group_id == 24, age := '15 to 49']
-    compare.dt.17 <- compare.dt.17[,.(age, sex, type = 'line', year = year_id, 
-                                      indicator = measure, model = 'GBD2017', mean, lower, upper)]
+  if(file.exists(paste0('/snfs1/WORK/04_epi/01_database/02_data/hiv/spectrum/summary/190630_rhino_combined/locations/', loc, '_spectrum_prep.csv'))){
+    compare.dt.19 <- fread(paste0('/snfs1/WORK/04_epi/01_database/02_data/hiv/spectrum/summary/190630_rhino_combined/locations/', loc, '_spectrum_prep.csv'))
+    compare.dt.19 <- compare.dt.19[!age_group_id > 24 & measure %in% c('Incidence', 'Prevalence', 'Deaths') & metric == c.metric]
+    compare.dt.19 <- merge(compare.dt.19, age.map[,.(age_group_id,age = age_group_name_short)], by = 'age_group_id', all.x = T)
+    compare.dt.19[sex_id == 1, sex := 'male']
+    compare.dt.19[sex_id == 2, sex := 'female']
+    compare.dt.19[sex_id == 3, sex := 'both']
+    compare.dt.19[age_group_id == 24, age := '15 to 49']
+    compare.dt.19 <- compare.dt.19[,.(age, sex, type = 'line', year = year_id, 
+                                      indicator = measure, model = 'GBD2019', mean, lower, upper)]
   }else{
-    compare.dt.17 <- NULL
+    compare.dt.19 <- NULL
   }
-  compare.run <- '190630_rhino2'
+  
+
   if(!is.na(compare.run)){
-    compare.dt <- fread(paste0('/share/hiv/epp_output/gbd19/', compare.run, '/compiled/', loc, '.csv'))
+    compare.dt <- fread(paste0('/share/hiv/epp_output/',gbd_year_old,'/', compare.run, '/compiled/', loc, '.csv'))
     compare.dt <- get_summary(compare.dt, loc, compare.run, paediatric)
     compare.dt <- compare.dt[measure %in% c('Incidence', 'Prevalence', 'Deaths') & metric == c.metric,
                              .(age, sex, type = 'line', year, indicator = measure, model = compare.run, mean, lower, upper)]
@@ -426,17 +445,26 @@ plot_age_specific <- function(loc, run.name.old, compare.run = '191002_sitar', p
     unaids.dt <- NULL
   }
   
+  #Add LBD unraked estimates
+  lbd.unraked <- fread("/ihme/geospatial/mbg/hiv/hiv_adult_prev/output/2019_12_09_13_15_59/pred_derivatives/admin_summaries/hiv_adult_prev_admin_0_unraked_summary.csv")
+  location_name = loc.table[ihme_loc_id==loc,location_name]
+  if(loc=="STP"){
+    location_name <- "Principe"
+  }
+  lbd.unraked = lbd.unraked[ADM0_NAME==grepl(location_name,ADM0_NAME),.(year,mean,lower,upper,model = "LBD Unraked", indicator = "Prevalence", sex="both", type="line", age = "15-49")]
+  
   cur.dt <- fread(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name.new, '/compiled/', loc, '.csv'))
-  cur.dt <- get_summary(cur.dt,  loc, run.name.old = run.name.old, run.name.new = run.name.new, paediatric)
+  cur.dt <- get_summary(cur.dt,  loc, run.name, paediatric)
 
   cur.dt <- cur.dt[measure %in% c('Incidence', 'Prevalence', 'Deaths') & metric == c.metric,
                    .(age, sex, type = 'line', year, indicator = measure, model = run.name, mean, lower, upper)]
   
-  both.dt <- rbind(data, compare.dt.17, compare.dt, cur.dt, unaids.dt, use.names = T)
+  
+  both.dt <- rbind(data, compare.dt.19, compare.dt, cur.dt, unaids.dt,lbd.unraked, use.names = T)
   both.dt[,model := factor(model)]
   both.dt[age == '15-49', age := '15 to 49']
-  color.list <- c('blue', 'red', 'green', 'yellow', 'purple')
-  names(color.list) <- c(run.name,  'GBD2017', compare.run, 'STGPR', 'UNAIDS18')
+  color.list <- c('blue', 'red', 'green', 'yellow', 'purple', 'orange')
+  names(color.list) <- c(run.name,  'GBD2019', compare.run, 'STGPR', 'UNAIDS18', 'LBD Unraked')
   if(!paediatric){
     both.dt <- both.dt[!age %in% c('enn', 'lnn', 'pnn', '1', '5','10'),]
     both.dt[,age := factor(age, levels=c(paste0(seq(15, 80, 5)), 'All', '15 to 49'))]
@@ -445,8 +473,8 @@ plot_age_specific <- function(loc, run.name.old, compare.run = '191002_sitar', p
   }
   
   for(c.indicator in c('Incidence', 'Prevalence', 'Deaths')){
-    if(!dir.exists(paste0('ihme/hiv/epp_output/', gbdyear, '/', run.name.new, '/age_specific_plots/', c.indicator, '/'))){dir.create(paste0('ihme/hiv/epp_output/', gbdyear, '/', run.name.new, '/age_specific_plots/', c.indicator, '/'), recursive = TRUE)}
-    pdf(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name.new, '/age_specific_plots/', c.indicator, '/', loc, '.pdf'), width = 10, height = 6)
+    dir.create(paste0('/ihme/hiv/epp_output/', gbd_year_new, '/', run.name, '/age_specific_plots/', c.indicator, '/'),recursive = TRUE)
+    pdf(paste0('/ihme/hiv/epp_output/', gbd_year_new, '/', run.name, '/age_specific_plots/', c.indicator, '/', loc, '.pdf'), width = 10, height = 6)
 
     for(c.sex in c('male', 'female', 'both')){
       plot.dt <- both.dt[sex == c.sex & indicator == c.indicator]

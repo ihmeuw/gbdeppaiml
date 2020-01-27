@@ -4,6 +4,8 @@ library(xml2)
 get_eppxml_workset <- function(pjnz){
   
   xmlfile <- grep(".xml", unzip(pjnz, list=TRUE)$Name, value=TRUE)
+  xmlfile <- grep(".xml", unzip(pjnz, list=TRUE)$Name, value=TRUE)
+  
   if(!length(xmlfile)){
     warning(paste0("No EPP .xml file found for ", basename(pjnz)))
     return(NULL)

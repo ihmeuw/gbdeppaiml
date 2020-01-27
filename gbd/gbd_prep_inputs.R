@@ -14,11 +14,11 @@ if(length(args) > 0) {
 	run.group2 <- args[3]
 	decomp.step <- args[4]
 } else {
-	run.name <- "191224_trumpet"
+	run.name <- "200119_ukelele"
 	proj.end <- 2022
 
 	run.group2 <- FALSE
-	decomp.step <- "decomp.step"
+	decomp.step <- "step3"
 }
 
 gbdyear <- 'gbd20'
@@ -29,11 +29,10 @@ dir.create(out.dir, recursive = TRUE, showWarnings = TRUE)
 library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
 source( "/ihme/cc_resources/libraries/current/r/get_population.R")
 source('/ihme/cc_resources/libraries/current/r/get_covariate_estimates.R')
-source(paste0(root, '/temp/central_comp/libraries/2019_gbd_env/r/get_cod_data.R'))
+source('/ihme/cc_resources/libraries/current/r/get_cod_data.R')
 
 ## Locations
 loc.table <- get_locations(hiv_metadata = TRUE)
-write.csv(loc.table, paste0(out.dir, 'location_table.csv'), row.names = F)
 age.map <- get_age_map()
 write.csv(age.map, paste0(out.dir, 'age_map.csv'), row.names = F)
 source("/home/j/temp/central_comp/libraries/current/r/get_ids.R")
@@ -44,7 +43,7 @@ if(run.group2){
   
 }else{
   ## Prep inputs for standard group 1 epp locations
-  epp.locs <- loc.table[epp == 1, location_id]
+  epp.locs <- c(loc.table[epp == 1, location_id],loc.table[ihme_loc_id %in% c("STP","MAR","MRT","COM"), location_id])
 
 }
 
@@ -56,15 +55,10 @@ parent.locs <- loc.table[location_id %in% parent.locs,location_id]
 
 ## Population
 #####NEED POPULATION UPDATE
-pop.all <- get_population(age_group_id = c(28, 49:127), location_id = c(epp.locs, parent.locs), year_id = seq(1970, proj.end), gbd_round_id = 7, sex_id = 1:2, single_year_age = T, decomp_step = 'step1')
-# pop.all.20 <- pop.all[year_id == 2019,]
-# pop.all.20[,year_id := rep(2020, nrow(pop.all.20))] 
-# pop.all <- rbind(pop.all, pop.all.20)
-## this is a separate call because you can't get 80+ with single_age_pop = TRUE
-pop.o80 <- get_population(age_group_id = c( 21), location_id = c(epp.locs, parent.locs), year_id = seq(1970, proj.end), gbd_round_id = 7, sex_id = 1:2, decomp_step = 'step1')
-# pop.o80.20 <- pop.o80[year_id == 2019,]
-# pop.o80.20[,year_id := rep(2020, nrow(pop.o80.20))] 
-# pop.o80 <- rbind(pop.o80, pop.o80.20)
+pop.all <- get_population(age_group_id = c(28, 49:127), location_id = c(epp.locs, parent.locs), 
+                          year_id = seq(1970, proj.end), gbd_round_id = 7, sex_id = 1:2, single_year_age = T, decomp_step = 'step1')
+pop.o80 <- get_population(age_group_id = c( 21), location_id = c(epp.locs, parent.locs), 
+                          year_id = seq(1970, proj.end), gbd_round_id = 7, sex_id = 1:2, decomp_step = 'step1')
 
 pop.all <- rbind(pop.all, pop.o80, use.names = T)
 dir.create(paste0(out.dir, '/population_single_age'), showWarnings = F)
@@ -176,8 +170,6 @@ asfr <- data.table(asfr)
 # asfr.20 <- asfr.20[,year_id := rep(2020, nrow(asfr.20))]
 # asfr <- rbind(asfr, asfr.20)
 
-
-
 asfr <- asfr[age_group_id %in% c(8:14) & sex_id == 2, list(year_id, age_group_id, mean_value, location_id)]
 asfr[, age := (age_group_id - 5) * 5]
 setnames(asfr, c('mean_value', 'year_id'), c('value', 'year'))
@@ -188,16 +180,15 @@ invisible(lapply(epp.locs, function(c.location_id){
 }))
 
 ## Births and SRB
-births <- get_population(age_group_id = 164, location_id = epp.locs, year_id = seq(1970, proj.end), gbd_round_id = 7, sex_id = 1:2, decomp_step = 'step1')
+births <- get_population(age_group_id = 164, location_id = epp.locs, 
+                         year_id = seq(1970, 2019), gbd_round_id = 6, sex_id = 1:2, decomp_step = 'step4')
 ##creating dummy variable for births
-# births.20 <- births[year_id == 2019,]
-# births.20[,year_id := rep(2020, nrow(births.20))] 
-# births <- rbind(births, births.20)
-
+births = extrapolate_years(births, 2022, trans_vars = "population", id_vars = c("age_group_id","location_id","sex_id","run_id"))
 
 dir.create(paste0(out.dir, '/births'), showWarnings = F)
 dir.create(paste0(out.dir, '/SRB'), showWarnings = F)
 invisible(lapply(epp.locs, function(c.location_id) {
+  print(c.location_id)
   out.births <- copy(births[location_id == c.location_id])
   c.iso <- loc.table[location_id == c.location_id, ihme_loc_id]
   births.dt <- out.births[,.(population = sum(population)), by = c('age_group_id', 'location_id', 'year_id', 'run_id')]

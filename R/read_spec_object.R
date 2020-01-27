@@ -5,29 +5,25 @@ read_spec_object <- function(loc, j, start.year = 1970, stop.year, trans.params.
                              popadjust = TRUE, age.prev = FALSE, paediatric, anc.rt = FALSE, geoadjust=TRUE,
 anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE){
 
-  
-  print(age.prev)
+
   #Do this for now as something is weird with the new PJNZ files - don't need subpop anyway
   #Eventually these hsould all be regenerated with subpopulations
-  if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))){
+  if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))) {
     dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))
     
-  }else{
-    if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2018/', loc, '.rds'))){
+  } else if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2018/', loc, '.rds'))) {
       dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2018/', loc, '.rds'))
       
-    }else{
-      if(file.exists(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', loc, '.rds'))){
+  } else if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2015/', loc, '.rds'))){
+      dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2015/', loc, '.rds'))
+      
+  } else if(file.exists(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', loc, '.rds'))) {
         dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', loc, '.rds'))
-      }else{
-        if(file.exists(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))){
-          dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))
-        }
+        
+  } else if(file.exists(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))) {
+        dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))
       }
-    }
-  }
 
-  
   # if(grepl("ZAF",loc) | grepl("IND",loc) | grepl("SDN",loc)){
   #   dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))
   # } else {
@@ -86,7 +82,7 @@ anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE){
     dt <- sub.art(dt,loc)
   }
   ## Group 1 inputs
-  if(grepl('1', loc.table[ihme_loc_id == loc, group])){
+  if(grepl('1', loc.table[ihme_loc_id == loc, group]) | loc %in% c("STP","COM","MRT","MAR")){
     ## Prevalence surveys
     if(prev.sub) {
       print("Substituting prevalence surveys")
