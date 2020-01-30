@@ -290,6 +290,7 @@ split_u5_gbd2017 <- function(dt){
 }
 
 split_u1 <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd19"){
+  #change to the new population splits folder
   pop <- data.table(fread(paste0('/ihme/hiv/epp_input/','gbd19',"/" ,run.name.old, "/population_splits/", loc, '.csv')))
 
   u1.pop <- pop[age_group_id < 5]

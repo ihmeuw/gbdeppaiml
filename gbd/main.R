@@ -99,9 +99,9 @@ dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
 
 
 
-if(lbd.anc){
-  attr(dt, 'eppd')$ancsitedat$prev <- attr(dt, 'eppd')$ancsitedat$prev / 0.01
-}
+# if(lbd.anc){
+#   attr(dt, 'eppd')$ancsitedat$prev <- attr(dt, 'eppd')$ancsitedat$prev / 0.01
+# }
 if(any(attr(dt, 'eppd')$ancsitedat$prev > 1)){
   print('some prevelances greater than 100%')
   attr(dt, 'eppd')$ancsitedat <- as.data.frame(as.data.table(attr(dt, 'eppd')$ancsitedat)[prev  <1,])
@@ -119,8 +119,7 @@ if(geoadjust){
   
 }
 dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, "/", run.name, '/dt_objects/'), recursive = T)
-saveRDS(dt, file = paste0('/ihme/hiv/epp_output/', gbdyear, "/", run.name, '/dt_objects/', loc, '_dt.RDS'))
-
+saveRDS(dt, file = paste0('/ihme/hiv/epp_output/', gbdyear, "/", run.name, '/dt_objects/', loc, '_dt.RDS' ))
 if(epp.mod == 'rspline'){attr(dt, 'specfp')$equil.rprior <- TRUE}
 
 #Some substitutions to get things running
@@ -150,7 +149,7 @@ attr(dt, 'eppd')$ancsitedat = unique(attr(dt, 'eppd')$ancsitedat)
 attr(dt, 'eppd')$hhs <- attr(dt, 'eppd')$hhs[!attr(dt, 'eppd')$hhs$se == 0,]
 if(loc == 'GNQ'){
   attr(dt, 'eppd')$hhs <- subset(attr(dt, 'eppd')$hhs, sex == 'both')
-  
+
 }
 
 attr(dt, 'specfp')$relinfectART <- 0.3
@@ -163,7 +162,6 @@ if(grepl("IND",loc)){
 }
 
 ## Fit model
-
 fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500)
 data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc, '.csv')
 if(!file.exists(data.path)){save_data(loc, attr(dt, 'eppd'), run.name)}
@@ -320,7 +318,7 @@ if(dim( fit$fp$entrantartcov)[2] < fit$fp$SIM_YEARS){
 }
 
 if(length(fit$fp$artpaed_isperc) < fit$fp$SIM_YEARS){
-  diff <- fit$fp$SIM_YEARS - length(fit$fp$artpaed_isperc) 
+  diff <- fit$fp$SIM_YEARS - length(fit$fp$artpaed_isperc)
     add_names <- setdiff(seq(start.year, stop.year), as.numeric(names(fit$fp$artpaed_isperc)))
     add <- rep(FALSE, length(add_names))
     names(add) <- add_names
@@ -328,43 +326,43 @@ if(length(fit$fp$artpaed_isperc) < fit$fp$SIM_YEARS){
     new <- new[order(names(new))]
     fit$fp$artpaed_isperc <-  new
 
-  
+
 }
 
 if(length(fit$fp$artpaed_num) < fit$fp$SIM_YEARS){
-  diff <- fit$fp$SIM_YEARS - length(fit$fp$artpaed_num) 
+  diff <- fit$fp$SIM_YEARS - length(fit$fp$artpaed_num)
   add_names <- setdiff(seq(start.year, stop.year), as.numeric(names(fit$fp$artpaed_num)))
   add <- rep(0, length(add_names))
   names(add) <- add_names
   new <- c(fit$fp$artpaed_num, add)
   new <- new[order(names(new))]
   fit$fp$artpaed_num <-  new
-  
-  
+
+
 }
 
 if(length(fit$fp$cotrim_isperc) < fit$fp$SIM_YEARS){
-  diff <- fit$fp$SIM_YEARS - length(fit$fp$cotrim_isperc) 
+  diff <- fit$fp$SIM_YEARS - length(fit$fp$cotrim_isperc)
   add_names <- setdiff(seq(start.year, stop.year), as.numeric(names(fit$fp$cotrim_isperc)))
   add <- rep(FALSE, length(add_names))
   names(add) <- add_names
   new <- c(fit$fp$cotrim_isperc, add)
   new <- new[order(names(new))]
   fit$fp$cotrim_isperc <-  new
-  
-  
+
+
 }
 
 if(length(fit$fp$cotrim_num) < fit$fp$SIM_YEARS){
-  diff <- fit$fp$SIM_YEARS - length(fit$fp$cotrim_num) 
+  diff <- fit$fp$SIM_YEARS - length(fit$fp$cotrim_num)
   add_names <- setdiff(seq(start.year, stop.year), as.numeric(names(fit$fp$cotrim_num)))
   add <- rep(0, length(add_names))
   names(add) <- add_names
   new <- c(fit$fp$cotrim_num, add)
   new <- new[order(names(new))]
   fit$fp$cotrim_num <-  new
-  
-  
+
+
 }
 
 ## Simulate model for all resamples, choose a random draw, get gbd outputs

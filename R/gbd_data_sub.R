@@ -305,7 +305,7 @@ sub.paeds <- function(dt, loc, k, start.year = 1970, stop.year = stop.year){
     attr(dt, 'specfp')$paedtargetpop[,,i] <- pop.year
   }
   
-  prog <- fread(paste0('/share/hiv/epp_input/', gbdyear,'/paeds/childProgParam.csv'))
+  prog <- fread(paste0('/share/hiv/spectrum_input/', '191224_trumpet','/childProgParam/MWI.csv'))
   progu5 <- prog[age %in% 0:4]
   progu5 <- convert_paed_cd4(progu5, 'u5')
   progu5 <- data.table::dcast(progu5, cat + sex ~ age, value.var = 'value')
@@ -331,7 +331,7 @@ sub.paeds <- function(dt, loc, k, start.year = 1970, stop.year = stop.year){
     attr(dt, 'specfp')$prog_u15[,,c.sex] <- prog.mat
   }
   
-  mort.art <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/paeds/childMortOnART/', substr(loc, 1, 3), '.csv'))
+  mort.art <- fread(paste0('/share/hiv/spectrum_input/',  '191224_trumpet/childMortOnART/', loc, '.csv'))
   mort.art[category == 'LT6Mo', artdur := 'ART0MOS']
   mort.art[category == '6to12Mo', artdur := 'ART6MOS']
   mort.art[category == 'GT12Mo', artdur := 'ART1YR']
@@ -362,7 +362,7 @@ sub.paeds <- function(dt, loc, k, start.year = 1970, stop.year = stop.year){
       attr(dt, 'specfp')$art_mort_u15[,,c.age,c.sex] <- mort.mat
     }
   }
-  mort.offart <- fread(paste0('/share/hiv/epp_input/',gbdyear,'/paeds/childMortNoART.csv'))
+  mort.offart <- fread(paste0('/share/hiv/spectrum_input/','191224_trumpet/childMortNoART/MWI.csv'))
   mortu5 <- mort.offart[age %in% 0:4]
   mortu5 <- convert_paed_cd4(mortu5, 'u5')
   mortu5 <- data.table::dcast(mortu5, age + birth_category ~ cat, value.var = 'value')
@@ -399,14 +399,14 @@ sub.paeds <- function(dt, loc, k, start.year = 1970, stop.year = stop.year){
   if(file.exists(art.path)){
     art <- fread(art.path)
   }else{
-    art <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/paeds/childARTcoverage/', loc, '.csv'))
+    art <- fread(paste0('/share/hiv/spectrum_input/',  '/191224_trumpet/childARTcoverage/', loc, '.csv'))
   }
   setnames(art, old = 'year', new = 'year_id')
   if('ART_Cov_pct' %in% colnames(art)){
     setnames(art, old = 'ART_Cov_pct', new = 'ART_cov_pct')
     
   }
-  art <- extrapolate_years(art, end_year = stop.year, id_vars = c('ART_cov_pct', 'Cotrim_cov_pct', 'Cotrim_cov_num'), trans_vars = 'ART_cov_num')
+  #art <- extrapolate_years(art, end_year = stop.year, id_vars = c('ART_cov_pct', 'Cotrim_cov_pct', 'Cotrim_cov_num'), trans_vars = 'ART_cov_num')
   
   #art <- extend.years(art, years)
   setnames(art, old = 'year_id', new = 'year')
@@ -434,7 +434,7 @@ sub.paeds <- function(dt, loc, k, start.year = 1970, stop.year = stop.year){
   names(cotrim_isperc) <- art$year
   attr(dt, 'specfp')$cotrim_isperc <- cotrim_isperc
   
-  artdist <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/paeds/childARTDist/', substr(loc, 1, 3), '.csv'))
+  artdist <- fread(paste0('/share/hiv/spectrum_input/',  '/191224_trumpet/childARTDist/', loc, '.csv'))
   artdist <- artdist[year %in% years]
   artdist <- extend.years(artdist, years)
   artdist <- data.table::dcast(artdist, year~age)
@@ -444,7 +444,7 @@ sub.paeds <- function(dt, loc, k, start.year = 1970, stop.year = stop.year){
   colnames(artdist) <- 0:14
   attr(dt, 'specfp')$paed_artdist <- artdist
   
-  artelig <- fread(paste0('/share/hiv/epp_input/', gbdyear,'/paeds/childARTeligibility/', substr(loc, 1, 3), '.csv'))
+  artelig <- fread(paste0('/share/hiv/spectrum_input/', '/191224_trumpet/childARTeligibility/',loc, '.csv'))
   artelig <- artelig[year %in% years]
   artelig <- extend.years(artelig, years)  
   if(min(artelig$year) > start.year){
@@ -466,13 +466,13 @@ sub.paeds <- function(dt, loc, k, start.year = 1970, stop.year = stop.year){
   attr(dt, 'specfp')$paed_distnewinf <- infdist
   
   
-  pmtct <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/paeds/PMTCT/', loc, '.csv'))
+  pmtct <- fread(paste0('/share/hiv/spectrum_input/',  '/191224_trumpet/PMTCT/', loc, '.csv'))
   
     if( file.exists(paste0('/ihme/hiv/data/UNAIDS_extrapolated/UNAIDS_2019/', loc, '_PMTCT_ART_cov.csv'))){
       pmtct <- fread(paste0('/ihme/hiv/data/UNAIDS_extrapolated/UNAIDS_2019/', loc, '_PMTCT_ART_cov.csv'))
     }
     if( file.exists(paste0('/ihme/hiv/data/UNAIDS_extrapolated/UNAIDS_2018/', loc, '_PMTCT_ART_cov.csv'))){
-      pmtct <- fread(paste0('/ihme/hiv/data/UNAIDS_extrapolated/UNAIDS_20198', loc, '_PMTCT_ART_cov.csv'))
+      pmtct <- fread(paste0('/ihme/hiv/data/UNAIDS_extrapolated/UNAIDS_2018/', loc, '_PMTCT_ART_cov.csv'))
     }
   
   pmtct <- pmtct[year %in% years]
@@ -495,10 +495,10 @@ sub.paeds <- function(dt, loc, k, start.year = 1970, stop.year = stop.year){
   attr(dt, 'specfp')$pmtct_num <- data.frame(pmtct_num)
   attr(dt, 'specfp')$pmtct_isperc <- data.frame(pmtct_isperc)
   
-  dropout <- fread(paste0('/share/hiv/epp_input/', gbdyear,'/paeds/PMTCTdropoutRates.csv'))
+  dropout <- fread(paste0('/share/hiv/spectrum_input/', '/191224_trumpet/PMTCTdropoutRates/MWI.csv'))
   attr(dt, 'specfp')$pmtct_dropout <- data.frame(dropout)
   ##TODO - need to fix perc bf
-  percbf <- fread(paste0('/share/hiv/epp_input/', gbdyear,'/paeds/percentBF/', substr(loc, 1, 3), '.csv'))
+  percbf <- fread(paste0('/share/hiv/spectrum_input/', '/191224_trumpet/percentBF/', loc, '.csv'))
   attr(dt, 'specfp')$perc_bf_on_art <- percbf[,on_arv]
   attr(dt, 'specfp')$perc_bf_off_art <- percbf[,no_arv]
   mtctrans <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/paeds/PMTCT_transmission_rts_2016.csv'))
@@ -730,6 +730,7 @@ add_frr_noage_fp <- function(obj){
 
 sub.prev.granular <- function(dt, loc){
   ## TODO: Add this to cache prev
+  ##make sure that this only keeps sex 3 for 15-49
   age.prev.dt <- fread(paste0("/share/hiv/epp_input/gbd20/prev_surveys.csv"))
   age.prev.dt <- age.prev.dt[iso3 == loc]
   age.prev.dt[,loc_year := paste0(iso3, '_', year)]
@@ -926,11 +927,8 @@ geo_adj <- function(loc, dt, i, uncertainty) {
 
     anc.dt.all <- read.csv(paste0('/ihme/hiv/data/PJNZ_prepped/lbd_anc/2019/', loc, '_ANC_matched.csv'))  
     setnames(anc.dt.all, old = 'prev', new = 'mean')
-    sites <- anc.dt.all$site
     anc.dt.all <- as.data.table(anc.dt.all)
-    anc.dt.all <- anc.dt.all[,site := NULL]
-    anc.dt.all <- anc.dt.all[,clinic := sites]
-  
+
     
     
   
@@ -1025,6 +1023,35 @@ geo_adj <- function(loc, dt, i, uncertainty) {
         }
         
         anc.dt  <- anc.dt[,offset := qnorm(adm0_mean)-qnorm(site_pred)]
+        replace <- anc.dt[is.na(offset)]
+        anc.dt <- data.table(anc.dt)
+        for(clinic_x in replace$clinic){
+          if(!all(is.na(anc.dt[clinic == clinic_x,offset]))){
+            anc.dt[is.na(offset) & clinic == clinic_x, site_pred := mean(anc.dt[clinic == clinic_x, site_pred], na.rm = T)]
+            anc.dt[is.na(offset) & clinic == clinic_x, adm0_mean := mean(anc.dt[clinic == clinic_x, adm0_mean], na.rm = T)]
+            anc.dt[is.na(offset) & clinic == clinic_x, adm0_lower := mean(anc.dt[clinic == clinic_x, adm0_lower], na.rm = T)]
+            anc.dt[is.na(offset) & clinic == clinic_x, adm0_upper := mean(anc.dt[clinic == clinic_x, adm0_upper], na.rm = T)]
+            anc.dt[is.na(offset) & clinic == clinic_x, offset := qnorm(adm0_mean)-qnorm(site_pred)]
+            if(any(is.nan(anc.dt[clinic == clinic_x,offset]))){
+              anc.dt[is.nan(offset) & clinic == clinic_x, offset := mean(anc.dt[clinic == clinic_x, offset], nan.rm = T)]
+              
+            }
+            
+          }else{
+            years_to_fill <- unique(anc.dt[is.na(offset) & clinic == clinic_x,year_id])
+            for(year_x in years_to_fill){
+              anc.dt[is.na(offset) & year_id == year_x & clinic == clinic_x, site_pred := mean(anc.dt[year_id == year_x, site_pred], na.rm = T)]
+              anc.dt[is.na(offset) & year_id == year_x & clinic == clinic_x, adm0_mean := mean(anc.dt[year_id == year_x, adm0_mean], na.rm = T)]
+              anc.dt[is.na(offset) & year_id == year_x & clinic == clinic_x, adm0_lower := mean(anc.dt[year_id == year_x, adm0_lower], na.rm = T)]
+              anc.dt[is.na(offset) & year_id == year_x & clinic == clinic_x, adm0_upper := mean(anc.dt[year_id == year_x, adm0_upper], na.rm = T)]
+              anc.dt[is.na(offset) & year_id == year_x & clinic == clinic_x,offset := qnorm(adm0_mean)-qnorm(site_pred)]
+              if(any(is.nan(anc.dt[clinic == clinic_x,offset]))){
+                anc.dt[is.nan(offset) & year_id == year_x & clinic == clinic_x, offset := mean(anc.dt[year_id == year_x, offset], na.rm = T)]
+                
+              }
+            }
+          }
+        }
         #Copy year 2000 or otherwise earliest year to fill in  early years where GBD has data but LBD does not  
         post.2000 <- anc.dt[year_id >=2000]
         setnames(post.2000, 'clinic', 'site')
@@ -1034,11 +1061,17 @@ geo_adj <- function(loc, dt, i, uncertainty) {
         anc.dt[,'adm0_upper' := as.numeric(anc.dt[,adm0_upper])]
         anc.dt[,'site_pred' := as.numeric(anc.dt[,site_pred])]
         setnames(anc.dt, 'year_id', 'year')
+        setnames(site.dat, 'year_id', 'year')
         site.dat <- site.dat[,.(site, year, used, prev, n, subpop, type, agegr, age, agspan)]
+        setnames(anc.dt, 'clinic', 'site')
+        anc.dt[,subpop := as.character(subpop)]
+        anc.dt[,site := as.character(site)]
+        site.dat <- unique(site.dat)
+        anc.dt <- unique(anc.dt)
         
         
         if(subpop2 %in% unique(eppd$ancsitedat$subpop)){
-          temp.dat <- merge(site.dat,anc.dt[,.(site,subpop,year,site_pred,adm0_mean,adm0_lower,adm0_upper,offset,high_risk)], by=c("site","subpop","year", 'adm0_mean', 'adm0_upper', 'adm0_lower', 'site_pred', 'high_risk'),all.x=TRUE)
+          temp.dat <- merge(site.dat,anc.dt[,.(site,subpop,year,site_pred,adm0_mean,adm0_lower,adm0_upper,offset,high_risk)], by=c("site","subpop","year"), all.x = TRUE)
         } else {
           temp.dat <- merge(site.dat,anc.dt[,.(site,year,site_pred,adm0_mean,adm0_lower,adm0_upper,offset,high_risk)], by=c("site","year"),all.x=TRUE)
           
@@ -1048,12 +1081,21 @@ geo_adj <- function(loc, dt, i, uncertainty) {
           min.dt <- unique(min.dt)
         }
         
-        merge.dt <- copy(temp.dat[year < 2000 & !is.na(prev)])[,offset := NULL]
+        
+        merge.dt <- copy(temp.dat[year < 2000 & !is.na(prev)])
+        min.dt <- unique(min.dt)
+        add_on <- as.data.table(setdiff(merge.dt$site, min.dt$site))
+        setnames(add_on, old = 'V1', new = 'site')
+        add_on[,offset := mean(min.dt$offset)]
+        add_on[,site := as.factor(site)]
+        min.dt[,site := as.factor(as.character(site))]
+        min.dt <- rbind(min.dt, add_on)
         merge.dt <- merge(merge.dt, min.dt, by = 'site')
         
         
         temp.dat <- temp.dat[year >= 2000 & !is.na(prev)]
         temp.dat <- rbind(temp.dat, merge.dt, use.names = T, fill = TRUE)
+   
         
         all.anc <- rbind(all.anc,temp.dat)
         
@@ -1065,11 +1107,14 @@ geo_adj <- function(loc, dt, i, uncertainty) {
       
      nrow(all.anc) == nrow(eppd$ancsitedat)
      any(is.na(all.anc[,'offset']))
+
+     
+
      all.anc[is.na(offset), offset := 0]
      all.anc[offset > 0.15, offset := 0.15]
      all.anc[offset < -0.15, offset := -0.15]
-      all.anc[is.na(high_risk),high_risk := FALSE]
-      all.anc <- all.anc[!high_risk==TRUE]
+     all.anc[is.na(high_risk),high_risk := FALSE]
+      #all.anc <- all.anc[!high_risk==TRUE]
       all.anc[,c('site_pred','adm0_mean','adm0_lower','adm0_upper','high_risk') := NULL]
 
      
@@ -1078,7 +1123,7 @@ geo_adj <- function(loc, dt, i, uncertainty) {
        all.anc[,high_risk := FALSE]
      }
 
-     
+     all.anc <- all.anc[,.(site, subpop, year, used, prev, n, type, agegr, age, agspan, offset)]
      all.anc <- as.data.frame(all.anc)
      
      
@@ -1164,7 +1209,7 @@ geo_adj <- function(loc, dt, i, uncertainty) {
   #We use a different prior for MDG or else the curve goes to 0. It is worth rethinking this strategy for all no-survey locations.
   #We use a different prior for no-survey locs (except PNG which has enough ANC data)
   sub.anc.prior <- function(dt,loc){
-    if(loc %in%  c("SDN","SSD","SOM","GNB","MDG")){
+    if(loc %in%  c("SDN","SSD","SOM","GNB","MDG","PNG")){
       ancbias.pr.mean <<- 0.15
       ancbias.pr.sd <<- 0.001
     } else {

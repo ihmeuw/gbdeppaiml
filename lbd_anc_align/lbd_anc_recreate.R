@@ -2,9 +2,25 @@ rm(list=ls())
 windows <- Sys.info()[1][["sysname"]]=="Windows"
 root <- ifelse(windows,"J:/","/home/j/")
 user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
+run.name <- '191224_trumpet'
 code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/hiv_gbd2019/")
+input_table <- fread(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), '/gbdeppaiml/lbd_anc_align/inputs.csv'))
+c.args <- input_table[run_name==run.name]
+run_name <- run.name
+lbd.anc <- c.args[['lbd.anc']]
+anc_no_offset <- c.args[['anc_no_offset']]
+anc_offset <- c.args[['anc_offset']]
+lbd_anc_data <- c.args[['lbd_anc_data']]
+codetable <- c.args[['codetable']]
+codetable <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), codetable)
+add_info <- c.args[['add_info']]
+add_info <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), add_info)
+geo_codebook <- c.args[['geo_codebook']]
+geo_codebook <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), geo_codebook)
+UNAIDS_year <- 2019
+lat_long_table <- c.args[['lat_long_table']]
+
 date <- substr(gsub("-","",Sys.Date()),3,8)
-output.dir <- '/ihme/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/2019/'
 dir.create(output.dir)
 ## Packages
 library(data.table)
@@ -16,7 +32,7 @@ library(data.table)
 ###easy locs, called keep
 #load('/homes/mwalte10/lbd_anc_align/examine_first.RData')
 loc.table <- get_locations(hiv_metadata = TRUE)
-anc_dat <- as.data.table(readRDS('/home/j/WORK/11_geospatial/10_mbg/hiv/unaids_anc/anc_data_2019_08_13.rds')) 
+anc_dat <- as.data.table(readRDS(lbd_anc_data)) 
 keep <- unique(anc_dat$country)
 keep <- cbind(keep, loc.table[ihme_loc_id %in% keep, unaids_recent])
 colnames(keep) <- c('countries', 'years')
@@ -25,7 +41,7 @@ keep <- as.data.frame(keep)
 library(mortdb, lib = '/ihme/mortality/shared/r')
 loc.table <- get_locations(hiv_metadata = TRUE)
 hiv_locs_nat <- loc.table[level == 3 & epp == 1, ihme_loc_id]
-lat_long_table <- fread('/homes/mwalte10/lat_long_codetable.csv')
+lat_long_table <- fread(lat_long_table)
 colnames(lat_long_table) <- c('ihme_loc_id','longitude', 'latitude')
 
 tracking_sheet <- list()
@@ -36,9 +52,9 @@ sapply(libs, require, character.only = T)
 
 ## Bind all UNAIDS Survaillance files together---------------------------------------------------------------------------------------------
 
-additional <- read.csv("/ihme/homes/mwalte10/gbdeppaiml/lbd_anc_align/additional_info.csv")
+additional <- read.csv(add_info)
 ## Merge Geography codebook and UNAIDS data -----------------------------------------------------------------------------------------------
-geocodebook <- read.csv('/homes/mwalte10/gbdeppaiml/lbd_anc_align/final_geo_codebook.csv', stringsAsFactors = FALSE)
+geocodebook <- read.csv(geo_codebook, stringsAsFactors = FALSE)
 source('/homes/mwalte10/gbdeppaiml/lbd_anc_align/anc_snap.R')
 geocodebook <- snap_codebook(geocodebook)
 
@@ -71,7 +87,7 @@ loc.list <- loc.list[-which(loc.list == 'PNG')]
 
 use_2019 <- T
 use_2018 <- F
-use_subpop <- T 
+use_subpop <- F
 use_prepped <- F
 for (countries in loc.list) {
 
@@ -115,7 +131,6 @@ for (countries in loc.list) {
   df <- rbind(df.2019, df.2018, df.subpop, df.prepped)
   df <- as.data.table(df)
   
-  #df <- subset(df, type == 'ancss')
   df$country <- countries
   df$ihme_loc_id <- countries
   
@@ -166,22 +181,6 @@ for (countries in loc.list) {
     df$site[df$country == "CMR" & df$site == "CMA  Tyo"] <- "CMA Tyo"
   }
   
-  #################################
-  #remove duplicate observations. GBD ALSO DOES THIS STEP
-  #################################
-  # {
-  # nrow_before_dup <- nrow(df)
-  # df_in <- subset(df, In == 1)
-  # df_in <- unique(df_in)
-  # df_not_in <- subset(df, In == 0)
-  # df_not_in <- unique(df_not_in)
-  # together <- rbind.fill(df_in, df_not_in)
-  # together_dedupe <- unique(setDT(together)[order(Group,Site,Year, -In)], by = c('Group','Site','Year'))
-  # df <- data.frame(together_dedupe)
-  # df <- df[,!(names(df) %in% c("In"))]
-  # nrow_after_dup <- nrow(df)
-  # diff_1 <- nrow_before_dup - nrow_after_dup}
-  # nrow_2 <- nrow(df)
   
   parent <- unlist(strsplit(countries , split = '_'))[1]
   #################################
@@ -282,10 +281,6 @@ for (countries in loc.list) {
   }
   nrow_7 <- nrow(df)
   
-  #merge to geography information
-  # all <- merge(geocodebook, df, by.x=c("country", "Group", "site"), by.y=c("country", "subpop", "site"), all.x=F, all.y=T)
-  # all_copy <- all
-  # all$site <- as.character(all$site)
   all <- df
   
   #################################
@@ -362,7 +357,7 @@ for (countries in loc.list) {
                       'MOZ', 'MWI', 'CMR', 'CPV',
                       'ERI', 'KEN', 'TGO', 'ZAF',
                       'GHA'))
-    {# Remove site-years with concerning data (see "Checking weird Trends in ANC Data")
+    {
     outlier_pre <- nrow(all)
     all <- subset(all, !(country == "CIV" & site == "MATERNITE HG ABOBO SUD")) #outlier
     all <- subset(all, !(country == "CMR" & site == "Lolodorf" & year == 2012)) #outlier
@@ -374,7 +369,6 @@ for (countries in loc.list) {
     #exact duplicates to reports (zeros)
     all <- subset(all, !(country == "CMR" & site == "Ndop" & year == 2002))
     all <- subset(all, !(country == "CPV" & site == "S.Vicente" & year == 1995))
-    #all <- subset(all, !(country == "ERI" & site == "Akordet" & year == 1995 & data_source == "2017" ))
     all <- subset(all, !(country == "ERI" & site == "Akordet" & year == 2007 ))
     all <- subset(all, !(country == "KEN" & site == "Kisii" & year == 1992  ))
     all <- subset(all, !(country == "TGO" & site == "USP KATINDI" & year == 2011 ))
@@ -399,10 +393,15 @@ for (countries in loc.list) {
     all$n[all$country == "TGO" & all$n == 300] <- 103
     all$n[all$country == "UGA" & all$n == 300] <- 470
     all$n[all$country == "ZWE" & all$n == 300] <- 333
-    
     all$n[all$country == "AGO" & all$n == 500] <- 498
 
     # Only keep variables we need
+    if(!'ihme_loc_id' %in% colnames(all)){
+      all[,ihme_loc_id := countries]
+    }
+    if(!'country' %in% colnames(all)){
+      all[,country := countries]
+    }
     all <- all[,c("country", "subpop", "site",  "year","prev", "n", 'ihme_loc_id', 'type')]
     }
   
@@ -413,8 +412,7 @@ for (countries in loc.list) {
   ####for countries we don't do subnats for we can just keep all data and put into gbd format
   if(countries %in% hiv_locs_nat){ 
   all_mapped <- all
-  # all_mapped$latitude[all_mapped$point == 0] <- NA
-  # all_mapped$longitude[all_mapped$point == 0] <- NA
+
   all_mapped <- transform(all_mapped)
   all_mapped$prev <- all_mapped$prev 
   all_mapped <- unique(all_mapped)
@@ -431,22 +429,14 @@ for (countries in loc.list) {
   anc_point_dat[, age := "15"]
   anc_point_dat[, agspan := "35"]
   ##not sure how to get region
-  #anc_point_dat[, subpop := NA]
   anc_point_dat[, used := TRUE]
   anc_point_dat[, offset := NA]
   anc_site_dat.colnames <- c('site', 'year', 'used', 'prev','n' ,'subpop','type' ,'agegr' ,'age','agspan','offset', 'country', 'ihme_loc_id')
   anc_point_new.dat <- anc_point_dat[,anc_site_dat.colnames, with = FALSE]
-  saveRDS(anc_point_new.dat, file = paste0(output.dir,countries, '.rds'))
+  saveRDS(anc_point_new.dat, file = paste0(anc_no_offset,countries, '.rds'))
   diff_11 <- 0
   }else{
-    ######this removes sites that can't be geomatched, for countries where we do subnats for, should we keep them for nat estimates? 
-    # all_mapped <- subset(all,!is.na(point)) 
-    # all_mapped$latitude[all_mapped$point == 0] <- NA
-    # all_mapped$longitude[all_mapped$point == 0] <- NA
-    # all_mapped <- transform(all_mapped, latitude = as.numeric(as.character(latitude)),
-    #                         longitude = as.numeric(as.character(longitude)))
-    # all_mapped$location_code <- as.numeric(all_mapped$location_code)
-    # all_mapped$source <- paste0("UNAIDS files - ", all_mapped$data_source)
+
     all_mapped <- all
     all_mapped$prev <- all_mapped$prev
     all_mapped <- unique(all_mapped)
@@ -475,14 +465,11 @@ for (countries in loc.list) {
       #anc_point_dat[, type := "ancss"]
       anc_site_dat.colnames <- c('site', 'year', 'used', 'prev','n' ,'subpop','type' ,'agegr' ,'age','agspan','offset', 'country', 'ihme_loc_id')
       anc_point_new.dat <- anc_point_dat[,anc_site_dat.colnames, with = FALSE]
-      saveRDS(anc_point_new.dat, file = paste0(output.dir, countries, '.rds'))
+      saveRDS(anc_point_new.dat, file = paste0(anc_no_offset, countries, '.rds'))
 
     }else{   
       ######get point data
-      # temp_lat_long_code <- lat_long_table[grepl(countries, lat_long_table$ihme_loc_id),]
-      # subnat_all <- merge(all_mapped, temp_lat_long_code, by = c('latitude', 'longitude'))
-      # all_mapped <- as.data.table(subnat_all)
-      # 
+
        anc_point_dat <- as.data.table(all_mapped)
 
       anc_point_dat[, agegr := "15-49"]
@@ -500,7 +487,7 @@ for (countries in loc.list) {
         final_file <- subset(anc_point_new.dat, ihme_loc_id == unique(anc_point_new.dat$ihme_loc_id)[k])
         anc_site_dat.colnames <- c('site', 'year', 'used', 'prev','n' ,'subpop','type' ,'agegr' ,'age','agspan','offset', 'country')
         final_file <- final_file[,anc_site_dat.colnames, with = FALSE]
-        saveRDS(final_file, file = paste0(output.dir, unique(anc_point_new.dat$ihme_loc_id)[k], '.rds'))
+        saveRDS(final_file, file = paste0(anc_no_offset, unique(anc_point_new.dat$ihme_loc_id)[k], '.rds'))
         assign(paste0('diff_11_', k), nrow(final_file))
       }
       }
@@ -508,47 +495,10 @@ for (countries in loc.list) {
 
   }
   
-  # tracking_sheet[[i]] <- unlist(lapply(paste0('diff_', seq(2:11)), get))
-  # nrow_sheet[[i]] <- unlist(lapply(paste0('nrow_', seq(1:11)), get))
+ 
   
 }
 
-tracking_sheet.dt <- do.call(cbind.data.frame, tracking_sheet)
-colnames(tracking_sheet.dt) <- keep$countries
-rownames.tracking.dt <- c('Duplicate observation removed (-)',
-                          'Additional data added (+)',
-                          'Sample size replaced',
-                          'Prevalence replaced',
-                          'TGO duplicates removed (-)',
-                          'Duplicates after additional data is added are removed (-)',
-                          'MOZ pseudosites removed (-)', 
-                          'Non-ANC data removed',
-                          'Differently named duplicates removed (-)',
-                          'Outliers removed (-)',
-                          'Point data added at the subnational level')
-rownames(tracking_sheet.dt) <- rownames.tracking.dt
 
-nrow_sheet.dt <- do.call(cbind.data.frame, nrow_sheet)
-colnames(nrow_sheet.dt) <- keep$countries
-rownames.nrow.dt <- c('Start', 
-                          'Duplicate observation removed (-)',
-                          'Additional data added (+)',
-                          'Sample size replaced',
-                          'Prevalence replaced',
-                          'TGO duplicates removed (-)',
-                          'Duplicates after additional data is added are removed (-)',
-                          'MOZ pseudosites removed (-)', 
-                          'Non-ANC data removed',
-                          'Differently named duplicates removed (-)',
-                          'Outliers removed (-)')
-rownames(nrow_sheet.dt) <- rownames.nrow.dt
-
-
-###################
-#compare to gbd amounts, amounts_ancsitedat
-load('/homes/mwalte10/amounts_old.RData')
-amounts_ancsitedat <- as.data.table(amounts_ancsitedat)
-gbd_amounts <- amounts_ancsitedat[locations %in% keep$countries, ]
-gbd_amounts <- gbd_amounts[,1:2]
 
 
