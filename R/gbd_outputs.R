@@ -192,10 +192,11 @@ get_under1_splits <- function(mod, fp){
   prop.inc[, prop := ifelse(total_infections == 0, 0, new_infections/total_infections)]
   
   split.dt <- data.table(year = yrlbl)
-  split.dt[, enn := prop.inc[transmission == 'perinatal', prop] + (prop.inc[transmission == 'BF0', prop] * (1/26))]
+  ##this is done in months, would be more accurate to do it in days
+  split.dt[, enn := prop.inc[transmission == 'perinatal', prop] + (prop.inc[transmission == 'BF0', prop] * (0.2/6))]
   ## split first 6 months of BF incidence
-  split.dt[, lnn := prop.inc[transmission == 'BF0', prop] * (3/26)]
-  split.dt[, pnn := (prop.inc[transmission == 'BF0', prop] * (22/26)) + prop.inc[transmission == 'BF6', prop]]
+  split.dt[, x_388 := prop.inc[transmission == 'BF0', prop] * (4.8/6)]
+  split.dt[, x_389 := (prop.inc[transmission == 'BF0', prop] * (1/6)) + prop.inc[transmission == 'BF6', prop]]
   return(split.dt)
 }
 
@@ -289,10 +290,53 @@ split_u5_gbd2017 <- function(dt){
   
 }
 
-split_u1 <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd19"){
+split_u1.new_ages <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd20"){
   #change to the new population splits folder
-  pop <- data.table(fread(paste0('/ihme/hiv/epp_input/','gbd19',"/" ,run.name.old, "/population_splits/", loc, '.csv')))
+  pop <- data.table(fread(paste0('/ihme/hiv/epp_input/',gbdyear,"/" ,run.name.new, "/population_splits/", loc, '.csv')))
 
+  u1.pop <- pop[age_group_id %in% c(2,388,389)]
+  u1.pop[,pop_total := sum(population), by = c('sex_id', 'year_id')]
+  u1.pop[,pop_prop := population/sum(population), by = c('sex_id', 'year_id')]
+  ## props for death
+  u1.pop[age_group_id !=2 ,pop_prop_death:= 1]
+  u1.pop[age_group_id==2 ,pop_prop_death:=0]
+  setnames(u1.pop, 'year_id', 'year')
+  u1.pop[,sex := ifelse(sex_id == 1, 'male', 'female')]
+  u1.pop <- u1.pop[,list(sex,year,age_group_id,pop_total,pop_prop,pop_prop_death)]
+  
+  spec_u1 <- merge(dt,u1.pop,by=c("year","sex"), allow.cartesian=T)
+  # Split all variables that can be split by population without age restrictions for 1-4 age cat
+  pop_weight_all <- function(x) return(x*spec_u1[['pop_prop']])
+  all_age_vars <- c("pop_neg","non_hiv_deaths","pop_lt200","pop_200to350","pop_gt350","pop_art","pop")
+  spec_u1[,(all_age_vars) := lapply(.SD,pop_weight_all),.SDcols=all_age_vars] 
+  
+  # Split deaths into ENN and 1-4 age categories
+  pop_weight_death <- function(x) return(x*spec_u1[['pop_prop_death']])
+  death_vars <- c("hiv_deaths")
+  spec_u1[,(death_vars) := lapply(.SD,pop_weight_death),.SDcols=death_vars] 
+  
+  spec_u1[,c("pop_total","pop_prop","pop_prop_death", "age") :=NULL]
+  spec_u1[age_group_id == 2, age := 'enn']
+  spec_u1[age_group_id == 388, age := 'x_388']
+  spec_u1[age_group_id == 389, age := 'x_389']
+  spec_u1[, age_group_id := NULL]
+  
+  ## pull in incidence proportions from eppasm
+  split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/', run.name.new ,'/compiled/', loc, '_under1_splits.csv'))
+  split.dt <- melt(split.dt, id.vars = c('year', 'run_num'))
+  setnames(split.dt, 'variable', 'age')
+  spec_u1 <- merge(spec_u1, split.dt, by = c('year', 'run_num', 'age'))
+  pop_weight_inc <- function(x) return(x*spec_u1[['value']])
+  inc_vars <- c("new_hiv")
+  spec_u1[,(inc_vars) := lapply(.SD,pop_weight_inc),.SDcols=inc_vars] 
+  spec_u1[, value := NULL]
+  
+  return(spec_u1)
+  
+}
+
+split_u1 <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd20"){
+  pop <- fread(paste0('/ihme/hiv/epp_input/gbd19/', run.name.old, "/population_splits/", loc, '.csv'))
   u1.pop <- pop[age_group_id < 5]
   u1.pop[,pop_total := sum(population), by = c('sex_id', 'year_id')]
   u1.pop[,pop_prop := population/sum(population), by = c('sex_id', 'year_id')]
@@ -321,7 +365,7 @@ split_u1 <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd19"){
   spec_u1[, age_group_id := NULL]
   
   ## pull in incidence proportions from eppasm
-  split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/', run.name.new ,'/compiled/', loc, '_under1_splits.csv'))
+  split.dt <- fread(paste0('/share/hiv/epp_output/gbd19/', run.name.old ,'/compiled/', loc, '_under1_splits.csv'))
   split.dt <- melt(split.dt, id.vars = c('year', 'run_num'))
   setnames(split.dt, 'variable', 'age')
   spec_u1 <- merge(spec_u1, split.dt, by = c('year', 'run_num', 'age'))
@@ -334,7 +378,8 @@ split_u1 <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd19"){
   
 }
 
-get_summary <- function(output, loc, run.name.old, run.name.new, paediatric = FALSE){
+
+get_summary <- function(output, loc, run.name.old, run.name.new, paediatric = FALSE, old.splits){
   ## create gbd age groups
   output[age >= 5,age_gbd :=  age - age%%5]
   output[age %in% 1:4, age_gbd := 1]
@@ -351,7 +396,13 @@ get_summary <- function(output, loc, run.name.old, run.name.new, paediatric = FA
 
   setnames(output, 'age_gbd', 'age')
   if(paediatric){
-    output.u1 <- split_u1(output[age == 0], loc, run.name.old, run.name.new)
+    if(old.splits){
+      output.u1 <- split_u1(output[age == 0], loc, run.name.old, run.name.new)
+      
+    }else{
+      output.u1 <- split_u1.new_ages(output[age == 0], loc, run.name.old, run.name.new)
+      
+    }
     output <- output[age != 0]
     output <- rbind(output, output.u1, use.names = T)    
   }
@@ -365,8 +416,14 @@ get_summary <- function(output, loc, run.name.old, run.name.new, paediatric = FA
     
   }
   
-
-  age.map <- fread(paste0('/ihme/hiv/epp_input/gbd19', '/', run.name.old, "/age_map.csv"))
+  if(old.splits){
+    age.map <- fread(paste0('/ihme/hiv/epp_input/gbd19', '/', run.name.old, "/age_map.csv"))
+    
+  }else{
+    age.map <- fread(paste0('/ihme/hiv/epp_input/gbd20', '/', run.name.new, "/age_map.csv"))
+    age.map[age_group_id == 388, age_group_name_short := 'x_388']
+    age.map[age_group_id == 389, age_group_name_short := 'x_389']
+  }
   age.map[age_group_name_short == 'All', age_group_name_short := 'All']
   if(!paediatric){
     age.spec <- age.map[age_group_id %in% 8:21,.(age_group_id, age = age_group_name_short)]
@@ -434,7 +491,8 @@ get_summary <- function(output, loc, run.name.old, run.name.new, paediatric = FA
   out.dt[variable == 'hivpop', variable := 'Prevalence']
   setnames(out.dt, 'variable', 'measure')
   age.map <- rbind(age.map[,.(age_group_id, age_group_name_short)], data.table(age_group_id = 24, age_group_name_short = '15 to 49'))
-  out.dt <- merge(out.dt, age.map[,.(age_group_id, age = age_group_name_short)], by = 'age_group_id')
+  ##STOP MAGGIE
+  out.dt <- merge(out.dt, age.map[,.(age_group_id, age = age_group_name_short)], by = 'age_group_id', allow.cartesian = TRUE)
   out.dt <- out.dt[,.(mean = mean(value), lower = quantile(value, 0.025), upper = quantile(value, 0.975)), by = c('age_group_id', 'sex', 'year', 'measure', 'metric', 'age')]
   return(out.dt)
   }

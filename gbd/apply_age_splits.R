@@ -12,16 +12,16 @@ if(length(args) > 0) {
   run.name <- args[2]
   spec.name <- args[3]
 } else {
-  loc <- "MDG"
-  run.name <- "190630_rhino2"
+  loc <- "MWI"
+  run.name <- "191224_trumpet"
   spec.name <- "190630_rhino_combined"
 
 }
 fill.draw <- T
 fill.na <- T
-
+gbdyear <- 'gbd20'
 ### Paths
-eppasm_dir <- paste0('/share/hiv/epp_output/gbd19/', run.name, '/')
+eppasm_dir <- paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/')
 out_dir <- paste0("/ihme/hiv/spectrum_prepped/art_draws/",spec.name)
 dir.create(out_dir, recursive = T, showWarnings = F)
 out_dir_death <- paste0("/ihme/hiv/spectrum_prepped/death_draws/",spec.name)
@@ -41,8 +41,10 @@ devtools::load_all()
 
 ## Libraries etc.
 library(data.table); library(foreign); library(assertable)
-age_map <- data.table(fread("/ihme/hiv/spectrum_prepped/age_map.csv"))
-age_map <- age_map[(age_group_id>=2 & age_group_id <=21) ,list(age_group_id,age=age_group_name_short)]
+age_map <- data.table(fread(paste0('/ihme/hiv/epp_input/', gbdyear, '/', run.name, "/age_map.csv")))
+age_map <- age_map[(age_group_id %in% c(2, 34, 49, 388, 389, seq(6,21))) ,list(age_group_id,age=age_group_name_short)]
+age_map[age == 1,age_group_id := 238]
+
 
 ## Create a map to scramble draws from Spectrum
 locations <- data.table(get_locations(hiv_metadata = T))
@@ -112,7 +114,7 @@ spec_draw[, suscept_pop := pop_neg]
 
 
 ## Calculate birth prevalence rate
-birth_pop <- get_population(age_group_id=164, location_id=loc_id, year_id=1970:2019, sex_id=1:2, gbd_round_id = 6, decomp_step = 'step4')
+birth_pop <- get_population(age_group_id=164, location_id=loc_id, year_id=1970:2022, sex_id=1:2, gbd_round_id = 7, decomp_step = 'step1')
 setnames(birth_pop, c("year_id", "population"), c("year", "gbd_pop"))
 birth_dt <- copy(spec_draw)
 birth_dt <- birth_dt[,.(age_group_id = 164, birth_prev = sum(birth_prev), total_births = sum(total_births)), by = c('year', 'run_num', 'sex_id')]
@@ -129,7 +131,7 @@ spec_o80 <- data.table(spec_draw[age_group_id==21,])
 spec_o80[, age_group_id := NULL]
 
 # Get raw proportions for splitting populations and other general ones
-pop <- fread(paste0('/share/hiv/epp_input/gbd19/', run.name, '/population_splits/', loc, '.csv'))
+pop <- fread(paste0('/share/hiv/epp_input/gbd20/', run.name, '/population_splits/', loc, '.csv'))
 o80_pop <- pop[age_group_id %in% c(30:32, 235),]
 o80_pop[,pop_total:=sum(population), by=list(sex_id,year_id)]
 o80_pop[,pop_prop:=population/pop_total, by=list(sex_id,year_id)]
@@ -215,10 +217,7 @@ print(spec_combined)
 ## Format and Output
 setnames(spec_combined,"year","year_id")
 
-##This is a fluke in gbd2019 that we get negative values - need to figure out how it could happen
-if(loc == "KEN_44796" | loc == "KEN_35646"){
-  spec_combined[run_num==880 & year_id==2019 & sex_id==2 & age_group_id==13,pop_lt200:=0]
-}
+
 
 print(head(spec_combined))
 assert_values(spec_combined, names(spec_combined), "gte", 0)

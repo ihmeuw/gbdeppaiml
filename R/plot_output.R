@@ -141,7 +141,7 @@ plot_15to49 <- function(loc="IND_4854", run.name.old="190630_rhino2",  compare.r
     compare.run <- '190630_rhino2'
     if(!is.na(compare.run)){
       compare.dt <- fread(paste0('/share/hiv/epp_output/gbd19/', compare.run, '/compiled/', loc, '.csv'))
-      compare.dt <- get_summary(compare.dt, loc, run.name.old = compare.run, run.name.new = new.run, paediatric)
+      compare.dt <- get_summary(compare.dt, loc, run.name.old = compare.run, run.name.new = new.run, paediatric, old.splits = T)
       compare.dt <- compare.dt[age_group_id == 24 & sex == 'both' & measure %in% meas.list & metric == "Rate",.(type = 'line', year, indicator = measure, model = compare.run, mean, lower, upper)]
     }else{compare.dt = NULL}
 
@@ -178,7 +178,7 @@ plot_15to49 <- function(loc="IND_4854", run.name.old="190630_rhino2",  compare.r
   data[, c('sex', 'age') := NULL]
   compare.run <- '190630_rhino2'
   
-  cur.dt <- get_summary(cur.dt, loc, run.name.old = compare.run, run.name.new = new.run,  paediatric)
+  cur.dt <- get_summary(cur.dt, loc, run.name.old = compare.run, run.name.new = new.run,  paediatric, old.splits = F)
   cur.dt <- cur.dt[age_group_id == 24 & sex == 'both' & measure %in% meas.list & metric == "Rate",.(type = 'line', year, indicator = measure, model = run.name, mean, lower, upper)]
   
 
@@ -411,7 +411,7 @@ plot_age_specific <- function(loc, run.name.old, compare.run = '191002_sitar', p
   compare.run <- '190630_rhino2'
   if(!is.na(compare.run)){
     compare.dt <- fread(paste0('/share/hiv/epp_output/gbd19/', compare.run, '/compiled/', loc, '.csv'))
-    compare.dt <- get_summary(compare.dt, loc, compare.run, paediatric)
+    compare.dt <- get_summary(compare.dt, loc, compare.run, paediatric, old.splits = T)
     compare.dt <- compare.dt[measure %in% c('Incidence', 'Prevalence', 'Deaths') & metric == c.metric,
                              .(age, sex, type = 'line', year, indicator = measure, model = compare.run, mean, lower, upper)]
   }else{compare.dt = NULL} 
@@ -427,7 +427,7 @@ plot_age_specific <- function(loc, run.name.old, compare.run = '191002_sitar', p
   }
   
   cur.dt <- fread(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name.new, '/compiled/', loc, '.csv'))
-  cur.dt <- get_summary(cur.dt,  loc, run.name.old = run.name.old, run.name.new = run.name.new, paediatric)
+  cur.dt <- get_summary(cur.dt,  loc, run.name.old = run.name.old, run.name.new = run.name.new, paediatric, old.splits = F)
 
   cur.dt <- cur.dt[measure %in% c('Incidence', 'Prevalence', 'Deaths') & metric == c.metric,
                    .(age, sex, type = 'line', year, indicator = measure, model = run.name, mean, lower, upper)]
