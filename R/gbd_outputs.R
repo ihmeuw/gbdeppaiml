@@ -193,10 +193,11 @@ get_under1_splits <- function(mod, fp){
   
   split.dt <- data.table(year = yrlbl)
   ##this is done in months, would be more accurate to do it in days
-  split.dt[, enn := prop.inc[transmission == 'perinatal', prop] + (prop.inc[transmission == 'BF0', prop] * (0.2/6))]
+  split.dt[, enn := prop.inc[transmission == 'perinatal', prop] + (prop.inc[transmission == 'BF0', prop] * (1/26))]
   ## split first 6 months of BF incidence
-  split.dt[, x_388 := prop.inc[transmission == 'BF0', prop] * (4.8/6)]
-  split.dt[, x_389 := (prop.inc[transmission == 'BF0', prop] * (1/6)) + prop.inc[transmission == 'BF6', prop]]
+  split.dt[, lnn := (prop.inc[transmission == 'BF0', prop] * (3/26))]
+  split.dt[, x_388 := prop.inc[transmission == 'BF0', prop] * (22/26)]
+  split.dt[, x_389 :=  prop.inc[transmission == 'BF6', prop]]
   return(split.dt)
 }
 
@@ -294,12 +295,12 @@ split_u1.new_ages <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd2
   #change to the new population splits folder
   pop <- data.table(fread(paste0('/ihme/hiv/epp_input/',gbdyear,"/" ,run.name.new, "/population_splits/", loc, '.csv')))
 
-  u1.pop <- pop[age_group_id %in% c(2,388,389)]
+  u1.pop <- pop[age_group_id %in% c(2,3,388,389)]
   u1.pop[,pop_total := sum(population), by = c('sex_id', 'year_id')]
   u1.pop[,pop_prop := population/sum(population), by = c('sex_id', 'year_id')]
   ## props for death
-  u1.pop[age_group_id !=2 ,pop_prop_death:= 1]
-  u1.pop[age_group_id==2 ,pop_prop_death:=0]
+  u1.pop[age_group_id !=2 & age_group_id != 3,pop_prop_death:= 1]
+  u1.pop[age_group_id==2 | age_group_id == 3 ,pop_prop_death:=0]
   setnames(u1.pop, 'year_id', 'year')
   u1.pop[,sex := ifelse(sex_id == 1, 'male', 'female')]
   u1.pop <- u1.pop[,list(sex,year,age_group_id,pop_total,pop_prop,pop_prop_death)]
@@ -317,6 +318,7 @@ split_u1.new_ages <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd2
   
   spec_u1[,c("pop_total","pop_prop","pop_prop_death", "age") :=NULL]
   spec_u1[age_group_id == 2, age := 'enn']
+  spec_u1[age_group_id == 3, age := 'lnn']
   spec_u1[age_group_id == 388, age := 'x_388']
   spec_u1[age_group_id == 389, age := 'x_389']
   spec_u1[, age_group_id := NULL]
@@ -429,7 +431,7 @@ get_summary <- function(output, loc, run.name.old, run.name.new, paediatric = FA
     age.spec <- age.map[age_group_id %in% 8:21,.(age_group_id, age = age_group_name_short)]
     age.spec[, age := as.integer(age)]
   }else{
-    age.spec <- age.map[age_group_id %in% c(2:21),.(age_group_id, age = age_group_name_short)]
+    age.spec <- age.map[age_group_id %in% c(2:21, 388, 389),.(age_group_id, age = age_group_name_short)]
   }
   output.count <- merge(output.count, age.spec, by = 'age')
   output.count[, age := NULL]

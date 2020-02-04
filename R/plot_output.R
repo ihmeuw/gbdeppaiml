@@ -343,12 +343,12 @@ plot_spec_compare <- function(loc, run.name, paediatric = FALSE, c.metric = 'Rat
   }
 }
 
-plot_age_specific <- function(loc, run.name.old, compare.run = '191002_sitar', paediatric = FALSE, c.metric = 'Rate', run.name.new){
+plot_age_specific <- function(loc, run.name.old, compare.run = '191002_sitar', paediatric = TRUE, c.metric = 'Rate', run.name.new){
   ##will need to be changed
-  age.map <- fread(paste0('/ihme/hiv/epp_input/gbd19/', run.name.old, "/age_map.csv"))
+  age.map.old <- fread(paste0('/ihme/hiv/epp_input/gbd19/', run.name.old, "/age_map.csv"))
   if(loc %in% loc.table[grepl("IND",ihme_loc_id) & epp != 1,ihme_loc_id]){
     parent_id1 <- loc.table[ihme_loc_id==loc,parent_id]
-    loc1 <- loc.table[location_id==parent_id1,ihme_loc_id]
+    loc1 <- loc.table.old[location_id==parent_id1,ihme_loc_id]
     data <- fread(paste0('/share/hiv/epp_input/gbd19/', run.name.old, '/fit_data/', loc1, '.csv'))
   } else {
     data <- fread(paste0('/share/hiv/epp_input/gbd19/', run.name.old, '/fit_data/', loc, '.csv'))
@@ -380,7 +380,7 @@ plot_age_specific <- function(loc, run.name.old, compare.run = '191002_sitar', p
     stgpr <- fread('/ihme/hiv/st_gpr/spectrum_gpr_results.csv')
     stgpr <- stgpr[location_id == loc.table[ihme_loc_id == loc, location_id] & age_group_id %in% 8:22, .(age_group_id, year = year_id, sex = ifelse(sex_id == 1, 'male', 'female'), mean = gpr_mean / 100, type = 'line',
                                                                                                          lower = NA, upper = NA, model = 'STGPR', indicator = 'Deaths')]
-    stgpr <- merge(stgpr, age.map[,.(age_group_id, age = age_group_name_short)], by = 'age_group_id')
+    stgpr <- merge(stgpr, age.map.old[,.(age_group_id, age = age_group_name_short)], by = 'age_group_id')
     if(c.metric == 'Count'){
       pop.dt <- fread(paste0('/share/hiv/epp_input/gbd20/', run.name.old, '/population/', loc, '.csv'))
       setnames(pop.dt, 'year_id', 'year')
@@ -398,7 +398,7 @@ plot_age_specific <- function(loc, run.name.old, compare.run = '191002_sitar', p
   if(file.exists(paste0('/snfs1/WORK/04_epi/01_database/02_data/hiv/spectrum/summary/180702_numbat_combined/locations/', loc, '_spectrum_prep.csv'))){
     compare.dt.17 <- fread(paste0('/snfs1/WORK/04_epi/01_database/02_data/hiv/spectrum/summary/180702_numbat_combined/locations/', loc, '_spectrum_prep.csv'))
     compare.dt.17 <- compare.dt.17[!age_group_id > 24 & measure %in% c('Incidence', 'Prevalence', 'Deaths') & metric == c.metric]
-    compare.dt.17 <- merge(compare.dt.17, age.map[,.(age_group_id,age = age_group_name_short)], by = 'age_group_id', all.x = T)
+    compare.dt.17 <- merge(compare.dt.17, age.map.old[,.(age_group_id,age = age_group_name_short)], by = 'age_group_id', all.x = T)
     compare.dt.17[sex_id == 1, sex := 'male']
     compare.dt.17[sex_id == 2, sex := 'female']
     compare.dt.17[sex_id == 3, sex := 'both']
@@ -427,6 +427,7 @@ plot_age_specific <- function(loc, run.name.old, compare.run = '191002_sitar', p
   }
   
   cur.dt <- fread(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name.new, '/compiled/', loc, '.csv'))
+  old.splits = F
   cur.dt <- get_summary(cur.dt,  loc, run.name.old = run.name.old, run.name.new = run.name.new, paediatric, old.splits = F)
 
   cur.dt <- cur.dt[measure %in% c('Incidence', 'Prevalence', 'Deaths') & metric == c.metric,
@@ -441,7 +442,15 @@ plot_age_specific <- function(loc, run.name.old, compare.run = '191002_sitar', p
     both.dt <- both.dt[!age %in% c('enn', 'lnn', 'pnn', '1', '5','10'),]
     both.dt[,age := factor(age, levels=c(paste0(seq(15, 80, 5)), 'All', '15 to 49'))]
   }else{
-    both.dt[,age := factor(age, levels=c('enn', 'lnn', 'pnn', '1', paste0( seq(5, 80, 5)), 'All', '15 to 49'))]
+    if(!old.splits){
+      both.dt <- both.dt[age != '15-49',]
+      
+      both.dt[,age := factor(age, levels=c('enn', 'lnn', 'x_388', 'x_389', '1', paste0( seq(5, 80, 5)), 'All', '15 to 49'))]
+      
+    }else{
+      both.dt[,age := factor(age, levels=c('enn', 'lnn', 'pnn', '1', paste0( seq(5, 80, 5)), 'All', '15 to 49'))]
+      
+    }
   }
   
   for(c.indicator in c('Incidence', 'Prevalence', 'Deaths')){

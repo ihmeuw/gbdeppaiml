@@ -115,22 +115,29 @@ for (countries in loc.list) {
           
         }
   
-  if(!exists("df.2019") | !use_2019){
-    df.2019 <- NULL
-  }
-  if(!exists("df.2018") | !use_2018){
-    df.2018 <- NULL
-  }
-  if(!exists("df.subpop") | !use_subpop){
-    df.subpop <- NULL
-  }
-  if(!exists("df.prepped") | !use_prepped){
-    df.prepped <- NULL
-  }
   
-  df <- rbind(df.2019, df.2018, df.subpop, df.prepped)
-  df <- as.data.table(df)
-  
+  if(countries == 'SWZ'){
+    df <- data.table(df.2018)
+  }else{
+    if(!exists("df.2019") | !use_2019){
+      df.2019 <- NULL
+    }
+    if(!exists("df.2018") | !use_2018){
+      df.2018 <- NULL
+    }
+    if(!exists("df.subpop") | !use_subpop){
+      df.subpop <- NULL
+    }
+    if(!exists("df.prepped") | !use_prepped){
+      df.prepped <- NULL
+    }
+    
+    df <- rbind(df.2019, df.2018, df.subpop, df.prepped)
+    df <- as.data.table(df)
+  }
+
+  df[,country := countries]
+  df[,ihme_loc_id := countries]
   df$country <- countries
   df$ihme_loc_id <- countries
   

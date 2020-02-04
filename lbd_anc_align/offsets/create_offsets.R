@@ -211,6 +211,9 @@ if(grepl('ETH', loc) | grepl('KEN', loc) | grepl('NGA', loc)){
 }else{
   lbd.anc <- lbd.anc[iso3==loc]
 }
+if(loc == 'ZMB'){
+  lbd.anc <- lbd.anc[is.na(iso3_adm1)]
+}
 all.dat <- merge(all.dat,lbd.anc,by = c('site', 'year'),all.x=TRUE)
 if(grepl('ETH', loc) | grepl('KEN', loc) | grepl('NGA', loc)){
   all.dat <- all.dat[,iso3 := iso3_adm1]
@@ -408,6 +411,7 @@ merge_on <- intersect(colnames(gbd.anc), colnames(lbd.anc))
 merge_on <- merge_on[which(merge_on != 'source')]
 merge_on <- merge_on[which(merge_on != 'prev')]
 lbd.anc[,prev:=NULL]
+lbd.anc[,type := 'ancss']
 
 
 both.dt <- list()

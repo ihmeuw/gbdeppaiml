@@ -10,8 +10,8 @@ if(length(args) > 0) {
   loc <- args[3]
 } else {
   new_fp <- 'gbd20/191224_trumpet'
-  old_fp <- 'gbd19/190630_rhino'
-  loc <- 'AGO'
+  old_fp <- 'gbd19/190630_rhino2'
+  loc <- 'MDG'
 }
 
 diag_dir <- paste0('/ihme/hiv/epp_output/', new_fp, '/diagnostic/')
@@ -74,23 +74,23 @@ diff_arise <- function(new_fp = 'gbd20/191224_trumpet', old_fp = 'gbd19/190630_r
   raw_new <- intersect(raw.prevyear, new.prevyear)
   old_new <- intersect(old.prevyear, new.prevyear)
   
-  all <- intersect(old_new, raw_old)
+  all.x <- intersect(old_new, raw_old)
   
-  all <- raw[prev_year %in% all, .(year, prev)]
+  all <- raw[prev_year %in% all.x, .(year, prev)]
   all[,source:='all']
   all[,used := factor(1)]
   
-  raw_old <- raw[prev_year %in% raw_old, .(year, prev)]
+  raw_old <- raw[prev_year %in% setdiff(raw_old, all.x), .(year, prev)]
   raw_old[,source := 'raw_old']
   raw_old[,used := factor(0)]
   
   
-  raw_new <- raw[prev_year %in% raw_new, .(year, prev)]
+  raw_new <- raw[prev_year %in% setdiff(raw_new, all.x), .(year, prev)]
   raw_new[,source := 'raw_new']
   raw_new[,used := factor(1)]
   
   
-  old_new <- old[prev_year %in% old_new, .(year, prev)]
+  old_new <- old[prev_year %in% setdiff(old_new, all.x), .(year, prev)]
   old_new[,source := 'old_new']
   old_new[,used := factor(1)]
   
@@ -112,7 +112,6 @@ diff_arise <- function(new_fp = 'gbd20/191224_trumpet', old_fp = 'gbd19/190630_r
   
   final <- rbind(all, raw.only, old.only, new.only, raw_new, raw_old, old_new)
   final[,used := factor(used)]
-  final <- rbind(unique(final[source != 'all']), unique(final[source == 'all']))
 
   pdf(file = paste0('/ihme/hiv/epp_output/', new_fp, '/diagnostic/', loc, '.pdf'), width = 10, height = 6)
   

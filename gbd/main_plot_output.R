@@ -21,7 +21,7 @@ if(length(args) > 0) {
   }
 } else {
   run.name <- "191224_trumpet"
-  loc <- "AGO"
+  loc <- "DJI"
   draw.fill <- TRUE
 
   paediatric <- TRUE
@@ -43,10 +43,11 @@ devtools::load_all()
 
 
 loc.table <- fread(paste0('/share/hiv/epp_input/gbd20/', run.name, '/location_table.csv'))
+loc.table.old <- fread(paste0('/share/hiv/epp_input/gbd19/', run.name.old, '/location_table.csv'))
 # 
-## 15-49 plots
+# ## 15-49 plots
 dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/15to49_plots/'), recursive = TRUE, showWarnings = FALSE)
-plot_15to49(loc,new.run = run.name, run.name.old = run.name.old, paediatric, plot.deaths = FALSE, compare.stage2 = F)
+plot_15to49(loc,new.run = run.name, run.name.old = run.name.old, paediatric, plot.deaths = TRUE, compare.stage2 = F)
 
 # Age-specific plots
 for(c.indicator in c( 'Prevalence','Incidence','Deaths')){

@@ -128,9 +128,7 @@ if(redo_offsets){
 
 
 ## Launch EPP
-loc.list <- c('AGO', 'CAF', 'CIV', 'HTI', 'DOM', 'LSO',
-              'CPV', 'NAM', 'NER', 'CMR', loc.list[grepl('KEN', loc.list)],
-              'SWZ', 'COD' )
+
 for(loc in loc.list) {    ## Run EPPASM
 # # 
 #     epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q all.q -P ", cluster.project, " ",
@@ -144,7 +142,7 @@ for(loc in loc.list) {    ## Run EPPASM
 #                          run.name, " ", loc, " ", proj.end, " ", paediatric)
 #     print(epp.string)
 #     system(epp.string)
-# # 
+# #
 # 
 #     #Draw compilation
 #     draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
@@ -157,7 +155,7 @@ for(loc in loc.list) {    ## Run EPPASM
 #                           run.name, " ", loc, ' ', n.draws, ' TRUE ', paediatric)
 #     print(draw.string)
 #     system(draw.string)
-#
+# #
     plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
                           "-e /share/homes/", user, "/errors ",
                           "-o /share/temp/sgeoutput/", user, "/output ",
@@ -179,7 +177,7 @@ for(loc in loc.list) {    ## Run EPPASM
     #                       'gbd20/191224_trumpet', ' ', 'gbd19/190630_rhino2', ' ', loc)
     # print(diagnostic.string)
     # system(diagnostic.string)
-    # 
+
     # 
 
  
