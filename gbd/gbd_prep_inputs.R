@@ -16,7 +16,6 @@ if(length(args) > 0) {
 } else {
 	run.name <- "200119_ukelele"
 	proj.end <- 2022
-
 	run.group2 <- FALSE
 	decomp.step <- "step3"
 }
@@ -33,9 +32,11 @@ source('/ihme/cc_resources/libraries/current/r/get_cod_data.R')
 
 ## Locations
 loc.table <- get_locations(hiv_metadata = TRUE)
-age.map <- get_age_map()
+
+write.csv(loc.table, paste0(out.dir, 'location_table.csv'), row.names = F)
+age.map <- get_age_map(type = 'envelope')
 write.csv(age.map, paste0(out.dir, 'age_map.csv'), row.names = F)
-source("/home/j/temp/central_comp/libraries/current/r/get_ids.R")
+source( "/ihme/cc_resources/libraries/current/r/get_ids.R")
 
 if(run.group2){
   ## Prep inputs for all estimation locations
@@ -55,12 +56,19 @@ parent.locs <- loc.table[location_id %in% parent.locs,location_id]
 
 ## Population
 #####NEED POPULATION UPDATE
-pop.all <- get_population(age_group_id = c(28, 49:127), location_id = c(epp.locs, parent.locs), 
-                          year_id = seq(1970, proj.end), gbd_round_id = 7, sex_id = 1:2, single_year_age = T, decomp_step = 'step1')
-pop.o80 <- get_population(age_group_id = c( 21), location_id = c(epp.locs, parent.locs), 
-                          year_id = seq(1970, proj.end), gbd_round_id = 7, sex_id = 1:2, decomp_step = 'step1')
 
-pop.all <- rbind(pop.all, pop.o80, use.names = T)
+pop.all <- get_population(age_group_id = c(28, 50:127, 238), location_id = c(epp.locs, parent.locs), year_id = seq(1970, proj.end), gbd_round_id = 7, sex_id = 1:2, single_year_age = T, decomp_step = 'step1')
+
+# pop.all.20 <- pop.all[year_id == 2019,]
+# pop.all.20[,year_id := rep(2020, nrow(pop.all.20))] 
+# pop.all <- rbind(pop.all, pop.all.20)
+## this is a separate call because you can't get 80+ with single_age_pop = TRUE
+pop.o80 <- get_population(age_group_id = c( 21), location_id = c(epp.locs, parent.locs), year_id = seq(1970, proj.end), gbd_round_id = 7, sex_id = 1:2, decomp_step = 'step1')
+# pop.o80.20 <- pop.o80[year_id == 2019,]
+# pop.o80.20[,year_id := rep(2020, nrow(pop.o80.20))] 
+# pop.o80 <- rbind(pop.o80, pop.o80.20)
+
+pop.all <- rbind(pop.all,  pop.o80, use.names = T)
 dir.create(paste0(out.dir, '/population_single_age'), showWarnings = F)
 invisible(lapply(c(epp.locs, parent.locs), function(c.location_id) {
   out.pop <- copy(pop.all[location_id == c.location_id])
@@ -100,7 +108,7 @@ invisible(lapply(c(epp.locs, parent.locs), function(c.location_id) {
   write.csv(out.pop, paste0(out.dir, '/population/', c.iso, ".csv"), row.names = F)
 }))
 
-pop.splits <- get_population(age_group_id = c(2:5, 30:32, 235), location_id = epp.locs, year_id = seq(1970, proj.end), gbd_round_id = 7, sex_id = 1:2, decomp_step = 'step1')
+pop.splits <- get_population(age_group_id = c(2,3,30,31,32,34,235,238,388,389), location_id = epp.locs, year_id = seq(1970, proj.end), gbd_round_id = 7, sex_id = 1:2, decomp_step = 'step1')
 # pop.splits.20 <- pop.splits[year_id == 2019,]
 # pop.splits.20[,year_id := rep(2020, nrow(pop.splits.20))] 
 # pop.splits <- rbind(pop.splits, pop.splits.20)

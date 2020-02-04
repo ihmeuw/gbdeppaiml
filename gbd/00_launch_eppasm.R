@@ -25,6 +25,7 @@ est_India <- FALSE
 reckon_prep <- TRUE
 decomp.step <- "step3"
 gbdyear <- "gbd20"
+redo_offsets <- F
 
 ### Paths
 input.dir <- paste0("/ihme/hiv/epp_input/", gbdyear, '/', run.name, "/")
@@ -111,9 +112,26 @@ if(!file.exists(paste0(input.dir, 'art_prop.csv'))){
   system(prop.job)
 }
 
+
+if(redo_offsets){
+  redo_offsets.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q all.q -P ", cluster.project, " ",
+                       "-e /share/homes/", user, "/errors ",
+                       "-o /share/temp/sgeoutput/", user, "/output ",
+                       "-N ",  "redo_offsets ",
+                       code.dir, "gbd/singR_shell.sh ",
+                       code.dir, "lbd_anc_align/launch_lbd_process.R ",
+                       ##191224_trumpet is a placeholder for the old run
+                       run.name, '191224_trumpet')
+  print(redo_offsets.string)
+  system(redo_offsets.string)
+}
+
+
 ## Launch EPP
+
 for(loc in loc.list) {    ## Run EPPASM
-# 
+# # 
+
     epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q all.q -P ", cluster.project, " ",
                          "-e /share/temp/sgeoutput/", user, "/errors ",
                          "-o /share/temp/sgeoutput/", user, "/output ",
@@ -139,6 +157,7 @@ for(loc in loc.list) {    ## Run EPPASM
     print(draw.string)
     system(draw.string)
   
+
     plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
                           "-e /share/temp/sgeoutput/", user, "/errors ",
                           "-o /share/temp/sgeoutput/", user, "/output ",
@@ -149,7 +168,19 @@ for(loc in loc.list) {    ## Run EPPASM
                           loc, " ", run.name, ' ', paediatric, ' ', compare.run)
     print(plot.string)
     system(plot.string)
+    # 
+    # diagnostic.string <- paste0("qsub -l m_mem_free=5G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
+    #                       "-e /share/homes/", user, "/errors ",
+    #                       "-o /share/temp/sgeoutput/", user, "/output ",
+    #                       "-N ", loc, "_diagnostic_eppasm ",
+    #                       "-hold_jid ", loc, "_eppasm ",
+    #                       code.dir, "gbd/singR_shell.sh ",
+    #                       code.dir, "lbd_anc_align/check_diff_plot.R ",
+    #                       'gbd20/191224_trumpet', ' ', 'gbd19/190630_rhino2', ' ', loc)
+    # print(diagnostic.string)
+    # system(diagnostic.string)
 
+    # 
 
  
      

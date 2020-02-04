@@ -36,7 +36,10 @@ anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE){
   # }
 
   if(lbd.anc){
-      replace <- as.data.table(readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/2019/offset/', loc, '.rds')))
+      replace <- as.data.table(readRDS(paste0('/share/hiv/data/PJNZ_prepped/lbd_anc/2019/', loc, '.rds')))
+      if(!geoadjust){
+        replace[,offset := NULL]
+      }
       replace[,'age' := as.numeric(replace[,age])]
       replace[,'agspan' := as.numeric(replace[,agspan])]
       replace[,'site' := as.character(replace[,site])]

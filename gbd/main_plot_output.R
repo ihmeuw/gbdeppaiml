@@ -22,6 +22,7 @@ if(length(args) > 0) {
 } else {
   run.name <- "200119_ukelele"
   loc <- "STP"
+
   draw.fill <- TRUE
 
   paediatric <- TRUE
@@ -39,11 +40,17 @@ devtools::load_all()
 setwd(code.dir)
 devtools::load_all()
 
-loc.table <- get_locations(hiv_metadata = TRUE)
+
+
+
+
+
+loc.table <- fread(paste0('/share/hiv/epp_input/gbd20/', run.name, '/location_table.csv'))
+loc.table.old <- fread(paste0('/share/hiv/epp_input/gbd19/', run.name.old, '/location_table.csv'))
 # 
-## 15-49 plots
+# ## 15-49 plots
 dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/15to49_plots/'), recursive = TRUE, showWarnings = FALSE)
-plot_15to49(loc, new.run = run.name, plot.deaths = TRUE, compare.gbd17 = TRUE, paediatric=paediatric,  compare.stage2 = F)
+plot_15to49(loc,new.run = run.name, run.name.old = run.name.old, paediatric, plot.deaths = TRUE, compare.stage2 = F)
 
 #Age-specific plots
 for(c.indicator in c( 'Prevalence','Incidence','Deaths')){
@@ -159,21 +166,4 @@ plot_age_specific(loc, run.name=run.name,  paediatric=TRUE, gbd_year_new = "gbd2
 
 
 
-
-<<<<<<< HEAD
-=======
-
-
-
-
-
-
-
-
-
-
-
-
-
->>>>>>> 2019_decomp4
 
