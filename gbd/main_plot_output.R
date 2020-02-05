@@ -21,7 +21,7 @@ if(length(args) > 0) {
   }
 } else {
   run.name <- "191224_trumpet"
-  loc <- "DJI"
+  loc <- "BFA"
   draw.fill <- TRUE
 
   paediatric <- TRUE
@@ -163,21 +163,4 @@ plot_birthprev(loc,run.name.new =  run.name, run.name.old = run.name.old)
 
 
 
-
-<<<<<<< HEAD
-=======
-
-
-
-
-
-
-
-
-
-
-
-
-
->>>>>>> 2019_decomp4
 

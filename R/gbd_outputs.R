@@ -425,13 +425,16 @@ get_summary <- function(output, loc, run.name.old, run.name.new, paediatric = FA
     age.map <- fread(paste0('/ihme/hiv/epp_input/gbd20', '/', run.name.new, "/age_map.csv"))
     age.map[age_group_id == 388, age_group_name_short := 'x_388']
     age.map[age_group_id == 389, age_group_name_short := 'x_389']
+    age.map[age_group_id == 49, age_group_id := 238]
+    age.map[age_group_id == 238, age_group_name_short := 1]
+    
   }
   age.map[age_group_name_short == 'All', age_group_name_short := 'All']
   if(!paediatric){
     age.spec <- age.map[age_group_id %in% 8:21,.(age_group_id, age = age_group_name_short)]
     age.spec[, age := as.integer(age)]
   }else{
-    age.spec <- age.map[age_group_id %in% c(2:21, 388, 389),.(age_group_id, age = age_group_name_short)]
+    age.spec <- age.map[age_group_id %in% c(2, 3, 6:21, 34, 388, 389, 238),.(age_group_id, age = age_group_name_short)]
   }
   output.count <- merge(output.count, age.spec, by = 'age')
   output.count[, age := NULL]

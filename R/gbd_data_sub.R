@@ -745,9 +745,16 @@ sub.prev.granular <- function(dt, loc){
   age.prev.dt <- age.prev.dt[iso3 == loc]
   age.prev.dt[,loc_year := paste0(iso3, '_', year)]
   
+  ##removecopied site years and copied sexes
   copied_site_years <- intersect(age.prev.dt[age_year %in% c("15"), unique(loc_year)], age.prev.dt[age_year %in% c("15-49"), unique(loc_year)])
   age.prev.dt <- age.prev.dt[loc_year %in% copied_site_years & (age_year %in% c('15-49', '15-64')), age_year := 'drop']
   age.prev.dt <- age.prev.dt[age_year != 'drop',]
+  if(!'sex' %in% colnames(age.prev.dt)){
+   age.prev.dt <-  age.prev.dt[sex_id != 3,]
+  }else{
+    age.prev.dt <- age.prev.dt[sex != 'both',]
+    
+  }
   # 
 
 

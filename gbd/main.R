@@ -21,12 +21,11 @@ if(length(args) > 0) {
   paediatric <- as.logical(args[4])
 } else {
 	run.name <- '191224_trumpet'
-	loc <- 'BFA'
+	loc <- 'MOZ'
 	stop.year <- 2022
 	j <- 1
 	paediatric <- TRUE
 }
-
 
 run.table <- fread(paste0('/share/hiv/epp_input/gbd20/',run.name,'/eppasm_run_table.csv'))
 c.args <- run.table[run_name==run.name]
@@ -98,6 +97,12 @@ dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
                        sexincrr.sub = TRUE,  age.prev = age.prev, paediatric = TRUE, 
                        anc.prior.sub = TRUE, lbd.anc, geoadjust = geoadjust, use_2019 = TRUE)
 
+if(any(attr(dt, 'specfp')$art15plus_isperc) & loc != 'SDN'){
+  years_to_replace <- colnames(attr(dt, 'specfp')$art15plus_isperc)[attr(dt, 'specfp')$art15plus_isperc[1,]]
+  replace_dat <- fread(paste0('/snfs1/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/extrapolate_ART/PV_testing/UNAIDS_2019/', loc, '_Adult_ART_cov.csv'))
+  attr(dt, 'specfp')$art15plus_num[attr(dt, 'specfp')$art15plus_isperc] <- replace_dat[year %in% years_to_replace, ART_cov_num]
+  
+}
 
 
 # if(lbd.anc){
