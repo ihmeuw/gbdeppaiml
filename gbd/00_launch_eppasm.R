@@ -16,7 +16,7 @@ run.name <- "200119_ukelele"
 spec.name <- "191002_sitar"
 compare.run <- NA
 proj.end <- 2022
-n.draws <-5
+n.draws <- 100
 run.group2 <- FALSE
 paediatric <- TRUE
 cluster.project <- "proj_hiv"
@@ -43,8 +43,7 @@ loc.table <- data.table(get_locations(hiv_metadata = T))
 
 ### Code
 epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
-loc.list <- c("STP","MRT")
-
+loc.list <- epp.list
 #We did not use EPP-ASM for India in GBD19, instead EPP + Spectrum
 if(!est_India){
 loc.list <- loc.list[!grepl("IND",loc.list)]
@@ -128,11 +127,11 @@ if(redo_offsets){
 
 
 ## Launch EPP
-
+loc.list <- c('STP')
 for(loc in loc.list) {    ## Run EPPASM
 # # 
 
-    epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q all.q -P ", cluster.project, " ",
+    epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q long.q -P ", cluster.project, " ",
                          "-e /share/temp/sgeoutput/", user, "/errors ",
                          "-o /share/temp/sgeoutput/", user, "/output ",
                          "-N ", loc, "_eppasm ",
@@ -146,7 +145,7 @@ for(loc in loc.list) {    ## Run EPPASM
 
    
     #Draw compilation
-    draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
+    draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q long.q -P ", cluster.project, " ",
                           "-e /share/temp/sgeoutput/", user, "/errors ",
                           "-o /share/temp/sgeoutput/", user, "/output ",
                           "-N ", loc, "_save_draws ",
@@ -158,7 +157,7 @@ for(loc in loc.list) {    ## Run EPPASM
     system(draw.string)
   
 
-    plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
+    plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q long.q -P ", cluster.project, " ",
                           "-e /share/temp/sgeoutput/", user, "/errors ",
                           "-o /share/temp/sgeoutput/", user, "/output ",
                           "-N ", loc, "_plot_eppasm ",

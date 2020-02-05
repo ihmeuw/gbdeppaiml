@@ -89,6 +89,7 @@ use_2019 <- T
 use_2018 <- F
 use_subpop <- F
 use_prepped <- F
+loc.list <- c('COM', 'MRT')
 for (countries in loc.list) {
 
   if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', countries, '.rds')) & !grepl('ETH', countries)){

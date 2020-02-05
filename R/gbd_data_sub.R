@@ -773,7 +773,8 @@ sub.prev.granular <- function(dt, loc){
   age.prev.dt <- age.prev.dt[,.(year, sex, agegr, n, prev, se, used, deff, deff_approx)]
   age.prev.dt$n <- as.numeric(age.prev.dt$n)
   gen.pop.dict <- c("General Population", "General population", "GP", "GENERAL POPULATION", "GEN. POPL.", "General population(Low Risk)", "Remaining Pop")
-  if(length(dt) == 1) {
+ age.prev.dt <- age.prev.dt[sex!='both',]
+   if(length(dt) == 1) {
     gen.pop.i <- 1
   } else {
     gen.pop.i <- which(names(dt) %in% gen.pop.dict)

@@ -151,7 +151,7 @@ loc.list <- c(loc.list, loc.table[grep('ETH', ihme_loc_id),ihme_loc_id],
 loc.list <- loc.list[!loc.list %in% c('COM', 'MAR', 'MRT',
                                       'STP', 'ZAF')]
 loc.list <- loc.list[c(1:103, 112:149)]
-
+loc.list <- c('MRT', 'COM')
 for(loc in loc.list){
 gen.pop.dict <- c("General Population", "General population", "GP", 
                   "GENERAL POPULATION", "GEN. POPL.", "General population(Low Risk)", 'Pop restante',

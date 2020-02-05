@@ -104,9 +104,9 @@ sexincrr.sub <- TRUE
 if(loc %in% c("MAR","MRT","COM")){
   sexincrr.sub <- FALSE
 }
-if(loc == "STP"){
-  prev_sub <- FALSE
-}
+# if(loc == "STP"){
+#   prev_sub <- FALSE
+# }
 ### Code
 ## Read in spectrum object, sub in GBD parameters
 
@@ -177,7 +177,6 @@ if(grepl("IND",loc)){
 }
 
 if(loc %in% "STP"){
-  attr(dt, 'eppd')$hhs <- attr(dt, 'eppd')$hhs[attr(dt, 'eppd')$hhs$subpop=="Pop Fem_restante",] 
   attr(dt, 'eppd')$ancsitedat <- attr(dt, 'eppd')$ancsitedat[attr(dt, 'eppd')$ancsitedat$subpop=="Pop Fem_restante",] 
   attr(dt, 'eppd')$ancsitedat = unique(attr(dt, 'eppd')$ancsitedat)
   attr(dt, 'specfp')$art_alloc_mxweight <- 0.5
