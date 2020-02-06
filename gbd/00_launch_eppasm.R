@@ -128,8 +128,7 @@ if(redo_offsets){
 
 
 ## Launch EPP
-loc.list <- c('MOZ', 'MDG', 'SDN', 'CMR',
-              'BFA', 'BEN')
+loc.list <- c('BFA')
 for(loc in loc.list) {    ## Run EPPASM
 # # 
     epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q all.q -P ", cluster.project, " ",
