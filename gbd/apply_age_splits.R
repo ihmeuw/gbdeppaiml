@@ -14,7 +14,7 @@ if(length(args) > 0) {
 } else {
   loc <- "MWI"
   run.name <- "191224_trumpet"
-  spec.name <- "190630_rhino_combined"
+  spec.name <- "191224_trumpet"
 
 }
 fill.draw <- T
@@ -41,8 +41,8 @@ devtools::load_all()
 ## Libraries etc.
 library(data.table); library(foreign); library(assertable)
 age_map <- data.table(fread(paste0('/ihme/hiv/epp_input/', gbdyear, '/', run.name, "/age_map.csv")))
-age_map <- age_map[(age_group_id %in% c(2, 34, 49, 388, 389, seq(6,21))) ,list(age_group_id,age=age_group_name_short)]
-age_map[age == 1,age_group_id := 238]
+age_map <- age_map[(age_group_id %in% c(2, 34, 49, 388, 389,3, seq(6,21))) ,list(age_group_id,age=age_group_name_short)]
+age_map[age == "12-23 mo.",age_group_id := 238]
 
 
 ## Create a map to scramble draws from Spectrum
@@ -67,14 +67,17 @@ loc_id <- locations[ihme_loc_id==loc,location_id]
 ## Bring in EPPASM Draws
 
 spec_draw <- data.table(fread(paste0(eppasm_dir,"/compiled/",loc,".csv"), blank.lines.skip = T))
-spec_draw[age >= 5,age_gbd :=  age - age%%5]
-spec_draw[age %in% 1:4, age_gbd := 1]
+spec_draw[age >= 5,age_gbd :=  as.character(age - age%%5)]
+spec_draw[age %in% 1, age_gbd := "12-23 mo"]
+spec_draw[age %in% 2:4, age_gbd := "2-4"]
 spec_draw[age == 0, age_gbd := 0 ]
 spec_draw <- spec_draw[,.(pop = sum(pop), hiv_deaths = sum(hiv_deaths), non_hiv_deaths = sum(non_hiv_deaths), new_hiv = sum(new_hiv), pop_neg = sum(pop_neg),
                     total_births = sum(total_births), hiv_births = sum(hiv_births), birth_prev = sum(birth_prev),
                     pop_art = sum(pop_art), pop_gt350 = sum(pop_gt350), pop_200to350 = sum(pop_200to350), pop_lt200 = sum(pop_lt200)), by = c('age_gbd', 'sex', 'year', 'run_num')]
 setnames(spec_draw, 'age_gbd', 'age')
 output.u1 <- split_u1.new_ages(spec_draw[age == 0], loc, run.name.old=run.name, run.name.new = run.name)
+output.u1[age=="x_388", age := "1-5 mo."]
+output.u1[age=="x_389", age := "6-11 mo."]
 spec_draw <- spec_draw[age != 0]
 spec_draw <- rbind(spec_draw, output.u1, use.names = T)    
 
