@@ -12,9 +12,9 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 library(data.table)
 
 ## Arguments
-run.name <- "200119_ukelele"
-spec.name <- "191002_sitar"
-compare.run <- NA
+run.name <- "200212_tests"
+spec.name <- "200119_ukelele"
+compare.run <- '190630_rhino2'
 proj.end <- 2022
 n.draws <- 100
 run.group2 <- FALSE
@@ -125,39 +125,38 @@ if(redo_offsets){
   system(redo_offsets.string)
 }
 
-
+loc.list <- loc.list[grepl('KEN', loc.list)]
 ## Launch EPP
-loc.list <- c('STP')
 for(loc in loc.list) {    ## Run EPPASM
 # # 
 
-    epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q long.q -P ", cluster.project, " ",
-                         "-e /share/temp/sgeoutput/", user, "/errors ",
-                         "-o /share/temp/sgeoutput/", user, "/output ",
-                         "-N ", loc, "_eppasm ",
-                         "-t 1:", n.draws, " ",
-                         "-hold_jid eppasm_prep_inputs_", run.name," ",
-                         code.dir, "gbd/singR_shell.sh ",
-                         code.dir, "gbd/main.R ",
-                         run.name, " ", loc, " ", proj.end, " ", paediatric)
-    print(epp.string)
-    system(epp.string)
+    # epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q all.q -P ", cluster.project, " ",
+    #                      "-e /share/temp/sgeoutput/", user, "/errors ",
+    #                      "-o /share/temp/sgeoutput/", user, "/output ",
+    #                      "-N ", loc, "_eppasm ",
+    #                      "-t 1:", n.draws, " ",
+    #                      "-hold_jid eppasm_prep_inputs_", run.name," ",
+    #                      code.dir, "gbd/singR_shell.sh ",
+    #                      code.dir, "gbd/main.R ",
+    #                      run.name, " ", loc, " ", proj.end, " ", paediatric)
+    # print(epp.string)
+    # system(epp.string)
+    # 
+    # 
+    # #Draw compilation
+    # draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
+    #                       "-e /share/temp/sgeoutput/", user, "/errors ",
+    #                       "-o /share/temp/sgeoutput/", user, "/output ",
+    #                       "-N ", loc, "_save_draws ",
+    #                       "-hold_jid ", loc, "_eppasm ",
+    #                      code.dir, "gbd/singR_shell.sh ",
+    #                       code.dir, "gbd/compile_draws.R ",
+    #                       run.name, " ", loc, ' ', n.draws, ' TRUE ', paediatric)
+    # print(draw.string)
+    # system(draw.string)
+    #
 
-   
-    #Draw compilation
-    draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q long.q -P ", cluster.project, " ",
-                          "-e /share/temp/sgeoutput/", user, "/errors ",
-                          "-o /share/temp/sgeoutput/", user, "/output ",
-                          "-N ", loc, "_save_draws ",
-                          "-hold_jid ", loc, "_eppasm ",
-                         code.dir, "gbd/singR_shell.sh ",
-                          code.dir, "gbd/compile_draws.R ",
-                          run.name, " ", loc, ' ', n.draws, ' TRUE ', paediatric)
-    print(draw.string)
-    system(draw.string)
-  
-
-    plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q long.q -P ", cluster.project, " ",
+    plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
                           "-e /share/temp/sgeoutput/", user, "/errors ",
                           "-o /share/temp/sgeoutput/", user, "/output ",
                           "-N ", loc, "_plot_eppasm ",
@@ -230,8 +229,8 @@ if(reckon_prep){
   for(loc in all_loc_list){
     if(loc %in% eppasm_parents){
     prep.string <- paste0("qsub -l m_mem_free=100G -l fthread=2 -l h_rt=02:00:00 -l archive -q all.q -P ", cluster.project, " ",
-                          "-e /share/homes/djahag/errors2 ",
-                          "-o /share/homes/djahag/output ",
+                          "-o /share/temp/sgeoutput/", user, "/errors ",
+                          "-o /share/temp/sgeoutput/", user, "/output ",
                           "-N ", loc, "_aggregate ",
                           "-hold_jid ", loc,"_save_draws ",
                           code.dir, "gbd/singR_shell.sh ",
@@ -243,7 +242,7 @@ if(reckon_prep){
     
 
   prep.string <- paste0("qsub -l m_mem_free=50G -l fthread=1 -l h_rt=02:00:00 -l archive -q all.q -P ", cluster.project, " ",
-                        "-e /share/homes/djahag/errors ",
+                        "-o /share/temp/sgeoutput/", user, "/errors ",
                         "-o /share/temp/sgeoutput/", user, "/output ",
                         "-N ", loc, "_apply_age_splits ",
                         "-hold_jid ", loc,"_aggregate ",

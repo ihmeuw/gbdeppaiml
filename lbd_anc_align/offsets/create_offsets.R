@@ -143,15 +143,19 @@ if(rd != '/share/geospatial/mbg/hiv/hiv_test/output/2019_02_26_30_11_35/'){
 }
 
 
-### Functions
-loc.list <- loc.list[-1]
-loc.list <- c(loc.list, loc.table[grep('ETH', ihme_loc_id),ihme_loc_id],
-              loc.table[grep('KEN', ihme_loc_id),ihme_loc_id],
-              loc.table[grep('NGA', ihme_loc_id),ihme_loc_id])
-loc.list <- loc.list[!loc.list %in% c('COM', 'MAR', 'MRT',
-                                      'STP', 'ZAF')]
-loc.list <- loc.list[c(1:103, 112:149)]
-loc.list <- c('MRT', 'COM')
+# ### Functions
+# loc.list <- loc.list[-1]
+# loc.list <- c(loc.list, loc.table[grep('ETH', ihme_loc_id),ihme_loc_id],
+#               loc.table[grep('KEN', ihme_loc_id),ihme_loc_id],
+#               loc.table[grep('NGA', ihme_loc_id),ihme_loc_id])
+# loc.list <- loc.list[!loc.list %in% c('MAR',
+#                                       'STP', 'ZAF','ETH','KEN','NGA')]
+loc.table <- data.table(get_locations(hiv_metadata = T))
+
+### Code
+epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
+loc.list <- epp.list
+loc.list <- loc.list[grepl('NGA', loc.list)]
 for(loc in loc.list){
 gen.pop.dict <- c("General Population", "General population", "GP", 
                   "GENERAL POPULATION", "GEN. POPL.", "General population(Low Risk)", 'Pop restante',
@@ -169,6 +173,7 @@ if(loc == 'GNQ'){
 }
 
 anc.dt <- dt %>% data.table()
+anc.dt <- anc.dt[type == 'ancss']
 
 new.anc <- readRDS(lbd_anc_data)
 loc1 <- substring(loc,1,3)
@@ -213,6 +218,14 @@ if(grepl('ETH', loc) | grepl('KEN', loc) | grepl('NGA', loc)){
 }
 if(loc == 'ZMB'){
   lbd.anc <- lbd.anc[is.na(iso3_adm1)]
+}
+if(loc == 'MDG'){
+  sites <- gsub("\\(%)", '', as.character(lbd.anc$site))
+  sites <- gsub(' ', '',sites)
+  lbd.anc$site <- sites
+  all.dat$site <- gsub(' ', '',all.dat$site)
+  site.dat.li
+  
 }
 all.dat <- merge(all.dat,lbd.anc,by = c('site', 'year'),all.x=TRUE)
 if(grepl('ETH', loc) | grepl('KEN', loc) | grepl('NGA', loc)){
@@ -412,16 +425,18 @@ merge_on <- merge_on[which(merge_on != 'source')]
 merge_on <- merge_on[which(merge_on != 'prev')]
 lbd.anc[,prev:=NULL]
 lbd.anc[,type := 'ancss']
+gbd.anc[,source := NULL]
+lbd.anc[,source := NULL]
 
 
 both.dt <- list()
-for(subpop in unique(gbd.anc[,subpop])){
-  pre.2000 <- merge(gbd.anc[year < 2000], unique(lbd.anc), by= merge_on, all.x = TRUE)
+for(subpop.x in unique(gbd.anc[,subpop])){
+  pre.2000 <- merge(gbd.anc[subpop == subpop.x & year < 2000,], unique(lbd.anc[subpop == subpop.x,]), by= merge_on, all.x = TRUE)
   pre.2000[,c('adm1_mean', 'adm1_lower', 'adm1_upper') := NULL]
   pre.2000[,c("iso3_adm1" ,  "loc_id_adm1") := NA]
   
   ## Post 2000 merge on site-years
-  post.2000 <- merge(gbd.anc[year >= 2000], unique(lbd.anc), by = merge_on, all.x = TRUE)
+  post.2000 <- merge(gbd.anc[subpop == subpop.x & year >= 2000], unique(lbd.anc[subpop == subpop.x,]), by = merge_on, all.x = TRUE)
   post.2000[,c('latitude','longitude') := NULL]
   post.2000[,c('adm1_mean', 'adm1_lower', 'adm1_upper') := NULL]
   

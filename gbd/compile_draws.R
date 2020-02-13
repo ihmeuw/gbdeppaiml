@@ -21,8 +21,8 @@ if(length(args) > 0) {
   paediatric <- as.logical(args[5])
   gbdyear <- 'gbd20'
 } else {
-  run.name <- "191224_trumpet"
-  loc <- "AGO"
+  run.name <- "200119_ukelele"
+  loc <- "BFA"
   n <- 1
   draw.fill <- TRUE
   paediatric <- TRUE

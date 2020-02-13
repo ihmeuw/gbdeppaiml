@@ -20,8 +20,8 @@ if(length(args) > 0) {
   j <- as.integer(Sys.getenv("SGE_TASK_ID"))
   paediatric <- as.logical(args[4])
 } else {
-	run.name <- '200119_ukelele'
-	loc <- 'STP'
+	run.name <- '200212_tests'
+	loc <- 'CMR'
 
 	stop.year <- 2022
 	j <- 1
@@ -30,7 +30,7 @@ if(length(args) > 0) {
 
 run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
 
-c.args <- run.table[run_name==run.name]
+c.args <- run.table[run_name=='200119_ukelele']
 
 
 ### Arguments
@@ -74,7 +74,7 @@ loc.table <- get_locations(hiv_metadata = TRUE)
 # These locations do not have information from LBD team estimates
 # ZAF ANC data are considered nationally representative so no GeoADjust - this could be challenged in the future
 no_geo_adj <-  c(loc.table[epp ==1 & grepl("IND",ihme_loc_id),ihme_loc_id],
-                 "PNG","HTI","DOM", 'CPV', loc.table[epp ==1 & grepl("ZAF",ihme_loc_id),ihme_loc_id],"STP","MRT","COM")
+                 "PNG","HTI","DOM", 'CPV', loc.table[epp ==1 & grepl("ZAF",ihme_loc_id),ihme_loc_id], 'STP')
 
 
 
@@ -116,8 +116,9 @@ dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
                        anc.prior.sub = TRUE, lbd.anc = lbd.anc, 
                        geoadjust = geoadjust, use_2019 = TRUE)
 
-
-
+if(run.name == '200212_tests'){attr(dt, 'eppd')$ancsitedat <- data.table(attr(dt, 'eppd')$ancsitedat)
+attr(dt, 'eppd')$ancsitedat <- attr(dt, 'eppd')$ancsitedat[,offset := NULL]
+attr(dt, 'eppd')$ancsitedat <- data.frame(attr(dt, 'eppd')$ancsitedat )}
 
 
 
@@ -249,6 +250,14 @@ if(dim( attr(dt, 'specfp')$paedsurv_cd4dist)[3] < attr(dt, 'specfp')$SIM_YEARS){
   while(diff != 0){
     attr(dt, 'specfp')$paedsurv_cd4dist <-  abind::abind( attr(dt, 'specfp')$paedsurv_cd4dist,  attr(dt, 'specfp')$paedsurv_cd4dist[,,dim( attr(dt, 'specfp')$paedsurv_cd4dist)[3]])
     diff <- dim( attr(dt, 'specfp')$paedsurv_cd4dist)[3] - attr(dt, 'specfp')$SIM_YEARS
+    
+  }
+}
+if(dim( attr(dt, 'specfp')$incrr_age)[3] < attr(dt, 'specfp')$SIM_YEARS){
+  diff <- dim( attr(dt, 'specfp')$incrr_age)[3] - attr(dt, 'specfp')$SIM_YEARS
+  while(diff != 0){
+    attr(dt, 'specfp')$incrr_age <-  abind::abind( attr(dt, 'specfp')$incrr_age,  attr(dt, 'specfp')$incrr_age[,,dim( attr(dt, 'specfp')$incrr_age)[3]])
+    diff <- dim( attr(dt, 'specfp')$incrr_age)[3] - attr(dt, 'specfp')$SIM_YEARS
     
   }
 }
@@ -387,7 +396,7 @@ if(length(attr(dt, 'specfp')$cotrim_num) < attr(dt, 'specfp')$SIM_YEARS){
 }
 
 ## Fit model
-fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e4, B = 1e3, number_k = 500)
+fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e4, B = 1e3, number_k = 100)
 data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc, '.csv')
 if(!file.exists(data.path)){save_data(loc, attr(dt, 'eppd'), run.name)}
 if(file.exists(data.path)){save_data(loc, attr(dt, 'eppd'), run.name)}

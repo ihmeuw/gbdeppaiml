@@ -465,7 +465,7 @@ get_summary <- function(output, loc, run.name.old, run.name.new, paediatric = FA
 
 ## Get data from eppd object, save for future plotting
 save_data <- function(loc, eppd, run.name){
-  age.map <-  fread(paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/age_map.csv'))
+  age.map <-  fread(paste0('/ihme/hiv/epp_input/gbd20/age_map.csv'))
   if(nrow(eppd$hhs) > 0){
     prevdata <- data.table(eppd$hhs)
     prevdata <- prevdata[,.(sex, agegr, type = 'point', model = 'Household Survey', indicator = 'Prevalence', mean = prev, upper = prev + (1.96 * se), lower = ifelse(prev - (1.96 * se) < 0, 0, prev - (1.96 * se)), year)]

@@ -89,7 +89,9 @@ use_2019 <- T
 use_2018 <- F
 use_subpop <- F
 use_prepped <- F
-loc.list <- c('COM', 'MRT')
+loc.list <- loc.list[grepl('NGA', loc.list)]
+countries <- "NGA_25342"
+additional <- additional[Prev < 1,]
 for (countries in loc.list) {
 
   if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', countries, '.rds')) & !grepl('ETH', countries)){
@@ -191,6 +193,7 @@ for (countries in loc.list) {
   
   
   parent <- unlist(strsplit(countries , split = '_'))[1]
+
   #################################
   #Add additional data
   #################################
@@ -225,6 +228,7 @@ for (countries in loc.list) {
     additional$Site <- trimws(additional$Site)
     #Incorporate Additional Data and Discrepencies
     replace_N <- subset(additional, ihme_loc_id == as.character(countries) & type_of_additional %in% c(3,34))
+    replace_N <- unique(replace_N)
     replace_N <- replace_N[,c("Group","Site", "Year", "Prev", "N", 'type')]
     setnames(replace_N, new = 'subpop', old = 'Group')
     setnames(replace_N, new = 'n', old = 'N')
@@ -245,7 +249,7 @@ for (countries in loc.list) {
   #################################
   #Replace prevalence
   #################################
-  if(countries %in% unique(additional$ihme_loc_id)){
+  if(countries %in% unique(additional$ihme_loc_id) & !grepl('NGA', countries)){
     replace_Prev <- subset(additional, ihme_loc_id == as.character(countries) & type_of_additional %in% c(4,34))
     setDT(replace_Prev)
     replace_Prev <- replace_Prev[,c("Group","Site", "Year", "Prev", "N", 'type')]

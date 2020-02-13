@@ -189,9 +189,9 @@ invisible(lapply(epp.locs, function(c.location_id){
 
 ## Births and SRB
 births <- get_population(age_group_id = 164, location_id = epp.locs, 
-                         year_id = seq(1970, 2019), gbd_round_id = 6, sex_id = 1:2, decomp_step = 'step4')
+                         year_id = seq(1970, 2022), gbd_round_id = 7, sex_id = 1:2, decomp_step = 'step1')
 ##creating dummy variable for births
-births = extrapolate_years(births, 2022, trans_vars = "population", id_vars = c("age_group_id","location_id","sex_id","run_id"))
+#births = extrapolate_years(births, 2022, trans_vars = "population", id_vars = c("age_group_id","location_id","sex_id","run_id"))
 
 dir.create(paste0(out.dir, '/births'), showWarnings = F)
 dir.create(paste0(out.dir, '/SRB'), showWarnings = F)

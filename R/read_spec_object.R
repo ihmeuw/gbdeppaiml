@@ -44,6 +44,7 @@ anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE){
       replace[,'agspan' := as.numeric(replace[,agspan])]
       replace[,'site' := as.character(replace[,site])]
       replace[,'high_risk' := FALSE]
+      replace <- replace[type == 'ancss',]
 
       attr(dt, 'eppd')$ancsitedat <- replace
   

@@ -38,14 +38,13 @@ if(length(args) > 0) {
 id.vars <- c("run_num", "year", "sex", "age")
 
 ### Paths
-in.dir <- paste0("/ihme/hiv/epp_output/gbd19/", run.name, "/compiled/")
+in.dir <- paste0("/ihme/hiv/epp_output/gbd20/", run.name, "/compiled/")
 single.age.dir <- paste0('/ihme/hiv/spectrum_draws/', spec.run.name,'/detailed_deaths/')
 
 ### Functions
 library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
 source(paste0(root, "Project/Mortality/shared/functions/get_age_map.r"))
-source(paste0(root, "Project/Mortality/shared/functions/get_locations.r"))
-source(paste0(root, "temp/central_comp/libraries/current/r/get_population.R"))
+source( "/ihme/cc_resources/libraries/current/r/get_population.R")
 
 ### Tables
 age.table <- data.table(get_age_map(type="all"))

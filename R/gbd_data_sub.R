@@ -660,7 +660,11 @@ sub.prev <- function(loc, dt){
   } else {
     gen.pop.i <- which(names(dt) %in% gen.pop.dict)
   }
-  surv.path <- paste0("/ihme/hiv/epp_input/",gbdyear,"//prev_surveys.csv")
+  if(grepl('KEN', loc)){
+    surv.path <- "/ihme/hiv/epp_input/gbd19/190630_rhino2/prev_surveys.csv"
+  }else{
+    surv.path <- paste0("/ihme/hiv/epp_input/",gbdyear,"//prev_surveys.csv")
+  }
   data4 <- fread(surv.path)[iso3 == loc]
   
   if(loc=="STP"){
@@ -751,7 +755,11 @@ add_frr_noage_fp <- function(obj){
 sub.prev.granular <- function(dt, loc){
   ## TODO: Add this to cache prev
   ##make sure that this only keeps sex 3 for 15-49
-  age.prev.dt <- fread(paste0("/share/hiv/epp_input/gbd20/prev_surveys.csv"))
+  if(grepl('KEN', loc)){
+    age.prev.dt <- fread("/ihme/hiv/epp_input/gbd19/190630_rhino2/prev_surveys.csv")
+  }else{
+    age.prev.dt <- fread(paste0("/share/hiv/epp_input/gbd20/prev_surveys.csv"))
+  }
   age.prev.dt <- age.prev.dt[iso3 == loc]
   age.prev.dt[,loc_year := paste0(iso3, '_', year)]
   
@@ -773,7 +781,10 @@ sub.prev.granular <- function(dt, loc){
   age.prev.dt <- age.prev.dt[,.(year, sex, agegr, n, prev, se, used, deff, deff_approx)]
   age.prev.dt$n <- as.numeric(age.prev.dt$n)
   gen.pop.dict <- c("General Population", "General population", "GP", "GENERAL POPULATION", "GEN. POPL.", "General population(Low Risk)", "Remaining Pop")
- age.prev.dt <- age.prev.dt[sex!='both',]
+  if(!grepl('KEN', loc) & !grepl('NGA', loc)){
+    age.prev.dt <- age.prev.dt[sex!='both',]
+    
+  }
    if(length(dt) == 1) {
     gen.pop.i <- 1
   } else {
@@ -954,6 +965,7 @@ geo_adj <- function(loc, dt, i, uncertainty) {
     
   
     anc.dt.all <- as.data.table(anc.dt.all)
+    anc.dt.all <- anc.dt.all[type == 'ancss']
       anc.dt.all  <- anc.dt.all[,c( "clinic","year_id","mean","site_pred","adm0_mean","adm0_lower", "adm0_upper","subpop","high_risk")]
      
 
@@ -1089,10 +1101,11 @@ geo_adj <- function(loc, dt, i, uncertainty) {
         anc.dt[,site := as.character(site)]
         site.dat <- unique(site.dat)
         anc.dt <- unique(anc.dt)
-        
+        site.dat[,subpop := NULL]
+      
         
         if(subpop2 %in% unique(eppd$ancsitedat$subpop)){
-          temp.dat <- merge(site.dat,anc.dt[,.(site,subpop,year,site_pred,adm0_mean,adm0_lower,adm0_upper,offset,high_risk)], by=c("site","subpop","year"), all.x = TRUE)
+          temp.dat <- merge(site.dat[type == 'ancss'],anc.dt[,.(site,year,site_pred,adm0_mean,adm0_lower,adm0_upper,offset,high_risk)], by=c("site","year"), all.x = TRUE)
         } else {
           temp.dat <- merge(site.dat,anc.dt[,.(site,year,site_pred,adm0_mean,adm0_lower,adm0_upper,offset,high_risk)], by=c("site","year"),all.x=TRUE)
           
@@ -1102,16 +1115,17 @@ geo_adj <- function(loc, dt, i, uncertainty) {
           min.dt <- unique(min.dt)
         }
         
-        
+        temp.dat[,subpop := subpop2]
+        temp.dat <- rbind(temp.dat, site.dat[type == 'ancrt'], fill = T)
         merge.dt <- copy(temp.dat[year < 2000 & !is.na(prev)])
-        min.dt <- unique(min.dt)
-        add_on <- as.data.table(setdiff(merge.dt$site, min.dt$site))
-        setnames(add_on, old = 'V1', new = 'site')
-        add_on[,offset := mean(min.dt$offset)]
-        add_on[,site := as.factor(site)]
-        min.dt[,site := as.factor(as.character(site))]
-        min.dt <- rbind(min.dt, add_on)
-        merge.dt <- merge(merge.dt, min.dt, by = 'site')
+        # min.dt <- unique(min.dt)
+        # add_on <- as.data.table(setdiff(merge.dt$site, min.dt$site))
+        # setnames(add_on, old = 'V1', new = 'site')
+        # add_on[,offset := mean(min.dt$offset)]
+        # add_on[,site := as.factor(site)]
+        # min.dt[,site := as.factor(as.character(site))]
+        # min.dt <- rbind(min.dt, add_on)
+        # merge.dt <- merge(merge.dt, min.dt, by = 'site')
         
         
         temp.dat <- temp.dat[year >= 2000 & !is.na(prev)]
@@ -1224,7 +1238,7 @@ geo_adj <- function(loc, dt, i, uncertainty) {
       ancbias.pr.mean <<- 0.15
       ancbias.pr.sd <<- 0.001
     }else if(loc %in% "MRT"){
-      ancbias.pr.mean <<- 0.0
+      ancbias.pr.mean <<- 0.15
       ancbias.pr.sd <<- 0.001
         } else {
       ancbias.pr.mean <<- 0.15
