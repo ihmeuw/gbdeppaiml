@@ -872,6 +872,7 @@ sub.on.art <- function(dt, loc, k) {
                           age == "25-35" &
                           sex == 2 &
                           cd4_lower %in% c(0,50)]
+  replace_53[,variable := "mort53"]
   mortart[(variable=="mort53" & 
                          durationart == "6to12Mo" &
                          cd4_category %in% c("ARTLT50CD4","ART50to99CD4") &
@@ -887,7 +888,7 @@ sub.on.art <- function(dt, loc, k) {
                              age == "25-35" &
                              sex == 2 &
                              cd4_lower %in% c(0))]
-  replace_30[,variable := "mort30"]
+    replace_30[,variable := "mort30"]
    mortart[(variable=="mort30" & 
                      durationart == "6to12Mo" &
                      cd4_category %in% c("ARTLT50CD4") &
