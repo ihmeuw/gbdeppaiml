@@ -761,6 +761,10 @@ sub.prev.granular <- function(dt, loc){
     age.prev.dt <- fread(paste0("/share/hiv/epp_input/gbd20/prev_surveys.csv"))
   }
   age.prev.dt <- age.prev.dt[iso3 == loc]
+  ##outliering this survey
+  if(grepl('CMR', loc)){
+    age.prev.dt <- age.prev.dt[year != 2018,]
+  }
   age.prev.dt[,loc_year := paste0(iso3, '_', year)]
   
   copied_site_years <- intersect(age.prev.dt[age_year %in% c("15"), unique(loc_year)], age.prev.dt[age_year %in% c("15-49"), unique(loc_year)])
@@ -846,7 +850,14 @@ sub.off.art <- function(dt, loc, k) {
 }
 
 sub.on.art <- function(dt, loc, k) {
+  if(run.name!="200213_violin"){
   mortart <- fread(paste0(aim.dir,"transition_parameters/HIVmort_onART_regions/DisMod/", loc,"_HIVonART.csv"))
+  print('Using BRADMOD')
+  } else {
+  mortart <- fread(paste0("/ihme/hiv/mrbrt_output/gbd20/", loc,"_HIVonART.csv"))
+  print('Using MRBRT')
+  }
+  
   mortart <- melt(mortart, 
                   id = c("durationart", "cd4_category", "age", "sex","cd4_lower",
                          "cd4_upper"))
@@ -891,7 +902,8 @@ sub.on.art <- function(dt, loc, k) {
     for(c.ageindex in 1:length(age.list)){
       for(c.dur in c('ART0MOS', 'ART6MOS', 'ART1YR')){
         for(c.cd4 in paste0(1:7)){
-          replace[c.dur, c.cd4, c.ageindex, c.sex] = as.numeric(mortart[sex == c.sex & artdur == c.dur & agecat == age.index[[c.ageindex]] & cd4stage == c.cd4, risk])
+          replace[c.dur, c.cd4, c.ageindex, c.sex] = 
+            as.numeric(mortart[sex == c.sex & artdur == c.dur & agecat == age.index[[c.ageindex]] & cd4stage == c.cd4, risk])
         }
       }
     }
