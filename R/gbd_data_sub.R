@@ -862,6 +862,41 @@ sub.on.art <- function(dt, loc, k) {
                   id = c("durationart", "cd4_category", "age", "sex","cd4_lower",
                          "cd4_upper"))
   
+  
+  ##Pull out replacements for values above 1
+  if(k==53){
+
+  replace_53 <- mortart[variable=="mort100" & 
+                          durationart == "6to12Mo" &
+                          cd4_category %in% c("ARTLT50CD4","ART50to99CD4") &
+                          age == "25-35" &
+                          sex == 2 &
+                          cd4_lower %in% c(0,50)]
+  mortart[(variable=="mort53" & 
+                         durationart == "6to12Mo" &
+                         cd4_category %in% c("ARTLT50CD4","ART50to99CD4") &
+                         age == "25-35" &
+                         sex == 2 &
+                         cd4_lower %in% c(0,50))] <- replace_53
+  }
+  
+  if(k==30){
+    replace_30 <- mortart[(variable=="mort100" & 
+                             durationart == "6to12Mo" &
+                             cd4_category %in% c("ARTLT50CD4") &
+                             age == "25-35" &
+                             sex == 2 &
+                             cd4_lower %in% c(0))]
+  replace_30[,variable := "mort30"]
+   mortart[(variable=="mort30" & 
+                     durationart == "6to12Mo" &
+                     cd4_category %in% c("ARTLT50CD4") &
+                     age == "25-35" &
+                     sex == 2 &
+                     cd4_lower %in% c(0))] <- replace_30
+  }
+  
+  
   setnames(mortart, c("variable","value","cd4_category"),c("draw","mort","cd4"))
   # mortart <- mortart[age!="55-100",]
   
