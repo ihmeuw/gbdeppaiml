@@ -1187,6 +1187,11 @@ geo_adj <- function(loc, dt, i, uncertainty) {
           break
         }}
 
+    
+      if(grepl("ZAF",temp.loc)){
+        print("Using Tembisa for ZAF")
+        art.dt = fread(paste0("/share/hiv/data/UNAIDS_extrapolated/GBD20//ZAF_sub/", loc, '_Adult_ART_cov.csv'))
+      }
       
     art.dt[is.na(art.dt)] <- 0
     ##Need this to be logical later
