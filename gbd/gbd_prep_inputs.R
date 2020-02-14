@@ -57,7 +57,8 @@ parent.locs <- loc.table[location_id %in% parent.locs,location_id]
 ## Population
 #####NEED POPULATION UPDATE
 
-pop.all <- get_population(age_group_id = c(28, 50:127, 238), location_id = c(epp.locs, parent.locs), year_id = seq(1970, proj.end), gbd_round_id = 7, sex_id = 1:2, single_year_age = T, decomp_step = 'step1')
+pop.all <- get_population(age_group_id = c(28, 50:127, 238),
+                          location_id = c(epp.locs, parent.locs), year_id = seq(1970, proj.end), gbd_round_id = 7, sex_id = 1:2, single_year_age = T, decomp_step = 'step1')
 
 # pop.all.20 <- pop.all[year_id == 2019,]
 # pop.all.20[,year_id := rep(2020, nrow(pop.all.20))] 
@@ -108,13 +109,15 @@ invisible(lapply(c(epp.locs, parent.locs), function(c.location_id) {
   write.csv(out.pop, paste0(out.dir, '/population/', c.iso, ".csv"), row.names = F)
 }))
 
-pop.splits <- get_population(age_group_id = c(2,3,30,31,32,34,235,238,388,389), location_id = epp.locs, year_id = seq(1970, proj.end), gbd_round_id = 7, sex_id = 1:2, decomp_step = 'step1')
+pop.splits <- get_population(age_group_id = c(2,3,30,31,32,34,235,238,388,389),
+                             location_id = c(epp.locs,parents), year_id = seq(1970, proj.end), gbd_round_id = 7, sex_id = 1:2, decomp_step = 'step1')
+
 # pop.splits.20 <- pop.splits[year_id == 2019,]
 # pop.splits.20[,year_id := rep(2020, nrow(pop.splits.20))] 
 # pop.splits <- rbind(pop.splits, pop.splits.20)
 
 dir.create(paste0(out.dir, '/population_splits'), showWarnings = F)
-invisible(lapply(c(epp.locs, parent.locs), function(c.location_id) {
+invisible(lapply(c(epp.locs,parents), function(c.location_id) {
   c.iso <- loc.table[location_id == c.location_id, ihme_loc_id]
   write.csv(pop.splits[location_id == c.location_id], paste0(out.dir, '/population_splits/', c.iso, ".csv"), row.names = F)
 }))
