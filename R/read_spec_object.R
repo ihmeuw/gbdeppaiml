@@ -45,6 +45,16 @@ anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE){
       replace[,'site' := as.character(replace[,site])]
       replace[,'high_risk' := FALSE]
       replace <- replace[type == 'ancss',]
+      if(!geoadjust){
+        replace[,adm0_mean:=NULL]
+        replace[,adm0_lower:=NULL]
+        replace[,adm0_upper:=NULL]
+        replace[,site_pred:=NULL]
+        
+        
+        
+        
+      }
 
       attr(dt, 'eppd')$ancsitedat <- replace
   

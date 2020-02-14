@@ -21,7 +21,7 @@ if(length(args) > 0) {
   }
 } else {
   run.name <- "200119_ukelele"
-  loc <- "KEN_35618"
+  loc <- "MRT"
 
   draw.fill <- TRUE
 
