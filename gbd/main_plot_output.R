@@ -20,13 +20,13 @@ if(length(args) > 0) {
     compare.run <- NA
   }
 } else {
-  run.name <- "200119_ukelele"
-  loc <- "MRT"
+  run.name <- "200213_violin"
+  loc <- "AGO"
 
   draw.fill <- TRUE
 
   paediatric <- TRUE
-  compare.run <- '190630_rhino2'
+  compare.run <- '200119_ukelele'
 }
 
 gbd_year_new <- "gbd20"
@@ -47,7 +47,13 @@ devtools::load_all()
 
 
 loc.table <- fread(paste0('/share/hiv/epp_input/gbd20/', run.name, '/location_table.csv'))
-loc.table.old <- fread(paste0('/share/hiv/epp_input/gbd19/', run.name.old, '/location_table.csv'))
+if(run.name.old != '190630_rhino2'){
+  loc.table.old <- fread(paste0('/share/hiv/epp_input/gbd20/', run.name.old, '/location_table.csv'))
+  
+}else{
+  loc.table.old <- fread(paste0('/share/hiv/epp_input/gbd19/', run.name.old, '/location_table.csv'))
+  
+}
 if(loc %in% c('STP', 'COM', 'MAR')){
   compare.run = NA
 }

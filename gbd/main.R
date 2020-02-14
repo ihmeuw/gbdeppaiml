@@ -21,8 +21,8 @@ if(length(args) > 0) {
   paediatric <- as.logical(args[4])
 } else {
 	run.name <- '200213_violin'
-	loc <- 'CPV'
-
+	loc <- 'NGA_25343'
+	#loc <- 'BEN'
 	stop.year <- 2022
 	j <- 1
 	paediatric <- TRUE
@@ -60,7 +60,7 @@ anc.prior.sub <- TRUE
 out.dir <- paste0('/ihme/hiv/epp_output/',gbdyear,'/', run.name, "/", loc)
 
 ### Functions
-library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
+library(mortdb, lib = "/share/mortality/shared/r/")
 setwd(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/"))
 devtools::load_all()
 setwd(code.dir)
@@ -115,7 +115,10 @@ dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
                        anc.prior.sub = TRUE, lbd.anc = lbd.anc, 
                        geoadjust = geoadjust, use_2019 = TRUE)
 
-
+if(any(attr(dt, 'eppd')$ancsitedat$prev > 1)){
+  print('A prevalence above 1 was removed')
+  attr(dt, 'eppd')$ancsitedat <- as.data.frame(as.data.table(attr(dt, 'eppd')$ancsitedat)[prev < 1,])
+}
 
 ##this is a quick fix, will need to correct later
 

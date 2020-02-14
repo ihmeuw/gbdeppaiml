@@ -13,7 +13,7 @@ if(length(args) > 0) {
   spec.name <- args[3]
 } else {
   loc <- "MWI"
-  run.name <- "191224_trumpet"
+  run.name <- "200213_violin"
   spec.name <- "191224_trumpet"
 
 }
@@ -68,7 +68,7 @@ loc_id <- locations[ihme_loc_id==loc,location_id]
 
 spec_draw <- data.table(fread(paste0(eppasm_dir,"/compiled/",loc,".csv"), blank.lines.skip = T))
 spec_draw[age >= 5,age_gbd :=  as.character(age - age%%5)]
-spec_draw[age %in% 1, age_gbd := "12-23 mo"]
+spec_draw[age %in% 1, age_gbd := "12-23 mo."]
 spec_draw[age %in% 2:4, age_gbd := "2-4"]
 spec_draw[age == 0, age_gbd := 0 ]
 spec_draw <- spec_draw[,.(pop = sum(pop), hiv_deaths = sum(hiv_deaths), non_hiv_deaths = sum(non_hiv_deaths), new_hiv = sum(new_hiv), pop_neg = sum(pop_neg),

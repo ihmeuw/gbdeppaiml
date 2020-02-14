@@ -90,7 +90,7 @@ use_2018 <- F
 use_subpop <- F
 use_prepped <- F
 loc.list <- loc.list[grepl('NGA', loc.list)]
-countries <- "NGA_25342"
+countries <- "NGA_25343"
 additional <- additional[Prev < 1,]
 for (countries in loc.list) {
 
@@ -144,6 +144,13 @@ for (countries in loc.list) {
   df$country <- countries
   df$ihme_loc_id <- countries
   
+  if(loc ==  "NGA_25343"){
+    df <- as.data.table(df)
+    df[site == 'Site 3', site := 'Nasarawa(Doma)']
+    df[site == 'Site 1 - N/ Eggon', site := 'Nasarawa(N/Eggon)']
+    df[site == 'Site 2 - Lafia', site := 'Nasarawa (Lafia)']
+    df[site == 'Site 4', site := 'Nasarawa (Garaku)']
+  }
   nrow_1 <- nrow(df)
   
   #################################

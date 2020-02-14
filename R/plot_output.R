@@ -155,8 +155,15 @@ plot_15to49 <- function(loc="STP",  compare.run = NA, new.run = '200119_ukelele'
     }
 
     if(!is.na(compare.run)){
-      compare.dt <- fread(paste0('/share/hiv/epp_output/gbd19/', compare.run, '/compiled/', loc, '.csv'))
-      compare.dt <- get_summary(compare.dt, loc, run.name.old = compare.run, run.name.new = new.run, paediatric, old.splits = T)
+      if(compare.run != '190630_rhino2'){
+        compare.dt <- fread(paste0('/share/hiv/epp_output/gbd20/', compare.run, '/compiled/', loc, '.csv'))
+        compare.dt <- get_summary(compare.dt, loc, run.name.old = compare.run, run.name.new = new.run, paediatric, old.splits = F)
+        
+      }else{
+        compare.dt <- fread(paste0('/share/hiv/epp_output/gbd19/', compare.run, '/compiled/', loc, '.csv'))
+        compare.dt <- get_summary(compare.dt, loc, run.name.old = compare.run, run.name.new = new.run, paediatric, old.splits = T)
+        
+      }
       compare.dt <- compare.dt[age_group_id == 24 & sex == 'both' & measure %in% meas.list & metric == "Rate",.(type = 'line', year, indicator = measure, model = compare.run, mean, lower, upper)]
     }else{compare.dt = NULL}
 
@@ -452,9 +459,14 @@ plot_age_specific <- function(loc, run.name.old, compare.run = '191002_sitar', p
   
 
   if(!is.na(compare.run)){
+    if(compare.run != '190630_rhino2'){
+      compare.dt <- fread(paste0('/share/hiv/epp_output/gbd20/', compare.run, '/compiled/', loc, '.csv'))
+      compare.dt <- get_summary(compare.dt, loc, run.name.old =  compare.run, run.name.new = compare.run, paediatric = T, old.splits = F)
+    }else{
+      compare.dt <- fread(paste0('/share/hiv/epp_output/gbd19/', compare.run, '/compiled/', loc, '.csv'))
+      compare.dt <- get_summary(compare.dt, loc, compare.run, paediatric = T, old.splits = T)
+    }
 
-    compare.dt <- fread(paste0('/share/hiv/epp_output/gbd19/', compare.run, '/compiled/', loc, '.csv'))
-    compare.dt <- get_summary(compare.dt, loc, compare.run, paediatric = T, old.splits = T)
     compare.dt <- compare.dt[measure %in% c('Incidence', 'Prevalence', 'Deaths') & metric == c.metric,
                              .(age, sex, type = 'line', year, indicator = measure, model = compare.run, mean, lower, upper)]
   }else{compare.dt = NULL} 

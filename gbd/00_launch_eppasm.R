@@ -14,7 +14,7 @@ library(data.table)
 ## Arguments
 run.name <- "200213_violin"
 spec.name <- "191224_trumpet"
-compare.run <- '190630_rhino2'
+compare.run <- '200119_ukelele'
 proj.end <- 2022
 n.draws <- 100
 run.group2 <- FALSE
@@ -126,6 +126,7 @@ if(redo_offsets){
 }
 
 ## Launch EPP
+loc.list <- c('CPV', 'BEN', 'TCD')
 for(loc in loc.list) {    ## Run EPPASM
 # # 
 
