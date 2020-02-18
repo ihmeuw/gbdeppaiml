@@ -21,7 +21,7 @@ if(length(args) > 0) {
   }
 } else {
   run.name <- "200213_violin"
-  loc <- "AGO"
+  loc <- "ZWE"
 
   draw.fill <- TRUE
 
@@ -33,7 +33,7 @@ gbd_year_new <- "gbd20"
 gbd_year_old <- "gbd19"
 gbdyear <- 'gbd20'
 run.name.old <- compare.run
-
+compare.run = NA
 ### Functions
 library(mortdb, lib = "/ihme/mortality/shared/r")
 setwd(paste0(ifelse(windows, "H:", paste0("/homes/", user)), "/eppasm/"))

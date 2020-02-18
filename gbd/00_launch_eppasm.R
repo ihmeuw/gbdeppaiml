@@ -16,7 +16,7 @@ run.name <- "200213_violin"
 spec.name <- "191224_trumpet"
 compare.run <- '200119_ukelele'
 proj.end <- 2022
-n.draws <- 100
+n.draws <- 1000
 run.group2 <- FALSE
 paediatric <- TRUE
 cluster.project <- "proj_hiv"
@@ -126,7 +126,7 @@ if(redo_offsets){
 }
 
 ## Launch EPP
-loc.list <- c('CPV', 'BEN', 'TCD')
+loc.list <- c(loc.list, 'STP', 'MRT', 'COM')
 for(loc in loc.list) {    ## Run EPPASM
 # # 
 
@@ -154,8 +154,8 @@ for(loc in loc.list) {    ## Run EPPASM
                           run.name, " ", loc, ' ', n.draws, ' TRUE ', paediatric)
     print(draw.string)
     system(draw.string)
-
-
+    # 
+    # 
     plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
                           "-e /share/temp/sgeoutput/", user, "/errors ",
                           "-o /share/temp/sgeoutput/", user, "/output ",
@@ -166,7 +166,7 @@ for(loc in loc.list) {    ## Run EPPASM
                           loc, " ", run.name, ' ', paediatric, ' ', compare.run)
     print(plot.string)
     system(plot.string)
-    # 
+
     # diagnostic.string <- paste0("qsub -l m_mem_free=5G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
     #                       "-e /share/homes/", user, "/errors ",
     #                       "-o /share/temp/sgeoutput/", user, "/output ",

@@ -90,7 +90,7 @@ use_2018 <- F
 use_subpop <- F
 use_prepped <- F
 loc.list <- loc.list[grepl('NGA', loc.list)]
-countries <- "NGA_25343"
+loc.list <- "CPV"
 additional <- additional[Prev < 1,]
 for (countries in loc.list) {
 

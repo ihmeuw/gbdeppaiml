@@ -156,6 +156,7 @@ loc.table <- data.table(get_locations(hiv_metadata = T))
 epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
 loc.list <- epp.list
 loc.list <- loc.list[grepl('NGA', loc.list)]
+loc.list <- 'CPV'
 for(loc in loc.list){
 gen.pop.dict <- c("General Population", "General population", "GP", 
                   "GENERAL POPULATION", "GEN. POPL.", "General population(Low Risk)", 'Pop restante',
