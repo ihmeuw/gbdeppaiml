@@ -21,15 +21,14 @@ if(length(args) > 0) {
   paediatric <- as.logical(args[4])
 } else {
 	run.name <- '200213_violin'
-	loc <- 'NGA_25343'
-	#loc <- 'BEN'
+	loc <- 'CPV'
+	#loc <- 'ERI'
 	stop.year <- 2022
 	j <- 1
 	paediatric <- TRUE
 }
 
 run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
-
 c.args <- run.table[run_name=='200119_ukelele']
 
 
@@ -130,6 +129,13 @@ if(grepl('ETH', loc)){
 if(geoadjust){
   attr(dt, 'eppd')$ancsitedat$offset <- attr(dt, 'eppd')$ancsitedat$offset %>% as.numeric()
   
+}
+if(!geoadjust){
+  temp <- data.table(attr(dt, 'eppd')$ancsitedat)
+  setnames(temp, 'year_id', 'year')
+  temp <- temp[,ihme_loc_id := NULL]
+  temp <- temp[,high_risk := NULL]
+  attr(dt, 'eppd')$ancsitedat <- data.frame(temp)
 }
 
 dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, "/", run.name, '/dt_objects/'), recursive = T)
@@ -391,6 +397,12 @@ if(length(attr(dt, 'specfp')$cotrim_num) < attr(dt, 'specfp')$SIM_YEARS){
   attr(dt, 'specfp')$cotrim_num <-  new
   
   
+}
+
+if(any(colnames(attr(dt, 'eppd')) == 'year_id')){
+  x <- as.data.table(attr(dt, 'eppd')$ancsitedat)
+  x <- setnames(x, 'year_id', 'year')
+  attr(dt, 'eppd')$ancsitedat <-  as.data.frame(x)
 }
 
 ## Fit model

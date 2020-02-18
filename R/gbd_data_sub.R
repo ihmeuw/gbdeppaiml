@@ -761,6 +761,9 @@ sub.prev.granular <- function(dt, loc){
     age.prev.dt <- fread(paste0("/share/hiv/epp_input/gbd20/prev_surveys.csv"))
   }
   age.prev.dt <- age.prev.dt[iso3 == loc]
+  if(loc == 'AGO'){
+    age.prev.dt[year == 2016, year := 2015]
+  }
   ##outliering this survey
   if(grepl('CMR', loc)){
     age.prev.dt <- age.prev.dt[year != 2018,]
@@ -785,7 +788,7 @@ sub.prev.granular <- function(dt, loc){
   age.prev.dt <- age.prev.dt[,.(year, sex, agegr, n, prev, se, used, deff, deff_approx)]
   age.prev.dt$n <- as.numeric(age.prev.dt$n)
   gen.pop.dict <- c("General Population", "General population", "GP", "GENERAL POPULATION", "GEN. POPL.", "General population(Low Risk)", "Remaining Pop")
-  if(!grepl('KEN', loc) & !grepl('NGA', loc) & !grepl('BEN',loc)){
+  if(!grepl('KEN', loc) & !grepl('NGA', loc) & !grepl('BEN',loc) & !grepl('DJI',loc) & !grepl('ERI',loc)){
     age.prev.dt <- age.prev.dt[sex!='both',]
     
   }
@@ -1236,11 +1239,11 @@ geo_adj <- function(loc, dt, i, uncertainty) {
         }}
 
     
-      if(grepl("ZAF",temp.loc)){
-        print("Using Tembisa for ZAF")
-        art.dt = fread(paste0("/share/hiv/data/UNAIDS_extrapolated/GBD20//ZAF_sub/", loc, '_Adult_ART_cov.csv'))
-      }
-      
+      # if(grepl("ZAF",temp.loc)){
+      #   print("Using Tembisa for ZAF")
+      #   art.dt = fread(paste0("/share/hiv/data/UNAIDS_extrapolated/GBD20//ZAF_sub/", loc, '_Adult_ART_cov.csv'))
+      # }
+      # 
     art.dt[is.na(art.dt)] <- 0
     ##Need this to be logical later
     art.dt[, type := ifelse(ART_cov_pct > 0, TRUE, FALSE)]	

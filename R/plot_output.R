@@ -157,7 +157,7 @@ plot_15to49 <- function(loc="STP",  compare.run = NA, new.run = '200119_ukelele'
     if(!is.na(compare.run)){
       if(compare.run != '190630_rhino2'){
         compare.dt <- fread(paste0('/share/hiv/epp_output/gbd20/', compare.run, '/compiled/', loc, '.csv'))
-        compare.dt <- get_summary(compare.dt, loc, run.name.old = compare.run, run.name.new = new.run, paediatric, old.splits = F)
+        compare.dt <- get_summary(compare.dt, loc, run.name.old = compare.run, run.name.new = compare.run, paediatric, old.splits = F)
         
       }else{
         compare.dt <- fread(paste0('/share/hiv/epp_output/gbd19/', compare.run, '/compiled/', loc, '.csv'))
@@ -222,12 +222,13 @@ plot_15to49 <- function(loc="STP",  compare.run = NA, new.run = '200119_ukelele'
   cur.dt <- get_summary(cur.dt, loc, run.name.old = compare.run, run.name.new = new.run,  paediatric, old.splits = F)
   cur.dt <- cur.dt[age_group_id == 24 & sex == 'both' & measure %in% meas.list & metric == "Rate",.(type = 'line', year, indicator = measure, model = run.name, mean, lower, upper)]
 
-
+  compare.run <- '200119_ukelele'
   
-  plot.dt <- rbind(data,  compare.dt.17, cur.dt,compare.dt.unaids,lbd.unraked, use.names = T, fill = T)
+  
+  plot.dt <- rbind(data,  compare.dt.17, compare.dt,cur.dt,compare.dt.unaids,lbd.unraked, use.names = T, fill = T)
   plot.dt[,model := factor(model)]
-  color.list <- c('blue', 'red', 'purple','orange')
-  names(color.list) <- c(new.run, 'GBD2019', 'UNAIDS','LBD Unraked')
+  color.list <- c('blue', 'red', 'green','purple','orange')
+  names(color.list) <- c(new.run, 'GBD2019', compare.run,'UNAIDS','LBD Unraked')
 
   plot.dt[,model := factor(model)]
   # color.list <- c('blue', 'red', 'purple', 'green')
