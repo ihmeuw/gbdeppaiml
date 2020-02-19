@@ -21,7 +21,7 @@ if(length(args) > 0) {
   paediatric <- as.logical(args[4])
 } else {
 	run.name <- '200213_violin'
-	loc <- 'CPV'
+	loc <- 'NGA_25343'
 	#loc <- 'ERI'
 	stop.year <- 2022
 	j <- 1
@@ -119,8 +119,11 @@ if(any(attr(dt, 'eppd')$ancsitedat$prev > 1)){
   attr(dt, 'eppd')$ancsitedat <- as.data.frame(as.data.table(attr(dt, 'eppd')$ancsitedat)[prev < 1,])
 }
 
-##this is a quick fix, will need to correct later
-
+##Remove NA rows on ANCRT cens that are casuing issues
+if(loc=="NGA_25343"){
+  attr(dt,"eppd")$ancrtcens <- attr(dt,"eppd")$ancrtcens[1:2,] 
+  
+}
 
 if(grepl('ETH', loc)){
   attr(dt, 'eppd')$hhs <-  subset(attr(dt, 'eppd')$hhs, year != '2018')
@@ -406,7 +409,8 @@ if(any(colnames(attr(dt, 'eppd')) == 'year_id')){
 }
 
 ## Fit model
-fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500)
+
+fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e2, B = 1e3, number_k = 2)
 data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc, '.csv')
 if(!file.exists(data.path)){save_data(loc, attr(dt, 'eppd'), run.name)}
 if(file.exists(data.path)){save_data(loc, attr(dt, 'eppd'), run.name)}
