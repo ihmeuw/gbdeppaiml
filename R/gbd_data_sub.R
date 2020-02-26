@@ -756,7 +756,8 @@ sub.prev.granular <- function(dt, loc){
   ## TODO: Add this to cache prev
   ##make sure that this only keeps sex 3 for 15-49
   if(grepl('KEN', loc)){
-    age.prev.dt <- fread("/ihme/hiv/epp_input/gbd19/190630_rhino2/prev_surveys.csv")
+    age.prev.dt <- fread(paste0("/share/hiv/epp_input/gbd20/prev_surveys.csv"))
+    age.prev.dt <- age.prev.dt[sex_id == 3,]
   }else{
     age.prev.dt <- fread(paste0("/share/hiv/epp_input/gbd20/prev_surveys.csv"))
   }
@@ -853,7 +854,7 @@ sub.off.art <- function(dt, loc, k) {
 }
 
 sub.on.art <- function(dt, loc, k) {
-  if(run.name!="200213_violin"){
+  if(run.name!="200213_violin" & run.name!= '200213_violin_zaf'){
   mortart <- fread(paste0(aim.dir,"transition_parameters/HIVmort_onART_regions/DisMod/", loc,"_HIVonART.csv"))
   print('Using BRADMOD')
   } else {
@@ -865,42 +866,44 @@ sub.on.art <- function(dt, loc, k) {
                   id = c("durationart", "cd4_category", "age", "sex","cd4_lower",
                          "cd4_upper"))
   
+  mortart[value > 1, value := 0.9999]
   
   ##Pull out replacements for values above 1
-  if(k==53){
-
-  replace_53 <- mortart[variable=="mort100" & 
-                          durationart == "6to12Mo" &
-                          cd4_category %in% c("ARTLT50CD4","ART50to99CD4") &
-                          age == "25-35" &
-                          sex == 2 &
-                          cd4_lower %in% c(0,50)]
-  replace_53[,variable := "mort53"]
-  mortart[(variable=="mort53" & 
-                         durationart == "6to12Mo" &
-                         cd4_category %in% c("ARTLT50CD4","ART50to99CD4") &
-                         age == "25-35" &
-                         sex == 2 &
-                         cd4_lower %in% c(0,50))] <- replace_53
-  }
-  
-  if(k==30){
-    replace_30 <- mortart[(variable=="mort100" & 
-                             durationart == "6to12Mo" &
-                             cd4_category %in% c("ARTLT50CD4") &
-                             age == "25-35" &
-                             sex == 2 &
-                             cd4_lower %in% c(0))]
-    replace_30[,variable := "mort30"]
-   mortart[(variable=="mort30" & 
-                     durationart == "6to12Mo" &
-                     cd4_category %in% c("ARTLT50CD4") &
-                     age == "25-35" &
-                     sex == 2 &
-                     cd4_lower %in% c(0))] <- replace_30
-  }
-  
-  
+  # if(k==53){
+  # 
+  # replace_53 <- mortart[variable=="mort100" & 
+  #                         durationart == "6to12Mo" &
+  #                         cd4_category %in% c("ARTLT50CD4","ART50to99CD4") &
+  #                         age == "25-35" &
+  #                         sex == 2 &
+  #                         cd4_lower %in% c(0,50)]
+  # replace_53[,variable := "mort53"]
+  # mortart[(variable=="mort53" & 
+  #                        durationart == "6to12Mo" &
+  #                        cd4_category %in% c("ARTLT50CD4","ART50to99CD4") &
+  #                        age == "25-35" &
+  #                        sex == 2 &
+  #                        cd4_lower %in% c(0,50))] <- replace_53
+  # }
+  # 
+  # 
+  # if(k==30){
+  #   replace_30 <- mortart[(variable=="mort100" & 
+  #                            durationart == "6to12Mo" &
+  #                            cd4_category %in% c("ARTLT50CD4") &
+  #                            age == "25-35" &
+  #                            sex == 2 &
+  #                            cd4_lower %in% c(0))]
+  #   replace_30[,variable := "mort30"]
+  #  mortart[(variable=="mort30" & 
+  #                    durationart == "6to12Mo" &
+  #                    cd4_category %in% c("ARTLT50CD4") &
+  #                    age == "25-35" &
+  #                    sex == 2 &
+  #                    cd4_lower %in% c(0))] <- replace_30
+  # }
+  # 
+  # 
   setnames(mortart, c("variable","value","cd4_category"),c("draw","mort","cd4"))
   # mortart <- mortart[age!="55-100",]
   
@@ -1107,68 +1110,100 @@ geo_adj <- function(loc, dt, i, uncertainty) {
         }
         
         anc.dt  <- anc.dt[,offset := qnorm(adm0_mean)-qnorm(site_pred)]
-        replace <- anc.dt[is.na(offset)]
+        site.dat[,adm0_lower := NULL]
+        site.dat[,adm0_upper := NULL]
+        site.dat[,adm0_mean := NULL]
+        site.dat[,site_pred:=NULL]
+        site.dat[,offset := NULL]
+        anc.dt[,clinic := as.character(clinic)]
+        anc.dt[,mean := NULL]
+
+        if(loc == 'ZWE'){
+          anc.dt[,high_risk := FALSE]
+        }
+        anc.dt <- merge(site.dat, anc.dt, by.x = c('site',  "year_id" ,"subpop" ,"high_risk" ),
+              by.y = c('clinic',  'year_id',  'subpop', 'high_risk'))
+
+        #replace NAs with averages
+        replace <- anc.dt[is.na(offset) & year_id >= 2000,]
         anc.dt <- data.table(anc.dt)
-        for(clinic_x in replace$clinic){
-          if(!all(is.na(anc.dt[clinic == clinic_x,offset]))){
-            anc.dt[is.na(offset) & clinic == clinic_x, site_pred := mean(anc.dt[clinic == clinic_x, site_pred], na.rm = T)]
-            anc.dt[is.na(offset) & clinic == clinic_x, adm0_mean := mean(anc.dt[clinic == clinic_x, adm0_mean], na.rm = T)]
-            anc.dt[is.na(offset) & clinic == clinic_x, adm0_lower := mean(anc.dt[clinic == clinic_x, adm0_lower], na.rm = T)]
-            anc.dt[is.na(offset) & clinic == clinic_x, adm0_upper := mean(anc.dt[clinic == clinic_x, adm0_upper], na.rm = T)]
-            anc.dt[is.na(offset) & clinic == clinic_x, offset := qnorm(adm0_mean)-qnorm(site_pred)]
-            if(any(is.nan(anc.dt[clinic == clinic_x,offset]))){
-              anc.dt[is.nan(offset) & clinic == clinic_x, offset := mean(anc.dt[clinic == clinic_x, offset], nan.rm = T)]
+        for(site_x in replace$site){
+          if(!all(is.na(anc.dt[site == site_x,offset]))){
+            anc.dt[is.na(offset) & site == site_x, site_pred := mean(anc.dt[site == site_x, site_pred], na.rm = T)]
+            anc.dt[is.na(offset) & site == site_x, adm0_mean := mean(anc.dt[site == site_x, adm0_mean], na.rm = T)]
+            anc.dt[is.na(offset) & site == site_x, adm0_lower := mean(anc.dt[site == site_x, adm0_lower], na.rm = T)]
+            anc.dt[is.na(offset) & site == site_x, adm0_upper := mean(anc.dt[site == site_x, adm0_upper], na.rm = T)]
+            anc.dt[is.na(offset) & site == site_x, offset := qnorm(adm0_mean)-qnorm(site_pred)]
+            if(any(is.nan(anc.dt[site == site_x,offset]))){
+              anc.dt[is.nan(offset) & site == site_x, offset := mean(anc.dt[site == site_x, offset], nan.rm = T)]
               
             }
             
           }else{
-            years_to_fill <- unique(anc.dt[is.na(offset) & clinic == clinic_x,year_id])
+            years_to_fill <- unique(anc.dt[is.na(offset) & site == site_x,year_id])
             for(year_x in years_to_fill){
-              anc.dt[is.na(offset) & year_id == year_x & clinic == clinic_x, site_pred := mean(anc.dt[year_id == year_x, site_pred], na.rm = T)]
-              anc.dt[is.na(offset) & year_id == year_x & clinic == clinic_x, adm0_mean := mean(anc.dt[year_id == year_x, adm0_mean], na.rm = T)]
-              anc.dt[is.na(offset) & year_id == year_x & clinic == clinic_x, adm0_lower := mean(anc.dt[year_id == year_x, adm0_lower], na.rm = T)]
-              anc.dt[is.na(offset) & year_id == year_x & clinic == clinic_x, adm0_upper := mean(anc.dt[year_id == year_x, adm0_upper], na.rm = T)]
-              anc.dt[is.na(offset) & year_id == year_x & clinic == clinic_x,offset := qnorm(adm0_mean)-qnorm(site_pred)]
-              if(any(is.nan(anc.dt[clinic == clinic_x,offset]))){
-                anc.dt[is.nan(offset) & year_id == year_x & clinic == clinic_x, offset := mean(anc.dt[year_id == year_x, offset], na.rm = T)]
+              anc.dt[is.na(offset) & year_id == year_x & site == site_x, site_pred := mean(anc.dt[year_id == year_x, site_pred], na.rm = T)]
+              anc.dt[is.na(offset) & year_id == year_x & site == site_x, adm0_mean := mean(anc.dt[year_id == year_x, adm0_mean], na.rm = T)]
+              anc.dt[is.na(offset) & year_id == year_x & site == site_x, adm0_lower := mean(anc.dt[year_id == year_x, adm0_lower], na.rm = T)]
+              anc.dt[is.na(offset) & year_id == year_x & site == site_x, adm0_upper := mean(anc.dt[year_id == year_x, adm0_upper], na.rm = T)]
+              anc.dt[is.na(offset) & year_id == year_x & site == site_x,offset := qnorm(adm0_mean)-qnorm(site_pred)]
+              if(any(is.nan(anc.dt[site == site_x,offset]))){
+                anc.dt[is.nan(offset) & year_id == year_x & site == site_x, offset := mean(anc.dt[year_id == year_x, offset], na.rm = T)]
                 
               }
             }
           }
         }
-        #Copy year 2000 or otherwise earliest year to fill in  early years where GBD has data but LBD does not  
-        post.2000 <- anc.dt[year_id >=2000]
-        setnames(post.2000, 'clinic', 'site')
-        min.dt <- post.2000[year_id == min(year_id),.(offset), by = 'site']
-        anc.dt[,'adm0_mean' := as.numeric(anc.dt[,adm0_mean])]
-        anc.dt[,'adm0_lower' := as.numeric(anc.dt[,adm0_lower])]
-        anc.dt[,'adm0_upper' := as.numeric(anc.dt[,adm0_upper])]
-        anc.dt[,'site_pred' := as.numeric(anc.dt[,site_pred])]
-        setnames(anc.dt, 'year_id', 'year')
-        setnames(site.dat, 'year_id', 'year')
-        site.dat <- site.dat[,.(site, year, used, prev, n, subpop, type, agegr, age, agspan)]
-        setnames(anc.dt, 'clinic', 'site')
-        anc.dt[,subpop := as.character(subpop)]
-        anc.dt[,site := as.character(site)]
-        site.dat <- unique(site.dat)
-        anc.dt <- unique(anc.dt)
-        site.dat[,subpop := NULL]
-      
         
-        if(subpop2 %in% unique(eppd$ancsitedat$subpop)){
-          temp.dat <- merge(site.dat[type == 'ancss'],anc.dt[,.(site,year,site_pred,adm0_mean,adm0_lower,adm0_upper,offset,high_risk)], by=c("site","year"), all.x = TRUE)
-        } else {
-          temp.dat <- merge(site.dat,anc.dt[,.(site,year,site_pred,adm0_mean,adm0_lower,adm0_upper,offset,high_risk)], by=c("site","year"),all.x=TRUE)
+        #copy over post 2000 data to pre 2000 data
+        min_offset <- c()
+        for(site.x in unique(anc.dt$site)){
+          df <- anc.dt[site == site.x,.(year_id, offset)]
+          df <- df[order(year_id),]
+          min_offset[site.x] <- df$offset[!is.na(df$offset)][1]
           
         }
+        setnames(anc.dt, 'site', 'clinic')
+        min_offset <- data.table(min_offset)
+        min_offset[,clinic := unique(anc.dt$clinic)]
+        pre_2000 <- anc.dt[year_id < 2000]
+        pre_2000[,offset:= NULL]
+        pre_2000 <- merge(pre_2000, min_offset, by = 'clinic')
+        setnames(pre_2000, 'min_offset', 'offset')
+        anc.dt <- rbind(anc.dt[year_id >= 2000], pre_2000)
+        
+        #Copy year 2000 or otherwise earliest year to fill in  early years where GBD has data but LBD does not  
+        # post.2000 <- anc.dt[year_id >=2000]
+        # setnames(post.2000, 'clinic', 'site')
+        # min.dt <- post.2000[year_id == min(year_id),.(offset), by = 'site']
+        # anc.dt[,'adm0_mean' := as.numeric(anc.dt[,adm0_mean])]
+        # anc.dt[,'adm0_lower' := as.numeric(anc.dt[,adm0_lower])]
+        # anc.dt[,'adm0_upper' := as.numeric(anc.dt[,adm0_upper])]
+        # anc.dt[,'site_pred' := as.numeric(anc.dt[,site_pred])]
+        # setnames(anc.dt, 'year_id', 'year')
+        # setnames(site.dat, 'year_id', 'year')
+        # site.dat <- site.dat[,.(site, year, used, prev, n, subpop, type, agegr, age, agspan)]
+        # setnames(anc.dt, 'clinic', 'site')
+        # anc.dt[,subpop := as.character(subpop)]
+        # anc.dt[,site := as.character(site)]
+        # site.dat <- unique(site.dat)
+        # anc.dt <- unique(anc.dt)
+        # site.dat[,subpop := NULL]
+      
+        
+        # if(subpop2 %in% unique(eppd$ancsitedat$subpop)){
+        #   temp.dat <- merge(site.dat[type == 'ancss'],anc.dt[,.(site,year,site_pred,adm0_mean,adm0_lower,adm0_upper,offset,high_risk)], by=c("site","year"), all.x = TRUE)
+        # } else {
+        #   temp.dat <- merge(site.dat,anc.dt[,.(site,year,site_pred,adm0_mean,adm0_lower,adm0_upper,offset,high_risk)], by=c("site","year"),all.x=TRUE)
+        #   
+        # }
         #Duplicate issue with 'pseudo sites' in Mozambique
         if(loc == "MOZ"){
           min.dt <- unique(min.dt)
         }
-        
+        temp.dat <- anc.dt
         temp.dat[,subpop := subpop2]
         temp.dat <- rbind(temp.dat, site.dat[type == 'ancrt'], fill = T)
-        merge.dt <- copy(temp.dat[year < 2000 & !is.na(prev)])
         # min.dt <- unique(min.dt)
         # add_on <- as.data.table(setdiff(merge.dt$site, min.dt$site))
         # setnames(add_on, old = 'V1', new = 'site')
@@ -1179,8 +1214,7 @@ geo_adj <- function(loc, dt, i, uncertainty) {
         # merge.dt <- merge(merge.dt, min.dt, by = 'site')
         
         
-        temp.dat <- temp.dat[year >= 2000 & !is.na(prev)]
-        temp.dat <- rbind(temp.dat, merge.dt, use.names = T, fill = TRUE)
+        temp.dat 
    
         
         all.anc <- rbind(all.anc,temp.dat)
@@ -1202,12 +1236,14 @@ geo_adj <- function(loc, dt, i, uncertainty) {
      all.anc[is.na(high_risk),high_risk := FALSE]
       #all.anc <- all.anc[!high_risk==TRUE]
       all.anc[,c('site_pred','adm0_mean','adm0_lower','adm0_upper','high_risk') := NULL]
-
+      setnames(all.anc, 'clinic', 'site')
      
      ##This corrects a mistake in the file generation - should be corrected in the initial generation
      if(loc=="NGA_25332"){
        all.anc[,high_risk := FALSE]
      }
+      
+    setnames(all.anc, 'year_id', 'year')
 
      all.anc <- all.anc[,.(site, subpop, year, used, prev, n, type, agegr, age, agspan, offset)]
      all.anc <- as.data.frame(all.anc)
@@ -1239,11 +1275,11 @@ geo_adj <- function(loc, dt, i, uncertainty) {
         }}
 
     
-      # if(grepl("ZAF",temp.loc)){
-      #   print("Using Tembisa for ZAF")
-      #   art.dt = fread(paste0("/share/hiv/data/UNAIDS_extrapolated/GBD20//ZAF_sub/", loc, '_Adult_ART_cov.csv'))
-      # }
-      # 
+      if(grepl("ZAF",temp.loc) & grepl('zaf', run.name)){
+        print("Using Tembisa for ZAF")
+        art.dt = fread(paste0("/share/hiv/data/UNAIDS_extrapolated/GBD20//ZAF_sub/", loc, '_Adult_ART_cov.csv'))
+      }
+
     art.dt[is.na(art.dt)] <- 0
     ##Need this to be logical later
     art.dt[, type := ifelse(ART_cov_pct > 0, TRUE, FALSE)]	

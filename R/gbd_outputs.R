@@ -290,12 +290,14 @@ split_u1.new_ages <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd2
   u1.pop <- pop[age_group_id %in% c(2,3,388,389)]
   u1.pop[,pop_total := sum(population), by = c('sex_id', 'year_id')]
   u1.pop[,pop_prop := population/sum(population), by = c('sex_id', 'year_id')]
+  u1.pop[age_group_id != 2 & age_group_id !=3,pop_death_pop := population / sum(population), by = c('sex_id', 'year_id')]
+  u1.pop[is.na(pop_death_pop), pop_death_pop := 0]
   ## props for death
   u1.pop[age_group_id !=2 & age_group_id != 3,pop_prop_death:= 1]
   u1.pop[age_group_id==2 | age_group_id == 3 ,pop_prop_death:=0]
   setnames(u1.pop, 'year_id', 'year')
   u1.pop[,sex := ifelse(sex_id == 1, 'male', 'female')]
-  u1.pop <- u1.pop[,list(sex,year,age_group_id,pop_total,pop_prop,pop_prop_death)]
+  u1.pop <- u1.pop[,list(sex,year,age_group_id,pop_total,pop_prop,pop_prop_death, pop_death_pop)]
   
   spec_u1 <- merge(dt,u1.pop,by=c("year","sex"), allow.cartesian=T)
   # Split all variables that can be split by population without age restrictions for 1-4 age cat
@@ -304,7 +306,7 @@ split_u1.new_ages <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd2
   spec_u1[,(all_age_vars) := lapply(.SD,pop_weight_all),.SDcols=all_age_vars] 
   
   # Split deaths into ENN and 1-4 age categories
-  pop_weight_death <- function(x) return(x*spec_u1[['pop_prop_death']])
+  pop_weight_death <- function(x) return(x*spec_u1[['pop_death_pop']])
   death_vars <- c("hiv_deaths")
   spec_u1[,(death_vars) := lapply(.SD,pop_weight_death),.SDcols=death_vars] 
   
@@ -394,7 +396,7 @@ get_summary <- function(output, loc, run.name.old, run.name.new, paediatric = FA
       
     }
     output <- output[age != 0]
-    output <- rbind(output, output.u1, use.names = T)    
+    output <- rbind(output, output.u1[,pop_death_pop := NULL], use.names = T)    
   }
   output[, hivpop := pop_art + pop_gt350 + pop_200to350 + pop_lt200]
   output[,c('pop_gt350', 'pop_200to350', 'pop_lt200', 'birth_prev', 'pop_neg', 'hiv_births', 'total_births') := NULL]

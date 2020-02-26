@@ -13,8 +13,8 @@ library(data.table)
 
 ## Arguments
 run.name <- "200213_violin"
-spec.name <- "191224_trumpet"
-compare.run <- '200119_ukelele'
+spec.name <- "200213_violin"
+compare.run <- '190630_rhino2'
 proj.end <- 2022
 n.draws <- 1000
 run.group2 <- FALSE
@@ -126,10 +126,11 @@ if(redo_offsets){
 }
 
 ## Launch EPP
-loc.list <- c(loc.list, 'STP', 'MRT', 'COM')
+
+loc.list <- 'CAF'
 for(loc in loc.list) {    ## Run EPPASM
 # # 
-
+# 
     epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q all.q -P ", cluster.project, " ",
                          "-e /share/temp/sgeoutput/", user, "/errors ",
                          "-o /share/temp/sgeoutput/", user, "/output ",
@@ -229,7 +230,7 @@ if(reckon_prep){
   for(loc in all_loc_list){
     if(loc %in% eppasm_parents){
     prep.string <- paste0("qsub -l m_mem_free=100G -l fthread=2 -l h_rt=02:00:00 -l archive -q all.q -P ", cluster.project, " ",
-                          "-o /share/temp/sgeoutput/", user, "/errors ",
+                          "-e /share/temp/sgeoutput/", user, "/errors ",
                           "-o /share/temp/sgeoutput/", user, "/output ",
                           "-N ", loc, "_aggregate ",
                           "-hold_jid ", loc,"_save_draws ",
@@ -242,7 +243,7 @@ if(reckon_prep){
     
 
   prep.string <- paste0("qsub -l m_mem_free=50G -l fthread=1 -l h_rt=02:00:00 -l archive -q all.q -P ", cluster.project, " ",
-                        "-o /share/temp/sgeoutput/", user, "/errors ",
+                        "-e /share/temp/sgeoutput/", user, "/errors ",
                         "-o /share/temp/sgeoutput/", user, "/output ",
                         "-N ", loc, "_apply_age_splits ",
                         "-hold_jid ", loc,"_aggregate ",

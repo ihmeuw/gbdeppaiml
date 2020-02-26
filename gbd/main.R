@@ -21,10 +21,10 @@ if(length(args) > 0) {
   paediatric <- as.logical(args[4])
 } else {
 	run.name <- '200213_violin'
-	loc <- 'NGA_25343'
+	loc <- 'CAF'
 	#loc <- 'ERI'
 	stop.year <- 2022
-	j <- 1
+	j <- 106
 	paediatric <- TRUE
 }
 
@@ -133,7 +133,7 @@ if(geoadjust){
   attr(dt, 'eppd')$ancsitedat$offset <- attr(dt, 'eppd')$ancsitedat$offset %>% as.numeric()
   
 }
-if(!geoadjust){
+if(!geoadjust & any(colnames(data.table(attr(dt, 'eppd')$ancsitedat)) == 'year_id')){
   temp <- data.table(attr(dt, 'eppd')$ancsitedat)
   setnames(temp, 'year_id', 'year')
   temp <- temp[,ihme_loc_id := NULL]
@@ -410,7 +410,7 @@ if(any(colnames(attr(dt, 'eppd')) == 'year_id')){
 
 ## Fit model
 
-fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e2, B = 1e3, number_k = 2)
+fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500)
 data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc, '.csv')
 if(!file.exists(data.path)){save_data(loc, attr(dt, 'eppd'), run.name)}
 if(file.exists(data.path)){save_data(loc, attr(dt, 'eppd'), run.name)}

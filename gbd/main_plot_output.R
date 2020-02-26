@@ -26,14 +26,13 @@ if(length(args) > 0) {
   draw.fill <- TRUE
 
   paediatric <- TRUE
-  compare.run <- '200119_ukelele'
+  compare.run <- '190630_rhino2'
 }
 
 gbd_year_new <- "gbd20"
 gbd_year_old <- "gbd19"
 gbdyear <- 'gbd20'
 run.name.old <- compare.run
-compare.run = NA
 ### Functions
 library(mortdb, lib = "/ihme/mortality/shared/r")
 setwd(paste0(ifelse(windows, "H:", paste0("/homes/", user)), "/eppasm/"))

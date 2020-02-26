@@ -87,10 +87,10 @@ loc.list <- loc.list[-which(loc.list == 'PNG')]
 
 use_2019 <- T
 use_2018 <- F
-use_subpop <- F
+use_subpop <- T
 use_prepped <- F
 loc.list <- loc.list[grepl('NGA', loc.list)]
-loc.list <- "CPV"
+loc.list <- "ETH_44859"
 additional <- additional[Prev < 1,]
 for (countries in loc.list) {
 
@@ -128,7 +128,7 @@ for (countries in loc.list) {
     if(!exists("df.2018") | !use_2018){
       df.2018 <- NULL
     }
-    if(!exists("df.subpop") | !use_subpop){
+    if(!exists("df.subpop") ){
       df.subpop <- NULL
     }
     if(!exists("df.prepped") | !use_prepped){
@@ -136,6 +136,9 @@ for (countries in loc.list) {
     }
     
     df <- rbind(df.2019, df.2018, df.subpop, df.prepped)
+    if(countries == 'ETH_44859'){
+      df <- df.subpop
+    }
     df <- as.data.table(df)
   }
 
@@ -144,7 +147,14 @@ for (countries in loc.list) {
   df$country <- countries
   df$ihme_loc_id <- countries
   
-  if(loc ==  "NGA_25343"){
+  if(countries ==  "NGA_25343"){
+    df <- as.data.table(df)
+    df[site == 'Site 3', site := 'Nasarawa(Doma)']
+    df[site == 'Site 1 - N/ Eggon', site := 'Nasarawa(N/Eggon)']
+    df[site == 'Site 2 - Lafia', site := 'Nasarawa (Lafia)']
+    df[site == 'Site 4', site := 'Nasarawa (Garaku)']
+  }
+  if(countries ==  "NGA_25343"){
     df <- as.data.table(df)
     df[site == 'Site 3', site := 'Nasarawa(Doma)']
     df[site == 'Site 1 - N/ Eggon', site := 'Nasarawa(N/Eggon)']

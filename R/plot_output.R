@@ -96,6 +96,7 @@ plot_15to49 <- function(loc="STP",  compare.run = NA, new.run = '200119_ukelele'
 
   }
   
+  
   data <- data[metric == 'Rate']
   data[, c('age_group_id', 'metric', 'ihme_loc_id') := NULL]
   
@@ -214,15 +215,22 @@ plot_15to49 <- function(loc="STP",  compare.run = NA, new.run = '200119_ukelele'
     data.agg[,type := 'point']
     data <- data.agg
   }
+  if(loc %in% c('CPV')){
+    age.prev.dt <- fread(paste0("/share/hiv/epp_input/gbd20/prev_surveys.csv"))
+    age.prev.dt <- age.prev.dt[iso3 == loc]
+    sex_agg <- data.table(age = age.prev.dt[sex_id == 3, age_year], sex = 'both', type = 'point', model = 'Household Survey', indicator = 'Prevalence', 
+                 mean = age.prev.dt[sex_id == 3, prev], upper = NA, lower = NA, year = age.prev.dt[sex_id == 3, year])
+    data <- data[model!='Household Survey',]
+    data <- rbind(data, sex_agg)
+  }
   
   data <- rbind(data, anc[,age := NULL], fill = T)
 
-  compare.run <- '190630_rhino2'
-  
-  cur.dt <- get_summary(cur.dt, loc, run.name.old = compare.run, run.name.new = new.run,  paediatric, old.splits = F)
+
+  cur.dt <- get_summary(cur.dt, loc, run.name.old = '190630_rhino2', run.name.new = new.run,  paediatric, old.splits = F)
   cur.dt <- cur.dt[age_group_id == 24 & sex == 'both' & measure %in% meas.list & metric == "Rate",.(type = 'line', year, indicator = measure, model = run.name, mean, lower, upper)]
 
-  compare.run <- '200119_ukelele'
+  #compare.run <- '200119_ukelele'
   
   
   plot.dt <- rbind(data,  compare.dt.17, compare.dt,cur.dt,compare.dt.unaids,lbd.unraked, use.names = T, fill = T)

@@ -18,7 +18,7 @@ diag_dir <- paste0('/ihme/hiv/epp_output/', new_fp, '/diagnostic/')
 dir.create(diag_dir)
 
 
-diff_arise <- function(new_fp = 'gbd20/191224_trumpet', old_fp = 'gbd19/190630_rhino2', loc){
+diff_arise <- function(new_fp = 'gbd20/200213_violin', old_fp = 'gbd19/190630_rhino2', loc){
   if(!file.exists(paste0('/ihme/hiv/epp_output/', old_fp, '/dt_objects/', loc, '_dt.RDS'))){
     print(paste0('Dt object for the ', old_fp, ' run was not saved'))
   }

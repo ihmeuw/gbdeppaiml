@@ -12,9 +12,9 @@ if(length(args) > 0) {
   run.name <- args[2]
   spec.name <- args[3]
 } else {
-  loc <- "MWI"
+  loc <- "TCD"
   run.name <- "200213_violin"
-  spec.name <- "191224_trumpet"
+  spec.name <- "200213_violin"
 
 }
 fill.draw <- T
@@ -79,7 +79,7 @@ output.u1 <- split_u1.new_ages(spec_draw[age == 0], loc, run.name.old=run.name, 
 output.u1[age=="x_388", age := "1-5 mo."]
 output.u1[age=="x_389", age := "6-11 mo."]
 spec_draw <- spec_draw[age != 0]
-spec_draw <- rbind(spec_draw, output.u1, use.names = T)    
+spec_draw <- rbind(spec_draw, output.u1[,pop_death_pop := NULL], use.names = T)    
 
 # Fill in missing draws
 if(fill.draw) {
@@ -116,7 +116,7 @@ spec_draw[, suscept_pop := pop_neg]
 
 
 ## Calculate birth prevalence rate
-birth_pop <- get_population(age_group_id=164, location_id=loc_id, year_id=1970:2022, sex_id=1:2, gbd_round_id = 7, decomp_step = 'step1')
+birth_pop <- get_population(age_group_id=164, location_id=loc_id, year_id=1970:2022, sex_id=1:2, gbd_round_id = 7, decomp_step = 'step2')
 setnames(birth_pop, c("year_id", "population"), c("year", "gbd_pop"))
 birth_dt <- copy(spec_draw)
 birth_dt <- birth_dt[,.(age_group_id = 164, birth_prev = sum(birth_prev), total_births = sum(total_births)), by = c('year', 'run_num', 'sex_id')]
@@ -133,7 +133,7 @@ spec_o80 <- data.table(spec_draw[age_group_id==21,])
 spec_o80[, age_group_id := NULL]
 
 # Get raw proportions for splitting populations and other general ones
-pop <- fread(paste0('/share/hiv/epp_input/gbd20/', run.name, '/population_splits/', loc, '.csv'))
+pop <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/population_splits/', loc, '.csv'))
 o80_pop <- pop[age_group_id %in% c(30:32, 235),]
 o80_pop[,pop_total:=sum(population), by=list(sex_id,year_id)]
 o80_pop[,pop_prop:=population/pop_total, by=list(sex_id,year_id)]

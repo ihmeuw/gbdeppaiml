@@ -156,7 +156,7 @@ loc.table <- data.table(get_locations(hiv_metadata = T))
 epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
 loc.list <- epp.list
 loc.list <- loc.list[grepl('NGA', loc.list)]
-loc.list <- 'CPV'
+loc.list <- "ETH_44859"
 for(loc in loc.list){
 gen.pop.dict <- c("General Population", "General population", "GP", 
                   "GENERAL POPULATION", "GEN. POPL.", "General population(Low Risk)", 'Pop restante',
@@ -179,10 +179,16 @@ anc.dt <- anc.dt[type == 'ancss']
 new.anc <- readRDS(lbd_anc_data)
 loc1 <- substring(loc,1,3)
 if(grepl('ETH', loc) | grepl('KEN', loc) | grepl('NGA', loc)){
-  country <- unlist(strsplit(loc, split = '_'))[1]
-  new.anc <- setDT(new.anc)[country==country]
-  full_geo <- fread(paste0(geo_repository))[iso3==country]
+  countr <- unlist(strsplit(loc, split = '_'))[1]
+  new.anc <- as.data.table(new.anc)[country == countr,]
+  full_geo <- fread(paste0(geo_repository))[iso3==countr]
   full_geo[,data_source := paste0("UNAIDS files - ",UNAIDS_year)]
+  full_geo[,ihme_loc_id := paste0(iso3, '_', subnational)]
+  # full_geo <- full_geo[,.(latitude, longitude, ihme_loc_id)]
+  # new.anc <- merge(full_geo, new.anc, by = c('latitude', 'longitude'))
+  # new.anc[,country := NULL]
+  # setnames(new.anc, 'ihme_loc_id', 'country')
+  # new.anc <- new.anc[country == loc,]
 }else{
   new.anc <- setDT(new.anc)[country==loc]
   full_geo <- fread(paste0(geo_repository))[iso3==loc]
@@ -213,7 +219,12 @@ anc.dt$site_year <- paste0(anc.dt$site,anc.dt$year)
 
 lbd.anc <- read.csv(lbd_anc_mean_est) %>% data.table()
 if(grepl('ETH', loc) | grepl('KEN', loc) | grepl('NGA', loc)){
-  lbd.anc <- lbd.anc[iso3_adm1 == loc]
+  if(grepl('KEN', loc)){
+    lbd.anc <- lbd.anc
+  }else{
+    lbd.anc <- lbd.anc[iso3_adm1 == loc]
+    
+  }
 }else{
   lbd.anc <- lbd.anc[iso3==loc]
 }
@@ -230,7 +241,13 @@ if(loc == 'MDG'){
 }
 all.dat <- merge(all.dat,lbd.anc,by = c('site', 'year'),all.x=TRUE)
 if(grepl('ETH', loc) | grepl('KEN', loc) | grepl('NGA', loc)){
-  all.dat <- all.dat[,iso3 := iso3_adm1]
+  if(grepl('KEN', loc)){
+    all.dat <- all.dat[,iso3 := loc]
+    
+  }else{
+    all.dat <- all.dat[,iso3 := iso3_adm1]
+    
+  }
 }
 
 #setnames(all.dat, 'N', 'n')
