@@ -12,11 +12,11 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 library(data.table)
 
 ## Arguments
-run.name <- "200213_violin"
+run.name <- "200213_violin_test"
 spec.name <- "200213_violin"
 compare.run <- '190630_rhino2'
-proj.end <- 2022
-n.draws <- 1000
+proj.end <- 2019
+n.draws <- 5
 run.group2 <- FALSE
 paediatric <- TRUE
 cluster.project <- "proj_hiv"
@@ -126,8 +126,6 @@ if(redo_offsets){
 }
 
 ## Launch EPP
-
-loc.list <- 'CAF'
 for(loc in loc.list) {    ## Run EPPASM
 # # 
 # 
@@ -144,7 +142,7 @@ for(loc in loc.list) {    ## Run EPPASM
     system(epp.string)
 
 
-    #Draw compilation
+    # #Draw compilation
     draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
                           "-e /share/temp/sgeoutput/", user, "/errors ",
                           "-o /share/temp/sgeoutput/", user, "/output ",
@@ -155,8 +153,8 @@ for(loc in loc.list) {    ## Run EPPASM
                           run.name, " ", loc, ' ', n.draws, ' TRUE ', paediatric)
     print(draw.string)
     system(draw.string)
-    # 
-    # 
+    # #
+    #
     plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
                           "-e /share/temp/sgeoutput/", user, "/errors ",
                           "-o /share/temp/sgeoutput/", user, "/output ",
@@ -223,7 +221,7 @@ check_loc_results(loc.table[grepl("1",group) & spectrum==1,ihme_loc_id],paste0('
 ## Aggregate to higher levels for EPP-ASM child locs - not India because it goes through Spectrum
 ## Prepare for post-reckoning steps
 eppasm_parents <-  c("KEN","ZAF","ETH","KEN_44793" ,"KEN_44794","KEN_44795", "KEN_44796" ,"KEN_44797", "KEN_44798","KEN_44799", "KEN_44800","NGA")
-all_loc_list <- c(loc.list,eppasm_parents)
+all_loc_list <- c('KEN_35617','KEN_44799', 'KEN')
 
 ## Aggregation and reckoning prep for higher levels
 if(reckon_prep){

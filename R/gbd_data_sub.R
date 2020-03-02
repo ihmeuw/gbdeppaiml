@@ -789,7 +789,7 @@ sub.prev.granular <- function(dt, loc){
   age.prev.dt <- age.prev.dt[,.(year, sex, agegr, n, prev, se, used, deff, deff_approx)]
   age.prev.dt$n <- as.numeric(age.prev.dt$n)
   gen.pop.dict <- c("General Population", "General population", "GP", "GENERAL POPULATION", "GEN. POPL.", "General population(Low Risk)", "Remaining Pop")
-  if(!grepl('KEN', loc) & !grepl('NGA', loc) & !grepl('BEN',loc) & !grepl('DJI',loc) & !grepl('ERI',loc)){
+  if(!grepl('KEN', loc) & !grepl('NGA', loc) & !grepl('BEN',loc) & !grepl('DJI',loc) & !grepl('ERI',loc)& !grepl('CAF',loc)){
     age.prev.dt <- age.prev.dt[sex!='both',]
     
   }
@@ -1096,7 +1096,13 @@ geo_adj <- function(loc, dt, i, uncertainty) {
     ##Generate the local:national offest term as the probit difference between national and predicted site prevalence - by subpopulation to avoid duplicates
     all.anc <- data.table()
     
-   
+   if(loc == 'ZMB'){
+     hr <- unique(anc.dt.all[,high_risk, by = 'subpop'])
+     x <- as.data.table(eppd$ancsitedat)
+     x[,high_risk := NULL]
+     x <- merge(hr, x, by = 'subpop')
+     eppd$ancsitedat <- as.data.frame(x)
+   }
       for(subpop2 in unique(anc.dt.all$subpop)){
         
         if(subpop2 %in% unique(eppd$ancsitedat$subpop)){
@@ -1121,6 +1127,7 @@ geo_adj <- function(loc, dt, i, uncertainty) {
         if(loc == 'ZWE'){
           anc.dt[,high_risk := FALSE]
         }
+
         anc.dt <- merge(site.dat, anc.dt, by.x = c('site',  "year_id" ,"subpop" ,"high_risk" ),
               by.y = c('clinic',  'year_id',  'subpop', 'high_risk'))
 
@@ -1218,7 +1225,7 @@ geo_adj <- function(loc, dt, i, uncertainty) {
    
         
         all.anc <- rbind(all.anc,temp.dat)
-        
+        print(subpop2)
         
       
       

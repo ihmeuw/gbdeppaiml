@@ -12,7 +12,7 @@ if(length(args) > 0) {
   run.name <- args[2]
   spec.name <- args[3]
 } else {
-  loc <- "TCD"
+  loc <- "KEN_35617"
   run.name <- "200213_violin"
   spec.name <- "200213_violin"
 

@@ -21,7 +21,7 @@ if(length(args) > 0) {
   paediatric <- as.logical(args[4])
 } else {
 	run.name <- '200213_violin'
-	loc <- 'CAF'
+	loc <- 'ZAF_482'
 	#loc <- 'ERI'
 	stop.year <- 2022
 	j <- 106
@@ -114,6 +114,18 @@ dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
                        anc.prior.sub = TRUE, lbd.anc = lbd.anc, 
                        geoadjust = geoadjust, use_2019 = TRUE)
 
+if(loc == 'CAF'){
+  x <- data.table(attr(dt, 'eppd')$ancsitedat)
+  x[,subpop := as.character(subpop)]
+  x[,n := as.integer(n)]
+  attr(dt, 'eppd')$ancsitedat <- as.data.frame(x)
+}
+if(loc == 'CAF' & run.name == '200212_tests'){
+  x <- readRDS(paste0('/ihme/hiv/epp_output/gbd19/190630_rhino2/dt_objects/', loc, '_dt.RDS' ))
+  x <- attr(x, 'eppd')$ancsitedat
+  attr(dt, 'eppd')$ancsitedat <- as.data.frame(x)
+  
+}
 if(any(attr(dt, 'eppd')$ancsitedat$prev > 1)){
   print('A prevalence above 1 was removed')
   attr(dt, 'eppd')$ancsitedat <- as.data.frame(as.data.table(attr(dt, 'eppd')$ancsitedat)[prev < 1,])
@@ -410,7 +422,7 @@ if(any(colnames(attr(dt, 'eppd')) == 'year_id')){
 
 ## Fit model
 
-fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500)
+fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 250)
 data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc, '.csv')
 if(!file.exists(data.path)){save_data(loc, attr(dt, 'eppd'), run.name)}
 if(file.exists(data.path)){save_data(loc, attr(dt, 'eppd'), run.name)}

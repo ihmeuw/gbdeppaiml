@@ -472,10 +472,10 @@ save_data <- function(loc, eppd, run.name){
     prevdata <- data.table(eppd$hhs)
     prevdata <- prevdata[,.(sex, agegr, type = 'point', model = 'Household Survey', indicator = 'Prevalence', mean = prev, upper = prev + (1.96 * se), lower = ifelse(prev - (1.96 * se) < 0, 0, prev - (1.96 * se)), year)]
     if(exists('agegr', where = prevdata)){
-      prevdata.agg <- prevdata[agegr == '15-49']
+      prevdata.agg <- prevdata[agegr %in% c('15-49', '15-64')]
       prevdata.agg[, age_group_id := 24]
       prevdata.agg[, age := '15-49']
-      prevdata <- prevdata[!agegr == '15-49']
+      prevdata <- prevdata[!agegr %in% c('15-49', '15-64')]
       prevdata[,age:=as.character(sapply(strsplit(agegr, "-"), "[[", 1))]
       prevdata <- merge(prevdata, age.map[,.(age = age_group_name_short, age_group_id)],  by = 'age')
       prevdata <- rbind(prevdata, prevdata.agg, use.names = T)

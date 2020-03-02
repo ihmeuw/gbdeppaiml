@@ -21,7 +21,7 @@ if(length(args) > 0) {
   }
 } else {
   run.name <- "200213_violin"
-  loc <- "ZWE"
+  loc <- "KEN_35624"
 
   draw.fill <- TRUE
 
