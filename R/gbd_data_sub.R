@@ -284,21 +284,31 @@ convert_paed_cd4 <- function(dt, agegr){
 
 sub.paeds <- function(dt, loc, k, start.year = 1970, stop.year = stop.year){
   
-    fp_root <- '/share/hiv/spectrum_input/191224_trumpet'
-    artdist <- fread(paste0(fp_root, '/childARTDist/', loc, '.csv'))
-    artelig <- fread(paste0(fp_root, '/childARTeligibility/', loc, '.csv'))
-    percbf <- fread(paste0(fp_root, '/percentBF/', loc, '.csv'))
-    mort.art <- fread(paste0(fp_root, "/childMortOnART/",loc,".csv"))
-    prog <-  fread(paste0(fp_root, "/childProgParam/" ,loc,".csv"))
-    mort.offart <-  fread(paste0(fp_root, '/childMortNoART/', loc,".csv"))
-    dropout <- fread(paste0(fp_root, '/PMTCTdropoutRates/', loc,".csv"))
+    fp_root <- dir.table[run.name == run.name & input == 'fp_root',dir]
+    artdist <- fread(paste0(fp_root, '/childARTDist/', loc, 
+                            dir.table[run.name == run.name & input == 'fp_root',file_ext]))
+    artelig <- fread(paste0(fp_root, '/childARTeligibility/', loc, 
+                            dir.table[run.name == run.name & input == 'fp_root',file_ext]))
+    percbf <- fread(paste0(fp_root, '/percentBF/', loc, 
+                           dir.table[run.name == run.name & input == 'fp_root',file_ext]))
+    mort.art <- fread(paste0(fp_root, "/childMortOnART/",loc,
+                             dir.table[run.name == run.name & input == 'fp_root',file_ext]))
+    prog <-  fread(paste0(fp_root, "/childProgParam/" ,loc,
+                          dir.table[run.name == run.name & input == 'fp_root',file_ext]))
+    mort.offart <-  fread(paste0(fp_root, '/childMortNoART/', loc,
+                                 dir.table[run.name == run.name & input == 'fp_root',file_ext]))
+    dropout <- fread(paste0(fp_root, '/PMTCTdropoutRates/', loc,
+                            dir.table[run.name == run.name & input == 'fp_root',file_ext]))
     
     
   ##these are the only ones that are extrapolated.
   for(c.year in c('UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
-    if(file.exists(paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/childARTcoverage/',c.year,'/', loc, '_Child_ART_cov.csv'))){
-      art <- fread(paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/childARTcoverage/',c.year, '/', loc, '_Child_ART_cov.csv'))
-      pmtct <- fread(paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/PMTCT/', c.year,'/', loc, '_PMTCT_ART_cov.csv'))
+    if(file.exists(paste0(dir.table[run.name == run.name & input == 'childARTcoverage',dir],c.year, '/', loc, 
+                          dir.table[run.name == run.name & input == 'childARTcoverage',file_ext]))){
+      art <- fread(paste0(dir.table[run.name == run.name & input == 'childARTcoverage',dir],c.year, '/', loc, 
+                          dir.table[run.name == run.name & input == 'childARTcoverage',file_ext]))
+      pmtct <- fread(paste0(dir.table[run.name == run.name & input == 'pmtct',dir], c.year,'/', loc, 
+                            dir.table[run.name == run.name & input == 'pmtct',file_ext]))
 
       break
     }}
@@ -556,12 +566,13 @@ sub.paeds <- function(dt, loc, k, start.year = 1970, stop.year = stop.year){
 }
 
 sub.pop.params.specfp <- function(fp, loc, k){
-  dir <- paste0('/share/hiv/epp_input/', gbdyear ,'/', run.name, '/')
+  #dir <- paste0('/share/hiv/epp_input/', gbdyear ,'/', run.name, '/')
 
   
   ## Population
   years <- start.year:stop.year
-  pop <- fread(paste0(dir, 'population_single_age/', loc, '.csv'))
+  pop <- fread(paste0(dir.table[run.name == run.name & input == 'population_single_age',dir], loc, 
+                      dir.table[run.name == run.name & input == 'population_single_age',file_ext]))
   pop <- extend.years(pop, years)
   pop[age_group_id == 28, age := 0]
   pop[age_group_id == 21, age := 80]
@@ -604,7 +615,8 @@ sub.pop.params.specfp <- function(fp, loc, k){
   
 
   ## ASFR
-  asfr <- fread(paste0(dir,'/ASFR/', loc, '.csv'))
+  asfr <- fread(paste0(dir.table[run.name == run.name & input == 'ASFR',dir], loc, 
+                       dir.table[run.name == run.name & input == 'ASFR',file_ext]))
   asfr <- extend.years(asfr, years)
   ## Copy 5-year asfr
   for(c.age in 15:49){
@@ -622,21 +634,24 @@ sub.pop.params.specfp <- function(fp, loc, k){
   fp$asfr <- asfr
   
   ## Births
-  births <- fread(paste0(dir, '/births/', loc, '.csv'))
+  births <- fread(paste0(dir.table[run.name == run.name & input == 'births',dir], loc, 
+                         dir.table[run.name == run.name & input == 'births',file_ext]))
   births <- births$population
   names(births) <- start.year:stop.year
   fp$births <- births
   
   ## SRB
-  srb <- fread(paste0(dir, '/SRB/', loc, '.csv'))
+  srb <- fread(paste0(dir.table[run.name == run.name & input == 'SRB',dir], loc, 
+                      dir.table[run.name == run.name & input == 'SRB',file_ext]))
   srb.mat <- array(0, c(2, length(years)))
-  srb.mat[1,] <- srb$male_srb
-  srb.mat[2,] <- srb$female_srb
+  srb.mat[1,] <- srb$male_srb[1:length(years)]
+  srb.mat[2,] <- srb$female_srb[1:length(years)]
   colnames(srb.mat) <- years
   fp$srb <- srb.mat
   
   ## Migration
-  mig <- fread(paste0(dir, 'migration/', loc, '.csv'))
+  mig <- fread(paste0(dir.table[run.name == run.name & input == 'migration',dir], loc, 
+                      dir.table[run.name == run.name & input == 'migration',file_ext]))
   setnames(mig, 'sex', 'sex_id')
   mig <- mig[sex_id %in% c(1,2),]
   mig[, sex := ifelse(sex_id == 1, 'Male', 'Female')]
@@ -663,7 +678,7 @@ sub.prev <- function(loc, dt){
   if(grepl('KEN', loc)){
     surv.path <- "/ihme/hiv/epp_input/gbd19/190630_rhino2/prev_surveys.csv"
   }else{
-    surv.path <- paste0("/ihme/hiv/epp_input/",gbdyear,"//prev_surveys.csv")
+    surv.path <- paste0(dir.table[run.name == run.name & input == 'prev_surveys',dir])
   }
   data4 <- fread(surv.path)[iso3 == loc]
   
@@ -756,10 +771,10 @@ sub.prev.granular <- function(dt, loc){
   ## TODO: Add this to cache prev
   ##make sure that this only keeps sex 3 for 15-49
   if(grepl('KEN', loc)){
-    age.prev.dt <- fread(paste0("/share/hiv/epp_input/gbd20/prev_surveys.csv"))
+    age.prev.dt <- fread(paste0(dir.table[run.name == run.name & input == 'prev_surveys',dir]))
     age.prev.dt <- age.prev.dt[sex_id == 3,]
   }else{
-    age.prev.dt <- fread(paste0("/share/hiv/epp_input/gbd20/prev_surveys.csv"))
+    age.prev.dt <- fread(paste0(dir.table[run.name == run.name & input == 'prev_surveys',dir]))
   }
   age.prev.dt <- age.prev.dt[iso3 == loc]
   if(loc == 'AGO'){
@@ -1267,17 +1282,22 @@ geo_adj <- function(loc, dt, i, uncertainty) {
       
 
       for(c.year in c('UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
-        if(file.exists(paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/adultARTcoverage/',c.year,'/', loc, '_Adult_ART_cov.csv'))){
-          art.dt <- fread(paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/adultARTcoverage/',c.year, '/', loc, '_Adult_ART_cov.csv'))
+        if(file.exists(paste0(dir.table[run.name == run.name & input == 'art',dir] ,c.year,'/', loc, 
+                              dir.table[run.name == run.name & input == 'art',file_ext]))){
+          
+          art.dt <- fread(paste0(dir.table[run.name == run.name & input == 'art',dir] ,c.year,'/', loc, 
+                                 dir.table[run.name == run.name & input == 'art', file_ext]))
 
           
           break
-        }}
+        }
+        }
 
     
       if(grepl("ZAF",temp.loc) & grepl('zaf', run.name)){
         print("Using Tembisa for ZAF")
-        art.dt = fread(paste0("/share/hiv/data/UNAIDS_extrapolated/GBD20//ZAF_sub/", loc, '_Adult_ART_cov.csv'))
+        art.dt = fread(paste0(dir.table[run.name == run.name & input == 'tem_art',dir], loc, 
+                              dir.table[run.name == run.name & input == 'tem_art',file_ext]))
       }
 
     art.dt[is.na(art.dt)] <- 0

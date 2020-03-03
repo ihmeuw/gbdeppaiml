@@ -20,16 +20,17 @@ if(length(args) > 0) {
   j <- as.integer(Sys.getenv("SGE_TASK_ID"))
   paediatric <- as.logical(args[4])
 } else {
-	run.name <- '200213_violin'
+	run.name <- '200213_violin_test'
 	loc <- 'CAF'
 	#loc <- 'ERI'
-	stop.year <- 2022
+	stop.year <- 2019
 	j <- 106
 	paediatric <- TRUE
 }
 
 run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
-c.args <- run.table[run_name=='200119_ukelele']
+c.args <- run.table[run_name=='200213_violin_test']
+dir.table <- fread(paste0('/share/hiv/epp_input/gbd20//dir_table_gbd20.csv'))
 
 
 ### Arguments
@@ -410,7 +411,7 @@ if(any(colnames(attr(dt, 'eppd')) == 'year_id')){
 
 ## Fit model
 
-fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500)
+fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 250)
 data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc, '.csv')
 if(!file.exists(data.path)){save_data(loc, attr(dt, 'eppd'), run.name)}
 if(file.exists(data.path)){save_data(loc, attr(dt, 'eppd'), run.name)}

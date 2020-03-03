@@ -30,7 +30,13 @@ if(length(args) > 0) {
 }
 
 gbd_year_new <- "gbd20"
-gbd_year_old <- "gbd19"
+if(compare.run == '190630_rhino2'){
+  gbd_year_old <- "gbd19"
+  
+}else{
+  gbd_year_old <- "gbd20"
+  
+}
 gbdyear <- 'gbd20'
 run.name.old <- compare.run
 ### Functions
