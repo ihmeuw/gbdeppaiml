@@ -284,35 +284,20 @@ convert_paed_cd4 <- function(dt, agegr){
 
 sub.paeds <- function(dt, loc, k, start.year = 1970, stop.year = stop.year){
   
-    fp_root <- dir.table[run.name == run.name & input == 'fp_root',dir]
-    artdist <- fread(paste0(fp_root, '/childARTDist/', loc, 
-                            dir.table[run.name == run.name & input == 'fp_root',file_ext]))
-    artelig <- fread(paste0(fp_root, '/childARTeligibility/', loc, 
-                            dir.table[run.name == run.name & input == 'fp_root',file_ext]))
-    percbf <- fread(paste0(fp_root, '/percentBF/', loc, 
-                           dir.table[run.name == run.name & input == 'fp_root',file_ext]))
-    mort.art <- fread(paste0(fp_root, "/childMortOnART/",loc,
-                             dir.table[run.name == run.name & input == 'fp_root',file_ext]))
-    prog <-  fread(paste0(fp_root, "/childProgParam/" ,loc,
-                          dir.table[run.name == run.name & input == 'fp_root',file_ext]))
-    mort.offart <-  fread(paste0(fp_root, '/childMortNoART/', loc,
-                                 dir.table[run.name == run.name & input == 'fp_root',file_ext]))
-    dropout <- fread(paste0(fp_root, '/PMTCTdropoutRates/', loc,
-                            dir.table[run.name == run.name & input == 'fp_root',file_ext]))
+    fp_root <- fp_root
+    artdist <- fread(artdist)
+    artelig <- fread(artelig)
+    percbf <- fread(percbf)
+    mort.art <- fread(mort.art)
+    prog <-  fread(prog)
+    mort.offart <-  fread(mort.offart)
+    dropout <- fread(dropout)
     
     
-  ##these are the only ones that are extrapolated.
-  for(c.year in c('UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
-    if(file.exists(paste0(dir.table[run.name == run.name & input == 'childARTcoverage',dir],c.year, '/', loc, 
-                          dir.table[run.name == run.name & input == 'childARTcoverage',file_ext]))){
-      art <- fread(paste0(dir.table[run.name == run.name & input == 'childARTcoverage',dir],c.year, '/', loc, 
-                          dir.table[run.name == run.name & input == 'childARTcoverage',file_ext]))
-      pmtct <- fread(paste0(dir.table[run.name == run.name & input == 'pmtct',dir], c.year,'/', loc, 
-                            dir.table[run.name == run.name & input == 'pmtct',file_ext]))
+  ##these are the only ones that are extrapolated
+    art <- fread(art)
+    pmtct <- fread(pmtct)
 
-      break
-    }}
-  
 
   
   dir <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/')
@@ -571,8 +556,7 @@ sub.pop.params.specfp <- function(fp, loc, k){
   
   ## Population
   years <- start.year:stop.year
-  pop <- fread(paste0(dir.table[run.name == run.name & input == 'population_single_age',dir], loc, 
-                      dir.table[run.name == run.name & input == 'population_single_age',file_ext]))
+  pop <- fread(population_single_age)
   pop <- extend.years(pop, years)
   pop[age_group_id == 28, age := 0]
   pop[age_group_id == 21, age := 80]
@@ -615,8 +599,7 @@ sub.pop.params.specfp <- function(fp, loc, k){
   
 
   ## ASFR
-  asfr <- fread(paste0(dir.table[run.name == run.name & input == 'ASFR',dir], loc, 
-                       dir.table[run.name == run.name & input == 'ASFR',file_ext]))
+  asfr <- fread(ASFR)
   asfr <- extend.years(asfr, years)
   ## Copy 5-year asfr
   for(c.age in 15:49){
@@ -634,15 +617,13 @@ sub.pop.params.specfp <- function(fp, loc, k){
   fp$asfr <- asfr
   
   ## Births
-  births <- fread(paste0(dir.table[run.name == run.name & input == 'births',dir], loc, 
-                         dir.table[run.name == run.name & input == 'births',file_ext]))
+  births <- fread(births)
   births <- births$population
   names(births) <- start.year:stop.year
   fp$births <- births
   
   ## SRB
-  srb <- fread(paste0(dir.table[run.name == run.name & input == 'SRB',dir], loc, 
-                      dir.table[run.name == run.name & input == 'SRB',file_ext]))
+  srb <- fread(SRB)
   srb.mat <- array(0, c(2, length(years)))
   srb.mat[1,] <- srb$male_srb[1:length(years)]
   srb.mat[2,] <- srb$female_srb[1:length(years)]
@@ -650,8 +631,7 @@ sub.pop.params.specfp <- function(fp, loc, k){
   fp$srb <- srb.mat
   
   ## Migration
-  mig <- fread(paste0(dir.table[run.name == run.name & input == 'migration',dir], loc, 
-                      dir.table[run.name == run.name & input == 'migration',file_ext]))
+  mig <- fread(migration)
   setnames(mig, 'sex', 'sex_id')
   mig <- mig[sex_id %in% c(1,2),]
   mig[, sex := ifelse(sex_id == 1, 'Male', 'Female')]
@@ -678,7 +658,7 @@ sub.prev <- function(loc, dt){
   if(grepl('KEN', loc)){
     surv.path <- "/ihme/hiv/epp_input/gbd19/190630_rhino2/prev_surveys.csv"
   }else{
-    surv.path <- paste0(dir.table[run.name == run.name & input == 'prev_surveys',dir])
+    surv.path <- prev_surveys
   }
   data4 <- fread(surv.path)[iso3 == loc]
   
@@ -771,10 +751,10 @@ sub.prev.granular <- function(dt, loc){
   ## TODO: Add this to cache prev
   ##make sure that this only keeps sex 3 for 15-49
   if(grepl('KEN', loc)){
-    age.prev.dt <- fread(paste0(dir.table[run.name == run.name & input == 'prev_surveys',dir]))
+    age.prev.dt <- fread(prev_surveys)
     age.prev.dt <- age.prev.dt[sex_id == 3,]
   }else{
-    age.prev.dt <- fread(paste0(dir.table[run.name == run.name & input == 'prev_surveys',dir]))
+    age.prev.dt <- fread(prev_surveys)
   }
   age.prev.dt <- age.prev.dt[iso3 == loc]
   if(loc == 'AGO'){
@@ -1133,8 +1113,9 @@ geo_adj <- function(loc, dt, i, uncertainty) {
         anc.dt[,clinic := as.character(clinic)]
         anc.dt[,mean := NULL]
 
-        if(loc == 'ZWE'){
+        if(loc == 'ZWE' | loc == 'MOZ'){
           anc.dt[,high_risk := FALSE]
+          anc.dt[,high_risk := unique(site.dat[,high_risk])]
         }
         anc.dt <- merge(site.dat, anc.dt, by.x = c('site',  "year_id" ,"subpop" ,"high_risk" ),
               by.y = c('clinic',  'year_id',  'subpop', 'high_risk'))
@@ -1214,7 +1195,7 @@ geo_adj <- function(loc, dt, i, uncertainty) {
         # }
         #Duplicate issue with 'pseudo sites' in Mozambique
         if(loc == "MOZ"){
-          min.dt <- unique(min.dt)
+         # min.dt <- unique(min.dt)
         }
         temp.dat <- anc.dt
         temp.dat[,subpop := subpop2]
@@ -1233,7 +1214,7 @@ geo_adj <- function(loc, dt, i, uncertainty) {
    
         
         all.anc <- rbind(all.anc,temp.dat)
-        
+        print(subpop2)
         
       
       
@@ -1281,23 +1262,11 @@ geo_adj <- function(loc, dt, i, uncertainty) {
     # }
       
 
-      for(c.year in c('UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
-        if(file.exists(paste0(dir.table[run.name == run.name & input == 'art',dir] ,c.year,'/', loc, 
-                              dir.table[run.name == run.name & input == 'art',file_ext]))){
-          
-          art.dt <- fread(paste0(dir.table[run.name == run.name & input == 'art',dir] ,c.year,'/', loc, 
-                                 dir.table[run.name == run.name & input == 'art', file_ext]))
-
-          
-          break
-        }
-        }
-
+    art.dt <- fread(art.dt)
     
       if(grepl("ZAF",temp.loc) & grepl('zaf', run.name)){
         print("Using Tembisa for ZAF")
-        art.dt = fread(paste0(dir.table[run.name == run.name & input == 'tem_art',dir], loc, 
-                              dir.table[run.name == run.name & input == 'tem_art',file_ext]))
+        art.dt = fread(tem_art)
       }
 
     art.dt[is.na(art.dt)] <- 0

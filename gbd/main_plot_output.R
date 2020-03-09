@@ -19,14 +19,16 @@ if(length(args) > 0) {
   if(compare.run == 'NA'){
     compare.run <- NA
   }
+  testing <- args[5]
 } else {
-  run.name <- "200213_violin"
-  loc <- "ZWE"
+  run.name <- "200213_violin_test"
+  loc <- "NGA_25318"
 
   draw.fill <- TRUE
 
   paediatric <- TRUE
-  compare.run <- '190630_rhino2'
+  compare.run <- '200213_violin'
+  testing <- TRUE
 }
 
 gbd_year_new <- "gbd20"
@@ -45,7 +47,7 @@ setwd(paste0(ifelse(windows, "H:", paste0("/homes/", user)), "/eppasm/"))
 devtools::load_all()
 setwd(code.dir)
 devtools::load_all()
-
+dir.table <- fread(paste0('/share/hiv/epp_input/gbd20//dir_table_gbd20.csv'))
 
 
 
@@ -71,11 +73,15 @@ plot_15to49(loc,new.run = run.name, paediatric, plot.deaths = TRUE, compare.stag
 for(c.indicator in c( 'Prevalence','Incidence','Deaths')){
   dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/age_specific_plots/', c.indicator, '/'), recursive = TRUE, showWarnings = FALSE)
 }
-plot_age_specific(loc, run.name.new=run.name, paediatric=TRUE, run.name.old = '190630_rhino2', compare.run = compare.run, gbdyear = gbd_year_new)
+plot_age_specific(loc, run.name.new=run.name, paediatric=TRUE, run.name.old = '190630_rhino2', compare.run = compare.run, gbdyear = gbd_year_new, c.metric = 'Count')
 
 # ## Birth prevalence
 dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/paeds_plots/'), showWarnings = F)
 plot_birthprev(loc,run.name.new =  run.name, run.name.old = run.name.old)
+
+
+
+
 
 
 # CIBA/Spectrum comparison plots

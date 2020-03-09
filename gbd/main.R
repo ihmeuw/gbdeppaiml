@@ -21,7 +21,7 @@ if(length(args) > 0) {
   paediatric <- as.logical(args[4])
 } else {
 	run.name <- '200213_violin_test'
-	loc <- 'CAF'
+	loc <- 'MOZ'
 	#loc <- 'ERI'
 	stop.year <- 2019
 	j <- 106
@@ -30,7 +30,122 @@ if(length(args) > 0) {
 
 run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
 c.args <- run.table[run_name=='200213_violin_test']
-dir.table <- fread(paste0('/share/hiv/epp_input/gbd20//dir_table_gbd20.csv'))
+dir.table <- fread(paste0('/share/hiv/epp_input/gbd20//dir_table_log_gbd20.csv'))
+dir.table <- dir.table[ref == max(ref),]
+dir.table[,'ASFR' := as.logical(ASFR)]
+dir.table[,'births' := as.logical(births)]
+dir.table[,'SRB' := as.logical(SRB)]
+dir.table[,'migration' := as.logical(migration)]
+dir.table[,'prev_surveys' := as.logical(prev_surveys)]
+dir.table[,'art' := as.logical(art)]
+dir.table[,'tem_art' := as.logical(tem_art)]
+dir.table[,'population_single_age' := as.logical(population_single_age)]
+dir.table[,'fp_root' := as.logical(fp_root)]
+dir.table[,'childARTcoverage' := as.logical(childARTcoverage)]
+dir.table[,'pmtct' := as.logical(pmtct)]
+
+
+
+
+
+
+
+input_root <- paste0('/ihme/hiv/epp_input/', gbdyear, '/',run.name, '/')
+
+
+if(dir.table[ref == max(ref),ASFR]){
+  ASFR <- paste0(input_root, '/ASFR/', loc, '.csv')
+}else{
+  ASFR <- paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/ASFR/', loc, '.csv')
+}
+if(dir.table[ref == max(ref),births]){
+  births <- paste0(input_root, '/births/', loc, '.csv')
+}else{
+  births <- paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/births/', loc, '.csv')
+}
+if(dir.table[ref == max(ref),SRB]){
+  SRB <- paste0(input_root, '/SRB/', loc, '.csv')
+}else{
+  SRB <- paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/SRB/', loc, '.csv')
+}
+if(dir.table[ref == max(ref),migration]){
+  migration <- paste0(input_root, '/migration/', loc, '.csv')
+}else{
+  migration <- paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/migration/', loc, '.csv')
+}
+if(dir.table[ref == max(ref),prev_surveys]){
+  prev_surveys <- paste0('/ihme/hiv/epp_input/gbd20/prev_surveys.csv')
+}else{
+  ##need to look up old FP
+  prev_surveys <- paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/prev_surveys/')
+}
+if(dir.table[ref == max(ref),art]){
+  for(c.year in c('UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
+    if(file.exists(paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/adultARTcoverage/' ,c.year,'/', loc, '_Adult_ART_cov.csv'))){
+      
+      art.dt <- paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/adultARTcoverage/' ,c.year,'/', loc, '_Adult_ART_cov.csv')
+      
+      
+      break
+    }
+  }
+  }else{
+    for(c.year in c('UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
+      if(file.exists(paste0('/home/j/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/extrapolate_ART/PV_testing/' ,c.year,'/', loc, '_Adult_ART_cov.csv'))){
+        
+        art.dt <- paste0('/home/j/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/extrapolate_ART/PV_testing/' ,c.year,'/', loc, '_Adult_ART_cov.csv')
+        
+        
+        break
+      }
+    }
+}
+
+tem_art <- paste0('/share/hiv/data/UNAIDS_extrapolated/GBD20//ZAF_sub/', loc, '_Adult_ART_cov.csv')
+if(dir.table[ref == max(ref),population_single_age]){
+  population_single_age <- paste0(input_root, '/population_single_age/', loc, '.csv')
+}else{
+  population_single_age <- paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/population_single_age/', loc, '.csv')
+}
+if(dir.table[ref == max(ref),fp_root]){
+  fp_root <- paste0('/ihme/hiv/spectrum_input/191224_trumpet/')
+  artdist <- paste0(fp_root, '/childARTDist/', loc, '.csv')
+  artelig <- paste0(fp_root, '/childARTeligibility/', loc, '.csv')
+  percbf <- paste0(fp_root, '/percentBF/', loc, '.csv')
+  mort.art <- paste0(fp_root, "/childMortOnART/",loc, '.csv')
+  prog <-  paste0(fp_root, "/childProgParam/" ,loc, '.csv')
+  mort.offart <-  paste0(fp_root, '/childMortNoART/', loc, '.csv')
+  dropout <- paste0(fp_root, '/PMTCTdropoutRates/', loc, '.csv')
+}else{
+  fp_root <- '/share/hiv/epp_input/gbd19/paeds/'
+  artdist <- paste0(fp_root, '/childARTDist/', loc, '.csv')
+  artelig <- paste0(fp_root, '/childARTeligibility/', loc, '.csv')
+  percbf <- paste0(fp_root, '/percentBF/', loc, '.csv')
+  mort.art <- paste0(fp_root, "/childMortOnART/",loc, '.csv')
+  prog <-  paste0(fp_root, "/childProgParam/" ,loc, '.csv')
+  mort.offart <-  paste0(fp_root, '/childMortNoART/', loc, '.csv')
+  dropout <- paste0(fp_root, '/PMTCTdropoutRates/', loc, '.csv')
+  
+  }
+if(dir.table[ref == max(ref),childARTcoverage]){
+  for(c.year in c('UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
+    if(file.exists(paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/childARTcoverage/',c.year, '/', loc, '_Child_ART_cov.csv'))){
+      art <- paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/childARTcoverage/',c.year, '/', loc, '_Child_ART_cov.csv')
+      break
+    }}
+  }else{
+    art <- fread(paste0('/share/hiv/epp_input/gbd19/paeds/childARTcoverage/', loc, '.csv'))
+  }
+if(dir.table[ref == max(ref),childARTcoverage]){
+  for(c.year in c('UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
+    if(file.exists( paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/PMTCT/', c.year,'/', loc, '_PMTCT_ART_cov.csv'))){
+      pmtct <- paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/PMTCT/', c.year,'/', loc, '_PMTCT_ART_cov.csv')
+      break
+    }}
+}else{
+  pmtct <- paste0('/share/hiv/epp_input/gbd19/paeds/PMTCT/', loc, '.csv')
+  }
+
 
 
 ### Arguments
@@ -411,7 +526,7 @@ if(any(colnames(attr(dt, 'eppd')) == 'year_id')){
 
 ## Fit model
 
-fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 250)
+fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 100)
 data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc, '.csv')
 if(!file.exists(data.path)){save_data(loc, attr(dt, 'eppd'), run.name)}
 if(file.exists(data.path)){save_data(loc, attr(dt, 'eppd'), run.name)}

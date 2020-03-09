@@ -26,13 +26,15 @@ reckon_prep <- TRUE
 decomp.step <- "step3"
 gbdyear <- "gbd20"
 redo_offsets <- F
+testing = T
 
 ### Paths
 input.dir <- paste0("/ihme/hiv/epp_input/", gbdyear, '/', run.name, "/")
 dir.create(input.dir, recursive = TRUE, showWarnings = FALSE)
 dir <- paste0("/ihme/hiv/epp_output/", gbdyear, '/', run.name, "/")
-
 dir.create(dir, showWarnings = FALSE)
+dir.table <- fread(paste0('/share/hiv/epp_input/gbd20//dir_table_gbd20.csv'))
+
 
 ### Functions
 source(paste0(root,"/Project/Mortality/shared/functions/check_loc_results.r"))
@@ -127,35 +129,36 @@ if(redo_offsets){
 
 ## Launch EPP
 
-loc.list <- loc.list[grepl('NGA',loc.list)]
+loc.list <- c('MOZ', 
+              'NGA_25327')
 for(loc in loc.list) {    ## Run EPPASM
 # # 
 # 
-    # epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q all.q -P ", cluster.project, " ",
-    #                      "-e /share/temp/sgeoutput/", user, "/errors ",
-    #                      "-o /share/temp/sgeoutput/", user, "/output ",
-    #                      "-N ", loc, "_eppasm ",
-    #                      "-t 1:", n.draws, " ",
-    #                      "-hold_jid eppasm_prep_inputs_", run.name," ",
-    #                      code.dir, "gbd/singR_shell.sh ",
-    #                      code.dir, "gbd/main.R ",
-    #                      run.name, " ", loc, " ", proj.end, " ", paediatric)
-    # print(epp.string)
-    # system(epp.string)
-    # 
-    # 
-    # #Draw compilation
-    # draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
-    #                       "-e /share/temp/sgeoutput/", user, "/errors ",
-    #                       "-o /share/temp/sgeoutput/", user, "/output ",
-    #                       "-N ", loc, "_save_draws ",
-    #                       "-hold_jid ", loc, "_eppasm ",
-    #                      code.dir, "gbd/singR_shell.sh ",
-    #                       code.dir, "gbd/compile_draws.R ",
-    #                       run.name, " ", loc, ' ', n.draws, ' TRUE ', paediatric)
-    # print(draw.string)
-    # system(draw.string)
-    # 
+    epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q all.q -P ", cluster.project, " ",
+                         "-e /share/temp/sgeoutput/", user, "/errors ",
+                         "-o /share/temp/sgeoutput/", user, "/output ",
+                         "-N ", loc, "_eppasm ",
+                         "-t 1:", n.draws, " ",
+                         "-hold_jid eppasm_prep_inputs_", run.name," ",
+                         code.dir, "gbd/singR_shell.sh ",
+                         code.dir, "gbd/main.R ",
+                         run.name, " ", loc, " ", proj.end, " ", paediatric)
+    print(epp.string)
+    system(epp.string)
+
+
+    #Draw compilation
+    draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
+                          "-e /share/temp/sgeoutput/", user, "/errors ",
+                          "-o /share/temp/sgeoutput/", user, "/output ",
+                          "-N ", loc, "_save_draws ",
+                          "-hold_jid ", loc, "_eppasm ",
+                         code.dir, "gbd/singR_shell.sh ",
+                          code.dir, "gbd/compile_draws.R ",
+                          run.name, " ", loc, ' ', n.draws, ' TRUE ', paediatric)
+    print(draw.string)
+    system(draw.string)
+
     # 
     plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
                           "-e /share/temp/sgeoutput/", user, "/errors ",
@@ -164,7 +167,7 @@ for(loc in loc.list) {    ## Run EPPASM
                           "-hold_jid ", loc, "_save_draws ",
                           code.dir, "gbd/singR_shell.sh ",
                           code.dir, "gbd/main_plot_output.R ",
-                          loc, " ", run.name, ' ', paediatric, ' ', compare.run)
+                          loc, " ", run.name, ' ', paediatric, ' ', compare.run, ' TRUE')
     print(plot.string)
     system(plot.string)
 
@@ -184,6 +187,42 @@ for(loc in loc.list) {    ## Run EPPASM
  
      
 }
+
+if(testing){
+  vetting_dir <- paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/vetting/', unique(dir.table[use == 'T',ref]), '/')
+  dir.create(vetting_dir)
+  
+  setwd(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/15to49_plots/'))
+  system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=15to49_plots.pdf -f *"))
+  
+  setwd(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/age_specific_plots/Deaths/'))
+  system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=Deaths_plots.pdf -f *"))
+  
+  setwd(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/age_specific_plots/Prevalence/'))
+  system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=Prevalence_plots.pdf -f *"))
+  
+  setwd(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/age_specific_plots/Incidence/'))
+  system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=Incidence_plots.pdf -f *"))
+  
+  setwd(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/paeds_plots/'))
+  system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=paeds_plots.pdf -f *"))
+  
+  file.copy(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/15to49_plots/15to49_plots.pdf'), 
+            vetting_dir)
+  file.copy(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/age_specific_plots/Deaths/Deaths_plots.pdf'), 
+            vetting_dir)
+  file.copy(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/age_specific_plots/Prevalence/Prevalence_plots.pdf'), 
+            vetting_dir)
+  file.copy(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/age_specific_plots/Incidence/Incidence_plots.pdf'), 
+            vetting_dir)
+  file.copy(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/paeds_plots/paeds_plots.pdf'), 
+            vetting_dir)
+  
+  
+}
+
+
+
 
 
 #Make sure all locations are done
