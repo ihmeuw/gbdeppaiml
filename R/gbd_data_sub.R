@@ -849,13 +849,7 @@ sub.off.art <- function(dt, loc, k) {
 }
 
 sub.on.art <- function(dt, loc, k) {
-  if(run.name!="200213_violin" & run.name!= '200213_violin_zaf'){
-  mortart <- fread(paste0(aim.dir,"transition_parameters/HIVmort_onART_regions/DisMod/", loc,"_HIVonART.csv"))
-  print('Using BRADMOD')
-  } else {
-  mortart <- fread(paste0("/ihme/hiv/mrbrt_output/gbd20/", loc,"_HIVonART.csv"))
-  print('Using MRBRT')
-  }
+mortart <- fread(mortart)
   
   mortart <- melt(mortart, 
                   id = c("durationart", "cd4_category", "age", "sex","cd4_lower",

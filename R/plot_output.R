@@ -85,7 +85,7 @@ plot_15to49_draw <- function(loc, output, eppd, run.name, compare.run = '190630_
 
 plot_15to49 <- function(loc="STP",  compare.run = NA, new.run = '200119_ukelele',
                         paediatric =TRUE, plot.deaths = FALSE, compare.gbd17=TRUE, 
-                        compare.gbd19.unraked = T,
+                        compare.gbd19.unraked = T, lbd_unraked = TRUE,
                         compare.stage2 = FALSE, gbdyear = "gbd20"){
   
   if(loc %in% loc.table[grepl("IND",ihme_loc_id) & epp != 1,ihme_loc_id]){
@@ -96,7 +96,9 @@ plot_15to49 <- function(loc="STP",  compare.run = NA, new.run = '200119_ukelele'
     data <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/', new.run, '/fit_data/', loc, '.csv'))
 
   }
-  
+  if(!compare.gbd17){
+    compare.dt.17 = NULL
+  }
   
   data <- data[metric == 'Rate']
   data[, c('age_group_id', 'metric', 'ihme_loc_id') := NULL]
@@ -119,7 +121,8 @@ plot_15to49 <- function(loc="STP",  compare.run = NA, new.run = '200119_ukelele'
     compare.dt.unaids <- NULL
   }
   
-  lbd.unraked <- fread("/ihme/geospatial/mbg/hiv/hiv_adult_prev/output/2019_12_09_13_15_59/pred_derivatives/admin_summaries/hiv_adult_prev_admin_0_unraked_summary.csv")
+ if(lbd_unraked){ 
+   lbd.unraked <- fread("/ihme/geospatial/mbg/hiv/hiv_adult_prev/output/2019_12_09_13_15_59/pred_derivatives/admin_summaries/hiv_adult_prev_admin_0_unraked_summary.csv")
   location_name = loc.table[ihme_loc_id==loc,location_name]
   if(loc == "STP"){
     lbd.unraked = lbd.unraked[ADM0_CODE==207,
@@ -130,7 +133,9 @@ plot_15to49 <- function(loc="STP",  compare.run = NA, new.run = '200119_ukelele'
                             .(year,mean,lower,upper,model = "LBD Unraked", 
                               indicator = "Prevalence",type="line")]
   }
-
+ }else{
+  lbd.unraked = NULL
+}
   ## GBD 2017
   
 

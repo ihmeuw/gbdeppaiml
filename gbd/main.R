@@ -20,7 +20,7 @@ if(length(args) > 0) {
   j <- as.integer(Sys.getenv("SGE_TASK_ID"))
   paediatric <- as.logical(args[4])
 } else {
-	run.name <- '200213_violin_test'
+	run.name <- '200213_violin_mrbrt'
 	loc <- 'MOZ'
 	#loc <- 'ERI'
 	stop.year <- 2019
@@ -43,7 +43,7 @@ dir.table[,'population_single_age' := as.logical(population_single_age)]
 dir.table[,'fp_root' := as.logical(fp_root)]
 dir.table[,'childARTcoverage' := as.logical(childARTcoverage)]
 dir.table[,'pmtct' := as.logical(pmtct)]
-
+dir.table[,'on.art' := as.logical(on.art)]
 
 
 
@@ -144,7 +144,15 @@ if(dir.table[ref == max(ref),childARTcoverage]){
     }}
 }else{
   pmtct <- paste0('/share/hiv/epp_input/gbd19/paeds/PMTCT/', loc, '.csv')
-  }
+}
+if(dir.table[ref == max(ref),on.art]){
+  mortart <- paste0("/ihme/hiv/mrbrt_output/gbd20/", loc,"_HIVonART.csv")
+  print('Using MRBRT')
+
+} else {
+  mortart <- paste0(root,"/temp/TB/joyma/BRADMOD/Age-Pattern Plots/final_res/", loc,"_HIVonART.csv")
+  print('Using single model')
+}
 
 
 
