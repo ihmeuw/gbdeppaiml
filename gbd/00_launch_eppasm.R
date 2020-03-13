@@ -12,16 +12,16 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 library(data.table)
 
 ## Arguments
-run.name <- "200213_violin_single"
+run.name <- "200213_violin"
 spec.name <- "200213_violin"
 compare.run <- '200213_violin'
-proj.end <- 2019
-n.draws <- 3
+proj.end <- 2022
+n.draws <- 50
 run.group2 <- FALSE
 paediatric <- TRUE
 cluster.project <- "proj_hiv"
 plot_ART <- FALSE
-est_India <- FALSE
+est_India <- TRUE
 reckon_prep <- TRUE
 decomp.step <- "step3"
 gbdyear <- "gbd20"
@@ -128,35 +128,34 @@ if(redo_offsets){
 }
 
 ## Launch EPP
-
-loc.list <- c('AGO', 'ERI', 'BEN', 'PNG', 'DOM', 'CMR', 'TGO', 'SSD', 'CPV', 'MLI')
+loc.list <- loc.list[grepl('IND',loc.list)]
 for(loc in loc.list) {    ## Run EPPASM
 # # 
+# # 
+#     epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q all.q -P ", cluster.project, " ",
+#                          "-e /share/temp/sgeoutput/", user, "/errors ",
+#                          "-o /share/temp/sgeoutput/", user, "/output ",
+#                          "-N ", loc, "_eppasm ",
+#                          "-t 1:", n.draws, " ",
+#                          "-hold_jid eppasm_prep_inputs_", run.name," ",
+#                          code.dir, "gbd/singR_shell.sh ",
+#                          code.dir, "gbd/main.R ",
+#                          run.name, " ", loc, " ", proj.end, " ", paediatric)
+#     print(epp.string)
+#     system(epp.string)
 # 
-    # epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q all.q -P ", cluster.project, " ",
-    #                      "-e /share/temp/sgeoutput/", user, "/errors ",
-    #                      "-o /share/temp/sgeoutput/", user, "/output ",
-    #                      "-N ", loc, "_eppasm ",
-    #                      "-t 1:", n.draws, " ",
-    #                      "-hold_jid eppasm_prep_inputs_", run.name," ",
-    #                      code.dir, "gbd/singR_shell.sh ",
-    #                      code.dir, "gbd/main.R ",
-    #                      run.name, " ", loc, " ", proj.end, " ", paediatric)
-    # print(epp.string)
-    # system(epp.string)
-    # 
-    # 
-    # #Draw compilation
-    # draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
-    #                       "-e /share/temp/sgeoutput/", user, "/errors ",
-    #                       "-o /share/temp/sgeoutput/", user, "/output ",
-    #                       "-N ", loc, "_save_draws ",
-    #                       "-hold_jid ", loc, "_eppasm ",
-    #                      code.dir, "gbd/singR_shell.sh ",
-    #                       code.dir, "gbd/compile_draws.R ",
-    #                       run.name, " ", loc, ' ', n.draws, ' TRUE ', paediatric)
-    # print(draw.string)
-    # system(draw.string)
+# 
+#     #Draw compilation
+#     draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
+#                           "-e /share/temp/sgeoutput/", user, "/errors ",
+#                           "-o /share/temp/sgeoutput/", user, "/output ",
+#                           "-N ", loc, "_save_draws ",
+#                           "-hold_jid ", loc, "_eppasm ",
+#                          code.dir, "gbd/singR_shell.sh ",
+#                           code.dir, "gbd/compile_draws.R ",
+#                           run.name, " ", loc, ' ', n.draws, ' TRUE ', paediatric)
+#     print(draw.string)
+#     system(draw.string)
 
     # 
     plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q long.q -P ", cluster.project, " ",
@@ -231,7 +230,7 @@ if(est_India){
 ##If using EPP-ASM for India, can use this code
 ### Split India states to Urban Rural and generate values for Territories
 system(paste0("qsub -l m_mem_free=200G -l fthread=1 -l h_rt=08:00:00 -l archive -q all.q -P ", cluster.project, " ",
-               "-e /share/homes/djahag/errors ",
+               "-e /share/temp/sgeoutput/", user, "/errors ",
                "-o /share/temp/sgeoutput/", user, "/output ",
                "-N ", "india_split ",
                code.dir, "gbd/singR_shell.sh ",

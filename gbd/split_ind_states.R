@@ -23,17 +23,17 @@ if(length(args) > 0) {
   run.name <- args[1]
   decomp.step <- args[2]
 } else {
-  run.name <- "190630_rhino2"
-  decomp.step <- decomp.step
+  run.name <- "200213_violin"
+  decomp.step <- 'step2'
 }
 
 
 
 ### Paths
-dir.list <- paste0('/share/hiv/epp_output/gbd19/',run.name,'/compiled/')
-prop.path <- paste0('/share/hiv/epp_input/gbd19/art_prop.csv')
-pop.dir <- list(paste0('/share/hiv/epp_input/gbd19/',run.name,"/population_single_age/"),
-                paste0('/share/hiv/epp_input/gbd19/',run.name,"/population_single_age/india_splitting_locs/"))
+dir.list <- paste0('/share/hiv/epp_output/gbd20/',run.name,'/compiled/')
+prop.path <- paste0('/share/hiv/epp_input/gbd20/art_prop.csv')
+pop.dir <- list(paste0('/share/hiv/epp_input/gbd20/',run.name,"/population_single_age/"),
+                paste0('/share/hiv/epp_input/gbd20/',run.name,"/population_single_age/india_splitting_locs/"))
 
 
 ### Functions
@@ -53,7 +53,7 @@ sex_groups <- get_ids("sex")
 sex_groups$sex <- tolower(sex_groups$sex)
 
 prop.dt <- fread(prop.path)[grepl("IND", ihme_loc_id)]
-pops <- paste0("/ihme/hiv/epp_input/gbd19/",run.name,"/population_single_age/")
+pops <- paste0("/ihme/hiv/epp_input/gbd20/",run.name,"/population_single_age/")
 
 
 
@@ -75,8 +75,8 @@ ind.locs <- loc.table[grepl("IND", ihme_loc_id) & level == 4, ihme_loc_id]
 missing.locs <- setdiff(ind.locs, locs)
 
 
-spec.inc.path <- paste0('/ihme/hiv/epp_output/gbd19/', run.name, '/compiled/IND_inc/')
-spec.prev.path <- paste0('/ihme/hiv/epp_output/gbd19/', run.name, '/compiled/IND_prev/')
+spec.inc.path <- paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/compiled/IND_inc/')
+spec.prev.path <- paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/compiled/IND_prev/')
 dir.create(spec.inc.path, showWarnings = F)
 dir.create(spec.prev.path, showWarnings = F)
 
@@ -122,7 +122,7 @@ all.ind <- rbindlist(lapply(ind.locs.epp , function(loc_i) {
   return(sum.dt)
 }))
 
-measures_child <- c("enn","lnn","pnn")
+measures_child <- c("enn","lnn","x_388", 'x_389')
 stratum <- c("year","run_num")
 cols <- colnames(all.ind)[!colnames(all.ind) %in% stratum]
 measures_child <- cols

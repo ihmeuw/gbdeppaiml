@@ -140,16 +140,19 @@ plot_15to49 <- function(loc="STP",  compare.run = NA, new.run = '200119_ukelele'
   
 
   
-  # if(compare.stage2){
-  #   compare.dt.s2 <- fread(paste0('/share/hiv/spectrum_draws/190630_rhino/compiled/stage_2/', loc, '_ART_data.csv'))
-  #   compare.dt.s2[,'pop':= pop_neg + pop_lt200 + pop_200to350+ pop_gt350 + pop_art]
-  #   compare.dt.s2 <- get_summary(compare.dt.s2, loc, run.name.old = run.name.old, run.name.new = run.name.new, paediatric)
-  #   compare.dt.s2 <- compare.dt.s2[age_group_id == 24 & sex == 'both' & measure %in% meas.list & metric == "Rate",.(type = 'line', year, indicator = measure, model = 'stage_2', mean, lower, upper)]
-  #   compare.dt.17 <- NULL
-  #   compare.dt <- NULL
-  #   
-  #    }else{
-  #   compare.dt.s2 = NULL
+  if(compare.stage2 & grepl('IND', loc)){
+    temp.loc <- loc.table[parent_id == loc.table[ihme_loc_id == loc, location_id], ihme_loc_id][1]
+    compare.dt.s2 <- fread(paste0('/ihme/hiv/spectrum_draws/200213_violin/compiled/stage_2/summary/', temp.loc, '_all_age.csv'))
+    compare.dt.s2 <- compare.dt.s2[,.(type = 'line', year, indicator = variable, 
+                                      model = 'Spec, stage 2', mean = value, lower = NA, upper = NA)]
+    compare.dt.s2[indicator == 'mort_rate', indicator := 'Deaths']
+    compare.dt.s2[indicator == 'inc_rate', indicator := 'Incidence']
+    compare.dt.s2[indicator == 'prev_rate', indicator := 'Prevalence']
+    compare.dt.s2 <- compare.dt.s2[indicator != 'art_rate']
+     }else{
+    compare.dt.s2 = NULL
+    }
+  
     if(compare.gbd17){
       if(file.exists(paste0('/snfs1/WORK/04_epi/01_database/02_data/hiv/spectrum/summary/190630_rhino_combined/locations/', loc, '_spectrum_prep.csv'))){
         compare.dt.17 <- fread(paste0('/snfs1/WORK/04_epi/01_database/02_data/hiv/spectrum/summary/190630_rhino_combined/locations/', loc, '_spectrum_prep.csv'))
@@ -170,6 +173,8 @@ plot_15to49 <- function(loc="STP",  compare.run = NA, new.run = '200119_ukelele'
     }else{
       compare.gbd19.unraked<- NULL
     }
+   
+      
   }
 
     if(!is.na(compare.run)){
@@ -250,10 +255,13 @@ plot_15to49 <- function(loc="STP",  compare.run = NA, new.run = '200119_ukelele'
   #compare.run <- '200119_ukelele'
   
   
-  plot.dt <- rbind(data,  compare.dt.17, compare.dt,cur.dt,compare.dt.unaids,lbd.unraked,compare.gbd19.unraked, use.names = T, fill = T)
+  plot.dt <- rbind(data,compare.dt.17, compare.dt,cur.dt,compare.dt.unaids,lbd.unraked,compare.gbd19.unraked, compare.dt.s2,use.names = T, fill = T)
   plot.dt[,model := factor(model)]
-  color.list <- c('blue', 'red', 'green','purple','orange','black')
-  names(color.list) <- c(new.run, 'GBD2019', compare.run,'UNAIDS','LBD Unraked', '190630_rhino2')
+  if(any(colnames(plot.dt) == 'x')){
+    plot.dt[,x:= NULL]
+  }
+  color.list <- c('blue', 'red', 'green','purple','orange','black', 'darkgreen')
+  names(color.list) <- c(new.run, 'GBD2019', compare.run,'UNAIDS','LBD Unraked', '190630_rhino2', 'Spec, stage 2')
 
   plot.dt[,model := factor(model)]
   # color.list <- c('blue', 'red', 'purple', 'green')

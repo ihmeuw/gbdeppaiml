@@ -20,11 +20,11 @@ if(length(args) > 0) {
   j <- as.integer(Sys.getenv("SGE_TASK_ID"))
   paediatric <- as.logical(args[4])
 } else {
-	run.name <- '200213_violin_mrbrt'
-	loc <- 'MOZ'
+	run.name <- '200213_violin'
+	loc <- 'IND_4842'
 	#loc <- 'ERI'
-	stop.year <- 2019
-	j <- 106
+	stop.year <- 2022
+	j <- 1
 	paediatric <- TRUE
 }
 
@@ -45,7 +45,22 @@ dir.table[,'childARTcoverage' := as.logical(childARTcoverage)]
 dir.table[,'pmtct' := as.logical(pmtct)]
 dir.table[,'on.art' := as.logical(on.art)]
 
+### Paths
+out.dir <- paste0('/ihme/hiv/epp_output/',gbdyear,'/', run.name, "/", loc)
 
+### Functions
+library(mortdb, lib = "/share/mortality/shared/r/")
+setwd(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/"))
+devtools::load_all()
+setwd(code.dir)
+devtools::load_all()
+loc.table <- get_locations(hiv_metadata = TRUE)
+
+if(grepl('IND', loc)){
+  temp.loc <- loc.table[parent_id == loc.table[ihme_loc_id == loc, location_id], ihme_loc_id][1]
+}else{
+  temp.loc <- loc
+}
 
 
 
@@ -88,6 +103,10 @@ if(dir.table[ref == max(ref),art]){
       
       break
     }
+    if(grepl('IND', loc)){
+      art.dt <- paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/adultARTcoverage/' ,'140520','/', loc, '_Adult_ART_cov.csv')
+      
+    }
   }
   }else{
     for(c.year in c('UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
@@ -109,41 +128,49 @@ if(dir.table[ref == max(ref),population_single_age]){
 }
 if(dir.table[ref == max(ref),fp_root]){
   fp_root <- paste0('/ihme/hiv/spectrum_input/191224_trumpet/')
-  artdist <- paste0(fp_root, '/childARTDist/', loc, '.csv')
-  artelig <- paste0(fp_root, '/childARTeligibility/', loc, '.csv')
-  percbf <- paste0(fp_root, '/percentBF/', loc, '.csv')
-  mort.art <- paste0(fp_root, "/childMortOnART/",loc, '.csv')
-  prog <-  paste0(fp_root, "/childProgParam/" ,loc, '.csv')
-  mort.offart <-  paste0(fp_root, '/childMortNoART/', loc, '.csv')
-  dropout <- paste0(fp_root, '/PMTCTdropoutRates/', loc, '.csv')
+  artdist <- paste0(fp_root, '/childARTDist/', temp.loc, '.csv')
+  if(grepl('IND',temp.loc)){
+    artelig <- paste0(fp_root, '/childARTeligibility/AGO.csv')
+  }else{
+    artelig <- paste0(fp_root, '/childARTeligibility/', temp.loc, '.csv')
+  }
+  percbf <- paste0(fp_root, '/percentBF/', temp.loc, '.csv')
+  mort.art <- paste0(fp_root, "/childMortOnART/",temp.loc, '.csv')
+  prog <-  paste0(fp_root, "/childProgParam/" ,temp.loc, '.csv')
+  mort.offart <-  paste0(fp_root, '/childMortNoART/', temp.loc, '.csv')
+  dropout <- paste0(fp_root, '/PMTCTdropoutRates/', temp.loc, '.csv')
 }else{
   fp_root <- '/share/hiv/epp_input/gbd19/paeds/'
-  artdist <- paste0(fp_root, '/childARTDist/', loc, '.csv')
-  artelig <- paste0(fp_root, '/childARTeligibility/', loc, '.csv')
-  percbf <- paste0(fp_root, '/percentBF/', loc, '.csv')
-  mort.art <- paste0(fp_root, "/childMortOnART/",loc, '.csv')
-  prog <-  paste0(fp_root, "/childProgParam/" ,loc, '.csv')
-  mort.offart <-  paste0(fp_root, '/childMortNoART/', loc, '.csv')
-  dropout <- paste0(fp_root, '/PMTCTdropoutRates/', loc, '.csv')
+  artdist <- paste0(fp_root, '/childARTDist/', temp.loc, '.csv')
+  if(grepl('IND',temp.loc)){
+    artelig <- paste0(fp_root, '/childARTeligibility/AGO.csv')
+  }else{
+    artelig <- paste0(fp_root, '/childARTeligibility/', temp.loc, '.csv')
+  }
+  percbf <- paste0(fp_root, '/percentBF/', temp.loc, '.csv')
+  mort.art <- paste0(fp_root, "/childMortOnART/",temp.loc, '.csv')
+  prog <-  paste0(fp_root, "/childProgParam/" ,temp.loc, '.csv')
+  mort.offart <-  paste0(fp_root, '/childMortNoART/', temp.loc, '.csv')
+  dropout <- paste0(fp_root, '/PMTCTdropoutRates/', temp.loc, '.csv')
   
   }
 if(dir.table[ref == max(ref),childARTcoverage]){
   for(c.year in c('UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
-    if(file.exists(paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/childARTcoverage/',c.year, '/', loc, '_Child_ART_cov.csv'))){
-      art <- paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/childARTcoverage/',c.year, '/', loc, '_Child_ART_cov.csv')
+    if(file.exists(paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/childARTcoverage/',c.year, '/', temp.loc, '_Child_ART_cov.csv'))){
+      art <- paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/childARTcoverage/',c.year, '/', temp.loc, '_Child_ART_cov.csv')
       break
     }}
   }else{
-    art <- fread(paste0('/share/hiv/epp_input/gbd19/paeds/childARTcoverage/', loc, '.csv'))
+    art <- fread(paste0('/share/hiv/epp_input/gbd19/paeds/childARTcoverage/', temp.loc, '.csv'))
   }
 if(dir.table[ref == max(ref),childARTcoverage]){
   for(c.year in c('UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
-    if(file.exists( paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/PMTCT/', c.year,'/', loc, '_PMTCT_ART_cov.csv'))){
-      pmtct <- paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/PMTCT/', c.year,'/', loc, '_PMTCT_ART_cov.csv')
+    if(file.exists( paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/PMTCT/', c.year,'/', temp.loc, '_PMTCT_ART_cov.csv'))){
+      pmtct <- paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/PMTCT/', c.year,'/', temp.loc, '_PMTCT_ART_cov.csv')
       break
     }}
 }else{
-  pmtct <- paste0('/share/hiv/epp_input/gbd19/paeds/PMTCT/', loc, '.csv')
+  pmtct <- paste0('/share/hiv/epp_input/gbd19/paeds/PMTCT/', temp.loc, '.csv')
 }
 if(dir.table[ref == max(ref),on.art]){
   mortart <- paste0("/ihme/hiv/mrbrt_output/gbd20/", loc,"_HIVonART.csv")
@@ -179,18 +206,9 @@ geoadjust <- c.args[['anc_sub']]
 no_anc <- c.args[['no_anc']]
 anc.prior.sub <- TRUE
 
-### Paths
-out.dir <- paste0('/ihme/hiv/epp_output/',gbdyear,'/', run.name, "/", loc)
 
-### Functions
-library(mortdb, lib = "/share/mortality/shared/r/")
-setwd(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/"))
-devtools::load_all()
-setwd(code.dir)
-devtools::load_all()
 
 ### Tables
-loc.table <- get_locations(hiv_metadata = TRUE)
 
 
 
@@ -237,6 +255,11 @@ dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
                        sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = TRUE, 
                        anc.prior.sub = TRUE, lbd.anc = lbd.anc, 
                        geoadjust = geoadjust, use_2019 = TRUE)
+if(loc == 'IND_4842'){
+  sub_in <- readRDS('/ihme/hiv/epp_output/gbd20/200213_violin/dt_objects/IND_4862_dt.RDS')
+  sub_in <- attr(sub_in, 'specfp')$paedsurv_artcd4dist
+  attr(dt, 'specfp')$paedsurv_artcd4dist <- sub_in
+}
 
 if(any(attr(dt, 'eppd')$ancsitedat$prev > 1)){
   print('A prevalence above 1 was removed')
@@ -330,12 +353,29 @@ if(loc %in% "MRT"){
 }
 
 
-# ######extend pmtct_dropout to 2022
+# ######extend pmtct_dropout to 2022, and fill any missing years
 if(max(attr(dt, 'specfp')$pmtct_dropout$year) < stop.year){
   add_on.year <- seq(max(attr(dt, 'specfp')$pmtct_dropout$year) + 1 , stop.year)
   add_on.dropouts <- attr(dt, 'specfp')$pmtct_dropout[attr(dt, 'specfp')$pmtct_dropout$year == max(attr(dt, 'specfp')$pmtct_dropout$year), 2:ncol(attr(dt, 'specfp')$pmtct_dropout)]
   attr(dt, 'specfp')$pmtct_dropout <- rbind(attr(dt, 'specfp')$pmtct_dropout, c(year = unlist(add_on.year), add_on.dropouts))
 }
+if(length(unique(attr(dt, 'specfp')$pmtct_dropout$year)) <= attr(dt, 'specfp')$SIM_YEARS){
+  missing_years <- setdiff(seq(start.year, stop.year), attr(dt, 'specfp')$pmtct_dropout$year)
+  temp.dt <- data.table( attr(dt, 'specfp')$pmtct_dropout)
+  extend_back <- temp.dt[year == min(year),]
+  list <- list()
+  for(years in missing_years){
+    x <- extend_back
+    list[[years - min(missing_years) + 1]] <- x[,year := years]
+  }
+  extend_back <- do.call(rbind, list)
+  extend_back[,year := missing_years]
+  new <- rbind(attr(dt, 'specfp')$pmtct_dropout, extend_back)
+  new <- new[order(year),]
+  new <- as.data.frame(new)
+  attr(dt, 'specfp')$pmtct_dropout <- new
+}
+
 if(dim(attr(dt, 'specfp')$artmx_timerr)[2] < attr(dt, 'specfp')$SIM_YEARS){
   diff <- dim(attr(dt, 'specfp')$artmx_timerr)[2] - attr(dt, 'specfp')$SIM_YEARS
   while(diff != 0){
@@ -534,7 +574,7 @@ if(any(colnames(attr(dt, 'eppd')) == 'year_id')){
 
 ## Fit model
 
-fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 100)
+fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 250)
 data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc, '.csv')
 if(!file.exists(data.path)){save_data(loc, attr(dt, 'eppd'), run.name)}
 if(file.exists(data.path)){save_data(loc, attr(dt, 'eppd'), run.name)}

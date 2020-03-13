@@ -199,7 +199,7 @@ create_hivproj_param <- function(loc, start.year = 1970, stop.year = 2019){
   }else{
     temp.loc <- loc
   }
-  fert_rat <- fread(paste0('/share/hiv/spectrum_input/190630_rhino/TFRreduction/', temp.loc, '.csv'))
+  fert_rat <- fread(paste0('/share/hiv/spectrum_input/191224_trumpet/TFRreduction/', temp.loc, '.csv'))
   fert_rat <- fert_rat[, tfr_ratio]
   fert_rat_years <- array(0, c(7, length(proj.years)))
   for(j in 1:length(proj.years)){
@@ -248,7 +248,7 @@ create_hivproj_param <- function(loc, start.year = 1970, stop.year = 2019){
   cd4_initdist <- temp.projp$cd4_initdist
   art_alloc_method <- as.integer(1)
   scale_cd4_mort <- as.integer(0)
-  art15plus_eligthresh <- fread(paste0('/share/hiv/spectrum_input/190630_rhino/adultARTeligibility/', temp.loc, '.csv'))
+  art15plus_eligthresh <- fread(paste0('/share/hiv/spectrum_input/191224_trumpet/adultARTeligibility/', temp.loc, '.csv'))
   art15plus_eligthresh[year >= 2016, cd4_threshold := 999]
   art15plus_eligthresh <- extend.years(art15plus_eligthresh, proj.years)
   art15plus_eligthresh <- art15plus_eligthresh[,.(year, cd4_threshold)]
@@ -271,8 +271,7 @@ create_hivproj_param <- function(loc, start.year = 1970, stop.year = 2019){
   ## For now, using last year's extrapolated numbers
   ## art15plus_numperc - 0 if count, else 1
   if(grepl("IND",loc)){
-    sub.art.cov.path <- paste0("/home/j/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/AIM_assumptions/program_stats/
-                               ART_adults/170322_IND_split_extrapolated/", loc, "_Adult_ART_cov.csv")
+    sub.art.cov.path <- art.dt
   } else {
     sub.art.cov.path <- paste0("/share/hiv/spectrum_input/190630_rhino/adultARTcoverage/",loc,".csv")
   }

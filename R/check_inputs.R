@@ -1,3 +1,7 @@
+##Maggie Walters
+##mwalte10@uw.edu
+##this function can be used to ensure that all inputs are the correct dimension given years
+
 check_inputs <- function(dt_obj){
   specfp <- attr(dt_obj, 'specfp')
   names <- names(specfp)
@@ -45,6 +49,4 @@ check_inputs <- function(dt_obj){
 
 
 
-undebug(check_inputs)
-check_inputs(dt)
 
