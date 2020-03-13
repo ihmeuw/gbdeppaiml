@@ -103,10 +103,7 @@ if(dir.table[ref == max(ref),art]){
       
       break
     }
-    if(grepl('IND', loc)){
-      art.dt <- paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/adultARTcoverage/' ,'140520','/', loc, '_Adult_ART_cov.csv')
-      
-    }
+
   }
   }else{
     for(c.year in c('UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
@@ -119,7 +116,10 @@ if(dir.table[ref == max(ref),art]){
       }
     }
 }
-
+if(grepl('IND', loc)){
+  art.dt <- paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/adultARTcoverage/' ,'140520','/', loc, '_Adult_ART_cov.csv')
+  
+}
 tem_art <- paste0('/share/hiv/data/UNAIDS_extrapolated/GBD20//ZAF_sub/', loc, '_Adult_ART_cov.csv')
 if(dir.table[ref == max(ref),population_single_age]){
   population_single_age <- paste0(input_root, '/population_single_age/', loc, '.csv')
@@ -250,6 +250,9 @@ if(loc %in% c("MAR","MRT","COM")){
 # }
 ### Code
 ## Read in spectrum object, sub in GBD parameters
+debugonce(sub.pop.params.specfp)
+debugonce(read_spec_object)
+debugonce(create_hivproj_param)
 dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub, 
                        pop.sub, anc.sub, anc.backcast, prev.sub = prev_sub, art.sub = TRUE, 
                        sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = TRUE, 
@@ -574,7 +577,7 @@ if(any(colnames(attr(dt, 'eppd')) == 'year_id')){
 
 ## Fit model
 
-fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 250)
+fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e3, B = 1e3, number_k = 10)
 data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc, '.csv')
 if(!file.exists(data.path)){save_data(loc, attr(dt, 'eppd'), run.name)}
 if(file.exists(data.path)){save_data(loc, attr(dt, 'eppd'), run.name)}

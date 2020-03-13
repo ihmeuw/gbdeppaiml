@@ -551,7 +551,7 @@ sub.paeds <- function(dt, loc, k, start.year = 1970, stop.year = stop.year){
 }
 
 sub.pop.params.specfp <- function(fp, loc, k){
-  #dir <- paste0('/share/hiv/epp_input/', gbdyear ,'/', run.name, '/')
+  #population_single_age <- paste0('/share/hiv/epp_input/', gbdyear ,'/', run.name, '/population_single_age/',loc,".csv")
 
   
   ## Population
