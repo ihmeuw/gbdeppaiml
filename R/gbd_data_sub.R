@@ -658,8 +658,14 @@ sub.prev <- function(loc, dt){
   if(grepl('KEN', loc)){
     surv.path <- "/ihme/hiv/epp_input/gbd19/190630_rhino2/prev_surveys.csv"
   }else{
-    surv.path <- prev_surveys
-  }
+    if(grepl('IND', loc)){
+      surv.path <- "/ihme/hiv/epp_input/gbd19/190630_rhino_ind/prev_surveys.csv"
+      
+    }else{
+      surv.path <- prev_surveys
+      
+    
+  }}
   data4 <- fread(surv.path)[iso3 == loc]
   
   if(loc=="STP"){
@@ -754,8 +760,19 @@ sub.prev.granular <- function(dt, loc){
     age.prev.dt <- fread(prev_surveys)
     age.prev.dt <- age.prev.dt[sex_id == 3,]
   }else{
-    age.prev.dt <- fread(prev_surveys)
-  }
+    if(grepl('IND', loc)){
+      prev_surveys <- "/ihme/hiv/epp_input/gbd19/190630_rhino_ind/prev_surveys.csv"
+      age.prev.dt <- fread(prev_surveys)
+      age.prev.dt[, sex_id := 3]
+      age.prev.dt[,age_year := '15-49']
+      }else{
+        age.prev.dt <- fread(prev_surveys)
+        
+      }
+    }
+  
+  
+  
   age.prev.dt <- age.prev.dt[iso3 == loc]
   if(loc == 'AGO'){
     age.prev.dt[year == 2016, year := 2015]
@@ -766,6 +783,7 @@ sub.prev.granular <- function(dt, loc){
   }
   age.prev.dt[,loc_year := paste0(iso3, '_', year)]
   
+
   copied_site_years <- intersect(age.prev.dt[age_year %in% c("15"), unique(loc_year)], age.prev.dt[age_year %in% c("15-49"), unique(loc_year)])
   age.prev.dt <- age.prev.dt[loc_year %in% copied_site_years & (age_year %in% c('15-49', '15-64')), age_year := 'drop']
   age.prev.dt <- age.prev.dt[age_year != 'drop',]

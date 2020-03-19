@@ -2,6 +2,7 @@
 ## tahvif@uw.edu/tahvif@gmail.com
 ### Setup
 rm(list=ls())
+Sys.umask(mode = "0002")
 windows <- Sys.info()[1][["sysname"]]=="Windows"
 root <- ifelse(windows,"J:/","/home/j/")
 user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
@@ -12,11 +13,11 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 library(data.table)
 
 ## Arguments
-run.name <- "200213_violin"
+run.name <- "200213_violin_test"
 spec.name <- "200213_violin"
 compare.run <- '200213_violin'
 proj.end <- 2022
-n.draws <- 50
+n.draws <- 1
 run.group2 <- FALSE
 paediatric <- TRUE
 cluster.project <- "proj_hiv"
@@ -128,34 +129,35 @@ if(redo_offsets){
 }
 
 ## Launch EPP
-loc.list <- loc.list[grepl('IND',loc.list)]
+loc.list <- 'AGO'
+#loc.list <- 'IND_4842'
 for(loc in loc.list) {    ## Run EPPASM
 # # 
 # # 
-#     epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q all.q -P ", cluster.project, " ",
-#                          "-e /share/temp/sgeoutput/", user, "/errors ",
-#                          "-o /share/temp/sgeoutput/", user, "/output ",
-#                          "-N ", loc, "_eppasm ",
-#                          "-t 1:", n.draws, " ",
-#                          "-hold_jid eppasm_prep_inputs_", run.name," ",
-#                          code.dir, "gbd/singR_shell.sh ",
-#                          code.dir, "gbd/main.R ",
-#                          run.name, " ", loc, " ", proj.end, " ", paediatric)
-#     print(epp.string)
-#     system(epp.string)
-# 
-# 
-#     #Draw compilation
-#     draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
-#                           "-e /share/temp/sgeoutput/", user, "/errors ",
-#                           "-o /share/temp/sgeoutput/", user, "/output ",
-#                           "-N ", loc, "_save_draws ",
-#                           "-hold_jid ", loc, "_eppasm ",
-#                          code.dir, "gbd/singR_shell.sh ",
-#                           code.dir, "gbd/compile_draws.R ",
-#                           run.name, " ", loc, ' ', n.draws, ' TRUE ', paediatric)
-#     print(draw.string)
-#     system(draw.string)
+    epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q all.q -P ", cluster.project, " ",
+                         "-e /share/temp/sgeoutput/", user, "/errors ",
+                         "-o /share/temp/sgeoutput/", user, "/output ",
+                         "-N ", loc, "_eppasm ",
+                         "-t 1:", n.draws, " ",
+                         "-hold_jid eppasm_prep_inputs_", run.name," ",
+                         code.dir, "gbd/singR_shell.sh ",
+                         code.dir, "gbd/main.R ",
+                         run.name, " ", loc, " ", proj.end, " ", paediatric)
+    print(epp.string)
+    system(epp.string)
+
+
+    #Draw compilation
+    draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
+                          "-e /share/temp/sgeoutput/", user, "/errors ",
+                          "-o /share/temp/sgeoutput/", user, "/output ",
+                          "-N ", loc, "_save_draws ",
+                          "-hold_jid ", loc, "_eppasm ",
+                         code.dir, "gbd/singR_shell.sh ",
+                          code.dir, "gbd/compile_draws.R ",
+                          run.name, " ", loc, ' ', n.draws, ' TRUE ', paediatric)
+    print(draw.string)
+    system(draw.string)
 
     # 
     plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q long.q -P ", cluster.project, " ",
@@ -189,6 +191,7 @@ for(loc in loc.list) {    ## Run EPPASM
 if(testing){
   vetting_dir <- paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/vetting/', unique(dir.table[use == 'T',ref]), '/')
   dir.create(vetting_dir)
+  dir.create(paste0(vetting_dir, 'compiled/'))
   
   setwd(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/15to49_plots/'))
   system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=15to49_plots.pdf -f *"))
@@ -215,6 +218,7 @@ if(testing){
             vetting_dir)
   file.copy(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/paeds_plots/paeds_plots.pdf'), 
             vetting_dir)
+  copyDirectory(from = paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/compiled/'), to = paste0(vetting_dir, 'compiled/'))
   
   
 }
@@ -302,8 +306,8 @@ if(est_India){
   inputs <- list(inc="incidence",prev="prevalence")
   for(input.x in names(inputs)){
     for(loc_i in ind.locs){
-      file.copy(from = paste0('/ihme/hiv/epp_output/gbd19/',run.name,'/compiled/IND_',input.x,"/",loc_i,".csv"), 
-                to = paste0('/share/hiv/spectrum_input/190630_rhino/',inputs[input.x],"/",loc_i,".csv") )
+      file.copy(from = paste0('/ihme/hiv/epp_output/gbd20/',run.name,'/compiled/IND_',input.x,"/",loc_i,".csv"), 
+                to = paste0('/share/hiv/spectrum_input/200213_violin_test/',inputs[input.x],"/",loc_i,".csv") )
     }
   }
 }

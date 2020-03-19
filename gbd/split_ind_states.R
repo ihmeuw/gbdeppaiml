@@ -23,7 +23,7 @@ if(length(args) > 0) {
   run.name <- args[1]
   decomp.step <- args[2]
 } else {
-  run.name <- "200213_violin"
+  run.name <- "200213_violin_indtest_agg"
   decomp.step <- 'step2'
 }
 
@@ -43,6 +43,7 @@ library(mortdb, lib = "/ihme/mortality/shared/r")
 ##Find corrent age groups and sex ids to match EPP-ASM output using one location
 source("/home/j/temp/central_comp/libraries/current/r/get_ids.R")
 source("/home/j/temp/central_comp/libraries/current/r/get_population.R")
+##reading in one file to pull out the format of the age groups
 x = fread(paste0(dir.list,"IND_4841.csv"))
 age_groups <- get_ids("age_group")
 age_groups[age_group_name=="<1 year",age_group_name := "0"]
@@ -127,10 +128,12 @@ stratum <- c("year","run_num")
 cols <- colnames(all.ind)[!colnames(all.ind) %in% stratum]
 measures_child <- cols
 sum.ind <- all.ind[ ,lapply(.SD,sum), .SDcols=cols, by=stratum]
-child_age <- age_groups[age_group_id %in% c(2,3,4)]
+child_age <- age_groups[age_group_id %in% c(2,3,388,389)]
 child_age[age_group_name == "Early Neonatal", age_group_name := "enn"]
 child_age[age_group_name == "Late Neonatal", age_group_name := "lnn"]
-child_age[age_group_name == "Post Neonatal", age_group_name := "pnn"]
+child_age[age_group_name == "1-5 months", age_group_name := "x_388"]
+child_age[age_group_name == "6-11 months", age_group_name := "x_389"]
+
 print("filling in missing locs for under 1s")
 for(m_loc in missing.locs){
   m_loc1 <- loc.table[ihme_loc_id==m_loc,location_id]
@@ -169,11 +172,12 @@ missing.children <- setdiff(loc.table[grepl("IND", ihme_loc_id) & level == 5, ih
 missing.parents <- unique(loc.table[location_id %in% loc.table[ihme_loc_id %in% missing.children, parent_id], ihme_loc_id])
 
 state.locs <- c(loc.table[grepl("IND", ihme_loc_id) & level == 4 & epp == 1, ihme_loc_id],"IND_44538") #"IND_44538"-not run through EPP but filled in above
+state.locs <- state.locs[which(state.locs != 'IND_4842')]
 
 for(state in state.locs) {
   loc.id <- as.integer(strsplit(state, "_")[[1]][2])
   children <- loc.table[parent_id == loc.id, ihme_loc_id]
-  children <- children[!children %in% done]
+  #children <- children[!children %in% done]
 
   # set proportions - note no missing parents for now, else these could be age/sex specific (info available in PDFs above)
   if(state %in% missing.parents) {
@@ -275,7 +279,7 @@ for(state in state.locs) {
     ##Under 1 splits
     path <- paste0(dir, state,"_under1_splits.csv")
     state.dt <- fread(path)
-    measures_child <- c("enn","lnn","pnn")
+    measures_child <- c("enn","lnn","x_388", 'x_389')
     stratum <- c("year","run_num")
     child.result <- state.dt[,mget(stratum)]
     for(measure in measures_child) {
