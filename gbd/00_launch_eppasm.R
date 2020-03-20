@@ -13,18 +13,18 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 library(data.table)
 
 ## Arguments
-run.name <- "200213_violin_test"
+run.name <- "200316_windchime"
 spec.name <- "200213_violin"
 compare.run <- '200213_violin'
 proj.end <- 2022
-n.draws <- 1
+n.draws <- 5
 run.group2 <- FALSE
 paediatric <- TRUE
 cluster.project <- "proj_hiv"
 plot_ART <- FALSE
-est_India <- TRUE
+est_India <- FALSE
 reckon_prep <- TRUE
-decomp.step <- "step3"
+decomp.step <- "step2"
 gbdyear <- "gbd20"
 redo_offsets <- F
 testing = T
@@ -129,8 +129,7 @@ if(redo_offsets){
 }
 
 ## Launch EPP
-loc.list <- 'AGO'
-#loc.list <- 'IND_4842'
+loc.list <- c('BEN', 'ETH_44859', 'KEN_35626', 'LSO', 'MWI', 'NAM', 'NGA_25332', 'SEN', 'SOM', 'SWZ', 'TZA')
 for(loc in loc.list) {    ## Run EPPASM
 # # 
 # # 
@@ -190,7 +189,7 @@ for(loc in loc.list) {    ## Run EPPASM
 
 if(testing){
   vetting_dir <- paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/vetting/', unique(dir.table[use == 'T',ref]), '/')
-  dir.create(vetting_dir)
+  dir.create(vetting_dir, recursive = T)
   dir.create(paste0(vetting_dir, 'compiled/'))
   
   setwd(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/15to49_plots/'))
@@ -218,7 +217,7 @@ if(testing){
             vetting_dir)
   file.copy(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/paeds_plots/paeds_plots.pdf'), 
             vetting_dir)
-  copyDirectory(from = paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/compiled/'), to = paste0(vetting_dir, 'compiled/'))
+  file.copy(from = paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/compiled/'), to = paste0(vetting_dir, 'compiled/'), recursive = T)
   
   
 }
