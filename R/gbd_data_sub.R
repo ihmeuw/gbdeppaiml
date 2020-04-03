@@ -804,10 +804,10 @@ sub.prev.granular <- function(dt, loc){
   age.prev.dt <- age.prev.dt[,.(year, sex, agegr, n, prev, se, used, deff, deff_approx)]
   age.prev.dt$n <- as.numeric(age.prev.dt$n)
   gen.pop.dict <- c("General Population", "General population", "GP", "GENERAL POPULATION", "GEN. POPL.", "General population(Low Risk)", "Remaining Pop")
-  if(!grepl('KEN', loc) & !grepl('NGA', loc) & !grepl('BEN',loc) & !grepl('DJI',loc) & !grepl('ERI',loc) & !grepl('IND',loc)){
-    age.prev.dt <- age.prev.dt[sex!='both',]
-    
-  }
+  # if(!grepl('KEN', loc) & !grepl('NGA', loc) & !grepl('BEN',loc) & !grepl('DJI',loc) & !grepl('ERI',loc) & !grepl('IND',loc)& !grepl('BDI',loc)& !grepl('CAF',loc) ){
+  #   age.prev.dt <- age.prev.dt[sex!='both',]
+  #   
+  # }
    if(length(dt) == 1) {
     gen.pop.i <- 1
   } else {
@@ -1130,9 +1130,10 @@ geo_adj <- function(loc, dt, i, uncertainty) {
         if(loc == 'SEN'){
           anc.dt[,offset := 0]
         }
+  
 
         if(loc == 'ZWE' | loc == 'MOZ' | loc == 'BEN' | loc == 'ETH_44859' | loc == "KEN_35626" | loc == 'LSO' | loc == 'MWI' |
-           loc == 'NAM' | loc == 'NGA_25332' | loc == 'SOM' | loc == 'SWZ' | loc == 'TZA'){
+           loc == 'NAM' | loc == 'NGA_25332' | loc == 'SOM' | loc == 'SWZ' | loc == 'TZA' | loc == 'ZMB'){
           anc.dt[,high_risk := FALSE]
           anc.dt[,high_risk := unique(site.dat[,high_risk])]
         }
@@ -1185,7 +1186,7 @@ geo_adj <- function(loc, dt, i, uncertainty) {
           pre_2000[,offset:= NULL]
           pre_2000 <- merge(pre_2000, min_offset, by = 'site')
           setnames(pre_2000, 'min_offset', 'offset')
-          anc.dt <- rbind(anc.dt[year_id >= 2000], pre_2000)
+          anc.dt <- rbind(anc.dt[year_id >= 2000], anc.dt[year_id < 2000 & !is.na(offset),], pre_2000)
         }
   
         

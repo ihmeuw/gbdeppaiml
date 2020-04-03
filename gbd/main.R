@@ -22,7 +22,7 @@ if(length(args) > 0) {
   paediatric <- as.logical(args[4])
 } else {
 	run.name <- '200316_windchime'
-	loc <- 'BEN'
+	loc <- 'DOM'
 	#loc <- 'ERI'
 	stop.year <- 2022
 	j <- 1
@@ -79,7 +79,7 @@ loc.table <- get_locations(hiv_metadata = TRUE)
 # These locations do not have information from LBD team estimates
 # ZAF ANC data are considered nationally representative so no GeoADjust - this could be challenged in the future
 no_geo_adj <-  c(loc.table[epp ==1 & grepl("IND",ihme_loc_id),ihme_loc_id],
-                 "PNG","HTI","DOM", 'CPV', loc.table[epp ==1 & grepl("ZAF",ihme_loc_id),ihme_loc_id], 'STP', 'KEN_35626')
+                 "PNG","HTI","DOM", 'CPV', loc.table[epp ==1 & grepl("ZAF",ihme_loc_id),ihme_loc_id], 'STP', 'KEN_35626', 'MRT', 'COM')
 
 
 
@@ -184,10 +184,10 @@ if(run.name %in% c("190630_fixonARTIND","190630_fixonARTIND_tightprior")){
 attr(dt, 'eppd')$ancsitedat = unique(attr(dt, 'eppd')$ancsitedat)
 ## TODO - fix se = 0 data points in ZAF
 attr(dt, 'eppd')$hhs <- attr(dt, 'eppd')$hhs[!attr(dt, 'eppd')$hhs$se == 0,]
-if(loc == 'GNQ'){
-  attr(dt, 'eppd')$hhs <- subset(attr(dt, 'eppd')$hhs, sex == 'both')
-  
-}
+# if(loc == 'GNQ'){
+#   attr(dt, 'eppd')$hhs <- subset(attr(dt, 'eppd')$hhs, sex == 'both')
+#   
+# }
 
 attr(dt, 'specfp')$relinfectART <- 0.3
 

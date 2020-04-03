@@ -223,9 +223,12 @@ plot_15to49 <- function(loc="STP",  compare.run = NA, new.run = '200119_ukelele'
     pop.dt <- pop.dt[,.(pop = mean(pop)), by = c('age', 'sex', 'year')]
     pop.dt <- rbind(pop.dt, aggre_pop)
     pop.dt <- pop.dt[,.(pop = sum(pop)), by = c('age', 'sex', 'year')]
-    data.agg <- merge(pop.dt, data, by = c( 'age', 'sex','year'))
+    data.pre.agg <- data[age %in% c('15-49', '15-64') & sex == 'both',]
+    data.pre.agg[,pop := NA]
+    data.agg <- merge(pop.dt, data, by = c( 'age', 'sex','year'), fill = T)
     ##TODO - what to do with upper and lower here?
     data.agg <- data.agg[,.(mean = weighted.mean(x = mean, w = pop)), by =c('year', 'model', 'indicator') ]
+    data.agg <- rbind(data.agg, data.pre.agg[,.(year, model, indicator, mean)])
     data.agg[,upper := NA]
     data.agg[,lower := NA]    
     ui.dt <- fread(paste0('/share/hiv/data/prevalence_surveys/GBD2017_prevalence_surveys_15to49.csv'))

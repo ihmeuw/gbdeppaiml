@@ -50,7 +50,9 @@ if(dir.table[ref == max(ref),migration]){
   migration <- paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/migration/', loc, '.csv')
 }
 if(dir.table[ref == max(ref),prev_surveys]){
-  prev_surveys <- paste0('/ihme/hiv/epp_input/gbd20/prev_surveys.csv')
+   prev_surveys <- paste0('/ihme/hiv/epp_input/gbd20/prev_surveys.csv')
+
+  
  # prev_surveys <- '/ihme/hiv/data/prevalence_surveys/prev_surveys_temp.csv'
 }else{
   ##need to look up old FP
@@ -139,8 +141,8 @@ if(dir.table[ref == max(ref),on.art]){
   print('Using MRBRT')
   
 } else {
-  mortart <- paste0(root,"/temp/TB/joyma/BRADMOD/Age-Pattern Plots/final_res/", loc,"_HIVonART.csv")
-  print('Using single model')
+  mortart <- paste0(root,"/temp/TB/joyma/HIV/model_draw2/gbd20/", loc,"_HIVonART.csv")
+  print('Using test model')
 }
 
 print(paste('Using', ASFR, 'for ASFR', sep = ' '))
