@@ -12,8 +12,9 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 library(data.table)
 
 ## Arguments
-run.name <- "190630_rhino"
-spec.name <- "190630_rhino"
+
+run.name <- "190630_rhino2"
+spec.name <- "190630_rhino_combined"
 compare.run <- NA
 proj.end <- 2019
 n.draws <- 1
@@ -38,7 +39,7 @@ source(paste0(root,"/Project/Mortality/shared/functions/check_loc_results.r"))
 library(mortdb, lib = "/ihme/mortality/shared/r")
 
 ### Tables
-loc.table <- data.table(get_locations(hiv_metadata = T))
+loc.table <- data.table(get_locations(hiv_metadata = T, gbd_year = 2019))
 
 ### Code
 epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
@@ -110,12 +111,11 @@ if(!file.exists(paste0(input.dir, 'art_prop.csv'))){
 }
 
 
-
 ## Launch EPP
 for(loc in loc.list) {    ## Run EPPASM
-
       epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q all.q -P ", cluster.project, " ",
-                           "-e /share/homes/mwalte10/errors ",
+
+                           "-e /share/temp/sgeoutput/", user, "/errors ",
                            "-o /share/temp/sgeoutput/", user, "/output ",
                            "-N ", loc, "_eppasm ",
                            "-t 1:", n.draws, " ",
@@ -126,31 +126,31 @@ for(loc in loc.list) {    ## Run EPPASM
       print(epp.string)
       system(epp.string)
 
-    # # # ## Draw compilation
-    #  draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
-    #                        "-e /share/homes/djahag/errors ",
-    #                        "-o /share/temp/sgeoutput/", user, "/output ",
-    #                        "-N ", loc, "_save_draws ",
-    #                        "-hold_jid ", loc, "_eppasm ",
-    #                       code.dir, "gbd/singR_shell.sh ",
-    #                        code.dir, "gbd/compile_draws.R ",
-    #                        run.name, " ", loc, ' ', n.draws, ' TRUE ', paediatric)
-    #  print(draw.string)
-    #  system(draw.string)
-    # 
-    #  plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
-    #                        "-e /share/homes/djahag/errors ",
-    #                        "-o /share/temp/sgeoutput/", user, "/output ",
-    #                        "-N ", loc, "_plot_eppasm ",
-    #                        "-hold_jid ", loc, "_save_draws ",
-    #                        code.dir, "gbd/singR_shell.sh ",
-    #                        code.dir, "gbd/main_plot_output.R ",
-    #                        loc, " ", run.name, ' ', paediatric, ' ', compare.run)
-    #  print(plot.string)
-    #  system(plot.string)
-    #  
+
+     draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
+                           "-e /share/temp/sgeoutput/", user, "/errors ",
+                           "-o /share/temp/sgeoutput/", user, "/output ",
+                           "-N ", loc, "_save_draws ",
+                           "-hold_jid ", loc, "_eppasm ",
+                          code.dir, "gbd/singR_shell.sh ",
+                           code.dir, "gbd/compile_draws.R ",
+                           run.name, " ", loc, ' ', n.draws, ' TRUE ', paediatric)
+     print(draw.string)
+     system(draw.string)
+      }
  
+     plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
+                           "-e /share/temp/sgeoutput/", user, "/errors ",
+                           "-o /share/temp/sgeoutput/", user, "/output ",
+                           "-N ", loc, "_plot_eppasm ",
+                           "-hold_jid ", loc, "_save_draws ",
+                           code.dir, "gbd/singR_shell.sh ",
+                           code.dir, "gbd/main_plot_output.R ",
+                           loc, " ", run.name, ' ', paediatric, ' ', compare.run)
+     print(plot.string)
+     system(plot.string)
      
+
 }
 
 
@@ -192,13 +192,14 @@ check_loc_results(loc.table[grepl("1",group) & spectrum==1,ihme_loc_id],paste0('
 eppasm_parents <-  c("KEN","ZAF","ETH","KEN_44793" ,"KEN_44794","KEN_44795", "KEN_44796" ,"KEN_44797", "KEN_44798","KEN_44799", "KEN_44800","NGA")
 all_loc_list <- c(loc.list,eppasm_parents)
 
+
 ## Aggregation and reckoning prep for higher levels
 if(reckon_prep){
   for(loc in all_loc_list){
     if(loc %in% eppasm_parents){
     prep.string <- paste0("qsub -l m_mem_free=100G -l fthread=2 -l h_rt=02:00:00 -l archive -q all.q -P ", cluster.project, " ",
-                          "-e /share/homes/djahag/errors2 ",
-                          "-o /share/homes/djahag/output ",
+                          "-e /share/temp/sgeoutput/", user, "/errors ",
+                          "-o /share/temp/sgeoutput/", user, "/output ",
                           "-N ", loc, "_aggregate ",
                           "-hold_jid ", loc,"_save_draws ",
                           code.dir, "gbd/singR_shell.sh ",
@@ -207,10 +208,10 @@ if(reckon_prep){
     print(prep.string)
     system(prep.string)
   }
-    
+  
 
   prep.string <- paste0("qsub -l m_mem_free=50G -l fthread=1 -l h_rt=02:00:00 -l archive -q all.q -P ", cluster.project, " ",
-                        "-e /share/homes/djahag/errors ",
+                        "-e /share/temp/sgeoutput/", user, "/errors ",
                         "-o /share/temp/sgeoutput/", user, "/output ",
                         "-N ", loc, "_apply_age_splits ",
                         "-hold_jid ", loc,"_aggregate ",

@@ -12,7 +12,7 @@ if(length(args) > 0) {
   run.name <- args[2]
   spec.name <- args[3]
 } else {
-  loc <- "MDG"
+  loc <- "KEN_35650"
   run.name <- "190630_rhino2"
   spec.name <- "190630_rhino"
 }
@@ -30,8 +30,7 @@ dir.create(out_dir_birth, recursive = T, showWarnings = F)
 
 ### Functions
 library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
-source(paste0(root, "/temp/central_comp/libraries/current/r/get_population.R"))
-source(paste0(root, "/Project/Mortality/shared/functions/get_locations.r"))
+source(paste0("/share/cc_resources/libraries/current/r/get_population.R"))
 setwd(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/"))
 devtools::load_all()
 setwd(code.dir)
@@ -44,7 +43,7 @@ age_map <- data.table(fread("/ihme/hiv/spectrum_prepped/age_map.csv"))
 age_map <- age_map[(age_group_id>=2 & age_group_id <=21) ,list(age_group_id,age=age_group_name_short)]
 
 ## Create a map to scramble draws from Spectrum
-locations <- data.table(get_locations(hiv_metadata = T))
+locations <- data.table(get_locations(hiv_metadata = T, gbd_year=2019))
 loc_id <- locations[ihme_loc_id==loc,location_id]
 
 ## Use draw maps to scramble draws so that they are not correlated over time

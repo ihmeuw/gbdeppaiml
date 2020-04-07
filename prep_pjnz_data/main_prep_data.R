@@ -13,8 +13,10 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) > 0) {
   loc <- args[1]
+  unaids_year <- args[2]
 } else {
-  loc <- "SDN"
+  loc <- "SSD"
+  unaids_year <- 2019
 
 }
 ### Functions
@@ -26,18 +28,19 @@ devtools::load_all()
 
 ### Tables
 loc.table <- data.table(get_locations(hiv_metadata = T))
+dir.create(paste0("/share/hiv/data/PJNZ_prepped/",unaids_year,"/"),recursive = TRUE)
 
-if(grepl('1', loc.table[ihme_loc_id == loc, group])){
-  if(!grepl('IND', loc)){
-    val <- prepare_spec_object(loc)
-  }else{
-    val <- prepare_spec_object_ind(loc)
-  }
-}else{
-  val <- prepare_spec_object_group2(loc)
+loc.table[ grepl("KEN",ihme_loc_id) & level==5,]
+
+loc.list = loc.table[unaids_2018 == 1 & grepl("1",group) & epp==1,ihme_loc_id]
+
+unaids_year = 2018
+
+
+for(loc in loc.list[73:83]){
+  print(loc)
+  val <- prepare_spec_object(loc)
+  saveRDS(val, paste0("/share/hiv/data/PJNZ_prepped/",unaids_year,"/", loc, '.rds'))
 }
-
-
-
 
 

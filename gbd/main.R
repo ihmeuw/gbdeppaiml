@@ -60,7 +60,7 @@ setwd(code.dir)
 devtools::load_all()
 
 ### Tables
-loc.table <- fread(paste0('/share/hiv/epp_input/gbd19/', run.name, '/location_table.csv'))
+loc.table <- get_locations(hiv_metadata = TRUE, gbd_year=2019)
 
 # These locations do not have information from LBD team estimates
 # ZAF ANC data are considered nationally representative so no GeoADjust - this could be challenged in the future
@@ -76,6 +76,7 @@ if(geoadjust & !loc %in% no_geo_adj){
 ### Code
 ## Read in spectrum object, sub in GBD parameters
 dt <- read_spec_object(loc, i, start.year, stop.year, trans.params.sub, pop.sub, prev.sub, art.sub, sexincrr.sub, popadjust, age.prev, paediatric, anc.rt, geoadjust, anc.prior.sub)
+<<<<<<< HEAD
 dir.create(paste0('/ihme/hiv/epp_output/', 'gbd19', "/", run.name, '/dt_objects/'), recursive = T)
 saveRDS(dt, file = paste0('/ihme/hiv/epp_output/', 'gbd19', "/", run.name, '/dt_objects/', loc, '_dt.RDS'))
 
@@ -156,6 +157,88 @@ saveRDS(dt, file = paste0('/ihme/hiv/epp_output/', 'gbd19', "/", run.name, '/dt_
 # }
 # 
 # 
+=======
+anc = attr(dt,"eppd")$ancsitedat
+nrow(attr(dt,"eppd")$hhs)
+
+if(epp.mod == 'rspline'){attr(dt, 'specfp')$equil.rprior <- TRUE}
+
+#Some substitutions to get things running
+if(grepl('NGA', loc)){
+  temp <- attr(dt, 'specfp')$paedsurv_artcd4dist
+  temp[temp < 0] <- 0
+  attr(dt, 'specfp')$paedsurv_artcd4dist <- temp
+}
+
+## Replace on-ART mortality RR for TZA and UGA
+if(loc %in% c('UGA', 'TZA')){
+  temp <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/MWI.rds'))
+  temp.artmxrr <- attr(temp, 'specfp')$artmx_timerr
+  attr(dt, 'specfp')$artmx_timerr <- temp.artmxrr
+}
+
+if(run.name %in% c("190630_fixonARTIND","190630_fixonARTIND_tightprior")){
+  temp <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/MWI.rds'))
+  temp.artmxrr <- attr(temp, 'specfp')$artmx_timerr
+  attr(dt, 'specfp')$artmx_timerr <- temp.artmxrr
+}
+
+attr(dt, 'eppd')$ancsitedat = unique(attr(dt, 'eppd')$ancsitedat)
+## TODO - fix se = 0 data points in ZAF
+attr(dt, 'eppd')$hhs <- attr(dt, 'eppd')$hhs[!attr(dt, 'eppd')$hhs$se == 0,]
+attr(dt, 'specfp')$relinfectART <- 0.3
+
+if(grepl("IND",loc)){
+  if(no_anc){
+    attr(dt,"eppd")$ancsitedat <- NULL
+  }
+  attr(dt, 'specfp')$art_alloc_mxweight <- 0.5
+}
+
+## Fit model
+fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e4, B = 1e3, number_k = 200)
+
+
+data.path <- paste0('/share/hiv/epp_input/gbd19/', run.name, '/fit_data/', loc, '.csv')
+if(!file.exists(data.path)){
+save_data(loc, attr(dt, 'eppd'), run.name)
+}
+
+
+## When fitting, the random-walk based models only simulate through the end of the
+## data period. The `extend_projection()` function extends the random walk for r(t)
+## through the end of the projection period.
+if(epp.mod == 'rhybrid'){
+  fit <- extend_projection(fit, proj_years = stop.year - start.year + 1)
+}
+
+
+## Simulate model for all resamples, choose a random draw, get gbd outputs
+result <- gbd_sim_mod(fit, VERSION = 'R')
+output.dt <- get_gbd_outputs(result, attr(dt, 'specfp'), paediatric = paediatric)
+output.dt[,run_num := i]
+
+## Write output to csv
+dir.create(out.dir, showWarnings = FALSE)
+write.csv(output.dt, paste0(out.dir, '/', i, '.csv'), row.names = F)
+
+# ## under-1 splits
+if(paediatric){
+  split.dt <- get_under1_splits(result, attr(dt, 'specfp'))
+  split.dt[,run_num := i]
+  write.csv(split.dt, paste0(out.dir, '/under_1_splits_', i, '.csv' ), row.names = F)
+}
+
+## Write out theta for plotting posterior
+param <- data.table(theta = attr(result, 'theta'))
+write.csv(param, paste0(out.dir,'/theta_', i, '.csv'), row.names = F)
+
+if(plot.draw){
+  plot_15to49_draw(loc, output.dt, attr(dt, 'eppd'), run.name)
+}
+
+
+>>>>>>> 98ce7d5165c9dd4004748df477054824582b314e
 
 ##END
 

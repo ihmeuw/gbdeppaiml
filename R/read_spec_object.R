@@ -79,27 +79,7 @@ read_spec_object <- function(loc, i, start.year = 1970, stop.year = 2019, trans.
       dt <- gbdeppaiml::sub.anc.prior(dt,loc)
     }
     
-    ## Subsetting KEN counties from province
-    if(grepl('KEN', loc)){
-      ken.anc.path <- paste0('/share/hiv/epp_input/gbd19/kenya_anc_map.csv')
-      ken.anc <- fread(ken.anc.path)
-      county.sites <- ken.anc[ihme_loc_id == loc, site]
-      prov.sites <- row.names(attr(dt, "eppd")$anc.prev)
-      keep.index <- which(prov.sites %in% county.sites  | grepl(loc.table[ihme_loc_id == loc, location_name], prov.sites))
-      attr(dt, "eppd")$anc.used[] <- FALSE
-      if(length(keep.index) > 0) {
-        attr(dt, "eppd")$anc.used[keep.index] <- TRUE
-      }
-      ##TODO - need to update mapping, take out grepl on location name
-      attr(dt, 'eppd')$ancsitedat$used[!(attr(dt, 'eppd')$ancsitedat$site %in% county.sites | grepl(loc.table[ihme_loc_id == loc, location_name], attr(dt, 'eppd')$ancsitedat$site))] <- FALSE
-      # ART
-      prop.path <- paste0("/share/hiv/epp_input/gbd19/KEN_ART_props.csv")
-      prop.dt <- fread(prop.path)
-      prop <- prop.dt[ihme_loc_id == loc, prop_pepfar]
-      attr(dt,"specfp")$art15plus_num <- attr(dt,"specfp")$art15plus_num * prop
-    }
-      
-  
+
     if(!anc.rt){
       attr(dt, 'eppd')$ancrtsite.prev <- NULL
       attr(dt, 'eppd')$ancrtsite.n <- NULL
