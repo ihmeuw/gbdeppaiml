@@ -116,7 +116,7 @@ spec_draw[, suscept_pop := pop_neg]
 
 
 ## Calculate birth prevalence rate
-birth_pop <- get_population(age_group_id=164, location_id=loc_id, year_id=1970:2022, sex_id=1:2, gbd_round_id = 7, decomp_step = 'step2')
+birth_pop <- get_population(age_group_id=164, location_id=loc_id, year_id=1970:2022, sex_id=1:2, gbd_round_id = 7, decomp_step = 'iterative')
 setnames(birth_pop, c("year_id", "population"), c("year", "gbd_pop"))
 birth_dt <- copy(spec_draw)
 birth_dt <- birth_dt[,.(age_group_id = 164, birth_prev = sum(birth_prev), total_births = sum(total_births)), by = c('year', 'run_num', 'sex_id')]

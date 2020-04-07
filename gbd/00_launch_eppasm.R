@@ -17,14 +17,14 @@ run.name <- "200316_windchime"
 spec.name <- "200316_windchime"
 compare.run <- '200213_violin'
 proj.end <- 2022
-n.draws <- 5
+n.draws <- 1000
 run.group2 <- FALSE
 paediatric <- TRUE
 cluster.project <- "proj_hiv"
 plot_ART <- FALSE
 est_India <- FALSE
 reckon_prep <- TRUE
-decomp.step <- "step2"
+decomp.step <- "iterative"
 gbdyear <- "gbd20"
 redo_offsets <- F
 testing = T
@@ -128,8 +128,8 @@ if(redo_offsets){
   system(redo_offsets.string)
 }
 
-# loc.list <- c(loc.list, 'STP', 'MRT', 'COM')
-loc.list <- c('AGO', 'BEN', 'MWI')
+# loc.list <- c(loc.list, 'STP', 'COM', 'MRT')
+loc.list <- c('KEN_35630', 'KEN_35635', 'KEN_35637', 'KEN_35644', 'KEN_35655', 'KEN_35656')
 ## Launch EPP
 for(loc in loc.list) {    ## Run EPPASM
 # # 

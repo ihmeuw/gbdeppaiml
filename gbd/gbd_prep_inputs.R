@@ -137,7 +137,7 @@ invisible(lapply(india.locs, function(c.location_id) {
 
 ## Migration
 
-mig <- fread(paste0('/ihme/fertilitypop/population/popReconstruct/198/upload/net_migration_single_year.csv'))[measure_id==19]
+mig <- fread(paste0('/ihme/fertilitypop/population/popReconstruct/212/upload/net_migration_single_year.csv'))[measure_id==19]
 #fread(paste0('/ihme/fertilitypop/gbd_2017/population/modeling/popReconstruct/v96/best/net_migrants.csv'))
 age_groups <- get_ids("age_group")
 age_groups[age_group_name=="<1 year",age_group_name := "0"]
