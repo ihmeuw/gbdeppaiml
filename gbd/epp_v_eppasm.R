@@ -108,10 +108,61 @@ setwd('/ihme/hiv/epp_output/gbd20/2020_ind_test_agg3/vetting/eppasm_vs_epp/')
 system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=compiled_plots.pdf -f *"))
 
 
+compare_spec <- function(run_vec = c('190630_rhino_ind', '200316_windchime'), stage = 'stage_1'){
+   compare.dt.s2 <- c() 
+   for(run in run_vec){
+    temp.loc <- loc.table[parent_id == loc.table[ihme_loc_id == loc, location_id], ihme_loc_id][1]
+    ##changing to compare to stage on temporarily
+    compare.dt.run <- fread(paste0('/ihme/hiv/spectrum_draws/', run, '/compiled/', stage,'/summary/', temp.loc, '_all_age.csv'))
+    compare.dt.run <- compare.dt.run[,.(type = 'line', year, indicator = variable, 
+                                      model = paste0('Spectrum, ', stage, ', ', run), mean = value, lower = NA, upper = NA)]
+    compare.dt.run[indicator == 'mort_rate', indicator := 'Deaths']
+    compare.dt.run[indicator == 'inc_rate', indicator := 'Incidence']
+    compare.dt.run[indicator == 'prev_rate', indicator := 'Prevalence']
+    compare.dt.run <- compare.dt.run[indicator != 'art_rate']
+    compare.dt.s2 <- rbind(compare.dt.s2, compare.dt.run)
+  }
+  
+  return(compare.dt.s2)
+
+}
 
 
-
-
+compare_epp.func <- function(run_vec = c('190630_rhino_ind', '200316_windchime')){
+  epp_comp <- c()
+  for(run in run_vec){
+    epp_inc <- paste0(root,"/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/incidence_draws/",run,"/", loc, '_SPU_inc_draws.csv')
+    epp_prev <- paste0(root,"/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/prevalence_draws/",run,"/", loc, '_SPU_prev_draws.csv')
+    # epp_death <- paste0(root,"/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/death_draws/",run,"/", loc, '_SPU_death_draws.csv')
+    
+    epp_inc <- fread(epp_inc)
+    epp_prev <- fread(epp_prev)
+    # epp_death <- fread(epp_death)
+    ##Average incidence and prevalences across draws
+    epp_inc[,mean := rowSums(epp_inc[,2:101]) / 100 / 100]
+    epp_prev[,mean := rowSums(epp_prev[,2:101]) / 100 / 100]
+    # epp_death[,mean := rowSums(epp_death[,2:101]) / 100 / 100]
+    
+    epp_inc <- epp_inc[,.(year, mean)]
+    epp_prev <- epp_prev[,.(year, mean)]
+    # epp_death <- epp_death[,.(year, prev)]
+    epp_inc[,indicator := 'inc']
+    epp_prev[,indicator := 'prev']
+    # epp_death[,indicator := 'death']
+    
+    # epp <- rbind(epp_inc, epp_prev, epp_death)
+    epp <- rbind(epp_inc, epp_prev)
+    epp[,type := 'line']
+    epp[,model := paste0('EPP, ', run)]
+    epp[,lower := NA]
+    epp[,upper := NA]
+    
+  
+    epp_comp <- rbind(epp_comp, epp)
+  }
+  return(epp_comp)
+  
+}
 
 
 

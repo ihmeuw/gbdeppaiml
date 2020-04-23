@@ -23,7 +23,7 @@ if(length(args) > 0) {
   run.name <- args[1]
   decomp.step <- args[2]
 } else {
-  run.name <- "200213_violin_indtest_agg"
+  run.name <- "2020_ind_test_agg4"
   decomp.step <- 'step2'
 }
 
@@ -172,7 +172,7 @@ missing.children <- setdiff(loc.table[grepl("IND", ihme_loc_id) & level == 5, ih
 missing.parents <- unique(loc.table[location_id %in% loc.table[ihme_loc_id %in% missing.children, parent_id], ihme_loc_id])
 
 state.locs <- c(loc.table[grepl("IND", ihme_loc_id) & level == 4 & epp == 1, ihme_loc_id],"IND_44538") #"IND_44538"-not run through EPP but filled in above
-state.locs <- state.locs[which(state.locs != 'IND_4842')]
+# state.locs <- state.locs[which(state.locs != 'IND_4842')]
 
 for(state in state.locs) {
   loc.id <- as.integer(strsplit(state, "_")[[1]][2])
@@ -222,12 +222,23 @@ for(state in state.locs) {
       state.dt.t$run_num <- paste0("draw", state.dt.t$run_num )
       state.dt.t <- spread(unique(state.dt.t), run_num, get(measure))
 
-      max.draw <- max(state.dt$run_num)
+      # max.draw <- max(state.dt$run_num)
+      max.draw <- 10
+      
 
       #times the state level counts by the child ART props for HIV positive outcomes and 
       #do we need child Population props for HIV negative outcomes?
       draw.cols <- paste0("draw",1:max.draw)
       child.dt <- copy(state.dt.t)
+      if(any(colnames(child.dt) == 'draw50')){
+        child.dt[,draw50 := NULL]
+      }
+      if(!is.numeric(child.dt[,'draw1'])){
+        for (i in 1:max.draw) {
+          child.dt[,paste0('draw',i) := as.numeric(get(paste0('draw',i)))]
+          
+        }
+      }
       #if(measure %in% c("hiv_deaths","new_hiv","pop_art","hiv_births","birth_prev","pop_gt350" , "pop_200to350"  , "pop_lt200" )){
       child.dt <- child.dt[, (draw.cols) := lapply(.SD, '*',  props[ihme_loc_id == child, prop]), .SDcols = draw.cols][]
     # } else {
@@ -266,6 +277,9 @@ for(state in state.locs) {
     inc.dt <- dcast.data.table(inc.dt,year~run_num, value.var='inc')
     setnames(inc.dt, names(inc.dt)[!names(inc.dt) == 'year'], paste0('draw', names(inc.dt)[!names(inc.dt) == 'year']))
     inc.dt <- inc.dt[order(year),]
+    if(!dir.exists(paste0(spec.inc.path))){
+      dir.create(paste0(spec.inc.path))
+    }
     write.csv(inc.dt, paste0(spec.inc.path, child, '.csv'), row.names = F)
     
     prev.dt <- spec.dt[,.(year, run_num, prev)]
@@ -273,6 +287,9 @@ for(state in state.locs) {
     prev.dt <- dcast.data.table(prev.dt,year~run_num, value.var='prev')
     setnames(prev.dt, names(prev.dt)[!names(prev.dt) == 'year'], paste0('draw', names(prev.dt)[!names(prev.dt) == 'year']))
     prev.dt <- prev.dt[order(year),]
+    if(!dir.exists(paste0(spec.prev.path))){
+      dir.create(paste0(spec.prev.path))
+    }
     write.csv(prev.dt, paste0(spec.prev.path, child, '.csv'), row.names = F)
     
     

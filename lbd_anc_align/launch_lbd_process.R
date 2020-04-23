@@ -14,7 +14,7 @@ if(length(args) > 0) {
   run.name <- args[1]
   run.name.old <- args[2]
 } else {
-  run.name <- '191224_trumpet'
+  run.name <- '200316_windchime'
   run.name.old <- '191224_trumpet'
 }
 

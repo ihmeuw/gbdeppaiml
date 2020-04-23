@@ -21,7 +21,7 @@ if(length(args) > 0) {
   j <- as.integer(Sys.getenv("SGE_TASK_ID"))
   paediatric <- as.logical(args[4])
 } else {
-	run.name <- '2020_ind_test_agg3'
+	run.name <- '2020_ind_test_agg2'
 	loc <- 'IND_4842'
 	#loc <- 'ERI'
 	stop.year <- 2022
@@ -438,6 +438,11 @@ if(any(colnames(attr(dt, 'eppd')) == 'year_id')){
   x <- as.data.table(attr(dt, 'eppd')$ancsitedat)
   x <- setnames(x, 'year_id', 'year')
   attr(dt, 'eppd')$ancsitedat <-  as.data.frame(x)
+}
+if(grepl('IND', loc)){
+ x <- attr(dt, 'specfp')$birthslag
+ x[,53] <- x[,52]
+ attr(dt, 'specfp')$birthslag <- x
 }
 
 ## Fit model

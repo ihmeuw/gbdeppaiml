@@ -141,6 +141,7 @@ mig <- fread(paste0('/ihme/fertilitypop/population/popReconstruct/212/upload/net
 #fread(paste0('/ihme/fertilitypop/gbd_2017/population/modeling/popReconstruct/v96/best/net_migrants.csv'))
 age_groups <- get_ids("age_group")
 age_groups[age_group_name=="<1 year",age_group_name := "0"]
+age_groups[age_group_name=="12 to 23 months",age_group_name := "1"] 
 mig = merge(mig,age_groups, by='age_group_id')
 mig <- mig[age_group_name %in% c(0:95)]
 mig$age_group_name <- as.integer(mig$age_group_name)

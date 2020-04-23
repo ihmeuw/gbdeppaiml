@@ -3,6 +3,65 @@
 #' @param output model output
 #' @param eppd data input to eppasm
 #'
+#'
+compare_spec.func <- function(run_vec = c('190630_rhino_ind', '200316_windchime'), stage = 'stage_1'){
+compare.dt.s2 <- c() 
+for(run in run_vec){
+  temp.loc <- loc.table[parent_id == loc.table[ihme_loc_id == loc, location_id], ihme_loc_id][1]
+  ##changing to compare to stage on temporarily
+  compare.dt.run <- fread(paste0('/ihme/hiv/spectrum_draws/', run, '/compiled/', stage,'/summary/', temp.loc, '_all_age.csv'))
+  compare.dt.run <- compare.dt.run[,.(type = 'line', year, indicator = variable, 
+                                      model = paste0('Spectrum, ', stage, ', ', run), mean = value, lower = NA, upper = NA)]
+  compare.dt.run[indicator == 'mort_rate', indicator := 'Deaths']
+  compare.dt.run[indicator == 'inc_rate', indicator := 'Incidence']
+  compare.dt.run[indicator == 'prev_rate', indicator := 'Prevalence']
+  compare.dt.run <- compare.dt.run[indicator != 'art_rate']
+  compare.dt.s2 <- rbind(compare.dt.s2, compare.dt.run)
+}
+
+return(compare.dt.s2)
+
+}
+
+
+compare_epp.func <- function(run_vec = c('190630_rhino_ind', '200316_windchime')){
+  epp_comp <- c()
+  for(run in run_vec){
+    epp_inc <- paste0(root,"/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/incidence_draws/",run,"/", loc, '_SPU_inc_draws.csv')
+    epp_prev <- paste0(root,"/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/prevalence_draws/",run,"/", loc, '_SPU_prev_draws.csv')
+    # epp_death <- paste0(root,"/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/death_draws/",run,"/", loc, '_SPU_death_draws.csv')
+    
+    epp_inc <- fread(epp_inc)
+    epp_prev <- fread(epp_prev)
+    # epp_death <- fread(epp_death)
+    ##Average incidence and prevalences across draws
+    epp_inc[,mean := rowSums(epp_inc[,2:101]) / 100 / 100]
+    epp_prev[,mean := rowSums(epp_prev[,2:101]) / 100 / 100]
+    # epp_death[,mean := rowSums(epp_death[,2:101]) / 100 / 100]
+    
+    epp_inc <- epp_inc[,.(year, mean)]
+    epp_prev <- epp_prev[,.(year, mean)]
+    # epp_death <- epp_death[,.(year, prev)]
+    epp_inc[,indicator := 'Incidence']
+    epp_prev[,indicator := 'Prevalence']
+    # epp_death[,indicator := 'death']
+    
+    # epp <- rbind(epp_inc, epp_prev, epp_death)
+    epp <- rbind(epp_inc, epp_prev)
+    epp[,type := 'line']
+    epp[,model := paste0('EPP, ', run)]
+    epp[,lower := NA]
+    epp[,upper := NA]
+    
+    
+    epp_comp <- rbind(epp_comp, epp)
+  }
+  return(epp_comp)
+  
+}
+
+
+
 
 plot_15to49_draw <- function(loc, output, eppd, run.name, compare.run = '190630_rhino2', un.comparison = TRUE, paediatric = FALSE){
   ## Get data used in fitting model
@@ -86,7 +145,8 @@ plot_15to49_draw <- function(loc, output, eppd, run.name, compare.run = '190630_
 plot_15to49 <- function(loc="STP",  compare.run = NA, new.run = '200119_ukelele',
                         paediatric =TRUE, plot.deaths = FALSE, compare.gbd17=TRUE, 
                         compare.gbd19.unraked = T, lbd_unraked = TRUE,
-                        compare.stage2 = FALSE, gbdyear = "gbd20"){
+                        compare.spec = FALSE, compare.stage = 'stage_1', 
+                        compare.epp = TRUE, gbdyear = "gbd20"){
   
   if(loc %in% loc.table[grepl("IND",ihme_loc_id) & epp != 1,ihme_loc_id]){
     parent_id1 <- loc.table[ihme_loc_id==loc,parent_id]
@@ -140,18 +200,16 @@ plot_15to49 <- function(loc="STP",  compare.run = NA, new.run = '200119_ukelele'
   
 
   
-  if(compare.stage2 & grepl('IND', loc)){
-    temp.loc <- loc.table[parent_id == loc.table[ihme_loc_id == loc, location_id], ihme_loc_id][1]
-    compare.dt.s2 <- fread(paste0('/ihme/hiv/spectrum_draws/200213_violin/compiled/stage_2/summary/', temp.loc, '_all_age.csv'))
-    compare.dt.s2 <- compare.dt.s2[,.(type = 'line', year, indicator = variable, 
-                                      model = 'Spec, stage 2', mean = value, lower = NA, upper = NA)]
-    compare.dt.s2[indicator == 'mort_rate', indicator := 'Deaths']
-    compare.dt.s2[indicator == 'inc_rate', indicator := 'Incidence']
-    compare.dt.s2[indicator == 'prev_rate', indicator := 'Prevalence']
-    compare.dt.s2 <- compare.dt.s2[indicator != 'art_rate']
+  if(compare.spec & grepl('IND', loc)){
+    compare.dt.s2 <- compare_spec.func(run_vec = c('200316_windchime'), stage = compare.stage)
      }else{
     compare.dt.s2 = NULL
-    }
+     }
+  if(compare.epp){
+    compare_epp <- compare_epp.func(run_vec = c('200316_windchime_ind'))
+  }else{
+    compare_epp <- NULL
+  }
   
     if(compare.gbd17){
       if(file.exists(paste0('/snfs1/WORK/04_epi/01_database/02_data/hiv/spectrum/summary/190630_rhino_combined/locations/', loc, '_spectrum_prep.csv'))){
@@ -179,15 +237,32 @@ plot_15to49 <- function(loc="STP",  compare.run = NA, new.run = '200119_ukelele'
 
     if(!is.na(compare.run)){
       if(compare.run != '190630_rhino2'){
+        if(grepl('IND', loc)){
+          compare.dt <- c()
+          #not going to plot spline bc it's really hard to see everything else
+           run_vec <- c('2020_ind_test_agg2', '2020_ind_test_agg3', '2020_ind_test_agg4')
+          # run_vec <- c('2020_ind_test_agg2', '2020_ind_test_agg3')
+          
+          run_vec <- run_vec[-which(run_vec == new.run)]
+          for(run in run_vec){
+            temp.dt <- fread(paste0('/share/hiv/epp_output/gbd20/', run, '/compiled/', loc, '.csv'))
+            temp.dt <- get_summary(temp.dt, loc, run.name.old = run, run.name.new = run, paediatric, old.splits = F)
+            temp.dt[,model := run]
+            compare.dt <- rbind(compare.dt, temp.dt)
+          }
+        }
+
         compare.dt <- fread(paste0('/share/hiv/epp_output/gbd20/', compare.run, '/compiled/', loc, '.csv'))
-        compare.dt <- get_summary(compare.dt, loc, run.name.old = compare.run, run.name.new = compare.run, paediatric, old.splits = F)
+        compare.dt <- get_summary(compare.dt, loc, run.name.old = compare.run, run.name.new = new.run, paediatric, old.splits = F)
+        compare.dt[,model := compare.run]
         
       }else{
         compare.dt <- fread(paste0('/share/hiv/epp_output/gbd19/', compare.run, '/compiled/', loc, '.csv'))
         compare.dt <- get_summary(compare.dt, loc, run.name.old = compare.run, run.name.new = new.run, paediatric, old.splits = T)
         
       }
-      compare.dt <- compare.dt[age_group_id == 24 & sex == 'both' & measure %in% meas.list & metric == "Rate",.(type = 'line', year, indicator = measure, model = compare.run, mean, lower, upper)]
+
+      compare.dt <- compare.dt[age_group_id == 24 & sex == 'both' & measure %in% meas.list & metric == "Rate",.(type = 'line', year, indicator = measure, model, mean, lower, upper)]
     }else{compare.dt = NULL}
 
 
@@ -258,14 +333,25 @@ plot_15to49 <- function(loc="STP",  compare.run = NA, new.run = '200119_ukelele'
   #compare.run <- '200119_ukelele'
   
   
-  plot.dt <- rbind(data,compare.dt.17, compare.dt,cur.dt,compare.dt.unaids,lbd.unraked,compare.gbd19.unraked, compare.dt.s2,use.names = T, fill = T)
+  plot.dt <- rbind(data,compare.dt.17, compare.dt,cur.dt,compare.dt.unaids,lbd.unraked,compare.gbd19.unraked, compare.dt.s2, compare_epp,use.names = T, fill = T)
   plot.dt[,model := factor(model)]
   if(any(colnames(plot.dt) == 'x')){
     plot.dt[,x:= NULL]
   }
-  color.list <- c('blue', 'red', 'green','purple','orange','black', 'darkgreen')
-  names(color.list) <- c(new.run, 'GBD2019', compare.run,'UNAIDS','LBD Unraked', '190630_rhino2', 'Spec, stage 2')
-
+  if(any(plot.dt[,model] %in% c('2020_ind_test_agg2', '2020_ind_test_agg3', '2020_ind_test_agg4'))){
+    plot.dt[model == '2020_ind_test_agg2', model := 'rhybrid']
+    plot.dt[model == '2020_ind_test_agg3', model := 'rlogistic']
+    plot.dt[model == '2020_ind_test_agg4', model := 'rspline']
+  
+  }
+  # color.list <- c('blue', 'red', 'green','purple','orange','black', 'darkgreen', 'darkorange')
+  # names(color.list) <- c(new.run, 'GBD2019', compare.run,'UNAIDS','LBD Unraked', '190630_rhino2', paste0('Spec, '))
+  color.list <- rainbow(n = length(unique(plot.dt[,model])))
+  names(color.list) <- unique(plot.dt[,model])
+  color.list[which(names(color.list) == 'rlogistic')] <- 'orange'
+  color.list[which(names(color.list) == 'rspline')] <- 'grey'
+  
+  
   plot.dt[,model := factor(model)]
   # color.list <- c('blue', 'red', 'purple', 'green')
   # names(color.list) <- c(run.name, 'GBD2018', 'UNAIDS18', compare.run)

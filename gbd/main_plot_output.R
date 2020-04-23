@@ -22,12 +22,11 @@ if(length(args) > 0) {
   testing <- args[5]
 } else {
   run.name <- "200316_windchime"
-  loc <- "ZAF_490"
-
+  loc <- "AGO"
   draw.fill <- TRUE
 
   paediatric <- TRUE
-  compare.run <- '200213_violin_zaf'
+  compare.run <- '200213_violin'
   testing <- FALSE
 }
 
@@ -54,13 +53,19 @@ dir.table <- fread(paste0('/share/hiv/epp_input/gbd20//dir_table_gbd20.csv'))
 
 
 loc.table <- fread(paste0('/share/hiv/epp_input/gbd20/', run.name, '/location_table.csv'))
-if(run.name.old != '190630_rhino2'){
-  loc.table.old <- fread(paste0('/share/hiv/epp_input/gbd20/', run.name.old, '/location_table.csv'))
+if(run.name.old != '190630_rhino2' | is.na(run.name.old)){
+  if(file.exists(paste0('/share/hiv/epp_input/gbd20/', run.name.old, '/location_table.csv'))){
+    loc.table.old <- fread(paste0('/share/hiv/epp_input/gbd20/', run.name.old, '/location_table.csv'))
+  }else{
+    loc.table.old <- fread(paste0('/share/hiv/epp_input/gbd20/', run.name, '/location_table.csv'))
+    
+  }
   
 }else{
   loc.table.old <- fread(paste0('/share/hiv/epp_input/gbd19/', run.name.old, '/location_table.csv'))
   
 }
+
 if(loc %in% c('STP', 'COM', 'MAR')){
   compare.run = NA
 }
@@ -68,8 +73,9 @@ if(loc %in% c('STP', 'COM', 'MAR')){
 # ## 15-49 plots
 dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/15to49_plots/'), recursive = TRUE, showWarnings = FALSE)
 plot_15to49(loc,new.run = run.name, paediatric, plot.deaths = TRUE,  lbd_unraked = FALSE,
-            compare.gbd17=FALSE, compare.run = compare.run, compare.gbd19.unraked = FALSE,
-            compare.stage2 = TRUE)
+            compare.gbd17=TRUE, compare.run = compare.run, compare.gbd19.unraked = FALSE,
+            compare.spec = FALSE, compare.stage = 'stage_1', 
+            compare.epp = FALSE, gbdyear = "gbd20")
 
 #Age-specific plots
 for(c.indicator in c( 'Prevalence','Incidence','Deaths')){

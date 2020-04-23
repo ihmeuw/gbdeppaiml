@@ -2,9 +2,9 @@ rm(list=ls())
 windows <- Sys.info()[1][["sysname"]]=="Windows"
 root <- ifelse(windows,"J:/","/home/j/")
 user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
-run.name <- '191224_trumpet'
+run.name <- '200316_windchime'
 code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/hiv_gbd2019/")
-input_table <- fread(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), '/gbdeppaiml/lbd_anc_align/inputs.csv'))
+input_table <- fread(paste0('/ihme/hiv/epp_input/gbd20/inputs.csv'))
 c.args <- input_table[run_name==run.name]
 run_name <- run.name
 lbd.anc <- c.args[['lbd.anc']]
@@ -89,8 +89,7 @@ use_2019 <- T
 use_2018 <- F
 use_subpop <- T
 use_prepped <- F
-loc.list <- loc.list[grepl('NGA', loc.list)]
-loc.list <- "ETH_44859"
+loc.list <- loc.list[grepl('KEN', loc.list)]
 additional <- additional[Prev < 1,]
 for (countries in loc.list) {
 
