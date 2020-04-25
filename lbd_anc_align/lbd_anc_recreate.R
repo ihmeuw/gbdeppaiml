@@ -2,7 +2,7 @@ rm(list=ls())
 windows <- Sys.info()[1][["sysname"]]=="Windows"
 root <- ifelse(windows,"J:/","/home/j/")
 user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
-run.name <- '191224_trumpet'
+run.name <- '200316_windchime'
 code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/hiv_gbd2019/")
 input_table <- fread(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), '/gbdeppaiml/lbd_anc_align/inputs.csv'))
 c.args <- input_table[run_name==run.name]
@@ -21,7 +21,6 @@ UNAIDS_year <- 2019
 lat_long_table <- c.args[['lat_long_table']]
 
 date <- substr(gsub("-","",Sys.Date()),3,8)
-dir.create(output.dir)
 ## Packages
 library(data.table)
 
@@ -87,10 +86,9 @@ loc.list <- loc.list[-which(loc.list == 'PNG')]
 
 use_2019 <- T
 use_2018 <- F
-use_subpop <- T
+use_subpop <- F
 use_prepped <- F
-loc.list <- loc.list[grepl('NGA', loc.list)]
-loc.list <- "ETH_44859"
+loc.list <- loc.list[grepl('ETH', loc.list)]
 additional <- additional[Prev < 1,]
 for (countries in loc.list) {
 
@@ -128,7 +126,7 @@ for (countries in loc.list) {
     if(!exists("df.2018") | !use_2018){
       df.2018 <- NULL
     }
-    if(!exists("df.subpop") ){
+    if(!exists("df.subpop") | !use_subpop ){
       df.subpop <- NULL
     }
     if(!exists("df.prepped") | !use_prepped){

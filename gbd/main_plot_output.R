@@ -22,12 +22,12 @@ if(length(args) > 0) {
   testing <- args[5]
 } else {
   run.name <- "200316_windchime"
-  loc <- "ZAF_490"
+  loc <- "NGA_25322"
 
   draw.fill <- TRUE
 
   paediatric <- TRUE
-  compare.run <- '200213_violin_zaf'
+  compare.run <- '200213_violin'
   testing <- FALSE
 }
 
@@ -68,7 +68,7 @@ if(loc %in% c('STP', 'COM', 'MAR')){
 # ## 15-49 plots
 dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/15to49_plots/'), recursive = TRUE, showWarnings = FALSE)
 plot_15to49(loc,new.run = run.name, paediatric, plot.deaths = TRUE,  lbd_unraked = FALSE,
-            compare.gbd17=FALSE, compare.run = compare.run, compare.gbd19.unraked = FALSE,
+            compare.gbd17=FALSE, compare.run = compare.run, compare.gbd19.unraked = TRUE,
             compare.stage2 = TRUE)
 
 #Age-specific plots
