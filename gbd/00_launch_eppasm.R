@@ -13,18 +13,18 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 library(data.table)
 
 ## Arguments
-run.name <- "200213_violin_test"
-spec.name <- "200213_violin"
+run.name <- "200316_windchime"
+spec.name <- "200316_windchime"
 compare.run <- '200213_violin'
 proj.end <- 2022
-n.draws <- 1
+n.draws <- 5
 run.group2 <- FALSE
 paediatric <- TRUE
 cluster.project <- "proj_hiv"
 plot_ART <- FALSE
-est_India <- TRUE
+est_India <- FALSE
 reckon_prep <- TRUE
-decomp.step <- "step3"
+decomp.step <- "step2"
 gbdyear <- "gbd20"
 redo_offsets <- F
 testing = T
@@ -34,7 +34,7 @@ input.dir <- paste0("/ihme/hiv/epp_input/", gbdyear, '/', run.name, "/")
 dir.create(input.dir, recursive = TRUE, showWarnings = FALSE)
 dir <- paste0("/ihme/hiv/epp_output/", gbdyear, '/', run.name, "/")
 dir.create(dir, showWarnings = FALSE)
-dir.table <- fread(paste0('/share/hiv/epp_input/gbd20//dir_table_gbd20.csv'))
+dir.table <- fread(paste0('/share/hiv/epp_input/gbd20//dir_table_log_gbd20.csv'))
 
 
 ### Functions
@@ -128,9 +128,9 @@ if(redo_offsets){
   system(redo_offsets.string)
 }
 
+# loc.list <- c(loc.list, 'STP', 'MRT', 'COM')
+loc.list <- c('AGO', 'BEN', 'MWI')
 ## Launch EPP
-loc.list <- 'AGO'
-#loc.list <- 'IND_4842'
 for(loc in loc.list) {    ## Run EPPASM
 # # 
 # # 
@@ -189,8 +189,8 @@ for(loc in loc.list) {    ## Run EPPASM
 }
 
 if(testing){
-  vetting_dir <- paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/vetting/', unique(dir.table[use == 'T',ref]), '/')
-  dir.create(vetting_dir)
+  vetting_dir <- paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/vetting/', max(dir.table[,ref]), '/')
+  dir.create(vetting_dir, recursive = T)
   dir.create(paste0(vetting_dir, 'compiled/'))
   
   setwd(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/15to49_plots/'))
@@ -218,7 +218,11 @@ if(testing){
             vetting_dir)
   file.copy(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/paeds_plots/paeds_plots.pdf'), 
             vetting_dir)
-  copyDirectory(from = paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/compiled/'), to = paste0(vetting_dir, 'compiled/'))
+  for(loc in loc.list){
+    file.copy(from = paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/compiled/', loc, '.csv'), to = paste0(vetting_dir, 'compiled/'), recursive = T)
+    file.copy(from = paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/compiled/', loc, '_under1_splits.csv'), to = paste0(vetting_dir, 'compiled/'), recursive = T)
+    print(loc)
+  }
   
   
 }
@@ -270,7 +274,7 @@ all_loc_list <- c(loc.list,eppasm_parents)
 if(reckon_prep){
   for(loc in all_loc_list){
     if(loc %in% eppasm_parents){
-    prep.string <- paste0("qsub -l m_mem_free=100G -l fthread=2 -l h_rt=02:00:00 -l archive -q all.q -P ", cluster.project, " ",
+    prep.string <- paste0("qsub -l m_mem_free=100G -l fthread=2 -l h_rt=02:00:00 -l archive -q long.q -P ", cluster.project, " ",
                           "-e /share/temp/sgeoutput/", user, "/errors ",
                           "-o /share/temp/sgeoutput/", user, "/output ",
                           "-N ", loc, "_aggregate ",
@@ -283,7 +287,7 @@ if(reckon_prep){
   }
     
 
-  prep.string <- paste0("qsub -l m_mem_free=50G -l fthread=1 -l h_rt=02:00:00 -l archive -q all.q -P ", cluster.project, " ",
+  prep.string <- paste0("qsub -l m_mem_free=50G -l fthread=1 -l h_rt=02:00:00 -l archive -q long.q -P ", cluster.project, " ",
                         "-e /share/temp/sgeoutput/", user, "/errors ",
                         "-o /share/temp/sgeoutput/", user, "/output ",
                         "-N ", loc, "_apply_age_splits ",

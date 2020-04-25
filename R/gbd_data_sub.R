@@ -770,7 +770,9 @@ sub.prev.granular <- function(dt, loc){
         
       }
     }
-  
+  if('use' %in% colnames(age.prev.dt)){
+    age.prev.dt <- age.prev.dt[use == TRUE]
+  }
   
   
   age.prev.dt <- age.prev.dt[iso3 == loc]
@@ -802,10 +804,10 @@ sub.prev.granular <- function(dt, loc){
   age.prev.dt <- age.prev.dt[,.(year, sex, agegr, n, prev, se, used, deff, deff_approx)]
   age.prev.dt$n <- as.numeric(age.prev.dt$n)
   gen.pop.dict <- c("General Population", "General population", "GP", "GENERAL POPULATION", "GEN. POPL.", "General population(Low Risk)", "Remaining Pop")
-  if(!grepl('KEN', loc) & !grepl('NGA', loc) & !grepl('BEN',loc) & !grepl('DJI',loc) & !grepl('ERI',loc)){
-    age.prev.dt <- age.prev.dt[sex!='both',]
-    
-  }
+  # if(!grepl('KEN', loc) & !grepl('NGA', loc) & !grepl('BEN',loc) & !grepl('DJI',loc) & !grepl('ERI',loc) & !grepl('IND',loc)& !grepl('BDI',loc)& !grepl('CAF',loc) ){
+  #   age.prev.dt <- age.prev.dt[sex!='both',]
+  #   
+  # }
    if(length(dt) == 1) {
     gen.pop.i <- 1
   } else {
@@ -1020,15 +1022,16 @@ geo_adj <- function(loc, dt, i, uncertainty) {
 
     anc.dt.all <- read.csv(paste0('/ihme/hiv/data/PJNZ_prepped/lbd_anc/2019/', loc, '_ANC_matched.csv'))  
     setnames(anc.dt.all, old = 'prev', new = 'mean')
+    setnames(anc.dt.all, old = 'clinic', new = 'site')
     anc.dt.all <- as.data.table(anc.dt.all)
-
+ 
     
     
   
     anc.dt.all <- as.data.table(anc.dt.all)
     anc.dt.all <- anc.dt.all[type == 'ancss']
-      anc.dt.all  <- anc.dt.all[,c( "clinic","year_id","mean","site_pred","adm0_mean","adm0_lower", "adm0_upper","subpop","high_risk")]
-     
+    anc.dt.all  <- anc.dt.all[,c( "site","year_id","mean","site_pred","adm0_mean","adm0_lower", "adm0_upper","subpop","high_risk")]
+    
 
     eppd <- attr(dt, "eppd")
 
@@ -1122,15 +1125,20 @@ geo_adj <- function(loc, dt, i, uncertainty) {
         site.dat[,adm0_mean := NULL]
         site.dat[,site_pred:=NULL]
         site.dat[,offset := NULL]
-        anc.dt[,clinic := as.character(clinic)]
+        anc.dt[,site := as.character(site)]
         anc.dt[,mean := NULL]
+        if(loc == 'SEN'){
+          anc.dt[,offset := 0]
+        }
+  
 
-        if(loc == 'ZWE' | loc == 'MOZ'){
+        if(loc == 'ZWE' | loc == 'MOZ' | loc == 'BEN' | loc == 'ETH_44859' | loc == "KEN_35626" | loc == 'LSO' | loc == 'MWI' |
+           loc == 'NAM' | loc == 'NGA_25332' | loc == 'SOM' | loc == 'SWZ' | loc == 'TZA' | loc == 'ZMB'){
           anc.dt[,high_risk := FALSE]
           anc.dt[,high_risk := unique(site.dat[,high_risk])]
         }
         anc.dt <- merge(site.dat, anc.dt, by.x = c('site',  "year_id" ,"subpop" ,"high_risk" ),
-              by.y = c('clinic',  'year_id',  'subpop', 'high_risk'))
+              by.y = c('site',  'year_id',  'subpop', 'high_risk'))
 
         #replace NAs with averages
         replace <- anc.dt[is.na(offset) & year_id >= 2000,]
@@ -1164,21 +1172,23 @@ geo_adj <- function(loc, dt, i, uncertainty) {
         }
         
         #copy over post 2000 data to pre 2000 data
-        min_offset <- c()
-        for(site.x in unique(anc.dt$site)){
-          df <- anc.dt[site == site.x,.(year_id, offset)]
-          df <- df[order(year_id),]
-          min_offset[site.x] <- df$offset[!is.na(df$offset)][1]
-          
+        if(any(is.na(anc.dt[year_id < 2000,offset]))){
+          min_offset <- c()
+          for(site.x in unique(anc.dt$site)){
+            df <- anc.dt[site == site.x,.(year_id, offset)]
+            df <- df[order(year_id),]
+            min_offset[site.x] <- df$offset[!is.na(df$offset)][1]
+            
+          }
+          min_offset <- data.table(min_offset)
+          min_offset[,site := unique(anc.dt$site)]
+          pre_2000 <- anc.dt[year_id < 2000 & is.na(offset)]
+          pre_2000[,offset:= NULL]
+          pre_2000 <- merge(pre_2000, min_offset, by = 'site')
+          setnames(pre_2000, 'min_offset', 'offset')
+          anc.dt <- rbind(anc.dt[year_id >= 2000], anc.dt[year_id < 2000 & !is.na(offset),], pre_2000)
         }
-        setnames(anc.dt, 'site', 'clinic')
-        min_offset <- data.table(min_offset)
-        min_offset[,clinic := unique(anc.dt$clinic)]
-        pre_2000 <- anc.dt[year_id < 2000]
-        pre_2000[,offset:= NULL]
-        pre_2000 <- merge(pre_2000, min_offset, by = 'clinic')
-        setnames(pre_2000, 'min_offset', 'offset')
-        anc.dt <- rbind(anc.dt[year_id >= 2000], pre_2000)
+  
         
         #Copy year 2000 or otherwise earliest year to fill in  early years where GBD has data but LBD does not  
         # post.2000 <- anc.dt[year_id >=2000]
@@ -1210,7 +1220,10 @@ geo_adj <- function(loc, dt, i, uncertainty) {
          # min.dt <- unique(min.dt)
         }
         temp.dat <- anc.dt
-        temp.dat[,subpop := subpop2]
+        if(loc != 'SEN'){
+          temp.dat[,subpop := subpop2]
+          
+        }
         temp.dat <- rbind(temp.dat, site.dat[type == 'ancrt'], fill = T)
         # min.dt <- unique(min.dt)
         # add_on <- as.data.table(setdiff(merge.dt$site, min.dt$site))
@@ -1223,16 +1236,21 @@ geo_adj <- function(loc, dt, i, uncertainty) {
         
         
         temp.dat 
-   
-        
-        all.anc <- rbind(all.anc,temp.dat)
+        if(all(is.na(temp.dat[,site]))){
+          temp.dat[,site := NULL]
+        }
+      
+        all.anc <- rbind(all.anc,temp.dat,fill = TRUE)
         print(subpop2)
         
       
       
     }
-    
+  
+    if(any(colnames(all.anc) == 'clinic')){
+      setnames(all.anc, 'clinic', 'site')
       
+    }
      nrow(all.anc) == nrow(eppd$ancsitedat)
      any(is.na(all.anc[,'offset']))
 
@@ -1244,7 +1262,6 @@ geo_adj <- function(loc, dt, i, uncertainty) {
      all.anc[is.na(high_risk),high_risk := FALSE]
       #all.anc <- all.anc[!high_risk==TRUE]
       all.anc[,c('site_pred','adm0_mean','adm0_lower','adm0_upper','high_risk') := NULL]
-      setnames(all.anc, 'clinic', 'site')
      
      ##This corrects a mistake in the file generation - should be corrected in the initial generation
      if(loc=="NGA_25332"){
@@ -1276,7 +1293,7 @@ geo_adj <- function(loc, dt, i, uncertainty) {
 
     art.dt <- fread(art.dt)
     
-      if(grepl("ZAF",temp.loc) & grepl('zaf', run.name)){
+      if(grepl("ZAF",temp.loc) ){
         print("Using Tembisa for ZAF")
         art.dt = fread(tem_art)
       }

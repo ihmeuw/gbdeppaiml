@@ -3,7 +3,8 @@
 #mwalte10@uw.edu
 #This script should be loaded into the environment that is running eppasm
 ######################################
-c.args <- run.table[run_name=='200213_violin_test']
+run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
+c.args <- run.table[run_name==run.name]
 dir.table <- fread(paste0('/share/hiv/epp_input/gbd20//dir_table_log_gbd20.csv'))
 dir.table <- dir.table[ref == max(ref),]
 dir.table[,'ASFR' := as.logical(ASFR)]
@@ -49,7 +50,10 @@ if(dir.table[ref == max(ref),migration]){
   migration <- paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/migration/', loc, '.csv')
 }
 if(dir.table[ref == max(ref),prev_surveys]){
-  prev_surveys <- paste0('/ihme/hiv/epp_input/gbd20/prev_surveys.csv')
+   prev_surveys <- paste0('/ihme/hiv/epp_input/gbd20/prev_surveys.csv')
+
+  
+ # prev_surveys <- '/ihme/hiv/data/prevalence_surveys/prev_surveys_temp.csv'
 }else{
   ##need to look up old FP
   prev_surveys <- paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/prev_surveys/')
@@ -123,7 +127,7 @@ if(dir.table[ref == max(ref),childARTcoverage]){
 }else{
   art <- fread(paste0('/share/hiv/epp_input/gbd19/paeds/childARTcoverage/', loc, '.csv'))
 }
-if(dir.table[ref == max(ref),childARTcoverage]){
+if(dir.table[ref == max(ref),pmtct]){
   for(c.year in c('UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
     if(file.exists( paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/PMTCT/', c.year,'/', temp.loc, '_PMTCT_ART_cov.csv'))){
       pmtct <- paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/PMTCT/', c.year,'/', temp.loc, '_PMTCT_ART_cov.csv')
@@ -137,7 +141,28 @@ if(dir.table[ref == max(ref),on.art]){
   print('Using MRBRT')
   
 } else {
-  mortart <- paste0(root,"/temp/TB/joyma/BRADMOD/Age-Pattern Plots/final_res/", loc,"_HIVonART.csv")
-  print('Using single model')
+  mortart <- paste0(root,"/temp/TB/joyma/HIV/model_draw2/gbd20/", loc,"_HIVonART.csv")
+  print('Using test model')
 }
+
+print(paste('Using', ASFR, 'for ASFR', sep = ' '))
+print(paste('Using', births, 'for births', sep = ' '))
+print(paste('Using', SRB, 'for SRB', sep = ' '))
+print(paste('Using', migration, 'for migration', sep = ' '))
+print(paste('Using', prev_surveys, 'for prevalence surveys', sep = ' '))
+if(grepl('ZAF', loc)){
+  print(paste('Using', tem_art, 'for adult ART', sep = ' '))
+}else{
+  print(paste('Using', art.dt, 'for adult ART', sep = ' '))
+}
+print(paste('Using', population_single_age, 'for population', sep = ' '))
+print(paste('Using', artdist, 'for child ART distribution', sep = ' '))
+print(paste('Using', artelig, 'for child ART eligibility', sep = ' '))
+print(paste('Using', percbf, 'for percent BF', sep = ' '))
+print(paste('Using', mort.art, 'for child mortality on ART', sep = ' '))
+print(paste('Using', prog, 'for child Prog param', sep = ' '))
+print(paste('Using', mort.offart, 'for child mortality off art', sep = ' '))
+print(paste('Using', dropout, 'for pmtct dropout rates', sep = ' '))
+print(paste('Using', art, 'for child ART', sep = ' '))
+print(paste('Using', pmtct, 'for PMTCT', sep = ' '))
 
