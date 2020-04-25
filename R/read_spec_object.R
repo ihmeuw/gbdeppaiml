@@ -117,8 +117,13 @@ anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE){
     if(geoadjust){
       
       print("Merging ANC bias offsets")
-      
-      dt <- geo_adj(loc, dt, j, uncertainty=TRUE)
+      if(geoadj_test){
+        dt <- geo_adj_old(loc, dt, j, uncertainty=TRUE)
+        
+      }else{
+        dt <- geo_adj(loc, dt, j, uncertainty=TRUE)
+        
+      }
 
     } 
     

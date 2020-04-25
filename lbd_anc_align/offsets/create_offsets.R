@@ -19,7 +19,7 @@ for(p in packages){
   library(p, character.only = T)
 }
 
-run.name <- '191224_trumpet'
+run.name <- '200316_windchime'
 code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/hiv_gbd2019/")
 input_table <- fread(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), '/gbdeppaiml/lbd_anc_align/inputs.csv'))
 c.args <- input_table[run_name==run.name]
@@ -53,7 +53,7 @@ shapefile_field <- "GAUL_CODE"
 
 library("slackr",lib.loc =paste0("/homes/", user,"/rlibs/"))
 library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
-loc.table <- get_locations()
+loc.table <- get_locations(hiv_metadata = T)
 
 source(paste0(code.dir,"/geo_extract_functions.R"))
 library(data.table); library(rgdal)
@@ -154,9 +154,7 @@ loc.table <- data.table(get_locations(hiv_metadata = T))
 
 ### Code
 epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
-loc.list <- epp.list
-loc.list <- loc.list[grepl('NGA', loc.list)]
-loc.list <- "ETH_44859"
+loc.list <- epp.list[grepl('ETH',epp.list)]
 for(loc in loc.list){
 gen.pop.dict <- c("General Population", "General population", "GP", 
                   "GENERAL POPULATION", "GEN. POPL.", "General population(Low Risk)", 'Pop restante',
@@ -239,6 +237,17 @@ if(loc == 'MDG'){
   site.dat.li
   
 }
+if(loc == 'UGA'){
+  sites <- gsub("\\(%)", '', as.character(lbd.anc$site))
+  sites <- strsplit(sites, split = ' ')
+  for(x in 1:length(sites)){
+    sites[x] <-  paste0(sites[[x]][which(sites[[x]] != '')], collapse =' ')
+  }
+  sites <- unlist(sites)
+  sites[1] <- 'Kamwenge HC'
+  lbd.anc$site <- sites
+
+}
 all.dat <- merge(all.dat,lbd.anc,by = c('site', 'year'),all.x=TRUE)
 if(grepl('ETH', loc) | grepl('KEN', loc) | grepl('NGA', loc)){
   if(grepl('KEN', loc)){
@@ -262,7 +271,7 @@ gbd.anc.all  <- data.table(unique(site.dat.list))
 
 ##Flag high risk data that will not get matched to LBD data
 gbd.anc.all[,high_risk := FALSE]
-gbd.anc.all[!subpop %in% c(loc,gen.pop.dict, 'Urban', 'Rural', 'Urbaine', 'Rurale'),high_risk := TRUE] 
+gbd.anc.all[!subpop %in% c(loc,gen.pop.dict, 'Urban', 'Rural', 'Urbaine', 'Rurale', 'TOTAL', 'POPULATION TOTALE'),high_risk := TRUE] 
 gbd.anc.all[is.na(subpop),high_risk:=FALSE]
 #Remove high risk data to complete LBD matching (but bind it later)
 gbd.anc <- gbd.anc.all[high_risk==FALSE]
@@ -377,7 +386,7 @@ if(loc == 'RWA' | loc == 'TZA'){
 }
 
 #Check for differences
-gbd_diff <- setdiff(unique(gbd.anc$site), unique(lbd.anc$site))
+gbd_diff <- setdiff(unique(gbd.anc$clinic), unique(lbd.anc$site))
 #setdiff(unique(lbd.anc$site), unique(gbd.anc$site))
 gbd.anc[,lbd_areal := 0]
 gbd.anc[,lbd_missing := 0]
@@ -421,9 +430,9 @@ setnames(lbd.anc, c('site'), c('clinic'))
 
 lbd.anc <- unique(lbd.anc)
 
-if(length(unique(lbd.anc$iso3)) > 1){
-  lbd.anc <- lbd.anc[!is.na(iso3)]
-}
+# if(length(unique(lbd.anc$iso3)) > 1){
+#   lbd.anc <- lbd.anc[!is.na(iso3)]
+# }
 
 lbd.anc[,c('loc_id', 'subnational', 'country') := NULL]
 lbd.anc[,site_year := paste0(clinic, year)]
@@ -445,6 +454,7 @@ lbd.anc[,prev:=NULL]
 lbd.anc[,type := 'ancss']
 gbd.anc[,source := NULL]
 lbd.anc[,source := NULL]
+
 
 
 both.dt <- list()

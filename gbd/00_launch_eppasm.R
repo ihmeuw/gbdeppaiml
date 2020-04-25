@@ -13,11 +13,11 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 library(data.table)
 
 ## Arguments
-run.name <- "200316_windchime"
+run.name <- "200316_windchime_testing"
 spec.name <- "200316_windchime"
 compare.run <- '200213_violin'
 proj.end <- 2022
-n.draws <- 5
+n.draws <- 10
 run.group2 <- FALSE
 paediatric <- TRUE
 cluster.project <- "proj_hiv"
@@ -129,7 +129,7 @@ if(redo_offsets){
 }
 
 # loc.list <- c(loc.list, 'STP', 'MRT', 'COM')
-loc.list <- c('AGO', 'BEN', 'MWI')
+loc.list <- c('NAM', 'UGA', 'MWI', 'LSO', 'TZA')
 ## Launch EPP
 for(loc in loc.list) {    ## Run EPPASM
 # # 
@@ -189,7 +189,9 @@ for(loc in loc.list) {    ## Run EPPASM
 }
 
 if(testing){
-  vetting_dir <- paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/vetting/', max(dir.table[,ref]), '/')
+  vetting_dir <- paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/vetting/5/')
+  #vetting_dir <- paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/vetting/', max(dir.table[,ref]), '/')
+  
   dir.create(vetting_dir, recursive = T)
   dir.create(paste0(vetting_dir, 'compiled/'))
   
@@ -274,7 +276,7 @@ all_loc_list <- c(loc.list,eppasm_parents)
 if(reckon_prep){
   for(loc in all_loc_list){
     if(loc %in% eppasm_parents){
-    prep.string <- paste0("qsub -l m_mem_free=100G -l fthread=2 -l h_rt=02:00:00 -l archive -q long.q -P ", cluster.project, " ",
+    prep.string <- paste0("qsub -l m_mem_free=100G -l fthread=2 -l h_rt=02:00:00 -l archive -q all.q -P ", cluster.project, " ",
                           "-e /share/temp/sgeoutput/", user, "/errors ",
                           "-o /share/temp/sgeoutput/", user, "/output ",
                           "-N ", loc, "_aggregate ",
@@ -287,7 +289,7 @@ if(reckon_prep){
   }
     
 
-  prep.string <- paste0("qsub -l m_mem_free=50G -l fthread=1 -l h_rt=02:00:00 -l archive -q long.q -P ", cluster.project, " ",
+  prep.string <- paste0("qsub -l m_mem_free=50G -l fthread=1 -l h_rt=02:00:00 -l archive -q all.q -P ", cluster.project, " ",
                         "-e /share/temp/sgeoutput/", user, "/errors ",
                         "-o /share/temp/sgeoutput/", user, "/output ",
                         "-N ", loc, "_apply_age_splits ",

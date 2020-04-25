@@ -1133,7 +1133,7 @@ geo_adj <- function(loc, dt, i, uncertainty) {
   
 
         if(loc == 'ZWE' | loc == 'MOZ' | loc == 'BEN' | loc == 'ETH_44859' | loc == "KEN_35626" | loc == 'LSO' | loc == 'MWI' |
-           loc == 'NAM' | loc == 'NGA_25332' | loc == 'SOM' | loc == 'SWZ' | loc == 'TZA' | loc == 'ZMB'){
+           loc == 'NAM' | loc == 'NGA_25332' | loc == 'SOM' | loc == 'SWZ' | loc == 'TZA' | loc == 'ZMB' | grepl('KEN', loc) | grepl('ETH', loc)){
           anc.dt[,high_risk := FALSE]
           anc.dt[,high_risk := unique(site.dat[,high_risk])]
         }
@@ -1280,7 +1280,156 @@ geo_adj <- function(loc, dt, i, uncertainty) {
      attr(dt, "eppd") <- eppd
 
     return(dt)
+}
+
+geo_adj_old <- function(loc, dt, i, uncertainty) {
+  # Make adjustments to ANC coming from PJNZ files ** add more **
+  ## Prep EPP data
+  # Choose subpopulation for substitution
+  print("using LBD Adjustment")
+  
+  ##Bring in the matched data - reading in as CSV rather then fread because the latter seems to add quotations when there are escape characters, which messes up the matching
+  anc.dt.all <- read.csv(paste0('/share/hiv/data/lbd_anc/', loc, '_ANC_matched.csv')) %>% data.table()
+  anc.dt.all  <- anc.dt.all[,c( "clinic","year_id","mean","site_pred","adm0_mean","adm0_lower", "adm0_upper","subpop","high_risk")]
+  setnames(anc.dt.all,c("clinic","year_id"),c("site","year"))
+  eppd <- attr(dt, "eppd")
+  
+  # Collapse up to single provincial ANC site for ZAF and SWZ - NEED TO DECIDE WHETHER TO DO THIS GOING FORWARD
+  # Extract first year of data and use that site as provincial site
+  # if(grepl("ZAF", loc) | grepl("SWZ", loc)) {
+  #   first.year <- min(as.integer(colnames(eppd$anc.prev)[sapply(colnames(eppd$anc.prev), function(col) {
+  #     !all(is.na(eppd$anc.prev[, col]))
+  #   })]))
+  #   prov.sites <- which(!is.na(eppd$anc.prev[, as.character(first.year)]))
+  #   for(kk in 1:length(prov.sites)) {
+  #     prov.site <- prov.sites[kk]
+  #     row.lower <- prov.sites[kk] + 1
+  #     row.upper <- ifelse(i == length(prov.sites), nrow(eppd$anc.prev), prov.sites[kk + 1] - 1)
+  #     eppd$anc.used[row.lower:row.upper] <- F
+  #     # Sum administrative units to provincial level
+  #     site.prev <- eppd$anc.prev[row.lower:row.upper,]
+  #     site.n <- eppd$anc.n[row.lower:row.upper,]
+  #     site.pos <- site.prev * site.n
+  #     sub.pos <- colSums(site.pos, na.rm = T)
+  #     sub.n <- colSums(site.n, na.rm = T)
+  #     sub.prev <- sub.pos / sub.n
+  #     # Append to provincial site
+  #     for(c in colnames(eppd$anc.prev)) {
+  #       if(is.na(eppd$anc.prev[prov.site, c])) {
+  #         eppd$anc.prev[prov.site, c] <- sub.prev[c]
+  #         eppd$anc.n[prov.site, c] <- sub.n[c]
+  #       }
+  #     }
+  #   }
+  #   
+  #   
+  #   #Use average site prediction value
+  #   yearly.means <- anc.dt[,.(nm=mean(site_pred,na.rm=TRUE)),by=year]  
+  #   site.means <- anc.dt[,.(nm.all=mean(mean,na.rm=TRUE)),by=year] 
+  #   all.means <- merge(yearly.means,site.means,by="year_id")
+  #   anc.dt <- merge(anc.dt[clinic %in% rownames(eppd$anc.prev)[eppd$anc.used],],all.means,by="year_id")
+  #   anc.dt <- anc.dt[,site_pred := nm]
+  #   anc.dt <- anc.dt[,mean := nm.all]
+  #   anc.dt[,nm:=NULL]; anc.dt[,nm.all := NULL]
+  #   
+  #   attr(dt, "eppd") <- eppd
+  #   attr(dt, "likdat") <- fnCreateLikDat(eppd, anchor.year = floor(attr(dt, "eppfp")$proj.steps[1]))
+  #   
+  # }
+  
+  #ANOTHER IMPROVEMENT POTENTIAL GOING FORWARD
+  #Use Adm 1 mean where available
+  # anc.dt[,adm0_mean := ifelse(!is.na(adm1_mean),adm1_mean,adm0_mean)]
+  # anc.dt[,adm0_lower := ifelse(!is.na(adm1_lower),adm1_lower,adm0_lower)]
+  # anc.dt[,adm0_upper := ifelse(!is.na(adm1_upper),adm1_upper,adm0_upper)]
+  # 
+  if(uncertainty){
+    #Choose 1 from 1000 draws of uncertainty using adm0_mean bounds
+    for(row in 1:nrow(anc.dt.all)){
+      if(!is.na(anc.dt.all[row,adm0_mean])){
+        set.seed(i)
+        lower <- anc.dt.all[row,adm0_lower]
+        upper <- anc.dt.all[row,adm0_upper]
+        replace <- sample(runif(1000,lower,upper),1)
+        anc.dt.all[row,adm0_mean := replace]
+        
+      } else {
+        next
+      }
+    }
   }
+  
+  
+  ##Generate the local:national offest term as the probit difference between national and predicted site prevalence - by subpopulation to avoid duplicates
+  all.anc <- list()
+  for(subpop2 in unique(anc.dt.all$subpop)){
+    
+    if(subpop2 %in% unique(eppd$ancsitedat$subpop)){
+      anc.dt <- anc.dt.all[subpop == subpop2] 
+      site.dat <- eppd$ancsitedat[eppd$ancsitedat$subpop==subpop2,] %>% data.table()
+    } else {
+      anc.dt <- anc.dt.all
+      site.dat <- eppd$ancsitedat %>% data.table() 
+
+    }
+    setnames(site.dat, 'year_id', 'year')
+    site.dat[,offset := NULL]
+    anc.dt[,subpop := NULL]
+    
+    merge_on <- intersect(colnames(anc.dt[,.(site,year,site_pred,high_risk)]), colnames(site.dat))
+    
+    anc.dt  <- anc.dt[,offset := qnorm(adm0_mean)-qnorm(site_pred)]
+    #Copy year 2000 or otherwise earliest year to fill in  early years where GBD has data but LBD does not  
+    post.2000 <- anc.dt[year >=2000]
+    min.dt <- post.2000[year == min(year),.(offset), by = 'site']
+    
+    if(subpop2 %in% unique(eppd$ancsitedat$subpop)){
+      temp.dat <- merge(site.dat,anc.dt[,.(site,subpop,year,site_pred,adm0_mean,adm0_lower,adm0_upper,offset,high_risk)], by=c("site","subpop","year"),all.x=TRUE)
+    } else {
+      anc.dt <- anc.dt[,.(site, year, offset)]
+      temp.dat <- merge(site.dat,anc.dt, by=c('site', 'year'),all.x=TRUE)
+      
+    }
+    #Duplicate issue with 'pseudo sites' in Mozambique
+    if(loc == "MOZ"){
+      min.dt <- unique(min.dt)
+    }
+    
+    merge.dt <- copy(temp.dat[year < 2000 & !is.na(prev)])[,offset := NULL]
+    merge.dt <- merge(merge.dt, min.dt, by = 'site')
+    
+    temp.dat <- temp.dat[year >= 2000 & !is.na(prev)]
+    temp.dat <- rbind(temp.dat, merge.dt, use.names = T)
+    
+    all.anc <- rbind(all.anc,temp.dat)
+    
+    
+  }
+  
+  nrow(all.anc) == nrow(eppd$ancsitedat)
+  all.anc[is.na(offset), offset := 0]
+  all.anc[offset > 0.15, offset := 0.15]
+  all.anc[offset < -0.15, offset := -0.15]
+  all.anc[is.na(high_risk),high_risk := FALSE]
+  
+  ##This corrects a mistake in the file generation - should be corrected in the initial generation
+  if(loc=="NGA_25332"){
+    all.anc[,high_risk := FALSE]
+  }
+  
+  all.anc <- all.anc[!high_risk==TRUE]
+  all.anc[,c('site_pred','adm0_mean','adm0_lower','adm0_upper','high_risk') := NULL]
+  
+  all.anc <- as.data.frame(all.anc)
+  
+  
+  eppd$ancsitedat <- all.anc
+  
+  attr(dt, "eppd") <- eppd
+  
+  return(dt)
+}
+
   
   
   sub.art <- function(dt, loc, use.recent.unaids = FALSE) {

@@ -96,6 +96,12 @@ plot_15to49 <- function(loc="STP",  compare.run = NA, new.run = '200119_ukelele'
     data <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/', new.run, '/fit_data/', loc, '.csv'))
 
   }
+  if(grepl('KEN',loc)){
+    data[model == 'Household Survey' & age == 15 & year == 2018, age := '15-49']
+    data[model == 'Household Survey' & age == 15 & year == 2018, age_group_id := 24]
+    
+  
+  }
   if(!compare.gbd17){
     compare.dt.17 = NULL
   }
@@ -240,7 +246,7 @@ plot_15to49 <- function(loc="STP",  compare.run = NA, new.run = '200119_ukelele'
     data.agg[,type := 'point']
     data <- data.agg
   }
-  if(loc %in% c('CPV')){
+  if(loc %in% c('CPV', 'ERI')){
     age.prev.dt <- fread(paste0("/share/hiv/epp_input/gbd20/prev_surveys.csv"))
     age.prev.dt <- age.prev.dt[iso3 == loc]
     sex_agg <- data.table(age = age.prev.dt[sex_id == 3, age_year], sex = 'both', type = 'point', model = 'Household Survey', indicator = 'Prevalence', 

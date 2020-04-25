@@ -21,8 +21,8 @@ if(length(args) > 0) {
   j <- as.integer(Sys.getenv("SGE_TASK_ID"))
   paediatric <- as.logical(args[4])
 } else {
-	run.name <- '200316_windchime'
-	loc <- 'DOM'
+	run.name <- '200316_windchime_testing'
+	loc <- 'NAM'
 	#loc <- 'ERI'
 	stop.year <- 2022
 	j <- 1
@@ -82,7 +82,6 @@ no_geo_adj <-  c(loc.table[epp ==1 & grepl("IND",ihme_loc_id),ihme_loc_id],
                  "PNG","HTI","DOM", 'CPV', loc.table[epp ==1 & grepl("ZAF",ihme_loc_id),ihme_loc_id], 'STP', 'KEN_35626', 'MRT', 'COM')
 
 
-
 # ANC data bias adjustment
 if(geoadjust & !loc %in% no_geo_adj){
   geoadjust  <- TRUE
@@ -114,12 +113,21 @@ if(loc %in% c("MAR","MRT","COM")){
 # }
 ### Code
 ## Read in spectrum object, sub in GBD parameters
-
+if(loc %in% c('NAM', 'UGA', 'MWI', 'LSO', 'TZA')){
+  geoadj_test <- TRUE
+  
+}else{
+  geoadj_test <- FALSE
+}
 dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub, 
                        pop.sub, anc.sub, anc.backcast, prev.sub = prev_sub, art.sub = TRUE, 
                        sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = TRUE, 
                        anc.prior.sub = TRUE, lbd.anc = lbd.anc, 
                        geoadjust = geoadjust, use_2019 = TRUE)
+if(loc == 'NGA_25322'){
+  attr(dt, 'eppd')$ancsitedat <- as.data.frame(as.data.table(attr(dt, 'eppd')$ancsitedat)[prev < 0.2,])
+  
+}
 
 #source(paste0('/ihme/homes/mwalte10/data_post_processing.R'))
 if(loc == 'IND_4842'){
@@ -442,7 +450,7 @@ if(any(colnames(attr(dt, 'eppd')) == 'year_id')){
 
 ## Fit model
 
-fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500)
+fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 250)
 data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc, '.csv')
 if(!file.exists(data.path)){save_data(loc, attr(dt, 'eppd'), run.name)}
 if(file.exists(data.path)){save_data(loc, attr(dt, 'eppd'), run.name)}
