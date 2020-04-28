@@ -5,8 +5,8 @@
 ######################################
 run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
 c.args <- run.table[run_name==run.name]
-dir.table <- fread(paste0('/share/hiv/epp_input/gbd20//dir_table_log_gbd20.csv'))
-dir.table <- dir.table[ref == max(ref),]
+dir.table <- fread(paste0('/share/homes/djahag/dir_table_log_gbd20.csv'))
+dir.table <- dir.table[ref == 1,]
 dir.table[,'ASFR' := as.logical(ASFR)]
 dir.table[,'births' := as.logical(births)]
 dir.table[,'SRB' := as.logical(SRB)]

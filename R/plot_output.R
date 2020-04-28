@@ -83,7 +83,7 @@ plot_15to49_draw <- function(loc, output, eppd, run.name, compare.run = '190630_
   dev.off()
 }
 
-plot_15to49 <- function(loc="STP",  compare.run = NA, new.run = '200119_ukelele',
+plot_15to49 <- function(loc="KEN_35618",  compare.run = "200316_windchime_testing2", new.run = '200316_windchime_testing3',
                         paediatric =TRUE, plot.deaths = FALSE, compare.gbd17=TRUE, 
                         compare.gbd19.unraked = T, lbd_unraked = TRUE,
                         compare.stage2 = FALSE, gbdyear = "gbd20"){
@@ -200,7 +200,7 @@ plot_15to49 <- function(loc="STP",  compare.run = NA, new.run = '200119_ukelele'
   # 
   ##will need to be changed
   cur.dt <- fread(paste0('/share/hiv/epp_output/', gbdyear, '/', new.run, '/compiled/', loc, '.csv'))
-  anc <- data[model == 'ANC Site',]
+  anc <- data[model == 'ANC Site']
   anc[,sex := NULL]
   ## post stratify age-specific data using Spectrum population
   if(nrow(data[age != '15-49']) > 0){
@@ -244,7 +244,7 @@ plot_15to49 <- function(loc="STP",  compare.run = NA, new.run = '200119_ukelele'
     data.agg[, lower := ifelse(mean - (1.96 * se) < 0, 0, mean - (1.96 * se))]
     data.agg[, se := NULL]
     data.agg[,type := 'point']
-    data <- data.agg
+    data <- data.agg[model != "ANC Site"]
   }
   if(loc %in% c('CPV', 'ERI')){
     age.prev.dt <- fread(paste0("/share/hiv/epp_input/gbd20/prev_surveys.csv"))
