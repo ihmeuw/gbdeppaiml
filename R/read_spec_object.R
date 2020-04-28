@@ -24,16 +24,6 @@ anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE){
         dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))
       }
 
-  # if(grepl("ZAF",loc) | grepl("IND",loc) | grepl("SDN",loc)){
-  #   dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))
-  # } else {
-  #   dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', loc, '.rds'))
-  # }
-  # 
-  # if(use_2019 & loc != 'SWZ'){
-  #   #search 2019, then 2018, then subpop, then prep
-  #   dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))
-  # }
 
   if(lbd.anc){
       replace <- as.data.table(readRDS(paste0('/share/hiv/data/PJNZ_prepped/lbd_anc/2019/', loc, '.rds')))
@@ -144,33 +134,47 @@ anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE){
     }
     
     ## Subsetting KEN counties from province
-    # if(grepl('KEN', loc)){
-    #   ken.anc.path <- paste0('/share/hiv/epp_input/gbd19/kenya_anc_map.csv')
-    #   ken.anc <- fread(ken.anc.path)
-    #   county.sites <- ken.anc[ihme_loc_id == loc, site]
-    #   prov.sites <- row.names(attr(dt, "eppd")$anc.prev)
-    #   keep.index <- which(prov.sites %in% county.sites  | grepl(loc.table[ihme_loc_id == loc, location_name], prov.sites))
-    #   attr(dt, "eppd")$anc.used[] <- FALSE
-    #   if(length(keep.index) > 0) {
-    #     attr(dt, "eppd")$anc.used[keep.index] <- TRUE
-    #   }
-    #   ##TODO - need to update mapping, take out grepl on location name
-    #   attr(dt, 'eppd')$ancsitedat$used[!(attr(dt, 'eppd')$ancsitedat$site %in% county.sites | grepl(loc.table[ihme_loc_id == loc, location_name], attr(dt, 'eppd')$ancsitedat$site))] <- FALSE
-    #   # ART
-    #   prop.path <- paste0("/share/hiv/epp_input/gbd19/KEN_ART_props.csv")
-    #   prop.dt <- fread(prop.path)
-    #   prop <- prop.dt[ihme_loc_id == loc, prop_pepfar]
-    #   attr(dt,"specfp")$art15plus_num <- attr(dt,"specfp")$art15plus_num * prop
-    # }
+    if(grepl('KEN', loc)){
+      ken.anc.path <- paste0('/share/hiv/epp_input/gbd20/kenya_anc_map.csv')
+      ken.anc <- fread(ken.anc.path)
+      if(loc %in% ken.anc$ihme_loc_id){
+        county.sites <- ken.anc[ihme_loc_id == loc, site]
+        prov.sites <- unique(attr(dt, "eppd")$ancsitedat$site)
+
+        attr(dt, "eppd")$anc.used[] <- FALSE
+        
+        temp1 <- attr(dt, "eppd")$anc.prev[]
+        temp1 <- temp1[0,]
+ 
+        temp2 <- attr(dt, "eppd")$anc.n[]
+        temp2 <- temp2[0,]
+     
+        for(site in unique(county.sites)){
+          attr(dt, "eppd")$anc.used[grepl(site,names(attr(dt, "eppd")$anc.used))] <- TRUE
+          keep_index <- which(grepl(site,rownames(attr(dt, "eppd")$anc.prev)))
+          temp1 <- rbind(temp1,attr(dt, "eppd")$anc.prev[keep_index,,drop =FALSE])
+          temp2 <- rbind(temp2,attr(dt, "eppd")$anc.n[keep_index,,drop =FALSE])
+          
+        }
+        
+        attr(dt, "eppd")$anc.prev <- temp1
+        attr(dt, "eppd")$anc.n <- temp2
+        attr(dt, "eppd")$anc.used <- attr(dt, "eppd")$anc.used[attr(dt, "eppd")$anc.used] 
+        attr(dt, 'eppd')$ancsitedat$used[!(attr(dt, 'eppd')$ancsitedat$site %in% county.sites | grepl(loc.table[ihme_loc_id == loc, location_name], attr(dt, 'eppd')$ancsitedat$site))] <- FALSE
+        attr(dt, 'eppd')$ancsitedat <- attr(dt, 'eppd')$ancsitedat[which(attr(dt, 'eppd')$ancsitedat$used==TRUE),]
+     }
+    }
       
-  
-    # if(!anc.rt){
-    #   attr(dt, 'eppd')$ancrtsite.prev <- NULL
-    #   attr(dt, 'eppd')$ancrtsite.n <- NULL
-    #   attr(dt, 'eppd')$ancrtcens <- NULL
-    # }
+    # 
+    if(!anc.rt){
+      attr(dt, 'eppd')$ancrtsite.prev <- NULL
+      attr(dt, 'eppd')$ancrtsite.n <- NULL
+      attr(dt, 'eppd')$ancrtcens <- NULL
+    }
+    
     attr(dt, 'specfp')$prior_args <- list(logiota.unif.prior = c(log(1e-14), log(0.000025)))
     attr(dt, 'specfp')$group <- '1'
+    
   }else{
     ## Group 2 inputs
     print('Appending vital registration death data')
