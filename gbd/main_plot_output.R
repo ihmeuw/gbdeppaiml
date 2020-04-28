@@ -21,13 +21,13 @@ if(length(args) > 0) {
   }
   testing <- args[5]
 } else {
-  run.name <- "200316_windchime"
-  loc <- "NGA_25322"
+  run.name <- "200213_violin"
+  loc <- "UGA"
 
   draw.fill <- TRUE
 
   paediatric <- TRUE
-  compare.run <- '200213_violin'
+  compare.run <- '191224_trumpet'
   testing <- FALSE
 }
 
@@ -68,11 +68,11 @@ if(loc %in% c('STP', 'COM', 'MAR')){
 # ## 15-49 plots
 dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/15to49_plots/'), recursive = TRUE, showWarnings = FALSE)
 plot_15to49(loc,new.run = run.name, paediatric, plot.deaths = TRUE,  lbd_unraked = FALSE,
-            compare.gbd17=FALSE, compare.run = compare.run, compare.gbd19.unraked = TRUE,
-            compare.stage2 = TRUE)
+            compare.gbd17=FALSE, compare.run = run.name.old, compare.gbd19.unraked = TRUE,
+            compare.stage2 = TRUE, simplify = FALSE)
 
 #Age-specific plots
-for(c.indicator in c( 'Prevalence','Incidence','Deaths')){
+for(c.indicator in rev(c( 'Prevalence','Incidence','Deaths'))){
   dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/age_specific_plots/', c.indicator, '/'), recursive = TRUE, showWarnings = FALSE)
 }
 plot_age_specific(loc, run.name.new=run.name, paediatric=TRUE, run.name.old = '190630_rhino2', compare.run = compare.run, gbdyear = gbd_year_new, c.metric = 'Count')

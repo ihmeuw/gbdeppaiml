@@ -21,8 +21,8 @@ if(length(args) > 0) {
   j <- as.integer(Sys.getenv("SGE_TASK_ID"))
   paediatric <- as.logical(args[4])
 } else {
-	run.name <- '200316_windchime_testing1'
-	loc <- 'KEN_35632'
+	run.name <- '200316_windchime_testing2'
+	loc <- 'GHA'
 	#loc <- 'ERI'
 	stop.year <- 2022
 	j <- 1
@@ -30,7 +30,7 @@ if(length(args) > 0) {
 }
 
 run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
-c.args <- run.table[run_name==run.name]
+c.args <- run.table[run_name=='200316_windchime_testing1']
 
 
 ### Arguments
@@ -67,12 +67,6 @@ devtools::load_all()
 setwd(code.dir)
 devtools::load_all()
 loc.table <- get_locations(hiv_metadata = TRUE)
-
-
-if(loc == 'ETH_44862'){
-  births <-    paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/births/', loc, '.csv')
-
-}
 
 
 ### Tables
@@ -116,7 +110,7 @@ if(loc %in% c("MAR","MRT","COM")){
 # }
 ### Code
 ## Read in spectrum object, sub in GBD parameters
-if(loc %in% c('ZWE', 'MWI')){
+if(loc %in% c('BEN', 'GAB', 'MWI', 'MLI', 'SOM', 'ZWE')){
   geoadj_test <- TRUE
   
 }else{
@@ -127,9 +121,57 @@ dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
                        sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = TRUE, 
                        anc.prior.sub = TRUE, lbd.anc = lbd.anc, 
                        geoadjust = geoadjust, use_2019 = TRUE)
+
+
+if(loc == 'HTI'){
+  sub_anc <- readRDS('/ihme/hiv/epp_output/gbd19/190630_rhino2/dt_objects/TGO_dt.RDS')
+  sub_anc <- attr(sub_anc, 'eppd')$ancsitedat
+  attr(dt, 'eppd')$ancsitedat <- sub_anc
+}
+if(loc == 'TGO'){
+  sub_anc <- readRDS('/ihme/hiv/epp_output/gbd19/190630_rhino2/dt_objects/HTI_dt.RDS')
+  sub_anc <- attr(sub_anc, 'eppd')$ancsitedat
+  attr(dt, 'eppd')$ancsitedat <- sub_anc
+}
+if(loc == 'KEN_35625'){
+  sub_anc <- readRDS('/ihme/hiv/epp_output/gbd19/190630_rhino2/dt_objects/KEN_35625_dt.RDS')
+  sub_anc <- attr(sub_anc, 'eppd')$ancsitedat
+  attr(dt, 'eppd')$ancsitedat <- sub_anc
+}
 if(loc == 'NGA_25322'){
   attr(dt, 'eppd')$ancsitedat <- as.data.frame(as.data.table(attr(dt, 'eppd')$ancsitedat)[prev < 0.2,])
   
+}
+if(loc == 'KEN_35626'){
+  sub_anc <- readRDS('/ihme/hiv/epp_output/gbd19/190630_rhino2/dt_objects/KEN_35626_dt.RDS')
+  sub_anc <- attr(sub_anc, 'eppd')$ancsitedat
+  attr(dt, 'eppd')$ancsitedat <- sub_anc
+  
+  sub_hhs <- attr(sub_anc, 'eppd')$hhs
+  attr(dt, 'eppd')$hhs <- sub_hhs
+}
+if(loc == 'KEN_35638'){
+  sub_anc <- readRDS('/ihme/hiv/epp_output/gbd19/190630_rhino2/dt_objects/KEN_35626_dt.RDS')
+  sub_anc <- attr(sub_anc, 'eppd')$ancsitedat
+  attr(dt, 'eppd')$ancsitedat <- sub_anc
+  
+  sub_hhs <- attr(sub_anc, 'eppd')$hhs
+  attr(dt, 'eppd')$hhs <- sub_hhs
+}
+if(loc == 'UGA'){
+  sub_anc <- readRDS('/ihme/hiv/epp_output/gbd19/190630_rhino2/dt_objects/UGA_dt.RDS')
+  sub_hhs <- attr(sub_anc, 'eppd')$hhs
+  attr(dt, 'eppd')$hhs <- sub_hhs
+}
+if(loc == 'KEN_35634'){
+  sub_hhs <- attr(dt, 'eppd')$hhs
+  sub_hhs <- data.table(sub_hhs)[year != 2018,]
+  attr(dt, 'eppd')$hhs <- data.frame(sub_hhs)
+}
+if(loc == 'RWA'){
+  sub_hhs <- attr(dt, 'eppd')$hhs
+  sub_hhs <- data.table(sub_hhs)[year != 2018,]
+  attr(dt, 'eppd')$hhs <- data.frame(sub_hhs)
 }
 
 #source(paste0('/ihme/homes/mwalte10/data_post_processing.R'))
@@ -180,13 +222,8 @@ if(grepl('NGA', loc)){
 
 
 ## Replace on-ART mortality RR for TZA and UGA
-if(loc %in% c('UGA', 'TZA')){
+if(loc %in% c('UGA', 'TZA', 'CPV')){
   temp <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/MWI.rds'))
-  temp.artmxrr <- attr(temp, 'specfp')$artmx_timerr
-  attr(dt, 'specfp')$artmx_timerr <- temp.artmxrr
-}
-if(loc %in% c('CPV')){
-  temp <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/CPV.rds'))
   temp.artmxrr <- attr(temp, 'specfp')$artmx_timerr
   attr(dt, 'specfp')$artmx_timerr <- temp.artmxrr
 }
@@ -458,7 +495,7 @@ if(any(colnames(attr(dt, 'eppd')) == 'year_id')){
 
 ## Fit model
 
-fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500)
+fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 200)
 data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc, '.csv')
 if(!file.exists(data.path)){save_data(loc, attr(dt, 'eppd'), run.name)}
 if(file.exists(data.path)){save_data(loc, attr(dt, 'eppd'), run.name)}

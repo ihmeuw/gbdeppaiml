@@ -86,7 +86,7 @@ plot_15to49_draw <- function(loc, output, eppd, run.name, compare.run = '190630_
 plot_15to49 <- function(loc="STP",  compare.run = NA, new.run = '200119_ukelele',
                         paediatric =TRUE, plot.deaths = FALSE, compare.gbd17=TRUE, 
                         compare.gbd19.unraked = T, lbd_unraked = TRUE,
-                        compare.stage2 = FALSE, gbdyear = "gbd20"){
+                        compare.stage2 = FALSE, gbdyear = "gbd20", simplify = F){
   
   if(loc %in% loc.table[grepl("IND",ihme_loc_id) & epp != 1,ihme_loc_id]){
     parent_id1 <- loc.table[ihme_loc_id==loc,parent_id]
@@ -207,34 +207,46 @@ plot_15to49 <- function(loc="STP",  compare.run = NA, new.run = '200119_ukelele'
     pop.dt <- copy(cur.dt)
     pop.dt <- pop.dt[age %in% 15:59]
     
-    male.pop <- pop.dt[sex == 'male' & run_num == 1, .(pop, year)]
-    male.pop <- male.pop[,total := sum(pop), by = 'year']
-    male.pop <- cbind(unique(male.pop[,year]), unique(male.pop[,total]))
-    colnames(male.pop) <- c('year', 'pop')
-    male.pop <- data.table(male.pop)
+    male.pop <- pop.dt[sex == 'male' & run_num == 1, .(pop, year, age)]
+    male.pop[,age := paste0(age - age%%5)]
+    male.pop <- male.pop[,total := sum(pop), by = c('year', 'age')]
+    # male.pop <- cbind(unique(male.pop[,year]), unique(male.pop[,total]))
+    # colnames(male.pop) <- c('year', 'pop')
+    # male.pop <- data.table(male.pop)
     male.pop[,sex := 'male']
+    male.pop[,pop := NULL]
     
-    female.pop <- pop.dt[sex == 'female' & run_num == 1, .(pop, year)]
-    female.pop <- female.pop[,total := sum(pop), by = 'year']
-    female.pop <- cbind(unique(female.pop[,year]), unique(female.pop[,total]))
-    colnames(female.pop) <- c('year', 'pop')
-    female.pop <- data.table(female.pop)
+    female.pop <- pop.dt[sex == 'female' & run_num == 1, .(pop, year, age)]
+    female.pop[,age := paste0(age - age%%5)]
+    female.pop <- female.pop[,total := sum(pop), by = c('year', 'age')]
+    # female.pop <- cbind(unique(female.pop[,year]), unique(female.pop[,total]))
+    # colnames(female.pop) <- c('year', 'pop')
+    # female.pop <- data.table(female.pop)
     female.pop[,sex := 'female']
+   female.pop[,pop := NULL]
     
-    aggre_pop <- rbind(male.pop, female.pop)
-    aggre_pop[,age := '15-49']
     
-    pop.dt[,age := paste0(age - age%%5)]
-    pop.dt <- pop.dt[,.(pop = sum(pop)), by = c('age', 'sex', 'year', 'run_num')]
-    pop.dt <- pop.dt[,.(pop = mean(pop)), by = c('age', 'sex', 'year')]
-    pop.dt <- rbind(pop.dt, aggre_pop)
-    pop.dt <- pop.dt[,.(pop = sum(pop)), by = c('age', 'sex', 'year')]
-    data.pre.agg <- data[age %in% c('15-49', '15-64') & sex == 'both',]
+    aggre_pop <- rbind(unique(male.pop), unique(female.pop))
+    age_agg_pop <- copy(aggre_pop)
+    age_agg_pop <- age_agg_pop [,total := sum(total), by = c('year', 'sex')]
+    age_agg_pop[,age := '15-49']
+    aggre_pop <- rbind(aggre_pop, unique(age_agg_pop))
+    setnames(aggre_pop, 'total', 'pop')
+    
+    # pop.dt[,age := paste0(age - age%%5)]
+    # pop.dt <- pop.dt[,.(pop = sum(pop)), by = c('age', 'sex', 'year', 'run_num')]
+    # pop.dt <- pop.dt[,.(pop = mean(pop)), by = c('age', 'sex', 'year')]
+    # pop.dt <- rbind(pop.dt, aggre_pop)
+    pop.dt <- aggre_pop
+    # pop.dt <- pop.dt[,.(pop = sum(pop)), by = c('age', 'sex', 'year')]
+    data.pre.agg <- data[age %in%   c('15-49', '15-64') & model == 'Household Survey']
     data.pre.agg[,pop := NA]
-    data.agg <- merge(pop.dt, data, by = c( 'age', 'sex','year'), fill = T)
-    ##TODO - what to do with upper and lower here?
+    data.agg <- merge(pop.dt, data[model == 'Household Survey'], by = c( 'age', 'sex','year'), fill = T)
+    data.agg <- rbind(data.agg[,.(year, model, indicator, mean, pop)], data.pre.agg[,.(year, model, indicator, mean, pop)])
     data.agg <- data.agg[,.(mean = weighted.mean(x = mean, w = pop)), by =c('year', 'model', 'indicator') ]
-    data.agg <- rbind(data.agg, data.pre.agg[,.(year, model, indicator, mean)])
+
+    ##TODO - what to do with upper and lower here?
+ 
     data.agg[,upper := NA]
     data.agg[,lower := NA]    
     ui.dt <- fread(paste0('/share/hiv/data/prevalence_surveys/GBD2017_prevalence_surveys_15to49.csv'))

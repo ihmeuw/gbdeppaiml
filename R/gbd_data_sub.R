@@ -770,8 +770,12 @@ sub.prev.granular <- function(dt, loc){
         
       }
     }
-  if('use' %in% colnames(age.prev.dt)){
+  if('use' %in% colnames(age.prev.dt) & loc != 'CPV'){
     age.prev.dt <- age.prev.dt[use == TRUE]
+  }else{
+    print('CPV testing in sub.prev.granular')
+    age.prev.dt <- age.prev.dt[use == FALSE]
+    
   }
   
   
@@ -1379,6 +1383,13 @@ geo_adj_old <- function(loc, dt, i, uncertainty) {
     merge_on <- intersect(colnames(anc.dt[,.(site,year,site_pred,high_risk)]), colnames(site.dat))
     
     anc.dt  <- anc.dt[,offset := qnorm(adm0_mean)-qnorm(site_pred)]
+    if(loc == 'GAB'){
+      site.x <- gsub(" (%)", '', as.character(anc.dt[,site]))
+      site.x <- gsub(" \\(%)", '', site.x)
+      anc.dt[,site := site.x]
+      
+      
+    }
     #Copy year 2000 or otherwise earliest year to fill in  early years where GBD has data but LBD does not  
     post.2000 <- anc.dt[year >=2000]
     min.dt <- post.2000[year == min(year),.(offset), by = 'site']
@@ -1493,7 +1504,9 @@ geo_adj_old <- function(loc, dt, i, uncertainty) {
   #We use a different prior for no-survey locs (except PNG which has enough ANC data)
   sub.anc.prior <- function(dt,loc){
 
-    if(loc %in%  c("SDN","SSD","SOM","GNB","MDG","PNG", "COM")){
+   if(loc %in%  c("SDN","SSD","SOM","GNB","MDG","PNG", "COM")){
+   #   if(loc %in%  c("SDN","SSD","SOM","MDG","PNG", "COM")){
+        
       ancbias.pr.mean <<- 0.15
       ancbias.pr.sd <<- 0.001
     }else if(loc %in% "MRT"){

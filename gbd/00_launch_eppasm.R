@@ -13,11 +13,11 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 library(data.table)
 
 ## Arguments
-run.name <- "200316_windchime_testing"
+run.name <- "200316_windchime_testing1"
 spec.name <- "200316_windchime"
-compare.run <- '200213_violin'
-proj.end <- 2022
-n.draws <- 10
+compare.run <- "200316_windchime"
+proj.end <- 2019
+n.draws <- 5
 run.group2 <- FALSE
 paediatric <- TRUE
 cluster.project <- "proj_hiv"
@@ -128,13 +128,12 @@ if(redo_offsets){
   system(redo_offsets.string)
 }
 
-# loc.list <- c(loc.list, 'STP', 'MRT', 'COM')
-loc.list <- c('NAM', 'UGA', 'MWI', 'LSO', 'TZA')
+ loc.list <- c('MWI', 'ZWE')
 ## Launch EPP
 for(loc in loc.list) {    ## Run EPPASM
 # # 
 # # 
-    epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q all.q -P ", cluster.project, " ",
+    epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q long.q -P ", cluster.project, " ",
                          "-e /share/temp/sgeoutput/", user, "/errors ",
                          "-o /share/temp/sgeoutput/", user, "/output ",
                          "-N ", loc, "_eppasm ",
@@ -148,7 +147,7 @@ for(loc in loc.list) {    ## Run EPPASM
 
 
     #Draw compilation
-    draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
+    draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q long.q -P ", cluster.project, " ",
                           "-e /share/temp/sgeoutput/", user, "/errors ",
                           "-o /share/temp/sgeoutput/", user, "/output ",
                           "-N ", loc, "_save_draws ",
