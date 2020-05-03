@@ -83,7 +83,7 @@ plot_15to49_draw <- function(loc, output, eppd, run.name, compare.run = '190630_
   dev.off()
 }
 
-plot_15to49 <- function(loc="STP",  compare.run = NA, new.run = '200119_ukelele',
+plot_15to49 <- function(loc="KEN_35618",  compare.run = "200316_windchime_testing2", new.run = '200316_windchime_testing3',
                         paediatric =TRUE, plot.deaths = FALSE, compare.gbd17=TRUE, 
                         compare.gbd19.unraked = T, lbd_unraked = TRUE,
                         compare.stage2 = FALSE, gbdyear = "gbd20", simplify = F){
@@ -200,7 +200,7 @@ plot_15to49 <- function(loc="STP",  compare.run = NA, new.run = '200119_ukelele'
   # 
   ##will need to be changed
   cur.dt <- fread(paste0('/share/hiv/epp_output/', gbdyear, '/', new.run, '/compiled/', loc, '.csv'))
-  anc <- data[model == 'ANC Site',]
+  anc <- data[model == 'ANC Site']
   anc[,sex := NULL]
   ## post stratify age-specific data using Spectrum population
   if(nrow(data[age != '15-49']) > 0){
@@ -256,7 +256,7 @@ plot_15to49 <- function(loc="STP",  compare.run = NA, new.run = '200119_ukelele'
     data.agg[, lower := ifelse(mean - (1.96 * se) < 0, 0, mean - (1.96 * se))]
     data.agg[, se := NULL]
     data.agg[,type := 'point']
-    data <- data.agg
+    data <- data.agg[model != "ANC Site"]
   }
   if(loc %in% c('CPV', 'ERI')){
     age.prev.dt <- fread(paste0("/share/hiv/epp_input/gbd20/prev_surveys.csv"))
@@ -625,10 +625,10 @@ plot_birthprev <- function(loc, run.name.old, run.name.new){
   #   compare.dt <- NULL
   # }
   
-  compare.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/', '200213_violin', '/compiled/', loc, '.csv'))
+  compare.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/', run.name.old, '/compiled/', loc, '.csv'))
   compare.dt <- compare.dt[,.(birth_prev = sum(birth_prev), hiv_births = sum(hiv_births), total_births = sum(total_births)), by = c('year', 'run_num')]
   compare.dt <- compare.dt[,.(birth_prev = mean(birth_prev), hiv_births = mean(hiv_births), total_births = mean(total_births)), by = c('year')]
-  compare.dt[, model := '200213_violin']
+  compare.dt[, model := run.name.old]
   
   compare.dt.19 <- fread(paste0('/share/hiv/epp_output/', 'gbd19', '/', '190630_rhino2', '/compiled/', loc, '.csv'))
   compare.dt.19 <- compare.dt.19[,.(birth_prev = sum(birth_prev), hiv_births = sum(hiv_births), total_births = sum(total_births)), by = c('year', 'run_num')]
@@ -651,7 +651,7 @@ plot_birthprev <- function(loc, run.name.old, run.name.new){
                                                       'perinatal transmission rate', 'prevalence at birth (rate)', 'prevalence at birth (count)'))]
   plot.dt[,model := as.factor(model)]
   color.list <- c('blue', 'red', 'green' )
-  names(color.list) <- c(run.name,  '190630_rhino2', '200213_violin')
+  names(color.list) <- c(run.name,  '190630_rhino2', run.name.old)
   
   if(!dir.exists(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name.new, '/paeds_plots/'))){dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name.new, '/paeds_plots/'), recursive= TRUE)}
   pdf(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name.new, '/paeds_plots/', loc, '.pdf'), width = 10, height = 6)

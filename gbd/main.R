@@ -22,7 +22,7 @@ if(length(args) > 0) {
   paediatric <- as.logical(args[4])
 } else {
 	run.name <- '200316_windchime_testing1'
-	loc <- 'KEN_35632'
+	loc <- 'LSO'
 	#loc <- 'ERI'
 	stop.year <- 2022
 	j <- 1
@@ -30,7 +30,7 @@ if(length(args) > 0) {
 }
 
 run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
-c.args <- run.table[run_name==run.name]
+c.args <- run.table[run_name=='200316_windchime']
 
 
 ### Arguments
@@ -190,6 +190,19 @@ if(loc %in% c('CPV')){
   temp.artmxrr <- attr(temp, 'specfp')$artmx_timerr
   attr(dt, 'specfp')$artmx_timerr <- temp.artmxrr
 }
+if(loc %in% c('LSO')){
+  temp <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/LSO.rds'))
+  temp.artmxrr <- attr(temp, 'specfp')$artmx_timerr
+  attr(dt, 'specfp')$artmx_timerr <- temp.artmxrr
+}
+if(loc %in% c('MLI')){
+  temp <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/MLI.rds'))
+  temp.artmxrr <- attr(temp, 'specfp')$artmx_timerr
+  attr(dt, 'specfp')$artmx_timerr <- temp.artmxrr
+}
+
+
+
 
 if(run.name %in% c("190630_fixonARTIND","190630_fixonARTIND_tightprior")){
   temp <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/MWI.rds'))

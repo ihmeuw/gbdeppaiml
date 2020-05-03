@@ -1025,11 +1025,14 @@ geo_adj <- function(loc, dt, i, uncertainty) {
     #######change the directory here
 
     anc.dt.all <- read.csv(paste0('/ihme/hiv/data/PJNZ_prepped/lbd_anc/2019/', loc, '_ANC_matched.csv'))  
+    if(grepl("KEN",loc)){
+      anc.dt.all <- anc.dt.all[which(anc.dt.all$subpop == attr(dt,"eppd")$ancsitedat$subpop[1]),]
+    }
     setnames(anc.dt.all, old = 'prev', new = 'mean')
     setnames(anc.dt.all, old = 'clinic', new = 'site')
     anc.dt.all <- as.data.table(anc.dt.all)
  
-    
+ 
     
   
     anc.dt.all <- as.data.table(anc.dt.all)
