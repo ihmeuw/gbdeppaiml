@@ -398,7 +398,7 @@ get_summary <- function(output, loc, run.name, paediatric = FALSE){
 
 ## Get data from eppd object, save for future plotting
 save_data <- function(loc, eppd, run.name){
-  age.map <-  fread(paste0('/ihme/hiv/epp_input/gbd19/', run.name, "/age_map.csv"))
+  age.map <-  fread(paste0('/ihme/hiv/epp_input/', gbdyear, '/', run.name, "/age_map.csv"))
   if(nrow(eppd$hhs) > 0){
     prevdata <- data.table(eppd$hhs)
     prevdata <- prevdata[,.(sex, agegr, type = 'point', model = 'Household Survey', indicator = 'Prevalence', mean = prev, upper = prev + (1.96 * se), lower = ifelse(prev - (1.96 * se) < 0, 0, prev - (1.96 * se)), year)]
@@ -424,8 +424,8 @@ save_data <- function(loc, eppd, run.name){
   output <- rbind(prevdata, ancdata, use.names = T)
   output[, metric := 'Rate']
   output[, ihme_loc_id := loc]
-  path <- paste0('/share/hiv/epp_input/gbd19/', run.name, '/fit_data/', loc, '.csv')
-  dir.create(paste0('/share/hiv/epp_input/gbd19/', run.name, '/fit_data/'), recursive = TRUE, showWarnings = FALSE)
+  path <- paste0('/share/hiv/epp_input/', gbdyear,'/', run.name, '/fit_data/', loc, '.csv')
+  dir.create(paste0('/share/hiv/epp_input/',gbdyear, '/', run.name, '/fit_data/'), recursive = TRUE, showWarnings = FALSE)
   write.csv(output, path, row.names = F)
   return(output)
 }

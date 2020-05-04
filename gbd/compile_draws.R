@@ -23,6 +23,7 @@ if(length(args) > 0) {
   draw.fill <- TRUE
   paediatric <- TRUE
 }
+gbdyear <- 'gbd20'
 
 ## Functions
 fill_draws <- function(fill.dt,type=NULL){
@@ -42,13 +43,13 @@ fill_draws <- function(fill.dt,type=NULL){
     }
     if(type=="adult"){
     missing_spec <- data.table(ihme_loc_id=rep(loc,length(missing)), missing=need.draws)
-    write.csv(missing_spec,paste0('/ihme/hiv/epp_output/gbd19/', run.name, "/", loc,"/missing_or_neg_draws.csv"),row.names = FALSE)
+    write.csv(missing_spec,paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, "/", loc,"/missing_or_neg_draws.csv"),row.names = FALSE)
     }
   }
   return(fill.dt)
 }
 
-draw.path <- paste0('/ihme/hiv/epp_output/gbd19/', run.name, "/", loc)
+draw.path <- paste0('/ihme/hiv/epp_output/',gbdyear, '/', run.name, "/", loc)
 draw.list <- list.files(draw.path)
 ## subset out additional outputs (theta, under-1 splits)
 ## this could probably be tidied up
@@ -73,7 +74,7 @@ if(draw.fill){
   dt <- fill_draws(dt,type="adult")
 }
 
-compiled.path <- paste0('/ihme/hiv/epp_output/gbd19/', run.name, "/compiled/")
+compiled.path <- paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, "/compiled/")
 dir.create(compiled.path, recursive = TRUE, showWarnings = FALSE)
 write.csv(dt, paste0(compiled.path, loc, '.csv'), row.names = F)
 

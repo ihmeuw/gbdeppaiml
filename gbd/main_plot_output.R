@@ -25,7 +25,7 @@ if(length(args) > 0) {
   compare.run <- NA
   paediatric <- TRUE
 }
-
+gbdyear <- 'gbd20'
 ### Functions
 library(mortdb, lib = "/ihme/mortality/shared/r")
 setwd(paste0(ifelse(windows, "H:", paste0("/homes/", user)), "/eppasm/"))
@@ -33,20 +33,20 @@ devtools::load_all()
 setwd(code.dir)
 devtools::load_all()
 
-loc.table <- fread(paste0('/share/hiv/epp_input/gbd19/', run.name, '/location_table.csv'))
+loc.table <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/location_table.csv'))
 # 
 ## 15-49 plots
-dir.create(paste0('/ihme/hiv/epp_output/gbd19/', run.name, '/15to49_plots/'), recursive = TRUE, showWarnings = FALSE)
+dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/15to49_plots/'), recursive = TRUE, showWarnings = FALSE)
 plot_15to49(loc, run.name, compare.run, paediatric, plot.deaths = FALSE)
 
 # Age-specific plots
 for(c.indicator in c( 'Prevalence','Incidence','Deaths')){
-  dir.create(paste0('/ihme/hiv/epp_output/gbd19/', run.name, '/age_specific_plots/', c.indicator, '/'), recursive = TRUE, showWarnings = FALSE)
+  dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/age_specific_plots/', c.indicator, '/'), recursive = TRUE, showWarnings = FALSE)
 }
 plot_age_specific(loc, run.name, compare.run, paediatric)
 
 ## Birth prevalence
-dir.create(paste0('/ihme/hiv/epp_output/gbd19/', run.name, '/paeds_plots/'), showWarnings = F)
+dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/paeds_plots/'), showWarnings = F)
 plot_birthprev(loc, run.name)
 
 

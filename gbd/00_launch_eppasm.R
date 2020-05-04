@@ -13,11 +13,11 @@ library(data.table)
 
 ## Arguments
 
-run.name <- "190630_rhino2"
+run.name <- "200316_windchime_testing6"
 spec.name <- "190630_rhino_combined"
 compare.run <- NA
 proj.end <- 2019
-n.draws <- 1
+n.draws <- 5
 run.group2 <- FALSE
 paediatric <- TRUE
 cluster.project <- "proj_hiv"
@@ -25,13 +25,13 @@ plot_ART <- FALSE
 est_India <- FALSE
 reckon_prep <- TRUE
 decomp.step <- "step4"
-
+gbdyear <- 'gbd20'
 
 
 ### Paths
-input.dir <- paste0("/ihme/hiv/epp_input/gbd19/", run.name, "/")
+input.dir <- paste0("/ihme/hiv/epp_input/", gbdyear, "/", run.name, "/")
 dir.create(input.dir, recursive = TRUE, showWarnings = FALSE)
-dir <- paste0("/ihme/hiv/epp_output/gbd19/", run.name, "/")
+dir <- paste0("/ihme/hiv/epp_output/", gbdyear, "/", run.name, "/")
 dir.create(dir, showWarnings = FALSE)
 
 ### Functions
@@ -112,6 +112,7 @@ if(!file.exists(paste0(input.dir, 'art_prop.csv'))){
 
 
 ## Launch EPP
+loc.list <- c('LSO', 'MLI')
 for(loc in loc.list) {    ## Run EPPASM
       epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q all.q -P ", cluster.project, " ",
 
@@ -137,7 +138,7 @@ for(loc in loc.list) {    ## Run EPPASM
                            run.name, " ", loc, ' ', n.draws, ' TRUE ', paediatric)
      print(draw.string)
      system(draw.string)
-      }
+      
  
      plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
                            "-e /share/temp/sgeoutput/", user, "/errors ",
