@@ -27,6 +27,17 @@ anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE){
 
   if(lbd.anc){
       replace <- as.data.table(readRDS(paste0('/share/hiv/data/PJNZ_prepped/lbd_anc/2019/', loc, '.rds')))
+      
+      if(grepl("KEN",loc)){
+        replace <- replace[which(subpop == attr(dt,"eppd")$ancsitedat$subpop[1])]
+      }
+      
+      
+      if(grepl("SOM",loc)){
+        replace <- replace[subpop %in% "Remaining females" & type=="ancss"]
+      }
+      
+      
       if(!geoadjust){
         replace[,offset := NULL]
       }
@@ -134,7 +145,7 @@ anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE){
     }
     
     ## Subsetting KEN counties from province
-    if(grepl('KEN', loc)){
+    if(grepl('KEN', loc) & !run.name %in% c( "200316_windchime_testing4","200316_windchime_testing5")){
       ken.anc.path <- paste0('/share/hiv/epp_input/gbd20/kenya_anc_map.csv')
       ken.anc <- fread(ken.anc.path)
       if(loc %in% ken.anc$ihme_loc_id){

@@ -20,14 +20,19 @@ if(length(args) > 0) {
     compare.run <- NA
   }
   testing <- args[5]
+
+  compare2 <- args[6]
+  if(compare2 == 'NA'){
+    compare2 <- NA
+  }
 } else {
-  run.name <- "200316_windchime"
-  loc <- "NGA_25322"
+  run.name <- "200316_windchime_testing3"
+  loc <- "KEN_35618"
 
   draw.fill <- TRUE
 
   paediatric <- TRUE
-  compare.run <- '200213_violin'
+  compare.run <- '200316_windchime_testing1'
   testing <- FALSE
 }
 
@@ -66,10 +71,11 @@ if(loc %in% c('STP', 'COM', 'MAR')){
 }
 # 
 # ## 15-49 plots
+debugonce(plot_15to49)
 dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/15to49_plots/'), recursive = TRUE, showWarnings = FALSE)
 plot_15to49(loc,new.run = run.name, paediatric, plot.deaths = TRUE,  lbd_unraked = FALSE,
             compare.gbd17=FALSE, compare.run = compare.run, compare.gbd19.unraked = TRUE,
-            compare.stage2 = TRUE)
+            compare.stage2 = TRUE,compare2 = compare2)
 
 #Age-specific plots
 for(c.indicator in c( 'Prevalence','Incidence','Deaths')){

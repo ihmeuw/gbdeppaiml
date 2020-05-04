@@ -4,7 +4,7 @@
 #This script should be loaded into the environment that is running eppasm
 ######################################
 run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
-c.args <- run.table[run_name==run.name]
+c.args <- run.table[run_name=="200316_windchime"]
 dir.table <- fread(paste0('/share/homes/djahag/dir_table_log_gbd20.csv'))
 dir.table <- dir.table[ref == 1,]
 dir.table[,'ASFR' := as.logical(ASFR)]

@@ -13,11 +13,11 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 library(data.table)
 
 ## Arguments
-run.name <- "200316_windchime_testing"
-spec.name <- "200316_windchime"
-compare.run <- '200213_violin'
+run.name <- "200316_windchime_testing4"
+spec.name <- "200316_windchime_testing3"
+compare.run <- '200316_windchime_testing1'
 proj.end <- 2022
-n.draws <- 10
+n.draws <- 1000
 run.group2 <- FALSE
 paediatric <- TRUE
 cluster.project <- "proj_hiv"
@@ -128,10 +128,11 @@ if(redo_offsets){
   system(redo_offsets.string)
 }
 
-# loc.list <- c(loc.list, 'STP', 'MRT', 'COM')
-loc.list <- c('NAM', 'UGA', 'MWI', 'LSO', 'TZA')
+
 ## Launch EPP
-for(loc in loc.list) {    ## Run EPPASM
+run.name <- "200316_windchime_testing4"
+compare2 <- "200316_windchime_testing1"
+for(loc in c("MWI","RWA")) {    ## Run EPPASM
 # # 
 # # 
     epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q all.q -P ", cluster.project, " ",
@@ -159,7 +160,9 @@ for(loc in loc.list) {    ## Run EPPASM
     print(draw.string)
     system(draw.string)
 
-    # 
+    #
+    
+    
     plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q long.q -P ", cluster.project, " ",
                           "-e /share/temp/sgeoutput/", user, "/errors ",
                           "-o /share/temp/sgeoutput/", user, "/output ",
@@ -167,7 +170,7 @@ for(loc in loc.list) {    ## Run EPPASM
                           "-hold_jid ", loc, "_save_draws ",
                           code.dir, "gbd/singR_shell.sh ",
                           code.dir, "gbd/main_plot_output.R ",
-                          loc, " ", run.name, ' ', paediatric, ' ', compare.run, ' TRUE')
+                          loc, " ", run.name, ' ', paediatric, ' ', compare.run, ' TRUE ', compare2)
     print(plot.string)
     system(plot.string)
 
@@ -183,8 +186,6 @@ for(loc in loc.list) {    ## Run EPPASM
     # system(diagnostic.string)
 
     # 
-
- 
      
 }
 
@@ -273,9 +274,11 @@ eppasm_parents <-  c("KEN","ZAF","ETH","KEN_44793" ,"KEN_44794","KEN_44795", "KE
 all_loc_list <- c(loc.list,eppasm_parents)
 
 ## Aggregation and reckoning prep for higher levels
+spec.name <- "200316_windchime_KEN"
+run.name <- "200316_windchime_testing4"
 if(reckon_prep){
-  for(loc in all_loc_list){
-    if(loc %in% eppasm_parents){
+  for(loc in all_loc_list[grepl("KEN",all_loc_list)]){
+    if(loc %in% eppasm_parents[grepl("KEN", eppasm_parents)]){
     prep.string <- paste0("qsub -l m_mem_free=100G -l fthread=2 -l h_rt=02:00:00 -l archive -q all.q -P ", cluster.project, " ",
                           "-e /share/temp/sgeoutput/", user, "/errors ",
                           "-o /share/temp/sgeoutput/", user, "/output ",

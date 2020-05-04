@@ -83,9 +83,10 @@ plot_15to49_draw <- function(loc, output, eppd, run.name, compare.run = '190630_
   dev.off()
 }
 
-plot_15to49 <- function(loc="KEN_35618",  compare.run = "200316_windchime_testing2", new.run = '200316_windchime_testing3',
-                        paediatric =TRUE, plot.deaths = FALSE, compare.gbd17=TRUE, 
-                        compare.gbd19.unraked = T, lbd_unraked = TRUE,
+plot_15to49 <- function(loc="KEN_35618",  compare.run = "200316_windchime_testing5", 
+                        compare2 = NULL, new.run = '200316_windchime_testing4',
+                        paediatric =TRUE, plot.deaths = FALSE, compare.gbd17=FALSE, 
+                        compare.gbd19.unraked = F, lbd_unraked = TRUE,
                         compare.stage2 = FALSE, gbdyear = "gbd20"){
   
   if(loc %in% loc.table[grepl("IND",ihme_loc_id) & epp != 1,ihme_loc_id]){
@@ -181,22 +182,32 @@ plot_15to49 <- function(loc="KEN_35618",  compare.run = "200316_windchime_testin
     }
    
       
+  } else {
+    compare.gbd19.unraked<- NULL
   }
-
-    if(!is.na(compare.run)){
-      if(compare.run != '190630_rhino2'){
-        compare.dt <- fread(paste0('/share/hiv/epp_output/gbd20/', compare.run, '/compiled/', loc, '.csv'))
-        compare.dt <- get_summary(compare.dt, loc, run.name.old = compare.run, run.name.new = compare.run, paediatric, old.splits = F)
+  
+  if(!is.na(compare.run)){ 
+  run_list = list(compare.run,compare2)
+  compare.dt.all <- list()
+  for(run_i in run_list){
+    
+      if(run_i != '190630_rhino2'){
+        compare.dt1 <- fread(paste0('/share/hiv/epp_output/gbd20/', run_i, '/compiled/', loc, '.csv'))
+        compare.dt <- get_summary(compare.dt1, loc, run.name.old = run_i, run.name.new = run_i, paediatric, old.splits = F)
         
       }else{
-        compare.dt <- fread(paste0('/share/hiv/epp_output/gbd19/', compare.run, '/compiled/', loc, '.csv'))
-        compare.dt <- get_summary(compare.dt, loc, run.name.old = compare.run, run.name.new = new.run, paediatric, old.splits = T)
+        compare.dt1 <- fread(paste0('/share/hiv/epp_output/gbd19/', compare.run, '/compiled/', loc, '.csv'))
+        compare.dt <- get_summary(compare.dt1, loc, run.name.old = run_i, run.name.new = new.run, paediatric, old.splits = T)
         
       }
-      compare.dt <- compare.dt[age_group_id == 24 & sex == 'both' & measure %in% meas.list & metric == "Rate",.(type = 'line', year, indicator = measure, model = compare.run, mean, lower, upper)]
-    }else{compare.dt = NULL}
+    
+      compare.dt <- compare.dt[age_group_id == 24 & sex == 'both' & measure %in% meas.list & metric == "Rate",.(type = 'line', year, indicator = measure, model = run_i, mean, lower, upper)]
+      compare.dt.all <- rbind(compare.dt.all,compare.dt)
+      
+      }
+}else{compare.dt.all = NULL}
 
-
+  
   # 
   ##will need to be changed
   cur.dt <- fread(paste0('/share/hiv/epp_output/', gbdyear, '/', new.run, '/compiled/', loc, '.csv'))
@@ -264,13 +275,13 @@ plot_15to49 <- function(loc="KEN_35618",  compare.run = "200316_windchime_testin
   #compare.run <- '200119_ukelele'
   
   
-  plot.dt <- rbind(data,compare.dt.17, compare.dt,cur.dt,compare.dt.unaids,lbd.unraked,compare.gbd19.unraked, compare.dt.s2,use.names = T, fill = T)
+  plot.dt <- rbind(data,compare.dt.all,cur.dt,compare.dt.unaids,lbd.unraked,compare.gbd19.unraked, compare.dt.s2,use.names = T, fill = T)
   plot.dt[,model := factor(model)]
   if(any(colnames(plot.dt) == 'x')){
     plot.dt[,x:= NULL]
   }
-  color.list <- c('blue', 'red', 'green','purple','orange','black', 'darkgreen')
-  names(color.list) <- c(new.run, 'GBD2019', compare.run,'UNAIDS','LBD Unraked', '190630_rhino2', 'Spec, stage 2')
+  color.list <- c('blue', 'red', 'green','purple','orange','black', 'darkgreen','yellow')
+  names(color.list) <- c(new.run, 'GBD2019', compare.run,compare2,'UNAIDS','LBD Unraked', '190630_rhino2', 'Spec, stage 2')
 
   plot.dt[,model := factor(model)]
   # color.list <- c('blue', 'red', 'purple', 'green')
@@ -291,7 +302,7 @@ dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/15to49_plot
     gg <- gg + geom_point(data = plot.dt[model == 'ANC Site'], aes(x = year, y = mean, shape = 'ANC Site'), alpha = 0.2)
   }
   gg <- gg + geom_line(data = plot.dt[type == 'line'], aes(x = year, y = mean, color = model)) +
-    geom_ribbon(data = plot.dt[type == 'line'], aes(x = year, ymin = lower, ymax = upper,  fill = model), alpha = 0.2) +
+    geom_ribbon(data = plot.dt[type == 'line' & model == new.run], aes(x = year, ymin = lower, ymax = upper,  fill = model), alpha = 0.2) +
     facet_wrap(~indicator, scales = 'free_y') +
     theme_bw() +
     scale_fill_manual(values=color.list) + scale_colour_manual(values=color.list)  +
@@ -664,6 +675,11 @@ plot_age_sex_incrr <- function(loc, run.name){
   incrr_50plus_logdiff <- cbind(male   = log(0.493510) - log(c(0.358980, 0.282400, 0.259240, 0.264920, 0.254790, 0.164140, 0.000000)),
                                 female = log(0.440260) - log(c(0.336720, 0.239470, 0.167890, 0.146590, 0.171350, 0.000000, 0.000000)))
   
+  if(run.name == "190630_rhino2"){
+    gbd_year = "gbd19"
+  } else {
+    gbd_year = gbd_year
+  }
   theta.files <- list.files(paste0('/ihme/hiv/epp_output/gbd19/', run.name, "/", loc))
   theta.files <- theta.files[grepl('theta', theta.files)]
   theta.dt <- rbindlist(lapply(theta.files, function(ff){

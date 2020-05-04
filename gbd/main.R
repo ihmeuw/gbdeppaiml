@@ -21,16 +21,16 @@ if(length(args) > 0) {
   j <- as.integer(Sys.getenv("SGE_TASK_ID"))
   paediatric <- as.logical(args[4])
 } else {
-	run.name <- '200316_windchime_testing'
-	loc <- 'NAM'
+	run.name <- '200316_windchime_testing4'
+	loc <- 'MWI'
 	#loc <- 'ERI'
-	stop.year <- 2022
+	stop.year <- 2019
 	j <- 1
 	paediatric <- TRUE
 }
 
 run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
-c.args <- run.table[run_name==run.name]
+c.args <- run.table[run_name=="200316_windchime"]
 
 
 ### Arguments
@@ -40,7 +40,7 @@ start.year <- 1970
 trans.params.sub <- TRUE
 pop.sub <- TRUE
 art.sub <- TRUE
-prev.sub <- TRUE
+prev_sub <- TRUE
 sexincrr.sub <- TRUE
 plot.draw <- FALSE
 anc.prior.sub <- TRUE
@@ -68,18 +68,14 @@ setwd(code.dir)
 devtools::load_all()
 loc.table <- get_locations(hiv_metadata = TRUE)
 
-
-
-
-
 ### Tables
-
 
 
 # These locations do not have information from LBD team estimates
 # ZAF ANC data are considered nationally representative so no GeoADjust - this could be challenged in the future
 no_geo_adj <-  c(loc.table[epp ==1 & grepl("IND",ihme_loc_id),ihme_loc_id],
                  "PNG","HTI","DOM", 'CPV', loc.table[epp ==1 & grepl("ZAF",ihme_loc_id),ihme_loc_id], 'STP', 'KEN_35626', 'MRT', 'COM')
+
 
 
 # ANC data bias adjustment
@@ -93,43 +89,45 @@ if(!loc %in% unlist(strsplit(list.files('/share/hiv/data/PJNZ_EPPASM_prepped_sub
   lbd.anc <- FALSE
 }
 
-if(grepl('ZAF', loc)){
-  lbd.anc <- FALSE
-}
-if(grepl('PNG', loc)){
+if(loc %in% c("ZAF","PNG")){
   lbd.anc <- FALSE
 }
 
-prev_sub <- TRUE
-
-sexincrr.sub <- TRUE
 
 ##Need to figure out where to get these
 if(loc %in% c("MAR","MRT","COM")){
   sexincrr.sub <- FALSE
 }
-# if(loc == "STP"){
-#   prev_sub <- FALSE
-# }
+
 ### Code
 ## Read in spectrum object, sub in GBD parameters
-if(loc %in% c('NAM', 'UGA', 'MWI', 'LSO', 'TZA')){
-  geoadj_test <- TRUE
-  
-}else{
-  geoadj_test <- FALSE
-}
+geoadj_test <- FALSE
+
 dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub, 
                        pop.sub, anc.sub, anc.backcast, prev.sub = prev_sub, art.sub = TRUE, 
                        sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = TRUE, 
                        anc.prior.sub = TRUE, lbd.anc = lbd.anc, 
                        geoadjust = geoadjust, use_2019 = TRUE)
+
+#Testing exceptions
+
+if(loc %in% c("MWI","RWA")){
+  temp <- readRDS(paste0("/ihme/hiv/epp_output/gbd19/190630_rhino2/dt_objects/",loc,"_dt.RDS"))
+  attr(dt, 'eppd')$ancsitedat <- attr(temp,'eppd')$ancsitedat
+  
+}
+
+#Test run outlitering last Kenya survey
+if(run.name == "200316_windchime_testing5" & grepl(loc,"KEN")){
+  attr(dt, 'eppd')$hhs <-  attr(dt, 'eppd')$hhs[attr(dt, 'eppd')$hhs$year != 2018,]
+}
+
+
 if(loc == 'NGA_25322'){
   attr(dt, 'eppd')$ancsitedat <- as.data.frame(as.data.table(attr(dt, 'eppd')$ancsitedat)[prev < 0.2,])
   
 }
 
-#source(paste0('/ihme/homes/mwalte10/data_post_processing.R'))
 if(loc == 'IND_4842'){
   sub_in <- readRDS('/ihme/hiv/epp_output/gbd20/200213_violin/dt_objects/IND_4862_dt.RDS')
   sub_in <- attr(sub_in, 'specfp')$paedsurv_artcd4dist
@@ -141,18 +139,9 @@ if(any(attr(dt, 'eppd')$ancsitedat$prev > 1)){
   attr(dt, 'eppd')$ancsitedat <- as.data.frame(as.data.table(attr(dt, 'eppd')$ancsitedat)[prev < 1,])
 }
 
-##Remove NA rows on ANCRT cens that are casuing issues
-if(loc=="NGA_25343"){
-  attr(dt,"eppd")$ancrtcens <- attr(dt,"eppd")$ancrtcens[1:2,] 
-  
-}
 
-if(grepl('ETH', loc)){
-  attr(dt, 'eppd')$hhs <-  subset(attr(dt, 'eppd')$hhs, year != '2018')
-}
-#check_inputs(dt)
 if(geoadjust){
-  attr(dt, 'eppd')$ancsitedat$offset <- attr(dt, 'eppd')$ancsitedat$offset %>% as.numeric()
+  attr(dt, 'eppd')$ancsitedat$offset <- attr(dt, 'eppd')$ancsitedat$offset %>% as.numeric() 
   
 }
 if(!geoadjust & any(colnames(data.table(attr(dt, 'eppd')$ancsitedat)) == 'year_id')){
@@ -164,7 +153,7 @@ if(!geoadjust & any(colnames(data.table(attr(dt, 'eppd')$ancsitedat)) == 'year_i
 }
 
 dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, "/", run.name, '/dt_objects/'), recursive = T)
-saveRDS(dt, file = paste0('/ihme/hiv/epp_output/', gbdyear, "/", run.name, '/dt_objects/', loc, '_dt.RDS' ))
+
 if(epp.mod == 'rspline'){attr(dt, 'specfp')$equil.rprior <- TRUE}
 # 
 # #Some substitutions to get things running
@@ -175,7 +164,6 @@ if(grepl('NGA', loc)){
 }
 
 
-
 ## Replace on-ART mortality RR for TZA and UGA
 if(loc %in% c('UGA', 'TZA')){
   temp <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/MWI.rds'))
@@ -183,10 +171,38 @@ if(loc %in% c('UGA', 'TZA')){
   attr(dt, 'specfp')$artmx_timerr <- temp.artmxrr
 }
 
-if(run.name %in% c("190630_fixonARTIND","190630_fixonARTIND_tightprior")){
-  temp <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/MWI.rds'))
+if(loc %in% c("LSO","MLI")){
+  temp <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2019/NAM.rds'))
   temp.artmxrr <- attr(temp, 'specfp')$artmx_timerr
+  
+  for(y in (1970 + ncol(temp.artmxrr)) : (1970 + ncol(attr(dt, 'specfp')$artmx_timerr)-1)){
+    print(y)
+    hold <- temp.artmxrr[,ncol(temp.artmxrr),drop = FALSE]
+    colnames(hold) <- y
+    temp.artmxrr <- cbind(temp.artmxrr,hold)
+  }
+  
   attr(dt, 'specfp')$artmx_timerr <- temp.artmxrr
+}
+
+if(loc=="LSO"){
+  dt1 = readRDS(paste0("/ihme/hiv/epp_output/gbd19/190630_rhino2/dt_objects/",loc,"_dt.RDS"))
+  hhs = attr(dt1,"eppd")$hhs
+  attr(dt,"eppd")$hhs <- hhs
+}
+
+if(loc %in% c("LSO","MLI")){
+  temp <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/',loc,'.rds'))
+  temp.entrantprev <- attr(temp, 'specfp')$entrantprev
+  
+  for(y in (1970 + ncol(temp.entrantprev)) : (1970 + ncol(attr(dt, 'specfp')$entrantprev)-1)){
+    print(y)
+    hold <- temp.entrantprev[,ncol(temp.entrantprev),drop = FALSE]
+    colnames(hold) <- y
+    temp.entrantprev <- cbind(temp.entrantprev,hold)
+  }
+  attr(dt, 'specfp')$entrantprev <- temp.entrantprev
+  
 }
 
 attr(dt, 'eppd')$ancsitedat = unique(attr(dt, 'eppd')$ancsitedat)
@@ -448,18 +464,18 @@ if(any(colnames(attr(dt, 'eppd')) == 'year_id')){
   attr(dt, 'eppd')$ancsitedat <-  as.data.frame(x)
 }
 
-## Fit model
+saveRDS(dt, file = paste0('/ihme/hiv/epp_output/', gbdyear, "/", run.name, '/dt_objects/', loc, '_dt.RDS' ))
 
+## Fit model
 fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 250)
 data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc, '.csv')
-if(!file.exists(data.path)){save_data(loc, attr(dt, 'eppd'), run.name)}
-if(file.exists(data.path)){save_data(loc, attr(dt, 'eppd'), run.name)}
-
+if(j==1){save_data(loc, attr(dt, 'eppd'), run.name)}
 
 
 ## When fitting, the random-walk based models only simulate through the end of the
 ## data period. The `extend_projection()` function extends the random walk for r(t)
 ## through the end of the projection period.
+
 if(epp.mod == 'rhybrid'){
   fit <- extend_projection(fit, proj_years = stop.year - start.year + 1)
 }
@@ -471,7 +487,6 @@ if(max(fit$fp$pmtct_dropout$year) < stop.year){
 }
 
 ##NOTE: need to get GBD simmod working again - error on BF transmissions - otherwise PAEDIATRIC must be false
-#debugonce(gbd_sim_mod)
 result <- gbd_sim_mod(fit, VERSION = "R")
 
 output.dt <- get_gbd_outputs(result, attr(dt, 'specfp'), paediatric = paediatric)
@@ -492,4 +507,4 @@ write.csv(param, paste0(out.dir,'/theta_', j, '.csv'), row.names = F)
 if(plot.draw){
   plot_15to49_draw(loc, output.dt, attr(dt, 'eppd'), run.name)
 }
-
+#
