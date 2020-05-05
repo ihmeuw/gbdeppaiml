@@ -20,7 +20,7 @@ if(length(args) > 0) {
     compare.run <- NA
   }
 } else {
-  loc <- 'MWI'
+  loc <- 'MLI'
   run.name <- '200316_windchime_testing6'
   compare.run <- '190630_rhino2_test'
   paediatric <- TRUE
