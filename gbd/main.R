@@ -25,10 +25,12 @@ if(length(args) > 0) {
 	stop.year <- 2019
 	i <- 1
 	paediatric <- TRUE
+	
 }
-
 gbdyear <- 'gbd20'
-run.table <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/eppasm_run_table.csv'))
+
+
+run.table <- fread(paste0('/share/hiv/epp_input/gbd20/eppasm_run_table.csv'))
 if(grepl('testing', run.name)){
   temp.run.name <- '200316_windchime'
 }else{
@@ -130,7 +132,7 @@ if(grepl("IND",loc)){
 }
 
 ## Fit model
-fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e3, B = 1e5, number_k = 200)
+fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500)
 
 
 data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc, '.csv')

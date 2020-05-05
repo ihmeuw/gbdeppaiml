@@ -20,12 +20,14 @@ if(length(args) > 0) {
     compare.run <- NA
   }
 } else {
-  loc <- "IND_4843"
-  run.name <- '190630_fixonARTIND'
-  compare.run <- NA
+  loc <- 'MWI'
+  run.name <- '200316_windchime_testing6'
+  compare.run <- '190630_rhino2_test'
   paediatric <- TRUE
+  
 }
-gbdyear <- 'gbd20'
+gbdyear <- 'gbd19'
+
 ### Functions
 library(mortdb, lib = "/ihme/mortality/shared/r")
 setwd(paste0(ifelse(windows, "H:", paste0("/homes/", user)), "/eppasm/"))
@@ -37,13 +39,13 @@ loc.table <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/loc
 # 
 ## 15-49 plots
 dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/15to49_plots/'), recursive = TRUE, showWarnings = FALSE)
-plot_15to49(loc, run.name, compare.run, paediatric, plot.deaths = FALSE)
+plot_15to49(loc, run.name, compare.run, paediatric, plot.deaths = TRUE)
 
 # Age-specific plots
 for(c.indicator in c( 'Prevalence','Incidence','Deaths')){
   dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/age_specific_plots/', c.indicator, '/'), recursive = TRUE, showWarnings = FALSE)
 }
-plot_age_specific(loc, run.name, compare.run, paediatric)
+plot_age_specific(loc, run.name, compare.run, paediatric = T, c.metric = 'Count')
 
 ## Birth prevalence
 dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/paeds_plots/'), showWarnings = F)

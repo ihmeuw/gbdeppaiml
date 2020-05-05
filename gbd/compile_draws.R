@@ -16,12 +16,14 @@ if(length(args) > 0) {
   n <- as.integer(args[3])
   draw.fill <- as.logical(args[4])
   paediatric <- as.logical(args[5])
+  gbdyear <- args[6]
 } else {
   run.name <- "190630_rhino2"
   loc <- "MDG"
   n <- 1000
   draw.fill <- TRUE
   paediatric <- TRUE
+  
 }
 gbdyear <- 'gbd20'
 
