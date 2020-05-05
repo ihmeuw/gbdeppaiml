@@ -128,7 +128,8 @@ if(redo_offsets){
   system(redo_offsets.string)
 }
 
-loc.list <- c('LSO', 'MLI')
+loc.list <- c('LSO', 'UGA', 'MOZ', 'MLI', 'MWI', 'COD', 'ZAF_482', 'ZAF_485')
+loc.list <- c('ZWE', 'TZA', 'COD')
 ## Launch EPP
 for(loc in loc.list) {    ## Run EPPASM
 # # 

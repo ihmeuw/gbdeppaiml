@@ -269,33 +269,29 @@ if(dir.table[ref == max(ref),on.art]){
 #   pmtct <- paste0('/share/hiv/epp_input/gbd19/paeds/PMTCT/', loc, '.csv')
 #   
 # }
-if(loc == 'ZAF_482'){
-  births <-    paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/births/', loc, '.csv')
-  asfr <- paste0("/share/hiv/epp_input/",'gbd19/190630_rhino2',"/ASFR/",loc,".csv")
-  pmtct <- paste0('/share/hiv/epp_input/gbd19/paeds/PMTCT/', loc, '.csv')
-  art <- (paste0('/share/hiv/epp_input/gbd19/paeds/childARTcoverage/', loc, '.csv'))
-  migration <- paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/migration/', loc, '.csv')
-  
-
-}
- if(loc == 'LSO'){
+# if(loc == 'ZAF_482'){
 #   births <-    paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/births/', loc, '.csv')
 #   asfr <- paste0("/share/hiv/epp_input/",'gbd19/190630_rhino2',"/ASFR/",loc,".csv")
 #   pmtct <- paste0('/share/hiv/epp_input/gbd19/paeds/PMTCT/', loc, '.csv')
 #   art <- (paste0('/share/hiv/epp_input/gbd19/paeds/childARTcoverage/', loc, '.csv'))
 #   migration <- paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/migration/', loc, '.csv')
-  for(c.year in c('UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
-    if(file.exists(paste0('/home/j/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/extrapolate_ART/PV_testing/' ,c.year,'/', loc, '_Adult_ART_cov.csv'))){
-
-      art.dt <- paste0('/home/j/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/extrapolate_ART/PV_testing/' ,c.year,'/', loc, '_Adult_ART_cov.csv')
-
-
-      break
-    }
-  }
+#   
 # 
-#   SRB <- paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/SRB/', loc, '.csv')
-#   population_single_age <- paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/population_single_age/', loc, '.csv')
+# }
+#   if(loc == 'ZWE'){
+# 
+#   pmtct <- paste0('/share/hiv/epp_input/gbd19/paeds/PMTCT/', loc, '.csv')
+#   art <- (paste0('/share/hiv/epp_input/gbd19/paeds/childARTcoverage/', loc, '.csv'))
+# for(c.year in c('UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
+#   if(file.exists(paste0('/home/j/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/extrapolate_ART/PV_testing/' ,c.year,'/', loc, '_Adult_ART_cov.csv'))){
+# 
+#     art.dt <- paste0('/home/j/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/extrapolate_ART/PV_testing/' ,c.year,'/', loc, '_Adult_ART_cov.csv')
+# 
+# 
+#     break
+#   }
+# }
+# 
 #   fp_root <- '/share/hiv/epp_input/gbd19/paeds/'
 #   artdist <- paste0(fp_root, '/childARTDist/', temp.loc, '.csv')
 #   if(grepl('IND',temp.loc)){
@@ -307,59 +303,41 @@ if(loc == 'ZAF_482'){
 #   mort.art <- paste0(fp_root, "/childMortOnART.csv")
 #   prog <-  paste0(fp_root, "/childProgParam.csv")
 #   mort.offart <-  paste0(fp_root, '/childMortNoART.csv')
-#   dropout <- paste0(fp_root, '/PMTCTdropoutRates.csv') 
+#   dropout <- paste0(fp_root, '/PMTCTdropoutRates.csv')
 #   art <- (paste0('/share/hiv/epp_input/gbd19/paeds/childARTcoverage.csv'))
 #   pmtct <- paste0('/share/hiv/epp_input/gbd19/paeds/PMTCT/', temp.loc, '.csv')
+# # # 
+#  }
+#  if(loc == 'TZA'){
+#   pmtct <- paste0('/share/hiv/epp_input/gbd19/paeds/PMTCT/', loc, '.csv')
+#   for(c.year in c('UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
+#     if(file.exists(paste0('/home/j/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/extrapolate_ART/PV_testing/' ,c.year,'/', loc, '_Adult_ART_cov.csv'))){
 # 
- }
-if(loc == 'MLI'){
-  # births <-    paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/births/', loc, '.csv')
-  # asfr <- paste0("/share/hiv/epp_input/",'gbd19/190630_rhino2',"/ASFR/",loc,".csv")
-  # pmtct <- paste0('/share/hiv/epp_input/gbd19/paeds/PMTCT/', loc, '.csv')
-  # for(c.year in c('UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
-  #   if(file.exists(paste0('/home/j/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/extrapolate_ART/PV_testing/' ,c.year,'/', loc, '_Adult_ART_cov.csv'))){
-  # 
-  #     art.dt <- paste0('/home/j/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/extrapolate_ART/PV_testing/' ,c.year,'/', loc, '_Adult_ART_cov.csv')
-  # 
-  # 
-  #     break
-  #   }
-  # }
-
-  # births <-    paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/births/', loc, '.csv')
-  # asfr <- paste0("/share/hiv/epp_input/",'gbd19/190630_rhino2',"/ASFR/",loc,".csv")
-  # pmtct <- paste0('/share/hiv/epp_input/gbd19/paeds/PMTCT/', loc, '.csv')
-  # art <- (paste0('/share/hiv/epp_input/gbd19/paeds/childARTcoverage/', loc, '.csv'))
-  # migration <- paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/migration/', loc, '.csv')
-  for(c.year in c('UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
-    if(file.exists(paste0('/home/j/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/extrapolate_ART/PV_testing/' ,c.year,'/', loc, '_Adult_ART_cov.csv'))){
-
-      art.dt <- paste0('/home/j/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/extrapolate_ART/PV_testing/' ,c.year,'/', loc, '_Adult_ART_cov.csv')
-
-
-      break
-    }
-  }
-  #aim.dir <- paste0(root,"/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/AIM_assumptions/")
-   # mortart <- fread(paste0(aim.dir,"transition_parameters/HIVmort_onART_regions/DisMod/", loc,"_HIVonART.csv"))
-  # SRB <- paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/SRB/', loc, '.csv')
-  # population_single_age <- paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/population_single_age/', loc, '.csv')
-  # fp_root <- '/share/hiv/epp_input/gbd19/paeds/'
-  # artdist <- paste0(fp_root, '/childARTDist/', temp.loc, '.csv')
-  # if(grepl('IND',temp.loc)){
-  #   artelig <- paste0(fp_root, '/childARTeligibility/AGO.csv')
-  # }else{
-  #   artelig <- paste0(fp_root, '/childARTeligibility/', temp.loc, '.csv')
-  # }
-  # percbf <- paste0(fp_root, '/percentBF/', temp.loc, '.csv')
-  # mort.art <- paste0(fp_root, "/childMortOnART.csv")
-  # prog <-  paste0(fp_root, "/childProgParam.csv")
-  # mort.offart <-  paste0(fp_root, '/childMortNoART.csv')
-  # dropout <- paste0(fp_root, '/PMTCTdropoutRates.csv')
-  # art <- (paste0('/share/hiv/epp_input/gbd19/paeds/childARTcoverage.csv'))
-  # pmtct <- paste0('/share/hiv/epp_input/gbd19/paeds/PMTCT/', temp.loc, '.csv')
-
-}
+#       art.dt <- paste0('/home/j/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/extrapolate_ART/PV_testing/' ,c.year,'/', loc, '_Adult_ART_cov.csv')
+# 
+# 
+#       break
+#     }
+#   }
+# 
+#   art <- (paste0('/share/hiv/epp_input/gbd19/paeds/childARTcoverage/', loc, '.csv'))
+# 
+#   fp_root <- '/share/hiv/epp_input/gbd19/paeds/'
+#   artdist <- paste0(fp_root, '/childARTDist/', temp.loc, '.csv')
+#   if(grepl('IND',temp.loc)){
+#     artelig <- paste0(fp_root, '/childARTeligibility/AGO.csv')
+#   }else{
+#     artelig <- paste0(fp_root, '/childARTeligibility/', temp.loc, '.csv')
+#   }
+#   percbf <- paste0(fp_root, '/percentBF/', temp.loc, '.csv')
+#   mort.art <- paste0(fp_root, "/childMortOnART.csv")
+#   prog <-  paste0(fp_root, "/childProgParam.csv")
+#   mort.offart <-  paste0(fp_root, '/childMortNoART.csv')
+#   dropout <- paste0(fp_root, '/PMTCTdropoutRates.csv')
+#   art <- (paste0('/share/hiv/epp_input/gbd19/paeds/childARTcoverage.csv'))
+#   pmtct <- paste0('/share/hiv/epp_input/gbd19/paeds/PMTCT/', temp.loc, '.csv')
+# # 
+# }
 # if(loc == 'PNG'){
 #   pmtct <- paste0('/share/hiv/epp_input/gbd19/paeds/PMTCT/', loc, '.csv')
 #   births <-    paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/births/', loc, '.csv')

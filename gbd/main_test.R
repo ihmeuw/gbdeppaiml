@@ -110,7 +110,7 @@ if(loc %in% c("MAR","MRT","COM")){
 # }
 ### Code
 ## Read in spectrum object, sub in GBD parameters
-if(loc %in% c('BEN', 'GAB', 'MWI',  'SOM', 'ZWE', 'MDG', 'MLI', 'LSO')){
+if(loc %in% c('BEN', 'GAB',  'SOM',  'MDG', 'ZWE')){
   geoadj_test <- TRUE
   
 }else{
@@ -121,7 +121,21 @@ dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
                        sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = TRUE, 
                        anc.prior.sub = TRUE, lbd.anc = lbd.anc, 
                        geoadjust = geoadjust, use_2019 = TRUE)
-
+if(loc == 'TZA'){
+  sub_in <- readRDS('/ihme/hiv/epp_output/gbd19/190630_rhino2/dt_objects/TZA_dt.RDS')
+  sub_in <- attr(sub_in, 'eppd')$ancsitedat
+  attr(dt, 'eppd')$ancsitedat <- sub_in
+}
+if(loc == 'ZWE'){
+  sub_in <- readRDS('/ihme/hiv/epp_output/gbd19/190630_rhino2/dt_objects/ZWE_dt.RDS')
+  sub_in <- attr(sub_in, 'eppd')$ancsitedat
+  attr(dt, 'eppd')$ancsitedat <- sub_in
+}
+if(loc == 'COD'){
+  sub_in <- readRDS('/ihme/hiv/epp_output/gbd19/190630_rhino2/dt_objects/COD_dt.RDS')
+  sub_in <- attr(sub_in, 'specfp')$art_mort
+  attr(dt, 'specfp')$art_mort <- sub_in
+}
 
 if(loc == 'HTI'){
   sub_anc <- readRDS('/ihme/hiv/epp_output/gbd19/190630_rhino2/dt_objects/HTI_dt.RDS')
@@ -132,13 +146,13 @@ if(loc == 'HTI'){
   sub_hhs <- attr(sub_anc, 'eppd')$hhs
   attr(dt, 'eppd')$hhs <- sub_hhs
 }
-if(loc == 'MLI'){
-  sub_anc <- readRDS('/ihme/hiv/epp_output/gbd19/190630_rhino2/dt_objects/MLI_dt.RDS')
-  sub_anc <- attr(sub_anc, 'eppd')$ancsitedat
-  attr(dt, 'eppd')$ancsitedat <- sub_anc
-  
-
-}
+# if(loc == 'MLI'){
+#   sub_anc <- readRDS('/ihme/hiv/epp_output/gbd19/190630_rhino2/dt_objects/MLI_dt.RDS')
+#   sub_anc <- attr(sub_anc, 'eppd')$ancsitedat
+#   attr(dt, 'eppd')$ancsitedat <- sub_anc
+#   
+# 
+# }
 if(loc == 'CMR'){
   sub_anc <- readRDS('/ihme/hiv/epp_output/gbd19/190630_rhino2/dt_objects/CMR_dt.RDS')
   sub_anc <- attr(sub_anc, 'eppd')$ancsitedat
@@ -158,15 +172,15 @@ if(loc == 'KHM'){
   sub_anc <- attr(sub_anc, 'eppd')$ancsitedat
   attr(dt, 'eppd')$ancsitedat <- sub_anc
 }
-if(loc == 'LSO'){
-sub_anc <- readRDS('/ihme/hiv/epp_output/gbd19/190630_rhino2/dt_objects/LSO_dt.RDS')
-  sub_anc <- attr(sub_anc, 'eppd')$ancsitedat
-  attr(dt, 'eppd')$ancsitedat <- sub_anc
-  
-  sub_anc <- readRDS('/ihme/hiv/epp_output/gbd19/190630_rhino2/dt_objects/LSO_dt.RDS')
-    sub_anc <- attr(sub_anc, 'eppd')$hhs
-     attr(dt, 'eppd')$hhs<- sub_anc
- }
+# if(loc == 'LSO'){
+# sub_anc <- readRDS('/ihme/hiv/epp_output/gbd19/190630_rhino2/dt_objects/LSO_dt.RDS')
+#   sub_anc <- attr(sub_anc, 'eppd')$ancsitedat
+#   attr(dt, 'eppd')$ancsitedat <- sub_anc
+#   
+#   sub_anc <- readRDS('/ihme/hiv/epp_output/gbd19/190630_rhino2/dt_objects/LSO_dt.RDS')
+#     sub_anc <- attr(sub_anc, 'eppd')$hhs
+#      attr(dt, 'eppd')$hhs<- sub_anc
+#  }
 if(loc == 'CIV'){
   sub_anc <- readRDS('/ihme/hiv/epp_output/gbd19/190630_rhino2/dt_objects/CIV_dt.RDS')
   sub_anc <- attr(sub_anc, 'eppd')$ancsitedat
@@ -197,11 +211,11 @@ if(loc == 'KEN_35638'){
   sub_hhs <- attr(sub_anc, 'eppd')$hhs
   attr(dt, 'eppd')$hhs <- sub_hhs
 }
-if(loc == 'UGA'){
-  sub_anc <- readRDS('/ihme/hiv/epp_output/gbd19/190630_rhino2/dt_objects/UGA_dt.RDS')
-  sub_hhs <- attr(sub_anc, 'eppd')$hhs
-  attr(dt, 'eppd')$hhs <- sub_hhs
-}
+# if(loc == 'UGA'){
+#   sub_anc <- readRDS('/ihme/hiv/epp_output/gbd19/190630_rhino2/dt_objects/UGA_dt.RDS')
+#   sub_hhs <- attr(sub_anc, 'eppd')$hhs
+#   attr(dt, 'eppd')$hhs <- sub_hhs
+# }
 if(loc == 'KEN_35634'){
   sub_hhs <- attr(dt, 'eppd')$hhs
   sub_hhs <- data.table(sub_hhs)[year != 2018,]
@@ -261,28 +275,32 @@ if(grepl('NGA', loc)){
 
 
 ## Replace on-ART mortality RR for TZA and UGA
-if(loc %in% c('UGA', 'TZA', 'CPV')){
+if(loc %in% c('UGA',  'CPV')){
   temp <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/MWI.rds'))
   temp.artmxrr <- attr(temp, 'specfp')$artmx_timerr
   attr(dt, 'specfp')$artmx_timerr <- temp.artmxrr
 }
-if(loc %in% c('LSO')){
-  temp <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/LSO.rds'))
-  temp.artmxrr <- attr(temp, 'specfp')$artmx_timerr
-  attr(dt, 'specfp')$artmx_timerr <- temp.artmxrr
-}
-if(loc %in% c('MLI')){
-  temp <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/MLI.rds'))
-  temp.artmxrr <- attr(temp, 'specfp')$artmx_timerr
-  attr(dt, 'specfp')$artmx_timerr <- temp.artmxrr
-}
+# if(loc %in% c('LSO')){
+#   temp <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/LSO.rds'))
+#   temp.artmxrr <- attr(temp, 'specfp')$artmx_timerr
+#   attr(dt, 'specfp')$artmx_timerr <- temp.artmxrr
+# }
+# if(loc %in% c('MLI')){
+#   temp <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/MLI.rds'))
+#   temp.artmxrr <- attr(temp, 'specfp')$artmx_timerr
+#   attr(dt, 'specfp')$artmx_timerr <- temp.artmxrr
+# }
 
 if(run.name %in% c("190630_fixonARTIND","190630_fixonARTIND_tightprior")){
   temp <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/MWI.rds'))
   temp.artmxrr <- attr(temp, 'specfp')$artmx_timerr
   attr(dt, 'specfp')$artmx_timerr <- temp.artmxrr
 }
-
+if(loc %in% c('TZA')){
+  temp <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/TZA.rds'))
+  temp.artmxrr <- attr(temp, 'specfp')$artmx_timerr
+  attr(dt, 'specfp')$artmx_timerr <- temp.artmxrr
+}
 attr(dt, 'eppd')$ancsitedat = unique(attr(dt, 'eppd')$ancsitedat)
 ## TODO - fix se = 0 data points in ZAF
 attr(dt, 'eppd')$hhs <- attr(dt, 'eppd')$hhs[!attr(dt, 'eppd')$hhs$se == 0,]

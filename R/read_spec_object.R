@@ -196,11 +196,12 @@ anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE){
     
   }
   ## Append fertility rate ratios for countries in SSA
-  if(loc.table[ihme_loc_id == loc, super_region_name] == 'Sub-Saharan Africa'){
-    print('Appending FRR')
-    dt <- add_frr_noage_fp(dt)
-  }
-  
+  ##COMMENTING OUT TO TEST
+  # if(loc.table[ihme_loc_id == loc, super_region_name] == 'Sub-Saharan Africa'){
+  #   print('Appending FRR')
+  #   dt <- add_frr_noage_fp(dt)
+  # }
+
   
     return(dt)
     

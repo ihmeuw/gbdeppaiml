@@ -22,7 +22,7 @@ if(length(args) > 0) {
   gbdyear <- 'gbd20'
 } else {
   run.name <- "200316_windchime_testing6"
-  loc <- "LSO"
+  loc <- "MOZ"
   n <- 5
   draw.fill <- TRUE
   paediatric <- TRUE

@@ -200,7 +200,11 @@ if(loc %in% c('MLI')){
   temp.artmxrr <- attr(temp, 'specfp')$artmx_timerr
   attr(dt, 'specfp')$artmx_timerr <- temp.artmxrr
 }
-
+if(loc %in% c('TZA')){
+  temp <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/TZA.rds'))
+  temp.artmxrr <- attr(temp, 'specfp')$artmx_timerr
+  attr(dt, 'specfp')$artmx_timerr <- temp.artmxrr
+}
 
 
 

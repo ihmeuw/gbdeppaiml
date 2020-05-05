@@ -625,10 +625,20 @@ plot_birthprev <- function(loc, run.name.old, run.name.new){
   #   compare.dt <- NULL
   # }
   
-  compare.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/', run.name.old, '/compiled/', loc, '.csv'))
-  compare.dt <- compare.dt[,.(birth_prev = sum(birth_prev), hiv_births = sum(hiv_births), total_births = sum(total_births)), by = c('year', 'run_num')]
-  compare.dt <- compare.dt[,.(birth_prev = mean(birth_prev), hiv_births = mean(hiv_births), total_births = mean(total_births)), by = c('year')]
-  compare.dt[, model := run.name.old]
+  if(grepl('rhino', run.name.old)){
+    compare.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd19', '/', run.name.old, '/compiled/', loc, '.csv'))
+    compare.dt <- compare.dt[,.(birth_prev = sum(birth_prev), hiv_births = sum(hiv_births), total_births = sum(total_births)), by = c('year', 'run_num')]
+    compare.dt <- compare.dt[,.(birth_prev = mean(birth_prev), hiv_births = mean(hiv_births), total_births = mean(total_births)), by = c('year')]
+    compare.dt[, model := run.name.old]
+  }else{
+    compare.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/', run.name.old, '/compiled/', loc, '.csv'))
+    compare.dt <- compare.dt[,.(birth_prev = sum(birth_prev), hiv_births = sum(hiv_births), total_births = sum(total_births)), by = c('year', 'run_num')]
+    compare.dt <- compare.dt[,.(birth_prev = mean(birth_prev), hiv_births = mean(hiv_births), total_births = mean(total_births)), by = c('year')]
+    compare.dt[, model := run.name.old]
+  }
+  
+
+  
   
   compare.dt.19 <- fread(paste0('/share/hiv/epp_output/', 'gbd19', '/', '190630_rhino2', '/compiled/', loc, '.csv'))
   compare.dt.19 <- compare.dt.19[,.(birth_prev = sum(birth_prev), hiv_births = sum(hiv_births), total_births = sum(total_births)), by = c('year', 'run_num')]
