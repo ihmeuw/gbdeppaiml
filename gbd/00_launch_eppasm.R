@@ -13,18 +13,18 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 library(data.table)
 
 ## Arguments
-run.name <- "200316_windchime_testing6"
+run.name <- "200316_windchime"
 spec.name <- "200316_windchime"
 compare.run <- "200316_windchime"
-proj.end <- 2019
-n.draws <- 5
+proj.end <- 2022
+n.draws <- 1000
 run.group2 <- FALSE
 paediatric <- TRUE
 cluster.project <- "proj_hiv"
 plot_ART <- FALSE
 est_India <- FALSE
 reckon_prep <- TRUE
-decomp.step <- "step2"
+decomp.step <- "iterative"
 gbdyear <- "gbd20"
 redo_offsets <- F
 testing = T
@@ -128,9 +128,9 @@ if(redo_offsets){
   system(redo_offsets.string)
 }
 
-loc.list <- c('LSO', 'UGA', 'MOZ', 'MLI', 'MWI', 'COD', 'ZAF_482', 'ZAF_485')
-loc.list <- c('ZWE', 'TZA', 'COD')
+
 ## Launch EPP
+loc.list <- c(loc.list, 'MRT', 'COM', 'STP')
 for(loc in loc.list) {    ## Run EPPASM
 # # 
 # # 
@@ -141,7 +141,7 @@ for(loc in loc.list) {    ## Run EPPASM
                          "-t 1:", n.draws, " ",
                          "-hold_jid eppasm_prep_inputs_", run.name," ",
                          code.dir, "gbd/singR_shell.sh ",
-                         code.dir, "gbd/main_test.R ",
+                         code.dir, "gbd/main.R ",
                          run.name, " ", loc, " ", proj.end, " ", paediatric)
     print(epp.string)
     system(epp.string)

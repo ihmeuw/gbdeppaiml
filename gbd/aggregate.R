@@ -27,9 +27,9 @@ if(length(args) > 0) {
   ncores <- args[4]
   
 } else {
-  parent <- "IND"
-  run.name <- "190630_rhino2"
-  spec.run.name <- "190630_rhino"
+  parent <- "KEN"
+  run.name <- "200505_xylo"
+  spec.run.name <- "200505_xylo"
   ncores <- 2
 }
 

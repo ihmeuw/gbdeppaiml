@@ -12,9 +12,9 @@ if(length(args) > 0) {
   run.name <- args[2]
   spec.name <- args[3]
 } else {
-  loc <- "KEN_35619"
-  run.name <- "200316_windchime"
-  spec.name <- "200316_windchime"
+  loc <- "AGO"
+  run.name <- "200505_xylo"
+  spec.name <- "200505_xylo"
 
 }
 fill.draw <- T
@@ -40,7 +40,13 @@ devtools::load_all()
 
 ## Libraries etc.
 library(data.table); library(foreign); library(assertable)
-age_map <- data.table(fread(paste0('/ihme/hiv/epp_input/', gbdyear, '/', run.name, "/age_map.csv")))
+if(run.name == '200505_xylo'){
+  age_map <- data.table(fread(paste0('/ihme/hiv/epp_input/', gbdyear, '/', '200316_windchime', "/age_map.csv")))
+  
+}else{
+  age_map <- data.table(fread(paste0('/ihme/hiv/epp_input/', gbdyear, '/', run.name, "/age_map.csv")))
+  
+}
 age_map <- age_map[(age_group_id %in% c(2, 34, 49, 388, 238, 389,3, seq(6,21))) ,list(age_group_id,age=age_group_name_short)]
 age_map[age == "12-23 mo.",age_group_id := 238]
 

@@ -27,6 +27,15 @@ anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE){
  
   if(lbd.anc){
       replace <- as.data.table(readRDS(paste0('/share/hiv/data/PJNZ_prepped/lbd_anc/2019/', loc, '.rds')))
+      if(grepl("KEN",loc)){
+        replace <- replace[which(subpop == attr(dt,"eppd")$ancsitedat$subpop[1])]
+      }
+      
+      
+      if(grepl("SOM",loc)){
+        replace <- replace[subpop %in% "Remaining females" & type=="ancss"]
+      }
+      
       if(!geoadjust){
         replace[,offset := NULL]
       }
@@ -40,10 +49,7 @@ anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE){
         replace[,adm0_lower:=NULL]
         replace[,adm0_upper:=NULL]
         replace[,site_pred:=NULL]
-        
-        
-        
-        
+ 
       }
 
       attr(dt, 'eppd')$ancsitedat <- replace
@@ -134,39 +140,39 @@ anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE){
     }
     
 
-    ## Subsetting KEN counties from province, updated 4/27/2020
+    ## Subsetting KEN counties from province, updated 5/5/2020
 
-    if(grepl('KEN', loc)){
-      ken.anc.path <- paste0('/share/hiv/epp_input/gbd20/kenya_anc_map.csv')
-      ken.anc <- fread(ken.anc.path)
-      if(loc %in% ken.anc$ihme_loc_id){
-        county.sites <- ken.anc[ihme_loc_id == loc, site]
-        prov.sites <- unique(attr(dt, "eppd")$ancsitedat$site)
-
-
-        attr(dt, "eppd")$anc.used[] <- FALSE
-        
-        temp1 <- attr(dt, "eppd")$anc.prev[]
-        temp1 <- temp1[0,]
- 
-        temp2 <- attr(dt, "eppd")$anc.n[]
-        temp2 <- temp2[0,]
-     
-        for(site in unique(county.sites)){
-          attr(dt, "eppd")$anc.used[grepl(site,names(attr(dt, "eppd")$anc.used))] <- TRUE
-          keep_index <- which(grepl(site,rownames(attr(dt, "eppd")$anc.prev)))
-          temp1 <- rbind(temp1,attr(dt, "eppd")$anc.prev[keep_index,,drop =FALSE])
-          temp2 <- rbind(temp2,attr(dt, "eppd")$anc.n[keep_index,,drop =FALSE])
-          
-        }
-        
-        attr(dt, "eppd")$anc.prev <- temp1
-        attr(dt, "eppd")$anc.n <- temp2
-        attr(dt, "eppd")$anc.used <- attr(dt, "eppd")$anc.used[attr(dt, "eppd")$anc.used] 
-        attr(dt, 'eppd')$ancsitedat$used[!(attr(dt, 'eppd')$ancsitedat$site %in% county.sites | grepl(loc.table[ihme_loc_id == loc, location_name], attr(dt, 'eppd')$ancsitedat$site))] <- FALSE
-        attr(dt, 'eppd')$ancsitedat <- attr(dt, 'eppd')$ancsitedat[which(attr(dt, 'eppd')$ancsitedat$used==TRUE),]
-     }
-    }
+    # if(grepl('KEN', loc)){
+    #   ken.anc.path <- paste0('/share/hiv/epp_input/gbd20/kenya_anc_map.csv')
+    #   ken.anc <- fread(ken.anc.path)
+    #   if(loc %in% ken.anc$ihme_loc_id){
+    #     county.sites <- ken.anc[ihme_loc_id == loc, site]
+    #     prov.sites <- unique(attr(dt, "eppd")$ancsitedat$site)
+    # 
+    # 
+    #     attr(dt, "eppd")$anc.used[] <- FALSE
+    #     
+    #     temp1 <- attr(dt, "eppd")$anc.prev[]
+    #     temp1 <- temp1[0,]
+    # 
+    #     temp2 <- attr(dt, "eppd")$anc.n[]
+    #     temp2 <- temp2[0,]
+    #  
+    #     for(site in unique(county.sites)){
+    #       attr(dt, "eppd")$anc.used[grepl(site,names(attr(dt, "eppd")$anc.used))] <- TRUE
+    #       keep_index <- which(grepl(site,rownames(attr(dt, "eppd")$anc.prev)))
+    #       temp1 <- rbind(temp1,attr(dt, "eppd")$anc.prev[keep_index,,drop =FALSE])
+    #       temp2 <- rbind(temp2,attr(dt, "eppd")$anc.n[keep_index,,drop =FALSE])
+    #       
+    #     }
+    #     
+    #     attr(dt, "eppd")$anc.prev <- temp1
+    #     attr(dt, "eppd")$anc.n <- temp2
+    #     attr(dt, "eppd")$anc.used <- attr(dt, "eppd")$anc.used[attr(dt, "eppd")$anc.used] 
+    #     attr(dt, 'eppd')$ancsitedat$used[!(attr(dt, 'eppd')$ancsitedat$site %in% county.sites | grepl(loc.table[ihme_loc_id == loc, location_name], attr(dt, 'eppd')$ancsitedat$site))] <- FALSE
+    #     attr(dt, 'eppd')$ancsitedat <- attr(dt, 'eppd')$ancsitedat[which(attr(dt, 'eppd')$ancsitedat$used==TRUE),]
+    #  }
+    # }
       
     # 
     if(!anc.rt){
@@ -196,11 +202,10 @@ anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE){
     
   }
   ## Append fertility rate ratios for countries in SSA
-  ##COMMENTING OUT TO TEST
-  # if(loc.table[ihme_loc_id == loc, super_region_name] == 'Sub-Saharan Africa'){
-  #   print('Appending FRR')
-  #   dt <- add_frr_noage_fp(dt)
-  # }
+  if(loc.table[ihme_loc_id == loc, super_region_name] == 'Sub-Saharan Africa'){
+    print('Appending FRR')
+    dt <- add_frr_noage_fp(dt)
+  }
 
   
     return(dt)

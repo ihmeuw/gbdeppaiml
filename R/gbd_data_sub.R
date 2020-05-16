@@ -1028,6 +1028,9 @@ geo_adj <- function(loc, dt, i, uncertainty) {
     if(grepl("KEN",loc)){
       anc.dt.all <- anc.dt.all[which(anc.dt.all$subpop == attr(dt,"eppd")$ancsitedat$subpop[1]),]
     }
+    if(grepl("SOM",loc)){
+      anc.dt.all <- anc.dt.all[anc.dt.all$subpop %in% "Remaining females",]
+    }
     setnames(anc.dt.all, old = 'prev', new = 'mean')
     setnames(anc.dt.all, old = 'clinic', new = 'site')
     anc.dt.all <- as.data.table(anc.dt.all)
