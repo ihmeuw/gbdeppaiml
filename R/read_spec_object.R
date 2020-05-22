@@ -107,7 +107,7 @@ read_spec_object <- function(loc, i, start.year = 1970, stop.year = 2019, trans.
   ## Append fertility rate ratios for countries in SSA
   if(loc.table[ihme_loc_id == loc, super_region_name] == 'Sub-Saharan Africa'){
     print('Appending FRR')
-    dt <- add_frr_noage_fp(dt)
+   # dt <- add_frr_noage_fp(dt)
   }
   
   

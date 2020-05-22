@@ -74,6 +74,10 @@ get_gbd_outputs <- function(mod, fp, paediatric = FALSE) {
 
   mod <- mod_dimnames(mod, fp$ss, paediatric)
   hp1 <- hivpop_singleage(mod, fp$ss)
+  if(!dir.exists(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/forecasting/hp1/', loc, '/'))){
+    dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/forecasting/hp1/', loc, '/'))
+  }
+  saveRDS(hp1, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/forecasting/hp1/', loc, '/', draw, '.RDS'))
   
   pop <- as.data.frame.table(apply(mod, c(1, 2, 4), sum), responseName = "pop")
   hiv_deaths <- as.data.frame.table(attr(mod, "hivdeaths"),
@@ -92,6 +96,8 @@ get_gbd_outputs <- function(mod, fp, paediatric = FALSE) {
   
   pop_art <- as.data.frame.table(colSums(hp1$artpop1,,2), responseName = "pop_art")
   setnames(pop_art, 'agegr', 'age')
+
+  
 
   hivpop_daly <- as.data.frame.table(get_daly_hivpop(hp1$hivpop), responseName = "value")
   hivpop_daly <- data.table::dcast(hivpop_daly, ... ~ cd4daly)

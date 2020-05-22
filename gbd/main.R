@@ -20,8 +20,8 @@ if(length(args) > 0) {
   paediatric <- as.logical(args[4])
 } else {
 
-	run.name <- "190630_rhino"
-	loc <- "AGO"
+	run.name <- "190630_rhino2"
+	loc <- "ZAF_482"
 	stop.year <- 2019
 	i <- 1
 	paediatric <- TRUE
@@ -132,13 +132,18 @@ fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500)
 # 
 # 
 # ## Simulate model for all resamples, choose a random draw, get gbd outputs
-# result <- gbd_sim_mod(fit, VERSION = 'R')
-# output.dt <- get_gbd_outputs(result, attr(dt, 'specfp'), paediatric = paediatric)
-# output.dt[,run_num := i]
+draw <- i
+result <- gbd_sim_mod(fit, VERSION = 'R')
+dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/'))
+saveRDS(result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/', draw, '.RDS'))
+
+output.dt <- get_gbd_outputs(result, attr(dt, 'specfp'), paediatric = paediatric)
+output.dt[,run_num := i]
 # 
 # ## Write output to csv
-# dir.create(out.dir, showWarnings = FALSE)
-# write.csv(output.dt, paste0(out.dir, '/', i, '.csv'), row.names = F)
+out.dir <- '/ihme/homes/mwalte10/draws/'
+ dir.create(out.dir, showWarnings = FALSE, recursive = T)
+ write.csv(output.dt, paste0(out.dir, '/', i, '.csv'), row.names = F)
 # 
 # # ## under-1 splits
 # if(paediatric){
