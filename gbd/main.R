@@ -499,22 +499,23 @@ if(max(fit$fp$pmtct_dropout$year) < stop.year){
 #debugonce(gbd_sim_mod)
 result <- gbd_sim_mod(fit, VERSION = "R")
 
-output.dt <- get_gbd_outputs(result, attr(dt, 'specfp'), paediatric = paediatric)
-output.dt[,run_num := j]
-## Write output to csv
-dir.create(out.dir, showWarnings = FALSE)
-write.csv(output.dt, paste0(out.dir, '/', j, '.csv'), row.names = F)
 
-# ## under-1 splits
-if(paediatric){
-  split.dt <- get_under1_splits(result, attr(dt, 'specfp'))
-  split.dt[,run_num := j]
-  write.csv(split.dt, paste0(out.dir, '/under_1_splits_', j, '.csv' ), row.names = F)
-}
-## Write out theta for plotting posterior
-param <- data.table(theta = attr(result, 'theta'))
-write.csv(param, paste0(out.dir,'/theta_', j, '.csv'), row.names = F)
-if(plot.draw){
-  plot_15to49_draw(loc, output.dt, attr(dt, 'eppd'), run.name)
-}
+output.dt <- get_gbd_outputs(result, attr(dt, 'specfp'), paediatric = paediatric)
+# output.dt[,run_num := j]
+# ## Write output to csv
+# dir.create(out.dir, showWarnings = FALSE)
+# write.csv(output.dt, paste0(out.dir, '/', j, '.csv'), row.names = F)
+# 
+# # ## under-1 splits
+# if(paediatric){
+#   split.dt <- get_under1_splits(result, attr(dt, 'specfp'))
+#   split.dt[,run_num := j]
+#   write.csv(split.dt, paste0(out.dir, '/under_1_splits_', j, '.csv' ), row.names = F)
+# }
+# ## Write out theta for plotting posterior
+# param <- data.table(theta = attr(result, 'theta'))
+# write.csv(param, paste0(out.dir,'/theta_', j, '.csv'), row.names = F)
+# if(plot.draw){
+#   plot_15to49_draw(loc, output.dt, attr(dt, 'eppd'), run.name)
+# }
 
