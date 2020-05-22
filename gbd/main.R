@@ -497,10 +497,25 @@ if(max(fit$fp$pmtct_dropout$year) < stop.year){
 
 ##NOTE: need to get GBD simmod working again - error on BF transmissions - otherwise PAEDIATRIC must be false
 #debugonce(gbd_sim_mod)
-result <- gbd_sim_mod(fit, VERSION = "R")
 
+
+draw <- i
+result <- gbd_sim_mod(fit, VERSION = 'R')
+dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/'))
+saveRDS(result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/', draw, '.RDS'))
 
 output.dt <- get_gbd_outputs(result, attr(dt, 'specfp'), paediatric = paediatric)
+output.dt[,run_num := i]
+# 
+# ## Write output to csv
+out.dir <- '/ihme/homes/mwalte10/draws/gbd20/'
+dir.create(out.dir, showWarnings = FALSE, recursive = T)
+write.csv(output.dt, paste0(out.dir, '/', i, '.csv'), row.names = F)
+
+# result <- gbd_sim_mod(fit, VERSION = "R")
+# 
+# 
+# output.dt <- get_gbd_outputs(result, attr(dt, 'specfp'), paediatric = paediatric)
 # output.dt[,run_num := j]
 # ## Write output to csv
 # dir.create(out.dir, showWarnings = FALSE)
