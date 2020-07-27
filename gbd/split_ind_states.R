@@ -23,8 +23,8 @@ if(length(args) > 0) {
   run.name <- args[1]
   decomp.step <- args[2]
 } else {
-  run.name <- "200213_violin_indtest_agg"
-  decomp.step <- 'step2'
+  run.name <- "200713_yuka"
+  decomp.step <- 'iterative'
 }
 
 
@@ -71,9 +71,10 @@ nat.rural15 <- 0.17
 ### Code
 ### Create minor territories ###
 file.list <- list.files(dir.list, "IND_")
-locs <- gsub(".csv", "", file.list)
+locs <- gsub("_under1_splits.csv", "", file.list)
+locs <- gsub(".csv", "", locs)
 ind.locs <- loc.table[grepl("IND", ihme_loc_id) & level == 4, ihme_loc_id]
-missing.locs <- setdiff(ind.locs, locs)
+missing.locs <- setdiff(ind.locs, unique(locs))
 
 
 spec.inc.path <- paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/compiled/IND_inc/')
@@ -93,6 +94,8 @@ all.ind <- rbindlist(all.ind)
 stratum <- colnames(all.ind)[colnames(all.ind) %in% c("age", "sex", "year","run_num")]
 cols <- colnames(all.ind)[!colnames(all.ind) %in% stratum]
 measures <- cols
+x <- all.ind[ ,lapply(.SD,as.numeric), .SDcols=cols]
+all.ind <- cbind(x, all.ind[,.(age, sex, year, run_num)])
 sum.ind <- all.ind[ ,lapply(.SD,sum), .SDcols=cols, by=stratum]
 
 print("filling in missing locs")
@@ -116,10 +119,10 @@ for(m_loc in missing.locs){
 }
 
 ##Sum counts across populations for children under 1
-file.list <- list.files(dir.list, "_under1_splits.csv")[grepl("IND",list.files(dir.list, "_under1_splits.csv"))]
-all.ind <- rbindlist(lapply(ind.locs.epp , function(loc_i) {
+file.list <- paste0(dir.list, ind.locs.epp, '_under1_splits.csv')
+all.ind <- rbindlist(lapply(file.list , function(loc_i) {
   print(loc_i)
-  sum.dt <- fread(paste0(dir.list,loc_i,".csv"))
+  sum.dt <- fread(loc_i)
   return(sum.dt)
 }))
 
@@ -127,6 +130,9 @@ measures_child <- c("enn","lnn","x_388", 'x_389')
 stratum <- c("year","run_num")
 cols <- colnames(all.ind)[!colnames(all.ind) %in% stratum]
 measures_child <- cols
+options(datatable.optimize=1)
+x <- all.ind[ ,lapply(.SD,as.numeric), .SDcols=cols]
+all.ind <- cbind(x, all.ind[,.(  year, run_num)])
 sum.ind <- all.ind[ ,lapply(.SD,sum), .SDcols=cols, by=stratum]
 child_age <- age_groups[age_group_id %in% c(2,3,388,389)]
 child_age[age_group_name == "Early Neonatal", age_group_name := "enn"]
@@ -155,6 +161,8 @@ for(m_loc in missing.locs){
   sum.ind <- merge(sum.ind,all_pop[,.(year,age_group_name,pop.ratio)],by=c('year','age_group_name'))
 
   cols <- "value"
+  x <- sum.ind[ ,lapply(.SD,as.numeric), .SDcols=cols]
+  sum.ind <- cbind(x, sum.ind[,.(age_group_name,  year, run_num, pop.ratio)])
   m_loc_all <- sum.ind[ ,lapply(.SD,"*",pop.ratio), .SDcols=cols, by=c('year','age_group_name','run_num')]
   m_loc_all <- spread(m_loc_all, key=c('age_group_name'), value="value")
 
@@ -172,9 +180,9 @@ missing.children <- setdiff(loc.table[grepl("IND", ihme_loc_id) & level == 5, ih
 missing.parents <- unique(loc.table[location_id %in% loc.table[ihme_loc_id %in% missing.children, parent_id], ihme_loc_id])
 
 state.locs <- c(loc.table[grepl("IND", ihme_loc_id) & level == 4 & epp == 1, ihme_loc_id],"IND_44538") #"IND_44538"-not run through EPP but filled in above
-state.locs <- state.locs[which(state.locs != 'IND_4842')]
 
-for(state in state.locs) {
+
+for(state in state.locs[(length(state.locs) - 7) : length(state.locs)]) {
   loc.id <- as.integer(strsplit(state, "_")[[1]][2])
   children <- loc.table[parent_id == loc.id, ihme_loc_id]
   #children <- children[!children %in% done]
@@ -207,6 +215,7 @@ for(state in state.locs) {
     dir <- dir.list
     path <- paste0(dir, state,".csv")
     state.dt <- fread(path)
+    state.dt[,non_hiv_deaths := as.numeric(non_hiv_deaths)]
 
     stratum <-  c("age", "sex", "year","run_num")
     cols <- colnames(state.dt)[!colnames(state.dt) %in% stratum]
@@ -222,12 +231,20 @@ for(state in state.locs) {
       state.dt.t$run_num <- paste0("draw", state.dt.t$run_num )
       state.dt.t <- spread(unique(state.dt.t), run_num, get(measure))
 
-      max.draw <- max(state.dt$run_num)
-
+      #max.draw <- max(state.dt$run_num)
+max.draw = 10
       #times the state level counts by the child ART props for HIV positive outcomes and 
       #do we need child Population props for HIV negative outcomes?
       draw.cols <- paste0("draw",1:max.draw)
       child.dt <- copy(state.dt.t)
+      if(any(colnames(child.dt) == 'draw50')){
+        child.dt[,draw50:= NULL]
+      }
+      if(is.character(unlist(child.dt[,mget(draw.cols)][,1]))){
+        x <- child.dt[ ,lapply(.SD,as.numeric), .SDcols=draw.cols]
+        child.dt <- cbind(x, child.dt[,.(age,  year, sex)])
+      }
+
       #if(measure %in% c("hiv_deaths","new_hiv","pop_art","hiv_births","birth_prev","pop_gt350" , "pop_200to350"  , "pop_lt200" )){
       child.dt <- child.dt[, (draw.cols) := lapply(.SD, '*',  props[ihme_loc_id == child, prop]), .SDcols = draw.cols][]
     # } else {

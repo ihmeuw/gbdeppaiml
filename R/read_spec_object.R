@@ -3,11 +3,13 @@
 read_spec_object <- function(loc, j, start.year = 1970, stop.year, trans.params.sub = TRUE, 
                              pop.sub = TRUE,  prev.sub = TRUE, art.sub = TRUE, sexincrr.sub = TRUE, 
                              popadjust = TRUE, age.prev = FALSE, paediatric, anc.rt = FALSE, geoadjust=TRUE,
-anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE){
+anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE,
+test.sub_prev_granular = NULL){
 
 
   #Do this for now as something is weird with the new PJNZ files - don't need subpop anyway
   #Eventually these hsould all be regenerated with subpopulations
+
   if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))) {
     dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))
     
@@ -99,7 +101,7 @@ anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE){
       
       ##adding in age.prev arg
       if(age.prev){
-        dt <- sub.prev.granular(dt, loc)
+        dt <- sub.prev.granular(dt, loc, test.sub_prev_granular)
         attr(dt, 'specfp')$fitincrr <- 'regincrr'
       } else{
         dt <- sub.prev(loc, dt)	
@@ -113,13 +115,13 @@ anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE){
     if(geoadjust){
       
       print("Merging ANC bias offsets")
-      if(geoadj_test){
-        dt <- geo_adj_old(loc, dt, j, uncertainty=TRUE)
-        
-      }else{
+      # if(geoadj_test){
+      #   dt <- geo_adj_old(loc, dt, j, uncertainty=TRUE)
+      #   
+      # }else{
         dt <- geo_adj(loc, dt, j, uncertainty=TRUE)
         
-      }
+      # }
 
     } 
     

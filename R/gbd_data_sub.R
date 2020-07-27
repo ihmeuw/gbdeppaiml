@@ -753,7 +753,7 @@ add_frr_noage_fp <- function(obj){
   obj
 }
 
-sub.prev.granular <- function(dt, loc){
+sub.prev.granular <- function(dt, loc, test.sub_prev_granular){
   ## TODO: Add this to cache prev
   ##make sure that this only keeps sex 3 for 15-49
   if(grepl('KEN', loc)){
@@ -761,14 +761,13 @@ sub.prev.granular <- function(dt, loc){
     age.prev.dt <- age.prev.dt[sex_id == 3,]
   }else{
     if(grepl('IND', loc)){
-      prev_surveys <- "/ihme/hiv/epp_input/gbd19/190630_rhino_ind/prev_surveys.csv"
+      prev_surveys <- "/ihme/hiv/epp_input/gbd20/prev_surveys_ind.csv"
       age.prev.dt <- fread(prev_surveys)
-      age.prev.dt[, sex_id := 3]
-      age.prev.dt[,age_year := '15-49']
+
       }else{
         age.prev.dt <- fread(prev_surveys)
         
-      }
+       }
     }
   if('use' %in% colnames(age.prev.dt) & loc != 'CPV'){
     age.prev.dt <- age.prev.dt[use == TRUE]
@@ -780,6 +779,31 @@ sub.prev.granular <- function(dt, loc){
   
   
   age.prev.dt <- age.prev.dt[iso3 == loc]
+  # if(!is.null(test.sub_prev_granular)){
+  #   if(test.sub_prev_granular == 'test1'){
+  #     age.prev.dt[,prev := prev * 1]
+  #   }
+  #   if(test.sub_prev_granular == 'test2'){
+  #     age.prev.dt[,prev := prev * 0.5]
+  #   }
+  #   if(test.sub_prev_granular == 'test3'){
+  #     age.prev.dt[sex == 1, prev * 0.5]
+  #   }
+  #   if(test.sub_prev_granular == 'test4'){
+  #     age.prev.dt[sex == 2, prev * 0.5]
+  #   }
+  #   if(test.sub_prev_granular == 'test5'){
+  #     age.prev.dt[,se := se * 0.5]
+  #   }
+  #   if(test.sub_prev_granular == 'test6'){
+  #     age.prev.dt[,se := se * 2]
+  #   }
+  #   if(test.sub_prev_granular == 'test7'){
+  #     age.prev.dt <- age.prev.dt[age_year > 30,]
+  #   }
+  # }
+
+    
   if(loc == 'AGO'){
     age.prev.dt[year == 2016, year := 2015]
   }

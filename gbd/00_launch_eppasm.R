@@ -13,21 +13,22 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 library(data.table)
 
 ## Arguments
-run.name <- "200316_windchime"
-spec.name <- "200316_windchime"
-compare.run <- "200316_windchime"
+run.name <- "2020_ind_test_agg10"
+spec.name <- "200713_yuka"
+compare.run <- "2020_ind_test_agg9"
 proj.end <- 2022
-n.draws <- 1000
+n.draws <- 10
 run.group2 <- FALSE
 paediatric <- TRUE
 cluster.project <- "proj_hiv"
 plot_ART <- FALSE
-est_India <- FALSE
+est_India <- T
 reckon_prep <- TRUE
 decomp.step <- "iterative"
 gbdyear <- "gbd20"
 redo_offsets <- F
-testing = T
+testing = FALSE
+test = NULL
 
 ### Paths
 input.dir <- paste0("/ihme/hiv/epp_input/", gbdyear, '/', run.name, "/")
@@ -128,48 +129,54 @@ if(redo_offsets){
   system(redo_offsets.string)
 }
 
-
+# loc.list = 'IND_4856'
 ## Launch EPP
-loc.list <- c(loc.list, 'MRT', 'COM', 'STP')
+loc.list <- loc.list[grepl('IND',loc.list)]
 for(loc in loc.list) {    ## Run EPPASM
-# # 
-# # 
-    epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q all.q -P ", cluster.project, " ",
-                         "-e /share/temp/sgeoutput/", user, "/errors ",
-                         "-o /share/temp/sgeoutput/", user, "/output ",
-                         "-N ", loc, "_eppasm ",
-                         "-t 1:", n.draws, " ",
-                         "-hold_jid eppasm_prep_inputs_", run.name," ",
-                         code.dir, "gbd/singR_shell.sh ",
-                         code.dir, "gbd/main.R ",
-                         run.name, " ", loc, " ", proj.end, " ", paediatric)
-    print(epp.string)
-    system(epp.string)
+# #
+# #
+   # for(test in paste0('test', c(1:7))){
+  # epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q all.q -P ", cluster.project, " ",
+  epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -q long.q -P ", cluster.project, " ",
+                       "-e /share/temp/sgeoutput/", user, "/errors ",
+                       "-o /share/temp/sgeoutput/", user, "/output ",
+                       "-N ", loc, "_eppasm ",
+                       "-t 1:", n.draws, " ",
+                       "-hold_jid eppasm_prep_inputs_", run.name," ",
+                       code.dir, "gbd/singR_shell.sh ",
+                       code.dir, "gbd/main.R ",
+                       run.name, " ", loc, " ", proj.end, " ", paediatric)
+      print(epp.string)
+      system(epp.string)
 
+      #
+      #
+      #Draw compilation
+      draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
+                            "-e /share/temp/sgeoutput/", user, "/errors ",
+                            "-o /share/temp/sgeoutput/", user, "/output ",
+                            "-N ", loc, "_save_draws ",
+                            "-hold_jid ", loc, "_eppasm ",
+                            code.dir, "gbd/singR_shell.sh ",
+                            code.dir, "gbd/compile_draws.R ",
+                            run.name, " ", loc, ' ', n.draws, ' TRUE ', paediatric)
+      print(draw.string)
+      system(draw.string)
 
-    #Draw compilation
-    draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
-                          "-e /share/temp/sgeoutput/", user, "/errors ",
-                          "-o /share/temp/sgeoutput/", user, "/output ",
-                          "-N ", loc, "_save_draws ",
-                          "-hold_jid ", loc, "_eppasm ",
-                         code.dir, "gbd/singR_shell.sh ",
-                          code.dir, "gbd/compile_draws.R ",
-                          run.name, " ", loc, ' ', n.draws, ' TRUE ', paediatric)
-    print(draw.string)
-    system(draw.string)
+      compare.run <- c('200316_windchime', '190630_rhino2')
+      plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
+                            "-e /share/temp/sgeoutput/", user, "/errors ",
+                            "-o /share/temp/sgeoutput/", user, "/output ",
+                            "-N ", loc, "_plot_eppasm ",
+                            "-hold_jid ", loc, "_save_draws ",
+                            code.dir, "gbd/singR_shell.sh ",
+                            code.dir, "gbd/main_plot_output.R ",
+                            loc, " ", run.name, ' ', paediatric, ' ', compare.run, ' ', test)
+      print(plot.string)
+      system(plot.string)
+     # }
+    #
 
-    # 
-    plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
-                          "-e /share/temp/sgeoutput/", user, "/errors ",
-                          "-o /share/temp/sgeoutput/", user, "/output ",
-                          "-N ", loc, "_plot_eppasm ",
-                          "-hold_jid ", loc, "_save_draws ",
-                          code.dir, "gbd/singR_shell.sh ",
-                          code.dir, "gbd/main_plot_output.R ",
-                          loc, " ", run.name, ' ', paediatric, ' ', compare.run, ' TRUE')
-    print(plot.string)
-    system(plot.string)
 
     # diagnostic.string <- paste0("qsub -l m_mem_free=5G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
     #                       "-e /share/homes/", user, "/errors ",
@@ -182,60 +189,60 @@ for(loc in loc.list) {    ## Run EPPASM
     # print(diagnostic.string)
     # system(diagnostic.string)
 
-    # 
+    #
 
- 
-     
+
+
 }
-
-if(testing){
-  vetting_dir <- paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/vetting/5/')
-  #vetting_dir <- paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/vetting/', max(dir.table[,ref]), '/')
-  
-  dir.create(vetting_dir, recursive = T)
-  dir.create(paste0(vetting_dir, 'compiled/'))
-  
-  setwd(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/15to49_plots/'))
-  system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=15to49_plots.pdf -f *"))
-  
-  setwd(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/age_specific_plots/Deaths/'))
-  system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=Deaths_plots.pdf -f *"))
-  
-  setwd(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/age_specific_plots/Prevalence/'))
-  system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=Prevalence_plots.pdf -f *"))
-  
-  setwd(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/age_specific_plots/Incidence/'))
-  system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=Incidence_plots.pdf -f *"))
-  
-  setwd(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/paeds_plots/'))
-  system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=paeds_plots.pdf -f *"))
-  
-  file.copy(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/15to49_plots/15to49_plots.pdf'), 
-            vetting_dir)
-  file.copy(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/age_specific_plots/Deaths/Deaths_plots.pdf'), 
-            vetting_dir)
-  file.copy(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/age_specific_plots/Prevalence/Prevalence_plots.pdf'), 
-            vetting_dir)
-  file.copy(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/age_specific_plots/Incidence/Incidence_plots.pdf'), 
-            vetting_dir)
-  file.copy(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/paeds_plots/paeds_plots.pdf'), 
-            vetting_dir)
-  for(loc in loc.list){
-    file.copy(from = paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/compiled/', loc, '.csv'), to = paste0(vetting_dir, 'compiled/'), recursive = T)
-    file.copy(from = paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/compiled/', loc, '_under1_splits.csv'), to = paste0(vetting_dir, 'compiled/'), recursive = T)
-    print(loc)
-  }
-  
-  
-}
-
-
-
-
-
+# 
+# if(testing){
+#   vetting_dir <- paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/vetting/')
+#   #vetting_dir <- paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/vetting/', max(dir.table[,ref]), '/')
+#   
+#   dir.create(vetting_dir, recursive = T)
+#   dir.create(paste0(vetting_dir, 'compiled/'))
+#   
+#   setwd(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/15to49_plots/'))
+#   system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=15to49_plots.pdf -f *"))
+#   
+#   setwd(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/age_specific_plots/Deaths/'))
+#   system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=Deaths_plots.pdf -f *"))
+#   
+#   setwd(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/age_specific_plots/Prevalence/'))
+#   system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=Prevalence_plots.pdf -f *"))
+#   
+#   setwd(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/age_specific_plots/Incidence/'))
+#   system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=Incidence_plots.pdf -f *"))
+#   
+#   setwd(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/paeds_plots/'))
+#   system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=paeds_plots.pdf -f *"))
+#   
+#   file.copy(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/15to49_plots/15to49_plots.pdf'), 
+#             vetting_dir)
+#   file.copy(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/age_specific_plots/Deaths/Deaths_plots.pdf'), 
+#             vetting_dir)
+#   file.copy(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/age_specific_plots/Prevalence/Prevalence_plots.pdf'), 
+#             vetting_dir)
+#   file.copy(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/age_specific_plots/Incidence/Incidence_plots.pdf'), 
+#             vetting_dir)
+#   file.copy(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/paeds_plots/paeds_plots.pdf'), 
+#             vetting_dir)
+#   for(loc in loc.list){
+#     file.copy(from = paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/compiled/', loc, '.csv'), to = paste0(vetting_dir, 'compiled/'), recursive = T)
+#     file.copy(from = paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/compiled/', loc, '_under1_splits.csv'), to = paste0(vetting_dir, 'compiled/'), recursive = T)
+#     print(loc)
+#   }
+#   
+#   
+# }
+# 
+# 
+# 
+# 
+# 
 #Make sure all locations are done
-check_loc_results(loc.list,paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/compiled/'),prefix="",postfix=".csv")
-
+# check_loc_results(loc.list,paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/compiled/'),prefix="",postfix=".csv")
+# 
 if(est_India){
 ##If using EPP-ASM for India, can use this code
 ### Split India states to Urban Rural and generate values for Territories
@@ -245,32 +252,34 @@ system(paste0("qsub -l m_mem_free=200G -l fthread=1 -l h_rt=08:00:00 -l archive 
                "-N ", "india_split ",
                code.dir, "gbd/singR_shell.sh ",
                code.dir, "gbd/split_ind_states.R ",
-               run.name))
+               run.name, ' iterative'))
 
 
 #Make sure all locations that originally went through Spectrum are there
-check_loc_results(loc.table[grepl("1",group) & spectrum==1,ihme_loc_id],paste0('/share/hiv/epp_output/gbd19/', run.name, '/compiled/'),prefix="",postfix=".csv")
+  x <- loc.table[grepl("1",group) & spectrum==1,ihme_loc_id]
+
+check_loc_results(x[grepl('IND',x)],paste0('/share/hiv/epp_output/gbd20/', run.name, '/compiled/'),prefix="",postfix=".csv")
 }
-
-
-## Compile plots
-  plot.holds <- paste(paste0(loc.list, '_plot_eppasm'), collapse = ",")
-  plot.string <- paste0("qsub -l m_mem_free=1G -l fthread=1 -l h_rt=00:35:00 -q all.q -P ", cluster.project, " ",
-                        "-e /share/homes/", user, "/errors ",
-
-                        "-o /share/temp/sgeoutput/", user, "/output ",
-                        "-N ", "compile_plots_eppasm ",
-                        "-hold_jid ", plot.holds, " ",
-                        code.dir, "gbd/singR_shell.sh ", 
-                        code.dir, "gbd/compile_plots.R ",
-                        run.name)
-  print(plot.string)
-  system(plot.string)
+# 
+# 
+# ## Compile plots
+#   plot.holds <- paste(paste0(loc.list, '_plot_eppasm'), collapse = ",")
+#   plot.string <- paste0("qsub -l m_mem_free=1G -l fthread=1 -l h_rt=00:35:00 -q all.q -P ", cluster.project, " ",
+#                         "-e /share/homes/", user, "/errors ",
+# 
+#                         "-o /share/temp/sgeoutput/", user, "/output ",
+#                         "-N ", "compile_plots_eppasm ",
+#                         "-hold_jid ", plot.holds, " ",
+#                         code.dir, "gbd/singR_shell.sh ",
+#                         code.dir, "gbd/compile_plots.R ",
+#                         run.name)
+#   print(plot.string)
+#   system(plot.string)
 
 ## Aggregate to higher levels for EPP-ASM child locs - not India because it goes through Spectrum
 ## Prepare for post-reckoning steps
 eppasm_parents <-  c("KEN","ZAF","ETH","KEN_44793" ,"KEN_44794","KEN_44795", "KEN_44796" ,"KEN_44797", "KEN_44798","KEN_44799", "KEN_44800","NGA")
-all_loc_list <- c(loc.list,eppasm_parents)
+all_loc_list <- c(loc.list,eppasm_parents, 'MRT', 'COM', 'STP')
 
 ## Aggregation and reckoning prep for higher levels
 if(reckon_prep){
@@ -287,7 +296,7 @@ if(reckon_prep){
     print(prep.string)
     system(prep.string)
   }
-    
+
 
   prep.string <- paste0("qsub -l m_mem_free=50G -l fthread=1 -l h_rt=02:00:00 -l archive -q all.q -P ", cluster.project, " ",
                         "-e /share/temp/sgeoutput/", user, "/errors ",
@@ -303,19 +312,30 @@ if(reckon_prep){
     }
 }
 
- 
+
 check_loc_results(c(loc.list,eppasm_parents),paste0("/ihme/hiv/spectrum_prepped/art_draws/",spec.name,"/"),prefix="",postfix="_ART_data.csv")
 
 #Move over India inputs for Spectrum if estimated through EPP-ASM
 if(est_India){
   ind.locs <- loc.table[grepl("IND",ihme_loc_id) & spectrum==1,ihme_loc_id]
   inputs <- list(inc="incidence",prev="prevalence")
+  dir.create(paste0('/ihme/hiv/spectrum_input/', spec.name, '/incidence/'))
+  dir.create(paste0('/ihme/hiv/spectrum_input/', spec.name, '/prevalence/'))
+
   for(input.x in names(inputs)){
     for(loc_i in ind.locs){
-      file.copy(from = paste0('/ihme/hiv/epp_output/gbd20/',run.name,'/compiled/IND_',input.x,"/",loc_i,".csv"), 
-                to = paste0('/share/hiv/spectrum_input/200213_violin_test/',inputs[input.x],"/",loc_i,".csv") )
+
+      file.copy(from = paste0('/ihme/hiv/epp_output/gbd20/',run.name,'/compiled/IND_',input.x,"/",loc_i,".csv"),
+                to = paste0('/share/hiv/spectrum_input/', spec.name, '/',inputs[input.x],"/",loc_i,".csv"), overwrite = T)
     }
   }
 }
+
+
+
+
+
+
+
 
   

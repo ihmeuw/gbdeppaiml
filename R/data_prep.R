@@ -3,13 +3,17 @@
 #mwalte10@uw.edu
 #This script should be loaded into the environment that is running eppasm
 ######################################
-run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
+# data_prep <- function(loc){
+  run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
 if(!any(ls() == 'run.name')){
-  run.name <- '200316_windchime'
+  run.name <- '2020_ind_test_agg4'
 }
 c.args <- run.table[run_name==run.name,]
 dir.table <- fread(paste0('/share/homes/mwalte10//dir_table_log_gbd20.csv'))
 dir.table <- dir.table[ref == max(ref),]
+if(grepl('test', loc)){
+  loc <- 'IND_4856'
+}
 
 dir.table[,'ASFR' := as.logical(ASFR)]
 dir.table[,'births' := as.logical(births)]
@@ -135,6 +139,10 @@ if(dir.table[ref == max(ref),childARTcoverage]){
 }else{
   art <- (paste0('/share/hiv/epp_input/gbd19/paeds/childARTcoverage/', loc, '.csv'))
 }
+if(!any(ls() == 'art')){
+  art <- (paste0('/share/hiv/epp_input/gbd19/paeds/childARTcoverage/', loc, '.csv'))
+  
+}
 if(loc %in% c('NGA', 'KEN', 'KEN_44796')){
   art <- paste0('/share/hiv/epp_input/gbd19/paeds/childARTcoverage/', loc, '.csv')
   
@@ -158,8 +166,6 @@ if(dir.table[ref == max(ref),on.art]){
 }
 
 
-
-
 print(paste('Using', ASFR, 'for ASFR', sep = ' '))
 print(paste('Using', births, 'for births', sep = ' '))
 print(paste('Using', SRB, 'for SRB', sep = ' '))
@@ -180,3 +186,12 @@ print(paste('Using', mort.offart, 'for child mortality off art', sep = ' '))
 print(paste('Using', dropout, 'for pmtct dropout rates', sep = ' '))
 print(paste('Using', art, 'for child ART', sep = ' '))
 print(paste('Using', pmtct, 'for PMTCT', sep = ' '))
+# return(list( 'asfr' = ASFR,
+#              'pop' = population_single_age,
+#              'mig' = migration,
+#              'birth' = births,
+#              
+#   
+# ))
+
+# }

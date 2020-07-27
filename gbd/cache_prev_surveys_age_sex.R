@@ -13,7 +13,7 @@ library(data.table); library(survey); library(assertable)
 ##out.dir <- paste0("/ihme/hiv/epp_output/gbd19/", run.name, "/")
 out.dir <- paste0("/ihme/hiv/epp_input/gbd20/")
 dir.create(out.dir, showWarnings = F)
-out.path <- paste0("/ihme/hiv/epp_input/gbd20/prev_surveys.csv")
+out.path <- paste0("/ihme/hiv/epp_input/gbd20/prev_surveys_ind.csv")
 
 ### Change this to the newest extraction sheet
 supp.survey.path <- paste0("/ihme/hiv/data/prevalence_surveys/avinav_GBD2019_prevalence_surveys_decomp4_FORUSE.csv")
@@ -243,7 +243,9 @@ out.dt <- rbind(out.dt,all_keny[,.(year,iso3,age_year,sex_id,prev,se,n,nid)],fil
 out.dt <- out.dt[!(iso3 %in% c("KEN_35623", "KEN_35662") & year == 2008)] #Outlier values
 
 #Use column for run locations only
-run_locs = loc.table[(epp==1 & !grepl("IND",ihme_loc_id)) | ihme_loc_id %in% c("MRT","COM","STP"),ihme_loc_id]
+# run_locs = loc.table[(epp==1 & !grepl("IND",ihme_loc_id)) | ihme_loc_id %in% c("MRT","COM","STP"),ihme_loc_id]
+run_locs = loc.table[epp==1  | ihme_loc_id %in% c("MRT","COM","STP"),ihme_loc_id]
+
 out.dt[,use:=TRUE]
 
 save_all <- out.dt[!iso3 %in% run_locs]
@@ -289,8 +291,8 @@ out.dt[!age_year %in% c(15:59,"15-49","15-64"), use := FALSE]
 
 #Bind back all surveys
 out.dt = rbind(out.dt,save_all)
-out.dt[grepl("IND_",iso3) & age_year=="15-49", use := TRUE]
+#out.dt[grepl("IND_",iso3) & age_year=="15-49", use := TRUE]
 out.dt[prev == 0.000 & use==TRUE, prev := 0.0005]
 
-write.csv(out.dt[,.(year,iso3,age_year,sex_id,prev,se,n,nid_loc_year, use)],"/ihme/hiv/epp_input/gbd20/prev_surveys.csv",row.names = FALSE)
+write.csv(out.dt[,.(year,iso3,age_year,sex_id,prev,se,n,nid_loc_year, use)],"/ihme/hiv/epp_input/gbd20/prev_surveys_ind.csv",row.names = FALSE)
 

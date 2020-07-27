@@ -283,7 +283,7 @@ split_u5_gbd2017 <- function(dt){
 }
 
 
-split_u1.new_ages <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd20"){
+split_u1.new_ages <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd20", test_run = NULL){
   #change to the new population splits folder
   pop <- data.table(fread(paste0('/ihme/hiv/epp_input/',gbdyear,"/" ,run.name.new, "/population_splits/", loc, '.csv')))
 
@@ -318,7 +318,14 @@ split_u1.new_ages <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd2
   spec_u1[, age_group_id := NULL]
   
   ## pull in incidence proportions from eppasm
-  split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/', run.name.new ,'/compiled/', loc, '_under1_splits.csv'))
+
+  if(is.null(test_run)){
+    split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/', run.name.new ,'/compiled/', loc, '_under1_splits.csv'))
+    
+  }else{
+    split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/', run.name.new ,'/compiled/', loc, '_', test_run,'_under1_splits.csv'))
+    
+  }
   split.dt <- melt(split.dt, id.vars = c('year', 'run_num'))
   setnames(split.dt, 'variable', 'age')
   spec_u1 <- merge(spec_u1, split.dt, by = c('year', 'run_num', 'age'))
@@ -377,7 +384,7 @@ split_u1 <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd20"){
 
 
 
-get_summary <- function(output, loc, run.name.old, run.name.new, paediatric = FALSE, old.splits){
+get_summary <- function(output, loc, run.name.old, run.name.new, paediatric = FALSE, old.splits, test_run = NULL){
   ## create gbd age groups
   output[age >= 5,age_gbd :=  age - age%%5]
   output[age %in% 1:4, age_gbd := 1]
@@ -392,7 +399,7 @@ get_summary <- function(output, loc, run.name.old, run.name.new, paediatric = FA
       output.u1 <- split_u1(output[age == 0], loc, run.name.old, run.name.new)
       
     }else{
-      output.u1 <- split_u1.new_ages(output[age == 0], loc, run.name.old, run.name.new)
+      output.u1 <- split_u1.new_ages(output[age == 0], loc, run.name.old, run.name.new, test_run = test_run)
       
     }
     output <- output[age != 0]

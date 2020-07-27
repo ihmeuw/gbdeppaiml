@@ -12,9 +12,9 @@ if(length(args) > 0) {
   run.name <- args[2]
   spec.name <- args[3]
 } else {
-  loc <- "AGO"
-  run.name <- "200505_xylo"
-  spec.name <- "200505_xylo"
+  loc <- "KEN"
+  run.name <- "200713_yuka"
+  spec.name <- "200713_yuka"
 
 }
 fill.draw <- T
@@ -40,7 +40,7 @@ devtools::load_all()
 
 ## Libraries etc.
 library(data.table); library(foreign); library(assertable)
-if(run.name == '200505_xylo'){
+if(run.name == '200505_xylo' | run.name == '200713_yuka'){
   age_map <- data.table(fread(paste0('/ihme/hiv/epp_input/', gbdyear, '/', '200316_windchime', "/age_map.csv")))
   
 }else{

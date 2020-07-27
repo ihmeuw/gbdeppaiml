@@ -124,6 +124,9 @@ find_pjnz <- function(loc){
   #   file.list <- grep(loc.name, pjn.list, value = T)    
   # }
   # 
+  if(!any(ls() == 'pjnz.list')){
+    pjnz.list <- "/home/j/DATA/UNAIDS_ESTIMATES/2019/MWI//MWI_UNAIDS_SPECTRUM_2019_V22_MM_BF_Y2019M08D05.PJNZ"
+  }
   
   if(length(file.list) == 0) {
     loc.name <- loc.table[ihme_loc_id == temp.loc, location_name]

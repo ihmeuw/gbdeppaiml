@@ -21,13 +21,14 @@ if(length(args) > 0) {
   paediatric <- as.logical(args[5])
   gbdyear <- 'gbd20'
 } else {
-  run.name <- "200505_xylo"
-  loc <- "NGA_25342"
+  run.name <- "200713_yuka"
+  loc <- "KEN_44796"
   n <- 1000
   draw.fill <- TRUE
   paediatric <- TRUE
 }
 gbdyear <- 'gbd20'
+test = NULL
 
 ## Functions
 fill_draws <- function(fill.dt,type=NULL){
@@ -58,16 +59,17 @@ fill_draws <- function(fill.dt,type=NULL){
 loc.table <- data.table(get_locations(hiv_metadata = T))
 print('loc.table loaded')
 
-#loc.table <- data.table(get_locations(hiv_metadata = T))
 
 ### Code
 
 
-
-# for(loc in loc.list){ 
-#   
-#   tryCatch({
-    draw.path <- paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, "/", loc)
+    if(!is.null(test)){
+      draw.path <- paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, "/", loc, '_', test)
+      
+    }else{
+      draw.path <- paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, "/", loc)
+      
+    }
     draw.list <- list.files(draw.path)
     print('draw.list exists')
     ## subset out additional outputs (theta, under-1 splits)
@@ -96,7 +98,13 @@ print('loc.table loaded')
     print('fill_draws done')
     compiled.path <- paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, "/compiled/")
     dir.create(compiled.path, recursive = TRUE, showWarnings = FALSE)
-    write.csv(dt, paste0(compiled.path, loc, '.csv'), row.names = F)
+    if(!is.null(test)){
+      write.csv(dt, paste0(compiled.path, loc, '_', test, '.csv'), row.names = F)
+      
+    }else{
+      write.csv(dt, paste0(compiled.path, loc, '.csv'), row.names = F)
+      
+    }
     print('first file saved')
     print(compiled.path)
     
@@ -120,14 +128,15 @@ print('loc.table loaded')
         split.dt <- fill_draws(split.dt,type="child")
       }
       
-      write.csv(split.dt, paste0(compiled.path, loc, '_under1_splits.csv'), row.names = F)
+      if(!is.null(test)){
+        write.csv(split.dt, paste0(compiled.path, loc,'_', test, '_under1_splits.csv'), row.names = F)
+        
+      }else{
+        write.csv(split.dt, paste0(compiled.path, loc, '_under1_splits.csv'), row.names = F)
+        
+      }
     }
-  # }, error=function(e){})
-  # 
-  # 
-  # 
-  # 
-  # }
+
 
 
 
