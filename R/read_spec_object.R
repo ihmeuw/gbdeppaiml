@@ -29,6 +29,7 @@ test.sub_prev_granular = NULL){
  
   if(lbd.anc){
       replace <- as.data.table(readRDS(paste0('/share/hiv/data/PJNZ_prepped/lbd_anc/2019/', loc, '.rds')))
+
       if(grepl("KEN",loc)){
         replace <- replace[which(subpop == attr(dt,"eppd")$ancsitedat$subpop[1])]
       }
@@ -38,6 +39,7 @@ test.sub_prev_granular = NULL){
         replace <- replace[subpop %in% "Remaining females" & type=="ancss"]
       }
       
+
       if(!geoadjust){
         replace[,offset := NULL]
       }
@@ -141,6 +143,7 @@ test.sub_prev_granular = NULL){
       dt <- gbdeppaiml::sub.anc.prior(dt,loc)
     }
     
+
 
     ## Subsetting KEN counties from province, updated 5/5/2020
 

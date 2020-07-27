@@ -1049,12 +1049,14 @@ geo_adj <- function(loc, dt, i, uncertainty) {
     #######change the directory here
 
     anc.dt.all <- read.csv(paste0('/ihme/hiv/data/PJNZ_prepped/lbd_anc/2019/', loc, '_ANC_matched.csv'))  
+    
     if(grepl("KEN",loc)){
       anc.dt.all <- anc.dt.all[which(anc.dt.all$subpop == attr(dt,"eppd")$ancsitedat$subpop[1]),]
     }
     if(grepl("SOM",loc)){
       anc.dt.all <- anc.dt.all[anc.dt.all$subpop %in% "Remaining females",]
     }
+
     setnames(anc.dt.all, old = 'prev', new = 'mean')
     setnames(anc.dt.all, old = 'clinic', new = 'site')
     anc.dt.all <- as.data.table(anc.dt.all)
@@ -1537,9 +1539,10 @@ geo_adj_old <- function(loc, dt, i, uncertainty) {
    if(loc %in%  c("SDN","SSD","SOM","GNB","MDG","PNG", "COM")){
    #   if(loc %in%  c("SDN","SSD","SOM","MDG","PNG", "COM")){
         
+
       ancbias.pr.mean <<- 0.15
       ancbias.pr.sd <<- 0.001
-    }else if(loc %in% "MRT"){
+    }else if(loc == "PNG" & run.name == "200316_windchime_testing5"){
       ancbias.pr.mean <<- 0.15
       ancbias.pr.sd <<- 0.001
         } else {

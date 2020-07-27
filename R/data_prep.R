@@ -15,6 +15,7 @@ if(grepl('test', loc)){
   loc <- 'IND_4856'
 }
 
+
 dir.table[,'ASFR' := as.logical(ASFR)]
 dir.table[,'births' := as.logical(births)]
 dir.table[,'SRB' := as.logical(SRB)]

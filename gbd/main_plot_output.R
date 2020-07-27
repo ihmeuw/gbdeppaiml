@@ -23,10 +23,12 @@ if(length(args) > 0) {
 } else {
   run.name <- "2020_ind_test_agg4"
   loc <- "IND_4842"
+
   draw.fill <- TRUE
   paediatric <- TRUE
   compare.run <- c('2020_ind_test_agg8')
   test <-  'test7'
+
 }
 
 gbd_year_new <- "gbd20"
@@ -66,6 +68,7 @@ if(loc %in% c('STP', 'COM', 'MAR')){
 run.names.comp <- compare.run
 test = NULL
 # ## 15-49 plots
+debugonce(plot_15to49)
 dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/15to49_plots/'), recursive = TRUE, showWarnings = FALSE)
 plot_15to49(loc,new.run = run.name, paediatric, plot.deaths = TRUE,  lbd_unraked = FALSE,
             names = c('Binomial', 'Probit'),

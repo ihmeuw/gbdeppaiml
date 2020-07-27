@@ -16,8 +16,9 @@ library(data.table)
 run.name <- "2020_ind_test_agg10"
 spec.name <- "200713_yuka"
 compare.run <- "2020_ind_test_agg9"
+
 proj.end <- 2022
-n.draws <- 10
+n.draws <- 1000
 run.group2 <- FALSE
 paediatric <- TRUE
 cluster.project <- "proj_hiv"
@@ -178,19 +179,6 @@ for(loc in loc.list) {    ## Run EPPASM
     #
 
 
-    # diagnostic.string <- paste0("qsub -l m_mem_free=5G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
-    #                       "-e /share/homes/", user, "/errors ",
-    #                       "-o /share/temp/sgeoutput/", user, "/output ",
-    #                       "-N ", loc, "_diagnostic_eppasm ",
-    #                       "-hold_jid ", loc, "_eppasm ",
-    #                       code.dir, "gbd/singR_shell.sh ",
-    #                       code.dir, "lbd_anc_align/check_diff_plot.R ",
-    #                       'gbd20/191224_trumpet', ' ', 'gbd19/190630_rhino2', ' ', loc)
-    # print(diagnostic.string)
-    # system(diagnostic.string)
-
-    #
-
 
 
 }
@@ -282,9 +270,11 @@ eppasm_parents <-  c("KEN","ZAF","ETH","KEN_44793" ,"KEN_44794","KEN_44795", "KE
 all_loc_list <- c(loc.list,eppasm_parents, 'MRT', 'COM', 'STP')
 
 ## Aggregation and reckoning prep for higher levels
+spec.name <- "200316_windchime_KEN"
+run.name <- "200316_windchime_testing4"
 if(reckon_prep){
-  for(loc in all_loc_list){
-    if(loc %in% eppasm_parents){
+  for(loc in all_loc_list[grepl("KEN",all_loc_list)]){
+    if(loc %in% eppasm_parents[grepl("KEN", eppasm_parents)]){
     prep.string <- paste0("qsub -l m_mem_free=100G -l fthread=2 -l h_rt=02:00:00 -l archive -q all.q -P ", cluster.project, " ",
                           "-e /share/temp/sgeoutput/", user, "/errors ",
                           "-o /share/temp/sgeoutput/", user, "/output ",

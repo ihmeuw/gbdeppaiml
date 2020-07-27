@@ -25,12 +25,13 @@ if(length(args) > 0) {
 	run.name <- '2020_ind_test_agg10'
 	loc <- 'IND_4842'
 	stop.year <- 2022
+
 	j <- 1
 	paediatric <- TRUE
 }
 
 run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
-c.args <- run.table[run_name==run.name]
+c.args <- run.table[run_name=="200316_windchime"]
 
 
 ### Arguments
@@ -40,7 +41,7 @@ start.year <- 1970
 trans.params.sub <- TRUE
 pop.sub <- TRUE
 art.sub <- TRUE
-prev.sub <- TRUE
+prev_sub <- TRUE
 sexincrr.sub <- TRUE
 plot.draw <- FALSE
 anc.prior.sub <- TRUE
@@ -85,6 +86,7 @@ loc.table <- get_locations(hiv_metadata = TRUE)
   
 }
 
+
 # These locations do not have information from LBD team estimates
 # ZAF ANC data are considered nationally representative so no GeoADjust - this could be challenged in the future
 no_geo_adj <-  c(loc.table[epp ==1 & grepl("IND",ihme_loc_id),ihme_loc_id],
@@ -95,6 +97,7 @@ if(loc %in% c('ZWE', 'MWI')){
 }else{
   geoadj_test <- FALSE
 }
+
 # ANC data bias adjustment
 if(geoadjust & !loc %in% no_geo_adj){
   geoadjust  <- TRUE
@@ -110,13 +113,11 @@ if(grepl('IND',loc)){
   lbd.anc <- FALSE
 }
 
-if(grepl('ZAF', loc)){
-  lbd.anc <- FALSE
-}
-if(grepl('PNG', loc)){
+if(loc %in% c("ZAF","PNG")){
   lbd.anc <- FALSE
 }
 print(paste0(loc, ' lbd.anc set to ', lbd.anc))
+
 
 ##Need to figure out where to get these
 if(loc %in% c("MAR","MRT","COM")){
@@ -176,9 +177,11 @@ if(grepl('IND', loc)){
 saveRDS(fit, '/ihme/homes/mwalte10/fit.RDS')
 data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc, '_', test,'.csv')
 if(file.exists(data.path)){save_data(loc, attr(dt, 'eppd'), run.name)}
+
 ## When fitting, the random-walk based models only simulate through the end of the
 ## data period. The `extend_projection()` function extends the random walk for r(t)
 ## through the end of the projection period.
+
 if(epp.mod == 'rhybrid'){
   fit <- extend_projection(fit, proj_years = stop.year - start.year + 1)
 }
@@ -193,6 +196,7 @@ if(max(fit$fp$pmtct_dropout$year) < stop.year){
 
 
 draw <- j
+
 result <- gbd_sim_mod(fit, VERSION = "R")
 dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/'), recursive = T)
 saveRDS(result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/', draw, '.RDS'))
@@ -215,4 +219,4 @@ write.csv(param, paste0(out.dir,'/theta_', j, '.csv'), row.names = F)
 if(plot.draw){
   plot_15to49_draw(loc, output.dt, attr(dt, 'eppd'), run.name)
 }
-
+#

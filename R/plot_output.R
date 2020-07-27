@@ -91,6 +91,7 @@ plot_15to49 <- function(loc="KEN_35618",  compare.run = c('2020_ind_test_agg8', 
                         compare.stage2 = FALSE, gbdyear = "gbd20", simplify = F,
                         test_run = NULL){
   x <- data.table(cbind(name = names, run_name = c(new.run, compare.run, '200316_windchime_ind')))
+
   
   if(loc %in% loc.table[grepl("IND",ihme_loc_id) & epp != 1,ihme_loc_id]){
     parent_id1 <- loc.table[ihme_loc_id==loc,parent_id]
@@ -209,6 +210,8 @@ plot_15to49 <- function(loc="KEN_35618",  compare.run = c('2020_ind_test_agg8', 
     }
    
       
+  } else {
+    compare.gbd19.unraked<- NULL
   }
 
 
@@ -271,6 +274,7 @@ plot_15to49 <- function(loc="KEN_35618",  compare.run = c('2020_ind_test_agg8', 
           
           
         }
+
         
         run <- x[run_name == run, name]
         compare.dt <- compare.dt[age_group_id == 24 & sex == 'both' & measure %in% meas.list & metric == "Rate",.(type = 'line', year, indicator = measure, model = run, mean, lower, upper)]
@@ -282,6 +286,8 @@ plot_15to49 <- function(loc="KEN_35618",  compare.run = c('2020_ind_test_agg8', 
   }else{compare.dt = NULL}
   
 
+
+  
   # 
   ##will need to be changed
   if(is.null(test_run)){
@@ -369,6 +375,7 @@ plot_15to49 <- function(loc="KEN_35618",  compare.run = c('2020_ind_test_agg8', 
   
   
   plot.dt <- rbind(data,compare.dt.17, compare.dt,cur.dt,compare.dt.unaids,lbd.unraked,compare.unraked, compare.dt.s2,use.names = T, fill = T)
+
   plot.dt[,model := factor(model)]
   if(any(colnames(plot.dt) == 'x')){
     plot.dt[,x:= NULL]
@@ -405,7 +412,7 @@ dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/15to49_plot
     gg <- gg + geom_point(data = plot.dt[model == 'ANC Site'], aes(x = year, y = mean, shape = 'ANC Site'), alpha = 0.2)
   }
   gg <- gg + geom_line(data = plot.dt[type == 'line'], aes(x = year, y = mean, color = model)) +
-    geom_ribbon(data = plot.dt[type == 'line'], aes(x = year, ymin = lower, ymax = upper,  fill = model), alpha = 0.2) +
+    geom_ribbon(data = plot.dt[type == 'line' & model == new.run], aes(x = year, ymin = lower, ymax = upper,  fill = model), alpha = 0.2) +
     facet_wrap(~indicator, scales = 'free_y') +
     theme_bw() +
     scale_fill_manual(values=color.list) + scale_colour_manual(values=color.list)  +
@@ -850,6 +857,7 @@ plot_age_sex_incrr <- function(loc, run.name){
                                 female = log(0.440260) - log(c(0.336720, 0.239470, 0.167890, 0.146590, 0.171350, 0.000000, 0.000000)))
   
   theta.files <- list.files(paste0('/ihme/hiv/epp_output/gbd20/', run.name, "/", loc))
+
   theta.files <- theta.files[grepl('theta', theta.files)]
   theta.dt <- rbindlist(lapply(theta.files, function(ff){
     draw.dt <- fread(paste0('/ihme/hiv/epp_output/gbd20/', run.name, "/", loc, '/', ff))
