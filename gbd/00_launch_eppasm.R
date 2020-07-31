@@ -18,7 +18,7 @@ spec.name <- "200713_yuka"
 compare.run <- "2020_ind_test_agg9"
 
 proj.end <- 2022
-n.draws <- 1000
+n.draws <- 20
 run.group2 <- FALSE
 paediatric <- TRUE
 cluster.project <- "proj_hiv"

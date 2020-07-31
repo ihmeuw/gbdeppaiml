@@ -126,16 +126,19 @@ if(loc %in% c("MAR","MRT","COM")){
 }
 
 
-if(loc == 'IND_4842'){
-  dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
-                         pop.sub, anc.sub, anc.backcast, prev.sub = prev_sub, art.sub = TRUE,
-                         sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = TRUE,
-                         anc.prior.sub = TRUE, lbd.anc = lbd.anc,
-                         geoadjust = geoadjust, use_2019 = TRUE,
-                         test.sub_prev_granular = test)
-}else{
-  dt <- readRDS('/ihme/hiv/epp_output/gbd20/2020_ind_test_agg10/dt_objects/IND_4842_dt.RDS')
-}
+# if(loc == 'IND_4842'){
+#   dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
+#                          pop.sub, anc.sub, anc.backcast, prev.sub = prev_sub, art.sub = TRUE,
+#                          sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = TRUE,
+#                          anc.prior.sub = TRUE, lbd.anc = lbd.anc,
+#                          geoadjust = geoadjust, use_2019 = TRUE,
+#                          test.sub_prev_granular = test)
+# }else{
+  dt <- readRDS(paste0('/ihme/hiv/epp_output/gbd20/2020_ind_test_agg10/dt_objects/', loc, '_dt.RDS'))
+# }
+mod <- data.table(attr(dt, 'eppd')$hhs)[prev == 0.0005,se := 0]
+mod <- mod[prev == 0.0005, prev := 0]
+attr(dt, 'eppd')$hhs <- data.frame(mod)
 
 dt <- modify_dt(dt)
 
@@ -167,7 +170,7 @@ attr(dt, 'specfp')$prior_args <- prior_args
 
 ## Fit model
 if(grepl('IND', loc)){
-  attr(dt, 'eppd')$hhs <- data.frame(data.table(attr(dt, 'eppd')$hhs)[prev == 0.0005, prev := 0])
+  #attr(dt, 'eppd')$hhs <- data.frame(data.table(attr(dt, 'eppd')$hhs)[prev == 0.0005, prev := 0])
   fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 300, ageprev = 'binom')
   
 }else{
