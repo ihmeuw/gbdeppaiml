@@ -22,7 +22,7 @@ if(length(args) > 0) {
   paediatric <- as.logical(args[4])
 
 } else {
-	run.name <- '2020_ind_test_agg10'
+	run.name <- '2020_ind_test_agg11'
 	loc <- 'IND_4842'
 	stop.year <- 2022
 
@@ -134,13 +134,22 @@ if(loc %in% c("MAR","MRT","COM")){
 #                          geoadjust = geoadjust, use_2019 = TRUE,
 #                          test.sub_prev_granular = test)
 # }else{
-  dt <- readRDS(paste0('/ihme/hiv/epp_output/gbd20/2020_ind_test_agg10/dt_objects/', loc, '_dt.RDS'))
+dt <- readRDS(paste0('/ihme/hiv/epp_output/gbd20/2020_ind_test_agg10/dt_objects/', loc, '_dt.RDS'))
 # }
 mod <- data.table(attr(dt, 'eppd')$hhs)[prev == 0.0005,se := 0]
+#mod <- data.table(attr(dt, 'eppd')$hhs)
 mod <- mod[prev == 0.0005, prev := 0]
 attr(dt, 'eppd')$hhs <- data.frame(mod)
 
 dt <- modify_dt(dt)
+attr(dt, 'specfp')$art_alloc_mxweight <- 0.5
+
+ageincrr.pr.sd  <- c(0.5, 0.4, 0.23, 0.3, 0.3, 0.3, 0.3, 0.3, 0.2, 0.2, 0.2, 0.2) * 1e-3
+
+prior_args <- c(attr(dt, 'specfp')$prior_args,
+                list(ageincrr.pr.sd = ageincrr.pr.sd))
+
+attr(dt, 'specfp')$prior_args <- prior_args
 
 sub.anc.prior <- function(dt,loc){
   
@@ -160,12 +169,7 @@ sub.anc.prior <- function(dt,loc){
 }
 
 dt <- sub.anc.prior(dt, loc)
-ageincrr.pr.sd  <- c(0.5, 0.4, 0.23, 0.3, 0.3, 0.3, 0.3, 0.3, 0.2, 0.2, 0.2, 0.2) * 1e-3
 
-prior_args <- c(attr(dt, 'specfp')$prior_args,
-                list(ageincrr.pr.sd = ageincrr.pr.sd))
-
-attr(dt, 'specfp')$prior_args <- prior_args
 
 
 ## Fit model

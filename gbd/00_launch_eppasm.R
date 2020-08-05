@@ -13,7 +13,7 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 library(data.table)
 
 ## Arguments
-run.name <- "2020_ind_test_agg10"
+run.name <- "2020_ind_test_agg11"
 spec.name <- "200713_yuka"
 compare.run <- "2020_ind_test_agg9"
 
