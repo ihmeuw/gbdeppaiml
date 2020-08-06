@@ -22,7 +22,7 @@ if(length(args) > 0) {
   paediatric <- as.logical(args[4])
 
 } else {
-	run.name <- '2020_ind_test_agg11'
+	run.name <- '200713_yuka'
 	loc <- 'IND_4842'
 	stop.year <- 2022
 
@@ -31,7 +31,7 @@ if(length(args) > 0) {
 }
 
 run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
-c.args <- run.table[run_name=="200316_windchime"]
+c.args <- run.table[run_name==run.name]
 
 
 ### Arguments
@@ -127,17 +127,18 @@ if(loc %in% c("MAR","MRT","COM")){
 
 
 # if(loc == 'IND_4842'){
-#   dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
-#                          pop.sub, anc.sub, anc.backcast, prev.sub = prev_sub, art.sub = TRUE,
-#                          sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = TRUE,
-#                          anc.prior.sub = TRUE, lbd.anc = lbd.anc,
-#                          geoadjust = geoadjust, use_2019 = TRUE,
-#                          test.sub_prev_granular = test)
+  # dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
+  #                        pop.sub, anc.sub, anc.backcast, prev.sub = prev_sub, art.sub = TRUE,
+  #                        sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = TRUE,
+  #                        anc.prior.sub = TRUE, lbd.anc = lbd.anc,
+  #                        geoadjust = geoadjust, use_2019 = TRUE,
+  #                        test.sub_prev_granular = test)
 # }else{
 dt <- readRDS(paste0('/ihme/hiv/epp_output/gbd20/2020_ind_test_agg10/dt_objects/', loc, '_dt.RDS'))
 # }
 mod <- data.table(attr(dt, 'eppd')$hhs)[prev == 0.0005,se := 0]
 #mod <- data.table(attr(dt, 'eppd')$hhs)
+#mod <- data.table(attr(dt, 'eppd')$hhs)[prev == 0.0005,se := 0.00005]
 mod <- mod[prev == 0.0005, prev := 0]
 attr(dt, 'eppd')$hhs <- data.frame(mod)
 

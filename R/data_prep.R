@@ -5,9 +5,7 @@
 ######################################
 # data_prep <- function(loc){
   run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
-if(!any(ls() == 'run.name')){
-  run.name <- '2020_ind_test_agg4'
-}
+
 c.args <- run.table[run_name==run.name,]
 dir.table <- fread(paste0('/share/homes/mwalte10//dir_table_log_gbd20.csv'))
 dir.table <- dir.table[ref == max(ref),]

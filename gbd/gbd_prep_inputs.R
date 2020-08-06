@@ -84,6 +84,14 @@ pop.all <-  get_mort_outputs(
 pop.all <- pop.all[,.(age_group_id, location_id, year_id, sex_id, population, run_id)]
 
 
+pop.o80 <-  get_mort_outputs(
+  "population", "estimate",
+  gbd_year = 2020,
+  run_id = population,
+  age_group_id = 21,
+  location_id = c(epp.locs, parent.locs), year_id = seq(1970, proj.end), sex_id = 1:2)
+pop.o80 <- pop.o80[,.(age_group_id, location_id, year_id, sex_id, population, run_id)]
+
 # pop.all.20 <- pop.all[year_id == 2019,]
 # pop.all.20[,year_id := rep(2020, nrow(pop.all.20))] 
 # pop.all <- rbind(pop.all, pop.all.20)
@@ -93,7 +101,7 @@ pop.all <- pop.all[,.(age_group_id, location_id, year_id, sex_id, population, ru
 # pop.o80.20[,year_id := rep(2020, nrow(pop.o80.20))] 
 # pop.o80 <- rbind(pop.o80, pop.o80.20)
 
-# pop.all <- rbind(pop.all,  pop.o80, use.names = T)
+pop.all <- rbind(pop.all,  pop.o80, use.names = T)
 dir.create(paste0(out.dir, '/population_single_age'), showWarnings = F)
 invisible(lapply(c(epp.locs, parent.locs), function(c.location_id) {
   out.pop <- copy(pop.all[location_id == c.location_id])
@@ -119,9 +127,18 @@ pop.all <-  get_mort_outputs(
   "population single year", "estimate",
   gbd_year = 2020,
   run_id = population_sa,
-  age_group_id = c(28, 238,21 ,50:127),
+  age_group_id = c(28, 238 ,50:127),
   location_id = india.locs, year_id = seq(1970, proj.end), sex_id = 1:2)
 pop.all <- pop.all[,.(age_group_id, location_id, year_id, sex_id, population, run_id)]
+pop.o80 <-  get_mort_outputs(
+  "population", "estimate",
+  gbd_year = 2020,
+  run_id = population,
+  age_group_id = 21,
+  location_id = india.locs, year_id = seq(1970, proj.end), sex_id = 1:2)
+pop.o80 <- pop.o80[,.(age_group_id, location_id, year_id, sex_id, population, run_id)]
+pop.all <- rbind(pop.all,  pop.o80, use.names = T)
+
 dir.create(paste0(out.dir, '/population_single_age/india_splitting_locs/'), showWarnings = F)
 invisible(lapply(india.locs, function(c.location_id) {
   out.pop <- copy(pop.all[location_id == c.location_id])
