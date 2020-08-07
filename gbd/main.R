@@ -176,16 +176,14 @@ dt <- sub.anc.prior(dt, loc)
 ## Fit model
 if(grepl('IND', loc)){
   #attr(dt, 'eppd')$hhs <- data.frame(data.table(attr(dt, 'eppd')$hhs)[prev == 0.0005, prev := 0])
-  fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500, ageprev = 'binom',
-                        fitincrr = TRUE)
+  fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500, ageprev = 'binom')
   
 }else{
   fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500)
 
 }
-saveRDS(fit, '/ihme/homes/mwalte10/fit.RDS')
-data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc, '_', test,'.csv')
-if(file.exists(data.path)){save_data(loc, attr(dt, 'eppd'), run.name)}
+data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc,'.csv')
+save_data(loc, attr(dt, 'eppd'), run.name)
 
 ## When fitting, the random-walk based models only simulate through the end of the
 ## data period. The `extend_projection()` function extends the random walk for r(t)
