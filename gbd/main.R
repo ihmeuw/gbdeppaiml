@@ -22,7 +22,7 @@ if(length(args) > 0) {
   paediatric <- as.logical(args[4])
 
 } else {
-	run.name <- '200713_yuka'
+	run.name <- '2020_ind_test_agg13'
 	loc <- 'IND_4842'
 	stop.year <- 2022
 
@@ -127,14 +127,14 @@ if(loc %in% c("MAR","MRT","COM")){
 
 
 # if(loc == 'IND_4842'){
-  # dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
-  #                        pop.sub, anc.sub, anc.backcast, prev.sub = prev_sub, art.sub = TRUE,
-  #                        sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = TRUE,
-  #                        anc.prior.sub = TRUE, lbd.anc = lbd.anc,
-  #                        geoadjust = geoadjust, use_2019 = TRUE,
-  #                        test.sub_prev_granular = test)
+  dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
+                         pop.sub, anc.sub, anc.backcast, prev.sub = prev_sub, art.sub = TRUE,
+                         sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = TRUE,
+                         anc.prior.sub = TRUE, lbd.anc = lbd.anc,
+                         geoadjust = geoadjust, use_2019 = TRUE,
+                         test.sub_prev_granular = test)
 # }else{
-dt <- readRDS(paste0('/ihme/hiv/epp_output/gbd20/2020_ind_test_agg10/dt_objects/', loc, '_dt.RDS'))
+#dt <- readRDS(paste0('/ihme/hiv/epp_output/gbd20/2020_ind_test_agg10/dt_objects/', loc, '_dt.RDS'))
 # }
 mod <- data.table(attr(dt, 'eppd')$hhs)[prev == 0.0005,se := 0]
 #mod <- data.table(attr(dt, 'eppd')$hhs)
@@ -176,7 +176,8 @@ dt <- sub.anc.prior(dt, loc)
 ## Fit model
 if(grepl('IND', loc)){
   #attr(dt, 'eppd')$hhs <- data.frame(data.table(attr(dt, 'eppd')$hhs)[prev == 0.0005, prev := 0])
-  fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 300, ageprev = 'binom')
+  fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500, ageprev = 'binom',
+                        fitincrr = TRUE)
   
 }else{
   fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500)

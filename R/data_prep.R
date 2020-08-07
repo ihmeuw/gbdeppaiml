@@ -59,7 +59,6 @@ if(dir.table[ref == max(ref),migration]){
 if(dir.table[ref == max(ref),prev_surveys]){
    prev_surveys <- paste0('/ihme/hiv/epp_input/gbd20/prev_surveys.csv')
 
-  
  # prev_surveys <- '/ihme/hiv/data/prevalence_surveys/prev_surveys_temp.csv'
 }else{
   ##need to look up old FP

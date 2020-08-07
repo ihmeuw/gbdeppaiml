@@ -201,11 +201,11 @@ invisible(lapply(india.locs, function(c.location_id) {
 }))
 
 ## Migration
-
-#mig <- fread(paste0('/ihme/fertilitypop/population/popReconstruct/212/upload/net_migration_single_year.csv'))[measure_id==19]
+##got 226 from Spencer on 8/6/2020
+mig <- fread(paste0('/ihme/fertilitypop/population/popReconstruct/226/upload/net_migration_single_year.csv'))[measure_id==19]
 #fread(paste0('/ihme/fertilitypop/gbd_2017/population/modeling/popReconstruct/v96/best/net_migrants.csv'))
-mig<- get_mort_outputs(model_name = 'migration',model_type = 'estimate', run_id = migration, location_id = epp.locs,
-                             age_group_ids = c(28, 238,21 ,50:127))[measure_id == 19]
+# mig<- get_mort_outputs(model_name = 'migration single year',model_type = 'estimate', run_id = migration, location_id = epp.locs,
+#                              age_group_ids = c(28, 238,21 ,50:127))[measure_id == 19]
 mig <- mig[,.(location_id, year_id, sex_id, age_group_id, measure_id, mean)]
 age_groups <- get_ids("age_group")
 age_groups[age_group_name=="<1 year",age_group_name := "0"]
