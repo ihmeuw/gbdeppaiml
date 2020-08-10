@@ -22,10 +22,9 @@ if(length(args) > 0) {
   paediatric <- as.logical(args[4])
 
 } else {
-	run.name <- '2020_ind_test_agg13'
-	loc <- 'IND_4842'
+	run.name <- "200807_demo_tests"
+	loc <- 'LSO'
 	stop.year <- 2022
-
 	j <- 1
 	paediatric <- TRUE
 }
@@ -80,12 +79,11 @@ devtools::load_all()
 loc.table <- get_locations(hiv_metadata = TRUE)
 
 ##set toggles
-{if(loc == 'ETH_44862'){
+if(loc == 'ETH_44862'){  ##I imagine this was for a test and can be taken off? Note that its in the set_toggles function too
   births <-    paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/births/', loc, '.csv')
   print(paste0(loc, ' births from rhino2 subbed in'))
   
 }
-
 
 # These locations do not have information from LBD team estimates
 # ZAF ANC data are considered nationally representative so no GeoADjust - this could be challenged in the future
@@ -123,11 +121,11 @@ print(paste0(loc, ' lbd.anc set to ', lbd.anc))
 if(loc %in% c("MAR","MRT","COM")){
   sexincrr.sub <- FALSE
 }
-}
+
 
 
 # if(loc == 'IND_4842'){
-  dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
+dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
                          pop.sub, anc.sub, anc.backcast, prev.sub = prev_sub, art.sub = TRUE,
                          sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = TRUE,
                          anc.prior.sub = TRUE, lbd.anc = lbd.anc,
@@ -139,18 +137,22 @@ if(loc %in% c("MAR","MRT","COM")){
 mod <- data.table(attr(dt, 'eppd')$hhs)[prev == 0.0005,se := 0]
 #mod <- data.table(attr(dt, 'eppd')$hhs)
 #mod <- data.table(attr(dt, 'eppd')$hhs)[prev == 0.0005,se := 0.00005]
-mod <- mod[prev == 0.0005, prev := 0]
+mod[prev == 0.0005, prev := 0]
 attr(dt, 'eppd')$hhs <- data.frame(mod)
 
 dt <- modify_dt(dt)
 attr(dt, 'specfp')$art_alloc_mxweight <- 0.5
 
-ageincrr.pr.sd  <- c(0.5, 0.4, 0.23, 0.3, 0.3, 0.3, 0.3, 0.3, 0.2, 0.2, 0.2, 0.2) * 1e-3
+if(run.name == "ind_aggs13"){ ##Need to correct
+  
+  ageincrr.pr.sd  <- c(0.5, 0.4, 0.23, 0.3, 0.3, 0.3, 0.3, 0.3, 0.2, 0.2, 0.2, 0.2) * 1e-3
+  
+  prior_args <- c(attr(dt, 'specfp')$prior_args,
+                  list(ageincrr.pr.sd = ageincrr.pr.sd))
+  
+  attr(dt, 'specfp')$prior_args <- prior_args
+}
 
-prior_args <- c(attr(dt, 'specfp')$prior_args,
-                list(ageincrr.pr.sd = ageincrr.pr.sd))
-
-attr(dt, 'specfp')$prior_args <- prior_args
 
 sub.anc.prior <- function(dt,loc){
   
@@ -170,8 +172,7 @@ sub.anc.prior <- function(dt,loc){
 }
 
 dt <- sub.anc.prior(dt, loc)
-
-
+# 
 
 ## Fit model
 if(grepl('IND', loc)){
@@ -179,9 +180,11 @@ if(grepl('IND', loc)){
   fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500, ageprev = 'binom')
   
 }else{
+  # 
   fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500)
 
 }
+
 data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc,'.csv')
 save_data(loc, attr(dt, 'eppd'), run.name)
 

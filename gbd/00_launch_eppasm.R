@@ -13,9 +13,9 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 library(data.table)
 
 ## Arguments
-run.name <- "2020_ind_test_agg13"
+run.name <- "200807_demo_tests2"
 spec.name <- "200713_yuka"
-compare.run <- "2020_ind_test_agg9"
+compare.run <- "200807_demo_tests"
 
 proj.end <- 2022
 n.draws <- 10
@@ -37,6 +37,17 @@ dir.create(input.dir, recursive = TRUE, showWarnings = FALSE)
 dir <- paste0("/ihme/hiv/epp_output/", gbdyear, '/', run.name, "/")
 dir.create(dir, showWarnings = FALSE)
 dir.table <- fread(paste0('/share/hiv/epp_input/gbd20//dir_table_log_gbd20.csv'))
+
+run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
+
+if(!run.name %in% unique(run.table$run_name)){
+  stop("Add run comment and new run to run tracker")
+  # new_run = copy(run.table)[run_name == "200713_yuka"]
+  # new_run[,run_name := run.name]
+  # new_run[,comments := "Testing swap SWZ pop structure for LSO"]
+  # run.table = rbind(run.table,new_run)
+  # fwrite(run.table,paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'),row.names = FALSE)
+}
 
 
 ### Functions
@@ -118,7 +129,7 @@ if(!file.exists(paste0(input.dir, 'art_prop.csv'))){
 
 
 if(redo_offsets){
-  redo_offsets.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q all.q -P ", cluster.project, " ",
+  redo_offsets.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive=True -q all.q -P ", cluster.project, " ",
                        "-e /share/homes/", user, "/errors ",
                        "-o /share/temp/sgeoutput/", user, "/output ",
                        "-N ",  "redo_offsets ",
@@ -132,16 +143,17 @@ if(redo_offsets){
 
 # loc.list = 'IND_4856'
 ## Launch EPP
-loc.list <- loc.list[grepl('IND',loc.list)]
-for(loc in loc.list) {    ## Run EPPASM
-# #
-# #
+#loc.list <- loc.list[grepl('IND',loc.list)]
+
+
+for(loc in c("LSO")) {    ## Run EPPASM
+
    # for(test in paste0('test', c(1:7))){
   # epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q all.q -P ", cluster.project, " ",
-  epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -q long.q -P ", cluster.project, " ",
+      epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive=True -q all.q -P ", cluster.project, " ",
                        "-e /share/temp/sgeoutput/", user, "/errors ",
                        "-o /share/temp/sgeoutput/", user, "/output ",
-                       "-N ", loc, "_eppasm ",
+                       "-N ", loc,"_",run.name, "_eppasm ",
                        "-t 1:", n.draws, " ",
                        "-hold_jid eppasm_prep_inputs_", run.name," ",
                        code.dir, "gbd/singR_shell.sh ",
@@ -156,20 +168,20 @@ for(loc in loc.list) {    ## Run EPPASM
       draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
                             "-e /share/temp/sgeoutput/", user, "/errors ",
                             "-o /share/temp/sgeoutput/", user, "/output ",
-                            "-N ", loc, "_save_draws ",
-                            "-hold_jid ", loc, "_eppasm ",
+                            "-N ", loc,"_",run.name, "_save_draws ",
+                            "-hold_jid ", loc,"_",run.name, "_eppasm ",
                             code.dir, "gbd/singR_shell.sh ",
                             code.dir, "gbd/compile_draws.R ",
                             run.name, " ", loc, ' ', n.draws, ' TRUE ', paediatric)
       print(draw.string)
       system(draw.string)
 
-      compare.run <- c('200316_windchime', '190630_rhino2')
+     # compare.run <- c('200316_windchime', '190630_rhino2')
       plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
                             "-e /share/temp/sgeoutput/", user, "/errors ",
                             "-o /share/temp/sgeoutput/", user, "/output ",
                             "-N ", loc, "_plot_eppasm ",
-                            "-hold_jid ", loc, "_save_draws ",
+                            "-hold_jid ", loc,"_",run.name, "_save_draws ",
                             code.dir, "gbd/singR_shell.sh ",
                             code.dir, "gbd/main_plot_output.R ",
                             loc, " ", run.name, ' ', paediatric, ' ', compare.run, ' ', test)
@@ -178,10 +190,8 @@ for(loc in loc.list) {    ## Run EPPASM
      # }
     #
 
-
-
-
 }
+
 # 
 # if(testing){
 #   vetting_dir <- paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/vetting/')

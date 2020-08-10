@@ -4,11 +4,12 @@
 #This script should be loaded into the environment that is running eppasm
 ######################################
 # data_prep <- function(loc){
-  run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
+user <- Sys.getenv("USER")
+run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
 
 c.args <- run.table[run_name==run.name,]
-dir.table <- fread(paste0('/share/homes/mwalte10//dir_table_log_gbd20.csv'))
-dir.table <- dir.table[ref == max(ref),]
+dir.table <- fread(paste0('/share/homes/',user,'/dir_table_log_gbd20.csv'))
+dir.table <- dir.table[ref == min(ref),] ##Changed from max which had ASFR/births set to F, might have been old
 if(grepl('test', loc)){
   loc <- 'IND_4856'
 }

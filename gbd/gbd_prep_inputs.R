@@ -20,7 +20,7 @@ if(length(args) > 0) {
 	mlt <- args[9]
 	birth <- args[10]
 } else {
-	run.name <- "200713_yuka"
+	run.name <- "200807_demo_tests2"
 	proj.end <- 2022
 	run.group2 <- FALSE
 	decomp.step <- "iterative"
@@ -82,6 +82,7 @@ pop.all <-  get_mort_outputs(
   age_group_id = c(28, 238,21 ,50:127),
   location_id = c(epp.locs, parent.locs), year_id = seq(1970, proj.end), sex_id = 1:2)
 pop.all <- pop.all[,.(age_group_id, location_id, year_id, sex_id, population, run_id)]
+unique(pop.all$age_group_id)
 
 
 pop.o80 <-  get_mort_outputs(
@@ -340,3 +341,9 @@ if(run.group2 == TRUE){
 }
 
 
+  
+  
+  
+  
+  
+  
