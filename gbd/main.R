@@ -22,15 +22,20 @@ if(length(args) > 0) {
   paediatric <- as.logical(args[4])
 
 } else {
-	run.name <- "200807_demo_tests"
-	loc <- 'LSO'
+	run.name <- "200713_yuka_rhy"
+	loc <- 'IND_4842'
 	stop.year <- 2022
 	j <- 1
 	paediatric <- TRUE
 }
 
-run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
-c.args <- run.table[run_name==run.name]
+# run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
+# if(grepl('IND',loc)){
+#   temp.run.name = '2020_ind_test_agg9'
+# }else{
+#   temp.run.name = run.name
+# }
+c.args <- run.table[run_name==temp.run.name]
 
 
 ### Arguments
@@ -56,9 +61,6 @@ epp.mod <- c.args[['epp_mod']]
 geoadjust <- c.args[['anc_sub']]
 no_anc <- c.args[['no_anc']]
 anc.prior.sub <- TRUE
-if(grepl('IND', loc)){
-  epp_mod <- 'rlogistic'
-}
 prev_sub <- TRUE
 sexincrr.sub <- TRUE
 
@@ -124,34 +126,21 @@ if(loc %in% c("MAR","MRT","COM")){
 
 
 
-# if(loc == 'IND_4842'){
 dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
                          pop.sub, anc.sub, anc.backcast, prev.sub = prev_sub, art.sub = TRUE,
                          sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = TRUE,
                          anc.prior.sub = TRUE, lbd.anc = lbd.anc,
                          geoadjust = geoadjust, use_2019 = TRUE,
                          test.sub_prev_granular = test)
-# }else{
-#dt <- readRDS(paste0('/ihme/hiv/epp_output/gbd20/2020_ind_test_agg10/dt_objects/', loc, '_dt.RDS'))
-# }
+
+dt <- readRDS('/ihme/hiv/epp_output/gbd20/2020_ind_test_agg9/dt_objects/IND_4841_dt.RDS')
 mod <- data.table(attr(dt, 'eppd')$hhs)[prev == 0.0005,se := 0]
-#mod <- data.table(attr(dt, 'eppd')$hhs)
-#mod <- data.table(attr(dt, 'eppd')$hhs)[prev == 0.0005,se := 0.00005]
 mod[prev == 0.0005, prev := 0]
 attr(dt, 'eppd')$hhs <- data.frame(mod)
 
 dt <- modify_dt(dt)
 attr(dt, 'specfp')$art_alloc_mxweight <- 0.5
 
-if(run.name == "ind_aggs13"){ ##Need to correct
-  
-  ageincrr.pr.sd  <- c(0.5, 0.4, 0.23, 0.3, 0.3, 0.3, 0.3, 0.3, 0.2, 0.2, 0.2, 0.2) * 1e-3
-  
-  prior_args <- c(attr(dt, 'specfp')$prior_args,
-                  list(ageincrr.pr.sd = ageincrr.pr.sd))
-  
-  attr(dt, 'specfp')$prior_args <- prior_args
-}
 
 
 sub.anc.prior <- function(dt,loc){
@@ -172,16 +161,24 @@ sub.anc.prior <- function(dt,loc){
 }
 
 dt <- sub.anc.prior(dt, loc)
-# 
 
+zero_prev_locs <- fread(prev_surveys)
+zero_prev_locs <- unique(zero_prev_locs[prev == 0.0005,iso3])
+
+if(loc == 'TZA'){
+  mod <- data.table(attr(dt, 'eppd')$hhs)
+  mod[year == 2017, se := 0.015]
+  attr(dt, 'eppd')$hhs <- data.frame(mod)
+}
 ## Fit model
-if(grepl('IND', loc)){
-  #attr(dt, 'eppd')$hhs <- data.frame(data.table(attr(dt, 'eppd')$hhs)[prev == 0.0005, prev := 0])
-  fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500, ageprev = 'binom')
+if(loc %in% zero_prev_locs){
+  fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 200, ageprev = 'binom')
   
 }else{
   # 
+  # fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500, fitincrr = 'regincrr')
   fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500)
+  
 
 }
 

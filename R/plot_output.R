@@ -590,6 +590,8 @@ plot_age_specific <- function(loc, run.name.old,  compare.run = c('2020_ind_test
     }
 
   }
+  data <- data[age %in% seq(15, 45, by = 5) | age == '15-49',]
+  data[mean == 0, upper := 0]
 
   if('Case Report' %in% data$model & c.metric == 'Rate'){
     pop.dt <- fread(paste0('/share/hiv/epp_input/gbd19/', run.name.old, '/population_single_age/', loc, '.csv'))
@@ -658,7 +660,7 @@ plot_age_specific <- function(loc, run.name.old,  compare.run = c('2020_ind_test
   if(!is.na(compare.run)){
     dt <- list()
     for(run in compare.run){
-      if(compare.run != '190630_rhino2'){
+      if(run != '190630_rhino2'){
         compare.dt <- fread(paste0('/share/hiv/epp_output/gbd20/', run, '/compiled/', loc, '.csv'))
         compare.dt <- get_summary(compare.dt, loc, run.name.old =  run, run.name.new = run, paediatric = T, old.splits = F)
       }else{

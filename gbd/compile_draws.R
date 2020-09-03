@@ -22,8 +22,8 @@ if(length(args) > 0) {
   gbdyear <- 'gbd20'
 } else {
   run.name <- "200713_yuka"
-  loc <- "KEN_44796"
-  n <- 1000
+  loc <- "IND_4841"
+  n <- 1
   draw.fill <- TRUE
   paediatric <- TRUE
 }
