@@ -320,7 +320,13 @@ split_u1.new_ages <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd2
   ## pull in incidence proportions from eppasm
 
   if(is.null(test_run)){
-    split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/', run.name.new ,'/compiled/', loc, '_under1_splits.csv'))
+    if(!file.exists(paste0('/share/hiv/epp_output/gbd20/200713_yuka/compiled/', loc, '.csv'))){
+      split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/200505_xylo/compiled/', loc, '_under1_splits.csv'))
+      
+    }else{
+      split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/', run.name.new ,'/compiled/', loc, '_under1_splits.csv'))
+      
+    }
     
   }else{
     split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/', run.name.new ,'/compiled/', loc, '_', test_run,'_under1_splits.csv'))

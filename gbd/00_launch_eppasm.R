@@ -13,24 +13,24 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 library(data.table)
 
 ## Arguments
-run.name <- "200713_yuka_rhy"
+run.name <- "200713_yuka"
 spec.name <- "200713_yuka"
 compare.run <- c("200505_xylo")
 
 proj.end <- 2022
-n.draws <- 10
+n.draws <- 1000
 run.group2 <- FALSE
 paediatric <- TRUE
 cluster.project <- "proj_hiv"
 plot_ART <- FALSE
 est_India <- T
-reckon_prep <- FALSE
+reckon_prep <- TRUE
 decomp.step <- "iterative"
 gbdyear <- "gbd20"
 redo_offsets <- F
 testing = FALSE
 test = NULL
-run_eppasm = T
+run_eppasm = F
 
 ### Paths
 input.dir <- paste0("/ihme/hiv/epp_input/", gbdyear, '/', run.name, "/")
@@ -146,11 +146,11 @@ if(redo_offsets){
 ## Launch EPP
 # zero_prev_locs <- fread(prev_surveys)
 # zero_prev_locs <- unique(zero_prev_locs[prev == 0.0005,iso3])
-rerun <- fread('/ihme/homes/mwalte10/temp_runs.csv')
-loc.list <- rerun[run == '200505_xylo',loc]
-loc.list <- loc.list[!grepl('IND', loc.list)]
+# rerun <- fread('/ihme/homes/mwalte10/temp_runs.csv')
+# loc.list <- c(rerun[run == '200713_yuka',loc], rerun[run == '200505_xylo',loc])
+
 if(run_eppasm){
-for(loc in loc.list) {    ## Run EPPASM
+for(loc in loc.list[9:12]) {    ## Run EPPASM
 
    # for(test in paste0('test', c(1:7))){
   # epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q all.q -P ", cluster.project, " ",
@@ -179,8 +179,8 @@ for(loc in loc.list) {    ## Run EPPASM
   }
   
                       
-     print(epp.string)
-     system(epp.string)
+   #  print(epp.string)
+    # system(epp.string)
 
      
       #
@@ -197,8 +197,7 @@ for(loc in loc.list) {    ## Run EPPASM
       print(draw.string)
       system(draw.string)
 
-     compare.run <- c('2020_ind_test_agg9')
-      plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q long.q -P ", cluster.project, " ",
+      plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
                             "-e /share/temp/sgeoutput/", user, "/errors ",
                             "-o /share/temp/sgeoutput/", user, "/output ",
                             "-N ", loc, "_plot_eppasm ",
@@ -299,7 +298,6 @@ for(loc in loc.list) {    ## Run EPPASM
 ## Prepare for post-reckoning steps
 eppasm_parents <-  c("KEN","ZAF","ETH","KEN_44793" ,"KEN_44794","KEN_44795", "KEN_44796" ,"KEN_44797", "KEN_44798","KEN_44799", "KEN_44800","NGA")
 all_loc_list <- c(loc.list,eppasm_parents, 'MRT', 'COM', 'STP')
-
 ## Aggregation and reckoning prep for higher levels
 if(reckon_prep){
   for(loc in all_loc_list){
@@ -335,20 +333,22 @@ if(reckon_prep){
 check_loc_results(c(loc.list,eppasm_parents),paste0("/ihme/hiv/spectrum_prepped/art_draws/",spec.name,"/"),prefix="",postfix="_ART_data.csv")
 
 #Move over India inputs for Spectrum if estimated through EPP-ASM
-# if(est_India){
-#   ind.locs <- loc.table[grepl("IND",ihme_loc_id) & spectrum==1,ihme_loc_id]
-#   inputs <- list(inc="incidence",prev="prevalence")
-#   dir.create(paste0('/ihme/hiv/spectrum_input/', spec.name, '/incidence/'))
-#   dir.create(paste0('/ihme/hiv/spectrum_input/', spec.name, '/prevalence/'))
-# 
-#   for(input.x in names(inputs)){
-#     for(loc_i in ind.locs){
-# 
-#       file.copy(from = paste0('/ihme/hiv/epp_output/gbd20/',run.name,'/compiled/IND_',input.x,"/",loc_i,".csv"),
-#                 to = paste0('/share/hiv/spectrum_input/', spec.name, '/',inputs[input.x],"/",loc_i,".csv"), overwrite = T)
-#     }
-#   }
-# }
+if(est_India){
+  ind.locs <- loc.table[grepl("IND",ihme_loc_id) & spectrum==1,ihme_loc_id]
+  ind.locs <- setdiff(ind.locs, c('IND_43880', 'IND_43877', 'IND_43911', 'IND_43910', 'IND_43875', 'IND_43874',
+                                 'IND_43909', 'IND_43872', 'IND_43873', 'IND_43882', 'IND_43881', 'IND_43883', 'IND_43884'))
+  inputs <- list(inc="incidence",prev="prevalence")
+  dir.create(paste0('/ihme/hiv/spectrum_input/', spec.name, '/incidence/'))
+  dir.create(paste0('/ihme/hiv/spectrum_input/', spec.name, '/prevalence/'))
+
+  for(input.x in names(inputs)){
+    for(loc_i in ind.locs){
+
+      file.copy(from = paste0('/ihme/hiv/epp_output/gbd20/',run.name,'/compiled/IND_',input.x,"/",loc_i,".csv"),
+                to = paste0('/share/hiv/spectrum_input/', spec.name, '/',inputs[input.x],"/",loc_i,".csv"), overwrite = T)
+    }
+  }
+}
 
 
 

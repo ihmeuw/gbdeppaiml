@@ -22,8 +22,8 @@ if(length(args) > 0) {
   gbdyear <- 'gbd20'
 } else {
   run.name <- "200713_yuka"
-  loc <- "IND_4841"
-  n <- 1
+  loc <- "ETH_44857"
+  n <- 1000
   draw.fill <- TRUE
   paediatric <- TRUE
 }
@@ -113,6 +113,7 @@ print('loc.table loaded')
       split.list <- list.files(draw.path)
       split.list <- split.list[grepl('under_', split.list)]
       split.dt <- lapply(split.list, function(draw){
+       
         draw.dt <- fread(paste0(draw.path, '/', draw))
       })
       

@@ -12,7 +12,7 @@ if(length(args) > 0) {
   run.name <- args[2]
   spec.name <- args[3]
 } else {
-  loc <- "AGO"
+  loc <- "ETH_44857"
   run.name <- "200713_yuka"
   spec.name <- "200713_yuka"
 
@@ -71,7 +71,16 @@ loc_id <- locations[ihme_loc_id==loc,location_id]
 
 
 ## Bring in EPPASM Draws
-
+dir.list <- c('/ihme/hiv/epp_output/gbd20/200713_yuka/', '/ihme/hiv/epp_output/gbd20/200505_xylo/')
+for(dir in dir.list){
+  if(file.exists(paste0(dir, '/compiled/', loc, '.csv'))){
+    eppasm_dir <- dir
+    
+  }else{
+    next
+  }
+  
+}
 spec_draw <- data.table(fread(paste0(eppasm_dir,"/compiled/",loc,".csv"), blank.lines.skip = T))
 spec_draw[age >= 5,age_gbd :=  as.character(age - age%%5)]
 spec_draw[age %in% 1, age_gbd := "12-23 mo."]

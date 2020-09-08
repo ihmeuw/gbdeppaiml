@@ -1,7 +1,3 @@
-## Tahvi Frank
-## tahvif@uw.edu/tahvif@gmail.com
-### Setup
-rm(list=ls())
 Sys.umask(mode = "0002")
 windows <- Sys.info()[1][["sysname"]]=="Windows"
 root <- ifelse(windows,"J:/","/home/j/")
@@ -10,7 +6,6 @@ code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdepp
 gbdyear <- 'gbd20'
 ## Packages
 library(data.table); library(mvtnorm); library(survey); library(ggplot2); library(plyr); library(dplyr)
-
 ## Arguments
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
@@ -20,24 +15,20 @@ if(length(args) > 0) {
   stop.year <- as.integer(args[3])
   j <- as.integer(Sys.getenv("SGE_TASK_ID"))
   paediatric <- as.logical(args[4])
-
 } else {
-	run.name <- "200713_yuka_rhy"
-	loc <- 'IND_4842'
-	stop.year <- 2022
-	j <- 1
-	paediatric <- TRUE
+  run.name <- "200713_yukaind"
+  loc <- 'IND_4841'
+  stop.year <- 2022
+  j <- 1
+  paediatric <- TRUE
 }
-
-# run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
-# if(grepl('IND',loc)){
-#   temp.run.name = '2020_ind_test_agg9'
-# }else{
-#   temp.run.name = run.name
-# }
+run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
+if(grepl('IND',loc)){
+  temp.run.name = '2020_ind_test_agg9'
+}else{
+  temp.run.name = run.name
+}
 c.args <- run.table[run_name==temp.run.name]
-
-
 ### Arguments
 ## Some arguments are likely to stay constant across runs, others we're more likely to test different options.
 ## The arguments that are more likely to vary are pulled from the eppasm run table
@@ -63,15 +54,12 @@ no_anc <- c.args[['no_anc']]
 anc.prior.sub <- TRUE
 prev_sub <- TRUE
 sexincrr.sub <- TRUE
-
 ### Paths
 if(!is.null(test)){
   out.dir <- paste0('/ihme/hiv/epp_output/',gbdyear,'/', run.name, '_', test,"/", loc)
 }else{
   out.dir <- paste0('/ihme/hiv/epp_output/',gbdyear,'/', run.name, "/", loc)
-  
 }
-
 ### Functions
 library(mortdb, lib = "/share/mortality/shared/r/")
 setwd(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/"))
@@ -79,25 +67,20 @@ devtools::load_all()
 setwd(code.dir)
 devtools::load_all()
 loc.table <- get_locations(hiv_metadata = TRUE)
-
 ##set toggles
 if(loc == 'ETH_44862'){  ##I imagine this was for a test and can be taken off? Note that its in the set_toggles function too
   births <-    paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/births/', loc, '.csv')
   print(paste0(loc, ' births from rhino2 subbed in'))
-  
 }
-
 # These locations do not have information from LBD team estimates
 # ZAF ANC data are considered nationally representative so no GeoADjust - this could be challenged in the future
 no_geo_adj <-  c(loc.table[epp ==1 & grepl("IND",ihme_loc_id),ihme_loc_id],
                  "PNG","HTI","DOM", 'CPV', loc.table[epp ==1 & grepl("ZAF",ihme_loc_id),ihme_loc_id], 'STP', 'KEN_35626', 'MRT', 'COM')
-
 if(loc %in% c('ZWE', 'MWI')){
   geoadj_test <- TRUE
 }else{
   geoadj_test <- FALSE
 }
-
 # ANC data bias adjustment
 if(geoadjust & !loc %in% no_geo_adj){
   geoadjust  <- TRUE
@@ -105,49 +88,35 @@ if(geoadjust & !loc %in% no_geo_adj){
   geoadjust  <- FALSE
 }
 print(paste0(loc, ' geoadjust set to ', geoadjust))
-
 if(!loc %in% unlist(strsplit(list.files('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/2019/'), '.rds'))){
   lbd.anc <- FALSE
 }
 if(grepl('IND',loc)){
   lbd.anc <- FALSE
 }
-
 if(loc %in% c("ZAF","PNG")){
   lbd.anc <- FALSE
 }
 print(paste0(loc, ' lbd.anc set to ', lbd.anc))
-
-
 ##Need to figure out where to get these
 if(loc %in% c("MAR","MRT","COM")){
   sexincrr.sub <- FALSE
 }
-
-
-
 dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
-                         pop.sub, anc.sub, anc.backcast, prev.sub = prev_sub, art.sub = TRUE,
-                         sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = TRUE,
-                         anc.prior.sub = TRUE, lbd.anc = lbd.anc,
-                         geoadjust = geoadjust, use_2019 = TRUE,
-                         test.sub_prev_granular = test)
-
-dt <- readRDS('/ihme/hiv/epp_output/gbd20/2020_ind_test_agg9/dt_objects/IND_4841_dt.RDS')
+                       pop.sub, anc.sub, anc.backcast, prev.sub = prev_sub, art.sub = TRUE,
+                       sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = TRUE,
+                       anc.prior.sub = TRUE, lbd.anc = lbd.anc,
+                       geoadjust = geoadjust, use_2019 = TRUE,
+                       test.sub_prev_granular = test)
+#dt <- readRDS('/ihme/hiv/epp_output/gbd20/2020_ind_test_agg9/dt_objects/IND_4841_dt.RDS')
 mod <- data.table(attr(dt, 'eppd')$hhs)[prev == 0.0005,se := 0]
 mod[prev == 0.0005, prev := 0]
 attr(dt, 'eppd')$hhs <- data.frame(mod)
-
 dt <- modify_dt(dt)
 attr(dt, 'specfp')$art_alloc_mxweight <- 0.5
-
-
-
 sub.anc.prior <- function(dt,loc){
-  
   if(loc %in%  c("SDN","SSD","SOM","GNB","MDG","PNG", "COM")){
     #   if(loc %in%  c("SDN","SSD","SOM","MDG","PNG", "COM")){
-    
     ancbias.pr.mean <<- 0.15
     ancbias.pr.sd <<- 0.001
   }else if(loc %in% "MRT"){
@@ -159,20 +128,25 @@ sub.anc.prior <- function(dt,loc){
   }
   return(dt)
 }
-
 dt <- sub.anc.prior(dt, loc)
-
 zero_prev_locs <- fread(prev_surveys)
 zero_prev_locs <- unique(zero_prev_locs[prev == 0.0005,iso3])
-
 if(loc == 'TZA'){
   mod <- data.table(attr(dt, 'eppd')$hhs)
   mod[year == 2017, se := 0.015]
   attr(dt, 'eppd')$hhs <- data.frame(mod)
 }
 ## Fit model
+
 if(loc %in% zero_prev_locs){
-  fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 200, ageprev = 'binom')
+  if(grepl('IND',loc)){
+    epp.mod = 'rlogistic'
+    fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500, ageprev = 'binom')
+    
+  }else{
+    fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500, ageprev = 'binom')
+    
+  }
   
 }else{
   # 
@@ -205,6 +179,7 @@ if(max(fit$fp$pmtct_dropout$year) < stop.year){
 draw <- j
 
 result <- gbd_sim_mod(fit, VERSION = "R")
+
 dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/'), recursive = T)
 saveRDS(result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/', draw, '.RDS'))
 
