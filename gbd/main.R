@@ -16,8 +16,8 @@ if(length(args) > 0) {
   j <- as.integer(Sys.getenv("SGE_TASK_ID"))
   paediatric <- as.logical(args[4])
 } else {
-  run.name <- "200713_yukaind"
-  loc <- 'IND_4841'
+  run.name <- "200908_test"
+  loc <- 'AGO'
   stop.year <- 2022
   j <- 1
   paediatric <- TRUE
@@ -29,6 +29,10 @@ if(grepl('IND',loc)){
   temp.run.name = run.name
 }
 c.args <- run.table[run_name==temp.run.name]
+array_table <- fread('/ihme/homes/mwalte10/eppasm_run_tab.csv')
+array_table[,loc := NULL]
+array_table <- unique(array_table)
+draws <- array_table[j,]
 ### Arguments
 ## Some arguments are likely to stay constant across runs, others we're more likely to test different options.
 ## The arguments that are more likely to vary are pulled from the eppasm run table
@@ -62,6 +66,11 @@ if(!is.null(test)){
 }
 ### Functions
 library(mortdb, lib = "/share/mortality/shared/r/")
+library(parallel)
+if(detectCores() < length(draws)){
+  stop('Need to up the number of threads')
+}
+
 setwd(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/"))
 devtools::load_all()
 setwd(code.dir)
@@ -138,67 +147,73 @@ if(loc == 'TZA'){
 }
 ## Fit model
 
-if(loc %in% zero_prev_locs){
-  if(grepl('IND',loc)){
-    epp.mod = 'rlogistic'
-    fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500, ageprev = 'binom')
+eppasm_functions <- function(draw){
+  if(loc %in% zero_prev_locs){
+    if(grepl('IND',loc)){
+      epp.mod = 'rlogistic'
+      fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500, ageprev = 'binom')
+      
+    }else{
+      fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 1000, ageprev = 'binom')
+      
+    }
     
   }else{
-    fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500, ageprev = 'binom')
+    # 
+    # fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500, fitincrr = 'regincrr')
+    fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 1000)
+    
     
   }
   
-}else{
-  # 
-  # fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500, fitincrr = 'regincrr')
-  fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500)
+  data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc,'.csv')
+  save_data(loc, attr(dt, 'eppd'), run.name)
   
+  ## When fitting, the random-walk based models only simulate through the end of the
+  ## data period. The `extend_projection()` function extends the random walk for r(t)
+  ## through the end of the projection period.
+  
+  if(epp.mod == 'rhybrid'){
+    fit <- extend_projection(fit, proj_years = stop.year - start.year + 1)
+  }
+  
+  if(max(fit$fp$pmtct_dropout$year) < stop.year){
+    add_on.year <- seq(max(fit$fp$pmtct_dropout$year) + 1 , stop.year)
+    add_on.dropouts <- fit$fp$pmtct_dropout[fit$fp$pmtct_dropout$year == max(fit$fp$pmtct_dropout$year), 2:ncol(fit$fp$pmtct_dropout)]
+    fit$fp$pmtct_dropout <- rbind(fit$fp$pmtct_dropout, c(year = unlist(add_on.year), add_on.dropouts))
+  }
+  
+  ##NOTE: need to get GBD simmod working again - error on BF transmissions - otherwise PAEDIATRIC must be false
+  j = draw
+  draw = j
+  result <- gbd_sim_mod(fit, VERSION = "R")
+  
+  dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/'), recursive = T)
+  saveRDS(result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/', j, '.RDS'))
+  
+  output.dt <- get_gbd_outputs(result, attr(dt, 'specfp'), paediatric = paediatric)
+  output.dt[,run_num := j]
+  ## Write output to csv
+  dir.create(out.dir, showWarnings = FALSE)
+  write.csv(output.dt, paste0(out.dir, '/', j, '.csv'), row.names = F)
+  
+  # ## under-1 splits
+  if(paediatric){
+    split.dt <- get_under1_splits(result, attr(dt, 'specfp'))
+    split.dt[,run_num := draw]
+    write.csv(split.dt, paste0(out.dir, '/under_1_splits_', j, '.csv' ), row.names = F)
+  }
+  ## Write out theta for plotting posterior
+  param <- data.table(theta = attr(result, 'theta'))
+  write.csv(param, paste0(out.dir,'/theta_', j, '.csv'), row.names = F)
+  if(plot.draw){
+    plot_15to49_draw(loc, output.dt, attr(dt, 'eppd'), run.name)
+  }
 
+  print(j)
 }
+#mclapply(unname(as.vector(draws)), eppasm_functions, mc.cores = 2)
 
-data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc,'.csv')
-save_data(loc, attr(dt, 'eppd'), run.name)
-
-## When fitting, the random-walk based models only simulate through the end of the
-## data period. The `extend_projection()` function extends the random walk for r(t)
-## through the end of the projection period.
-
-if(epp.mod == 'rhybrid'){
-  fit <- extend_projection(fit, proj_years = stop.year - start.year + 1)
-}
-
-if(max(fit$fp$pmtct_dropout$year) < stop.year){
-  add_on.year <- seq(max(fit$fp$pmtct_dropout$year) + 1 , stop.year)
-  add_on.dropouts <- fit$fp$pmtct_dropout[fit$fp$pmtct_dropout$year == max(fit$fp$pmtct_dropout$year), 2:ncol(fit$fp$pmtct_dropout)]
-  fit$fp$pmtct_dropout <- rbind(fit$fp$pmtct_dropout, c(year = unlist(add_on.year), add_on.dropouts))
-}
-
-##NOTE: need to get GBD simmod working again - error on BF transmissions - otherwise PAEDIATRIC must be false
+mclapply(unname(as.vector(draws)), eppasm_functions, mc.cores = length(draws))
 
 
-draw <- j
-
-result <- gbd_sim_mod(fit, VERSION = "R")
-
-dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/'), recursive = T)
-saveRDS(result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/', draw, '.RDS'))
-
-output.dt <- get_gbd_outputs(result, attr(dt, 'specfp'), paediatric = paediatric)
-output.dt[,run_num := j]
-## Write output to csv
-dir.create(out.dir, showWarnings = FALSE)
-write.csv(output.dt, paste0(out.dir, '/', j, '.csv'), row.names = F)
-
-# ## under-1 splits
-if(paediatric){
-  split.dt <- get_under1_splits(result, attr(dt, 'specfp'))
-  split.dt[,run_num := j]
-  write.csv(split.dt, paste0(out.dir, '/under_1_splits_', j, '.csv' ), row.names = F)
-}
-## Write out theta for plotting posterior
-param <- data.table(theta = attr(result, 'theta'))
-write.csv(param, paste0(out.dir,'/theta_', j, '.csv'), row.names = F)
-if(plot.draw){
-  plot_15to49_draw(loc, output.dt, attr(dt, 'eppd'), run.name)
-}
-#

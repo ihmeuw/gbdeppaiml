@@ -13,12 +13,11 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 library(data.table)
 
 ## Arguments
-run.name <- "200713_yuka"
-spec.name <- "200713_yuka"
+run.name <- "200908_test"
+spec.name <- "200908_test"
 compare.run <- c("200505_xylo")
 
 proj.end <- 2022
-n.draws <- 1000
 run.group2 <- FALSE
 paediatric <- TRUE
 cluster.project <- "proj_hiv"
@@ -31,6 +30,9 @@ redo_offsets <- F
 testing = FALSE
 test = NULL
 run_eppasm = F
+n.draws = 10
+jobs = 2
+rep_each = n.draws / jobs
 
 ### Paths
 input.dir <- paste0("/ihme/hiv/epp_input/", gbdyear, '/', run.name, "/")
@@ -142,35 +144,28 @@ if(redo_offsets){
   system(redo_offsets.string)
 }
 
-# loc.list = 'IND_4856'
-## Launch EPP
-# zero_prev_locs <- fread(prev_surveys)
-# zero_prev_locs <- unique(zero_prev_locs[prev == 0.0005,iso3])
-# rerun <- fread('/ihme/homes/mwalte10/temp_runs.csv')
-# loc.list <- c(rerun[run == '200713_yuka',loc], rerun[run == '200505_xylo',loc])
 
+loc.list = 'BDI'
 if(run_eppasm){
-for(loc in loc.list[9:12]) {    ## Run EPPASM
+for(loc in loc.list) {    ## Run EPPASM
 
-   # for(test in paste0('test', c(1:7))){
-  # epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q all.q -P ", cluster.project, " ",
   if(loc == 'RWA'){
     epp.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=24:00:00 -l archive=True -q long.q -P ", cluster.project, " ",
                          "-e /share/temp/sgeoutput/", user, "/errors ",
                          "-o /share/temp/sgeoutput/", user, "/output ",
                          "-N ", loc,"_",run.name, "_eppasm ",
-                         "-t 1:", n.draws, " ",
+                         "-t 1:", jobs, " ",
                          "-hold_jid eppasm_prep_inputs_", run.name," ",
                          code.dir, "gbd/singR_shell.sh ",
                          code.dir, "gbd/main.R ",
                          run.name, " ", loc, " ", proj.end, " ", paediatric)
                          
   }else{
-    epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive=True -q all.q -P ", cluster.project, " ",
+    epp.string <- paste0("qsub -l m_mem_free=15G -l fthread=2 -l h_rt=24:00:00 -l archive=True -q long.q -P ", cluster.project, " ",
                          "-e /share/temp/sgeoutput/", user, "/errors ",
                          "-o /share/temp/sgeoutput/", user, "/output ",
                          "-N ", loc,"_",run.name, "_eppasm ",
-                         "-t 1:", n.draws, " ",
+                         "-t 1:", jobs, " ",
                          "-hold_jid eppasm_prep_inputs_", run.name," ",
                          code.dir, "gbd/singR_shell.sh ",
                          code.dir, "gbd/main.R ",
@@ -180,7 +175,7 @@ for(loc in loc.list[9:12]) {    ## Run EPPASM
   
                       
    #  print(epp.string)
-    # system(epp.string)
+   # system(epp.string)
 
      
       #
