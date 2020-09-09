@@ -16,8 +16,8 @@ if(length(args) > 0) {
   j <- as.integer(Sys.getenv("SGE_TASK_ID"))
   paediatric <- as.logical(args[4])
 } else {
-  run.name <- "200713_yukaind"
-  loc <- 'IND_4841'
+  run.name <- "gv_test1"
+  loc <- 'AGO'
   stop.year <- 2022
   j <- 1
   paediatric <- TRUE

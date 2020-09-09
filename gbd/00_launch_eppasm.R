@@ -13,24 +13,24 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 library(data.table)
 
 ## Arguments
-run.name <- "200713_yuka"
+run.name <- "gv_test1"
 spec.name <- "200713_yuka"
 compare.run <- c("200505_xylo")
 
 proj.end <- 2022
-n.draws <- 1000
+n.draws <- 100
 run.group2 <- FALSE
 paediatric <- TRUE
 cluster.project <- "proj_hiv"
 plot_ART <- FALSE
 est_India <- T
-reckon_prep <- TRUE
+reckon_prep <- F
 decomp.step <- "iterative"
 gbdyear <- "gbd20"
 redo_offsets <- F
 testing = FALSE
 test = NULL
-run_eppasm = F
+run_eppasm = T
 
 ### Paths
 input.dir <- paste0("/ihme/hiv/epp_input/", gbdyear, '/', run.name, "/")
@@ -150,7 +150,7 @@ if(redo_offsets){
 # loc.list <- c(rerun[run == '200713_yuka',loc], rerun[run == '200505_xylo',loc])
 
 if(run_eppasm){
-for(loc in loc.list[9:12]) {    ## Run EPPASM
+for(loc in loc.list) {    ## Run EPPASM
 
    # for(test in paste0('test', c(1:7))){
   # epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q all.q -P ", cluster.project, " ",
@@ -179,8 +179,8 @@ for(loc in loc.list[9:12]) {    ## Run EPPASM
   }
   
                       
-   #  print(epp.string)
-    # system(epp.string)
+    print(epp.string)
+   system(epp.string)
 
      
       #
