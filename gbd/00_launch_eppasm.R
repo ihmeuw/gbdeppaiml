@@ -14,7 +14,7 @@ library(data.table)
 
 ## Arguments
 run.name <- "gv_test1"
-spec.name <- "200713_yuka"
+spec.name <- "gv_test1"
 compare.run <- c("200505_xylo")
 
 proj.end <- 2022
@@ -335,8 +335,8 @@ check_loc_results(c(loc.list,eppasm_parents),paste0("/ihme/hiv/spectrum_prepped/
 #Move over India inputs for Spectrum if estimated through EPP-ASM
 if(est_India){
   ind.locs <- loc.table[grepl("IND",ihme_loc_id) & spectrum==1,ihme_loc_id]
-  ind.locs <- setdiff(ind.locs, c('IND_43880', 'IND_43877', 'IND_43911', 'IND_43910', 'IND_43875', 'IND_43874',
-                                 'IND_43909', 'IND_43872', 'IND_43873', 'IND_43882', 'IND_43881', 'IND_43883', 'IND_43884'))
+  # ind.locs <- setdiff(ind.locs, c('IND_43880', 'IND_43877', 'IND_43911', 'IND_43910', 'IND_43875', 'IND_43874',
+  #                                'IND_43909', 'IND_43872', 'IND_43873', 'IND_43882', 'IND_43881', 'IND_43883', 'IND_43884'))
   inputs <- list(inc="incidence",prev="prevalence")
   dir.create(paste0('/ihme/hiv/spectrum_input/', spec.name, '/incidence/'))
   dir.create(paste0('/ihme/hiv/spectrum_input/', spec.name, '/prevalence/'))
