@@ -145,7 +145,7 @@ if(redo_offsets){
 }
 
 
-loc.list = 'BDI'
+loc.list = 'AGO'
 if(run_eppasm){
 for(loc in loc.list) {    ## Run EPPASM
 
@@ -161,7 +161,7 @@ for(loc in loc.list) {    ## Run EPPASM
                          run.name, " ", loc, " ", proj.end, " ", paediatric)
                          
   }else{
-    epp.string <- paste0("qsub -l m_mem_free=15G -l fthread=2 -l h_rt=24:00:00 -l archive=True -q long.q -P ", cluster.project, " ",
+    epp.string <- paste0("qsub -l m_mem_free=15G -l fthread=2 -l h_rt=24:00:00 -l archive=True -q all.q -P ", cluster.project, " ",
                          "-e /share/temp/sgeoutput/", user, "/errors ",
                          "-o /share/temp/sgeoutput/", user, "/output ",
                          "-N ", loc,"_",run.name, "_eppasm ",

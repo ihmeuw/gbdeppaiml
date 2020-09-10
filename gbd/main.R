@@ -154,14 +154,14 @@ eppasm_functions <- function(draw){
       fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500, ageprev = 'binom')
       
     }else{
-      fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 1000, ageprev = 'binom')
+      fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500, ageprev = 'binom')
       
     }
     
   }else{
     # 
     # fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500, fitincrr = 'regincrr')
-    fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 1000)
+    fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500)
     
     
   }
