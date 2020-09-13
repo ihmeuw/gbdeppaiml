@@ -13,8 +13,8 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 library(data.table)
 
 ## Arguments
-run.name <- "gv_test1"
-spec.name <- "gv_test1"
+run.name <- "gv_test3"
+spec.name <- "gv_test3"
 compare.run <- c("200505_xylo")
 
 proj.end <- 2022
@@ -23,14 +23,14 @@ run.group2 <- FALSE
 paediatric <- TRUE
 cluster.project <- "proj_hiv"
 plot_ART <- FALSE
-est_India <- T
-reckon_prep <- F
+est_India <- F
+reckon_prep <- T
 decomp.step <- "iterative"
 gbdyear <- "gbd20"
 redo_offsets <- F
 testing = FALSE
 test = NULL
-run_eppasm = T
+run_eppasm = F
 
 ### Paths
 input.dir <- paste0("/ihme/hiv/epp_input/", gbdyear, '/', run.name, "/")
