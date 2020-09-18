@@ -138,7 +138,7 @@ if(loc == 'TZA'){
 }
 ## Fit model
 
-if(loc %in% zero_prev_locs){
+if(loc %in% zero_prev_locs & loc != 'RWA'){
   if(grepl('IND',loc)){
     epp.mod = 'rlogistic'
     fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500, ageprev = 'binom')

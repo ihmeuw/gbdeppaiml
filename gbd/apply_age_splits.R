@@ -12,9 +12,9 @@ if(length(args) > 0) {
   run.name <- args[2]
   spec.name <- args[3]
 } else {
-  loc <- "ETH_44857"
-  run.name <- "200713_yuka"
-  spec.name <- "200713_yuka"
+  loc <- "KEN"
+  run.name <- "gv_test2"
+  spec.name <- "gv_test2"
 
 }
 fill.draw <- T
@@ -40,7 +40,7 @@ devtools::load_all()
 
 ## Libraries etc.
 library(data.table); library(foreign); library(assertable)
-if(run.name == '200505_xylo' | run.name == '200713_yuka'){
+if(run.name == '200505_xylo' | run.name == '200713_yuka' | run.name %in% c('gv_test1', 'gv_test2', 'gv_test3')){
   age_map <- data.table(fread(paste0('/ihme/hiv/epp_input/', gbdyear, '/', '200316_windchime', "/age_map.csv")))
   
 }else{
@@ -71,16 +71,17 @@ loc_id <- locations[ihme_loc_id==loc,location_id]
 
 
 ## Bring in EPPASM Draws
+eppasm_dir <- paste0('/ihme/hiv/epp_output/gbd20/',run.name,'/')
 dir.list <- c('/ihme/hiv/epp_output/gbd20/200713_yuka/', '/ihme/hiv/epp_output/gbd20/200505_xylo/')
-for(dir in dir.list){
-  if(file.exists(paste0(dir, '/compiled/', loc, '.csv'))){
-    eppasm_dir <- dir
-    
-  }else{
-    next
-  }
-  
-}
+# for(dir in dir.list){
+#   if(file.exists(paste0(dir, '/compiled/', loc, '.csv'))){
+#     eppasm_dir <- dir
+#     
+#   }else{
+#     next
+#   }
+#   
+# }
 spec_draw <- data.table(fread(paste0(eppasm_dir,"/compiled/",loc,".csv"), blank.lines.skip = T))
 spec_draw[age >= 5,age_gbd :=  as.character(age - age%%5)]
 spec_draw[age %in% 1, age_gbd := "12-23 mo."]
