@@ -13,12 +13,12 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 library(data.table)
 
 ## Arguments
-run.name <- "200713_yuka"
+run.name <- "200921_socialdets"
 spec.name <- "200713_yuka"
 compare.run <- c("200505_xylo")
 
 proj.end <- 2022
-n.draws <- 1000
+n.draws <- 10
 run.group2 <- FALSE
 paediatric <- TRUE
 cluster.project <- "proj_hiv"
@@ -179,8 +179,8 @@ for(loc in loc.list[9:12]) {    ## Run EPPASM
   }
   
                       
-   #  print(epp.string)
-    # system(epp.string)
+    print(epp.string)
+   system(epp.string)
 
      
       #

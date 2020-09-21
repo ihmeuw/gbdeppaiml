@@ -16,8 +16,8 @@ if(length(args) > 0) {
   j <- as.integer(Sys.getenv("SGE_TASK_ID"))
   paediatric <- as.logical(args[4])
 } else {
-  run.name <- "200713_yukaind"
-  loc <- 'IND_4841'
+  run.name <- "200921_socialdets"
+  loc <- 'AGO'
   stop.year <- 2022
   j <- 1
   paediatric <- TRUE
@@ -151,7 +151,7 @@ if(loc %in% zero_prev_locs){
 }else{
   # 
   # fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500, fitincrr = 'regincrr')
-  fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500)
+  fit <- eppasm::fitmod(obj = dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 100)
   
 
 }

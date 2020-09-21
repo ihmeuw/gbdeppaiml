@@ -21,12 +21,12 @@ if(length(args) > 0) {
   }
   test <- args[5]
 } else {
-  run.name <- "200713_yuka"
-  loc <- "IND_4841"
+  run.name <- "200921_socialdets"
+  loc <- "AGO"
 
   draw.fill <- TRUE
   paediatric <- TRUE
-  compare.run <- c('2020_ind_test_agg9')
+  compare.run <- c('200713_yuka')
   test <-  NULL
 
 }
