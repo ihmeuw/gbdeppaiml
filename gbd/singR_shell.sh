@@ -1,7 +1,7 @@
 #$ -S /bin/sh
 # First, activate all filesystems under /ihme
 export SINGULARITYENV_OMP_NUM_THREADS=1
-export SINGULARITYENV_orig_umask=$(umask)
+export SINGULARITYENV_orig_umask=--2
 # ls /ihme/* 1>/dev/null
 # ls /home/j 1>/dev/null
 run_file="$1"; shift

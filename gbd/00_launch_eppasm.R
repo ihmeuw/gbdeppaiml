@@ -30,9 +30,16 @@ redo_offsets <- F
 testing = FALSE
 test = NULL
 run_eppasm = F
+compile_plot = F
+throttle_flag <- "-tc 800"
 n.draws = 10
 jobs = 2
 rep_each = n.draws / jobs
+loc.table <- data.table(get_locations(hiv_metadata = T))
+locs <- c(loc.table[epp == 1, ihme_loc_id], 'MRT', 'COM', 'STP')
+
+param_map <- data.table(expand.grid(draws = c(1:rep_each), ihme_loc_id = locs))
+write.csv(param_map, file = paste0('/ihme/hiv/epp_input/gbd20/', run.name, '/param_map.csv'), row.names = F)
 
 ### Paths
 input.dir <- paste0("/ihme/hiv/epp_input/", gbdyear, '/', run.name, "/")
@@ -58,7 +65,6 @@ source(paste0(root,"/Project/Mortality/shared/functions/check_loc_results.r"))
 library(mortdb, lib = "/ihme/mortality/shared/r")
 
 ### Tables
-loc.table <- data.table(get_locations(hiv_metadata = T))
 
 ### Code
 epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
@@ -145,41 +151,25 @@ if(redo_offsets){
 }
 
 
-loc.list = 'BWA'
 if(run_eppasm){
-for(loc in loc.list) {    ## Run EPPASM
+  epp.string <- paste0("qsub -l m_mem_free=200G -l fthread=2 -l h_rt=24:00:00 -l archive=True -q all.q -P ", cluster.project, " ",
+                     "-e /share/temp/sgeoutput/", user, "/errors ",
+                     "-o /share/temp/sgeoutput/", user, "/output ",
+                     "-N ", "eppasm_", run.name, ' ',
+                     throttle_flag," ",
+                     "-t 1:", nrow(param_map), " ",
+                     "-hold_jid eppasm_prep_inputs_", run.name," ",
+                     code.dir, "gbd/singR_shell.sh ",
+                     code.dir, "gbd/main.R ",
+                     run.name, " ", proj.end, " ", paediatric)
 
-  if(loc == 'RWA'){
-    epp.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=24:00:00 -l archive=True -q long.q -P ", cluster.project, " ",
-                         "-e /share/temp/sgeoutput/", user, "/errors ",
-                         "-o /share/temp/sgeoutput/", user, "/output ",
-                         "-N ", loc,"_",run.name, "_eppasm ",
-                         "-t 1:", jobs, " ",
-                         "-hold_jid eppasm_prep_inputs_", run.name," ",
-                         code.dir, "gbd/singR_shell.sh ",
-                         code.dir, "gbd/main.R ",
-                         run.name, " ", loc, " ", proj.end, " ", paediatric)
-                         
-  }else{
-    epp.string <- paste0("qsub -l m_mem_free=20G -l fthread=2 -l h_rt=24:00:00 -l archive=True -q all.q -P ", cluster.project, " ",
-                         "-e /share/temp/sgeoutput/", user, "/errors ",
-                         "-o /share/temp/sgeoutput/", user, "/output ",
-                         "-N ", loc,"_",run.name, "_eppasm ",
-                         "-t 1:", jobs, " ",
-                         "-hold_jid eppasm_prep_inputs_", run.name," ",
-                         code.dir, "gbd/singR_shell.sh ",
-                         code.dir, "gbd/main.R ",
-                         run.name, " ", loc, " ", proj.end, " ", paediatric)
-                         
-  }
-  
-                      
-    print(epp.string)
-   system(epp.string)
 
-     
-      #
-      #
+print(epp.string)
+system(epp.string)
+}
+
+if(compile_plot){
+for(loc in loc.list) {    
       #Draw compilation
       draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
                             "-e /share/temp/sgeoutput/", user, "/errors ",
