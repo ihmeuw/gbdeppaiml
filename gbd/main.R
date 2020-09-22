@@ -141,17 +141,17 @@ if(loc == 'TZA'){
 if(loc %in% zero_prev_locs){
   if(grepl('IND',loc)){
     epp.mod = 'rlogistic'
-    fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500, ageprev = 'binom')
+    fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e4, B = 1e3, number_k = 100, ageprev = 'binom')
     
   }else{
-    fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500, ageprev = 'binom')
+    fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e4, B = 1e3, number_k = 100, ageprev = 'binom')
     
   }
   
 }else{
   # 
   # fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500, fitincrr = 'regincrr')
-  fit <- eppasm::fitmod(obj = dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 100)
+  fit <- eppasm::fitmod(obj = dt, eppmod = epp.mod, B0 = 1e4, B = 1e3, number_k = 100)
   
 
 }
