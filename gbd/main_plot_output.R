@@ -75,7 +75,7 @@ test = NULL
 # ## 15-49 plots
 dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/15to49_plots/'), recursive = TRUE, showWarnings = FALSE)
 plot_15to49(loc,new.run = run.name, paediatric, plot.deaths = TRUE,  lbd_unraked = FALSE,
-            names = c('GBD20', 'IND_agg run'),
+            names = c('Social Dets Proj', 'GBD20'),
             compare.gbd17=FALSE, compare.run = run.names.comp, compare.unraked = TRUE,
             compare.stage2 = FALSE, simplify = FALSE, test_run = test)
 

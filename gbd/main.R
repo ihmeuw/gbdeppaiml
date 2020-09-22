@@ -5,7 +5,7 @@ user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
 gbdyear <- 'gbd20'
 ## Packages
-library(data.table); library(mvtnorm); library(survey); library(ggplot2); library(plyr); library(dplyr) ; library(pbapply)
+library(data.table); library(mvtnorm); library(survey); library(ggplot2); library(plyr); library(dplyr) ; library(pbapply) ; library(parallel)
 ## Arguments
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
@@ -14,28 +14,32 @@ if(length(args) > 0) {
   stop.year <- as.integer(args[3])
   j <- as.integer(Sys.getenv("SGE_TASK_ID"))
   paediatric <- as.logical(args[4])
+  cores <- as.integer(args[5])
 } else {
-  run.name <- "200908_test"
+  run.name <- "200921_socialdets"
   stop.year <- 2022
   j <- 1
   paediatric <- TRUE
+  cores = 10
 }
 run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
+param_map <- fread(paste0('/ihme/hiv/epp_input/gbd20/', run.name, '/param_map.csv'))
+loc <- param_map[j, ihme_loc_id]
+draws <- param_map[j, draws]
+# draws <- c(as.numeric(draws) : (as.numeric(draws) + (cores - 1)))
+draws = c(1:10)
 if(grepl('IND',loc)){
   temp.run.name = '2020_ind_test_agg9'
 }else{
   temp.run.name = run.name
 }
 c.args <- run.table[run_name==temp.run.name]
-param_map <- fread(paste0('/ihme/hiv/epp_input/gbd20/', run.name, '/param_map.csv'))
-loc <- param_map[j, ihme_loc_id]
-draws <- param_map[j, draws]
-draws <- c(as.numeric(draws) : (as.numeric(draws) + 99))
 
 
-if(detectCores() < draws){
-  stop('Up threads')
-}
+
+# if(detectCores() < length(draws)){
+#   stop('Up threads')
+# }
 
 ### Arguments
 ## Some arguments are likely to stay constant across runs, others we're more likely to test different options.
@@ -115,6 +119,8 @@ print(paste0(loc, ' lbd.anc set to ', lbd.anc))
 if(loc %in% c("MAR","MRT","COM")){
   sexincrr.sub <- FALSE
 }
+start.year = 1970
+stop.year = 2022
 dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
                        pop.sub, anc.sub, anc.backcast, prev.sub = prev_sub, art.sub = TRUE,
                        sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = TRUE,
@@ -213,6 +219,8 @@ eppasm_functions <- function(draw, obj, B_0 = 1e5, B = 1e3, k = 500){
 
 }
 #mclapply(draws, eppasm_functions, obj = dt, B_0 = 1e3, B = 1e3, k = 2, mc.cores = length(draws))
-mclapply(draws, eppasm_functions, obj = dt, mc.cores = length(draws))
+mclapply(draws, eppasm_functions, obj = dt,
+         B_0 = 1e3, B = 1e3, k = 100,
+         mc.cores = 10)
 
 

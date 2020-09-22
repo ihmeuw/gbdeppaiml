@@ -13,7 +13,7 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 library(data.table)
 
 ## Arguments
-run.name <- "200908_test"
+run.name <- "200921_socialdets"
 spec.name <- "200908_test"
 compare.run <- c("200505_xylo")
 
@@ -32,9 +32,9 @@ test = NULL
 run_eppasm = F
 compile_plot = F
 throttle_flag <- "-tc 800"
-n.draws = 10
-jobs = 2
-rep_each = n.draws / jobs
+n.draws = 100
+mc.cores = 10
+rep_each = n.draws / mc.cores
 loc.table <- data.table(get_locations(hiv_metadata = T))
 locs <- c(loc.table[epp == 1, ihme_loc_id], 'MRT', 'COM', 'STP')
 
@@ -161,7 +161,7 @@ if(run_eppasm){
                      "-hold_jid eppasm_prep_inputs_", run.name," ",
                      code.dir, "gbd/singR_shell.sh ",
                      code.dir, "gbd/main.R ",
-                     run.name, " ", proj.end, " ", paediatric)
+                     run.name, " ", proj.end, " ", paediatric, ' ', mc.cores)
 
 
 print(epp.string)
