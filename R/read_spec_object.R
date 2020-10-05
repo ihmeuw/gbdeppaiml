@@ -269,14 +269,19 @@ update_spectrum_fixpar <- function(specfp, hiv_steps_per_year = 10L, proj_start 
   ss$h.age15plus.idx <- which((AGE_START-1 + cumsum(ss$h.ag.span)) >= 15)
   
   ## Paediatric state space
-  ss$pAGu5 <- 5 ## under 5 ages
-  ss$hDSu5 <- 7 ## cd4 percent
-  ss$hMT <- 4 ## perinatal, bf0, bf6, bf12
-  ss$pAGu15 <- 10 ## 5-15 ages
-  ss$hDSu15 <- 6 ##under 15 cd4 count categories
-  ss$u5.elig.groups <- list('30' = 1, '25' = 2, '20' = 3, '15' = 4, '10' = 5, '5' = 6, '0' = 7)
-  ss$u15.elig.groups <- list('1000' = 1, '750' = 2, '500' = 3, '350' = 4, '200' = 5, '0' = 6)  
-  ss$prenat.opt <- c('tripleARTdurPreg', 'tripleARTbefPreg', 'singleDoseNevir', 'prenat_optionB', 'prenat_optionA', 'dualARV')
+  if(paediatric){
+    ss$pAGu5 <- 5 ## under 5 ages
+    ss$hDSu5 <- 7 ## cd4 percent
+    ss$hMT <- 4 ## perinatal, bf0, bf6, bf12
+    ss$pAGu15 <- 10 ## 5-15 ages
+    ss$hDSu15 <- 6 ##under 15 cd4 count categories
+    ss$u5.elig.groups <- list('30' = 1, '25' = 2, '20' = 3, '15' = 4, '10' = 5, '5' = 6, '0' = 7)
+    ss$u15.elig.groups <- list('1000' = 1, '750' = 2, '500' = 3, '350' = 4, '200' = 5, '0' = 6)  
+    ss$prenat.opt <- c('tripleARTdurPreg', 'tripleARTbefPreg', 'singleDoseNevir', 'prenat_optionB', 'prenat_optionA', 'dualARV')
+    
+  }
+  
+
   
   
   invisible(list2env(ss, environment())) # put ss variables in environment for convenience

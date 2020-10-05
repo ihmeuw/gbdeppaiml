@@ -27,7 +27,7 @@ if(length(args) > 0) {
   ncores <- args[4]
   
 } else {
-  parent <- "ZAF"
+  parent <- "ETH"
   run.name <- "200713_yuka"
   spec.run.name <- "200713_yuka"
   ncores <- 2

@@ -1542,10 +1542,7 @@ geo_adj_old <- function(loc, dt, i, uncertainty) {
 
       ancbias.pr.mean <<- 0.15
       ancbias.pr.sd <<- 0.001
-    }else if(loc == "PNG" & run.name == "200316_windchime_testing5"){
-      ancbias.pr.mean <<- 0.15
-      ancbias.pr.sd <<- 0.001
-        } else {
+    }else {
       ancbias.pr.mean <<- 0.15
       ancbias.pr.sd <<- 1
     }

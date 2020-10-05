@@ -13,7 +13,7 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 library(data.table)
 
 ## Arguments
-run.name <- "200921_socialdets"
+run.name <- "201005_socialdets"
 spec.name <- "200713_yuka"
 compare.run <- c("200713_yuka")
 
@@ -149,8 +149,10 @@ if(redo_offsets){
 # rerun <- fread('/ihme/homes/mwalte10/temp_runs.csv')
 # loc.list <- c(rerun[run == '200713_yuka',loc], rerun[run == '200505_xylo',loc])
 
+loc.list <- c('AGO', 'BDI', 'BEN', 'CAF')
+
 if(run_eppasm){
-for(loc in loc.list[!grepl('_',loc.list)]) {    ## Run EPPASM
+for(loc in loc.list) {    ## Run EPPASM
 
    # for(test in paste0('test', c(1:7))){
   # epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive -q all.q -P ", cluster.project, " ",
@@ -159,7 +161,7 @@ for(loc in loc.list[!grepl('_',loc.list)]) {    ## Run EPPASM
                          "-e /share/temp/sgeoutput/", user, "/errors ",
                          "-o /share/temp/sgeoutput/", user, "/output ",
                          "-N ", loc,"_",run.name, "_eppasm ",
-                         "-tc 40 ",
+                         "-tc 100 ",
                          "-t 1:", n.draws, " ",
                          "-hold_jid eppasm_prep_inputs_", run.name," ",
                          code.dir, "gbd/singR_shell.sh ",
@@ -168,8 +170,8 @@ for(loc in loc.list[!grepl('_',loc.list)]) {    ## Run EPPASM
                          
   
                       
-   #  print(epp.string)
-   # system(epp.string)
+    print(epp.string)
+   system(epp.string)
 
      
       #
@@ -183,8 +185,8 @@ for(loc in loc.list[!grepl('_',loc.list)]) {    ## Run EPPASM
                             code.dir, "gbd/singR_shell.sh ",
                             code.dir, "gbd/compile_draws.R ",
                             run.name, " ", loc, ' ', n.draws, ' TRUE ', paediatric)
-      # print(draw.string)
-      # system(draw.string)
+      print(draw.string)
+      system(draw.string)
 
       plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
                             "-e /share/temp/sgeoutput/", user, "/errors ",
@@ -201,47 +203,7 @@ for(loc in loc.list[!grepl('_',loc.list)]) {    ## Run EPPASM
 
 }
 }
-# 
-# if(testing){
-#   vetting_dir <- paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/vetting/')
-#   #vetting_dir <- paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/vetting/', max(dir.table[,ref]), '/')
-#   
-#   dir.create(vetting_dir, recursive = T)
-#   dir.create(paste0(vetting_dir, 'compiled/'))
-#   
-#   setwd(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/15to49_plots/'))
-#   system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=15to49_plots.pdf -f *"))
-#   
-#   setwd(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/age_specific_plots/Deaths/'))
-#   system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=Deaths_plots.pdf -f *"))
-#   
-#   setwd(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/age_specific_plots/Prevalence/'))
-#   system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=Prevalence_plots.pdf -f *"))
-#   
-#   setwd(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/age_specific_plots/Incidence/'))
-#   system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=Incidence_plots.pdf -f *"))
-#   
-#   setwd(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/paeds_plots/'))
-#   system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=paeds_plots.pdf -f *"))
-#   
-#   file.copy(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/15to49_plots/15to49_plots.pdf'), 
-#             vetting_dir)
-#   file.copy(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/age_specific_plots/Deaths/Deaths_plots.pdf'), 
-#             vetting_dir)
-#   file.copy(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/age_specific_plots/Prevalence/Prevalence_plots.pdf'), 
-#             vetting_dir)
-#   file.copy(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/age_specific_plots/Incidence/Incidence_plots.pdf'), 
-#             vetting_dir)
-#   file.copy(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/paeds_plots/paeds_plots.pdf'), 
-#             vetting_dir)
-#   for(loc in loc.list){
-#     file.copy(from = paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/compiled/', loc, '.csv'), to = paste0(vetting_dir, 'compiled/'), recursive = T)
-#     file.copy(from = paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/compiled/', loc, '_under1_splits.csv'), to = paste0(vetting_dir, 'compiled/'), recursive = T)
-#     print(loc)
-#   }
-#   
-#   
-# }
+
 # 
 # 
 # 

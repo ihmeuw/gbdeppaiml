@@ -16,11 +16,11 @@ if(length(args) > 0) {
   j <- as.integer(Sys.getenv("SGE_TASK_ID"))
   paediatric <- as.logical(args[4])
 } else {
-  run.name <- "200921_socialdets"
+  run.name <- "201001_socialdets"
   loc <- 'AGO'
   stop.year <- 2022
   j <- 1
-  paediatric <- TRUE
+  paediatric <- FALSE
 }
 run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
 if(grepl('IND',loc)){
@@ -28,7 +28,9 @@ if(grepl('IND',loc)){
 }else{
   temp.run.name = run.name
 }
-c.args <- run.table[run_name==temp.run.name]
+c.args <- run.table[run_name=='200921_socialdets']
+#c.args <- run.table[run_name==run.name]
+
 ### Arguments
 ## Some arguments are likely to stay constant across runs, others we're more likely to test different options.
 ## The arguments that are more likely to vary are pulled from the eppasm run table
@@ -42,6 +44,7 @@ plot.draw <- FALSE
 anc.prior.sub <- TRUE
 lbd.anc <- T
 test <- NULL
+ped_toggle = FALSE
 geoadjust <- c.args[['geoadjust']]
 anc.sub <- c.args[['anc_sub']]
 anc.backcast <- c.args[['anc_backcast']]
@@ -104,7 +107,7 @@ if(loc %in% c("MAR","MRT","COM")){
 }
 dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
                        pop.sub, anc.sub, anc.backcast, prev.sub = prev_sub, art.sub = TRUE,
-                       sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = TRUE,
+                       sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = ped_toggle,
                        anc.prior.sub = TRUE, lbd.anc = lbd.anc,
                        geoadjust = geoadjust, use_2019 = TRUE,
                        test.sub_prev_granular = test)
@@ -151,7 +154,7 @@ if(loc %in% zero_prev_locs){
 }else{
   # 
   # fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500, fitincrr = 'regincrr')
-  fit <- eppasm::fitmod(obj = dt, eppmod = epp.mod, B0 = 1e4, B = 1e3, number_k = 100)
+  fit <- eppasm::fitmod(obj = dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 300)
   
 
 }
@@ -167,7 +170,7 @@ if(epp.mod == 'rhybrid'){
   fit <- extend_projection(fit, proj_years = stop.year - start.year + 1)
 }
 
-if(max(fit$fp$pmtct_dropout$year) < stop.year){
+if(max(fit$fp$pmtct_dropout$year) < stop.year & ped_toggle){
   add_on.year <- seq(max(fit$fp$pmtct_dropout$year) + 1 , stop.year)
   add_on.dropouts <- fit$fp$pmtct_dropout[fit$fp$pmtct_dropout$year == max(fit$fp$pmtct_dropout$year), 2:ncol(fit$fp$pmtct_dropout)]
   fit$fp$pmtct_dropout <- rbind(fit$fp$pmtct_dropout, c(year = unlist(add_on.year), add_on.dropouts))
@@ -178,27 +181,29 @@ if(max(fit$fp$pmtct_dropout$year) < stop.year){
 
 draw <- j
 
-result <- gbd_sim_mod(fit, VERSION = "R")
+  result <- gbd_sim_mod(fit, VERSION = "R")
+  # rvec <- fnCreateParam(theta = attr(result, 'theta'), fp =fit$fp)
+  # saveRDS(rvec, file = paste0("/ihme/homes/mwalte10/hiv_gbd2020/", run.name, '/', loc, ".RDS"))
+  # 
+  dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/'), recursive = T)
+  saveRDS(result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/', draw, '.RDS'))
+  
+  output.dt <- get_gbd_outputs(result, attr(dt, 'specfp'), paediatric = paediatric)
+  output.dt[,run_num := j]
+  ## Write output to csv
+  dir.create(out.dir, showWarnings = FALSE)
+  write.csv(output.dt, paste0(out.dir, '/', j, '.csv'), row.names = F)
+  
+  # ## under-1 splits
+  if(paediatric){
+    split.dt <- get_under1_splits(result, attr(dt, 'specfp'))
+    split.dt[,run_num := j]
+    write.csv(split.dt, paste0(out.dir, '/under_1_splits_', j, '.csv' ), row.names = F)
+  }
+  ## Write out theta for plotting posterior
+  param <- data.table(theta = attr(result, 'theta'))
+  write.csv(param, paste0(out.dir,'/theta_', j, '.csv'), row.names = F)
+  if(plot.draw){
+    plot_15to49_draw(loc, output.dt, attr(dt, 'eppd'), run.name)
+  }
 
-dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/'), recursive = T)
-saveRDS(result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/', draw, '.RDS'))
-
-output.dt <- get_gbd_outputs(result, attr(dt, 'specfp'), paediatric = paediatric)
-output.dt[,run_num := j]
-## Write output to csv
-dir.create(out.dir, showWarnings = FALSE)
-write.csv(output.dt, paste0(out.dir, '/', j, '.csv'), row.names = F)
-
-# ## under-1 splits
-if(paediatric){
-  split.dt <- get_under1_splits(result, attr(dt, 'specfp'))
-  split.dt[,run_num := j]
-  write.csv(split.dt, paste0(out.dir, '/under_1_splits_', j, '.csv' ), row.names = F)
-}
-## Write out theta for plotting posterior
-param <- data.table(theta = attr(result, 'theta'))
-write.csv(param, paste0(out.dir,'/theta_', j, '.csv'), row.names = F)
-if(plot.draw){
-  plot_15to49_draw(loc, output.dt, attr(dt, 'eppd'), run.name)
-}
-#

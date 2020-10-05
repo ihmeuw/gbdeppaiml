@@ -21,7 +21,10 @@ gbd_sim_mod <-  function(fit, rwproj=fit$fp$eppmod == "rspline", VERSION = 'C'){
   ## We only need 1 draw, so let's save time and subset to that now
   rand.draw <- round(runif(1, min = 1, max = 3000))
   if(!(exists('group', where = fit$fp) & fit$fp$group == '2')){
+    ##create an argument in fnCreateParam to call a modified create_rvec that doesn't scale
+    #fit$param <- lapply(seq_len(nrow(fit$resample)), function(ii) fnCreateParam(fit$resample[ii,], fit$fp, proj = T))
     fit$param <- lapply(seq_len(nrow(fit$resample)), function(ii) fnCreateParam(fit$resample[ii,], fit$fp))
+    
     
     if(rwproj){
       if(exists("eppmod", where=fit$fp) && fit$fp$eppmod == "rtrend")

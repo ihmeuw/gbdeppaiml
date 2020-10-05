@@ -21,8 +21,8 @@ if(length(args) > 0) {
   }
   test <- args[5]
 } else {
-  run.name <- "200921_socialdets"
-  loc <- "AGO"
+  run.name <- "191218_group2_tests"
+  loc <- "AUS"
 
   draw.fill <- TRUE
   paediatric <- TRUE
@@ -39,8 +39,8 @@ if( '190630_rhino2' %in% compare.run){
   gbd_year_old <- "gbd20"
   
 }
-gbdyear <- 'gbd20'
-#compare.run <- c('200505_xylo', '190630_rhino2')
+gbdyear <- 'gbd19'
+compare.run <- c('190630_rhino2')
 
 run.names.comp <- compare.run
 ### Functions
@@ -84,7 +84,10 @@ for(c.indicator in rev(c( 'Prevalence','Incidence','Deaths'))){
   dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/age_specific_plots/', c.indicator, '/'), recursive = TRUE, showWarnings = FALSE)
 }
 
-plot_age_specific(loc, run.name.new=run.name, paediatric=TRUE, run.name.old = '190630_rhino2', compare.run = run.names.comp, gbdyear = gbd_year_new, c.metric = 'Rate', test_run = test)
+#plot_age_specific(loc, run.name.new=run.name, paediatric=TRUE, run.name.old = '190630_rhino2', compare.run = run.names.comp, gbdyear = gbd_year_new, c.metric = 'Rate', test_run = test)
+plot_age_specific_group2(loc, run.name.new=run.name, paediatric=TRUE, run.name.old = '190630_rhino2', 
+                         compare.run = run.names.comp, gbdyear = gbd_year_new, c.metric = 'Rate', test_run = test,
+                         comp.2019 =T)
 
 # ## Birth prevalence
 dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/paeds_plots/'), showWarnings = F)

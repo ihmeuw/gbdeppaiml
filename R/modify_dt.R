@@ -142,12 +142,12 @@ modify_dt <- function(dt){
 ###########################################################################
 # Extend inputs to stop.year ----------------------------------------------
 ###########################################################################
-  if(max(attr(dt, 'specfp')$pmtct_dropout$year) < stop.year){
+  if(max(attr(dt, 'specfp')$pmtct_dropout$year) < stop.year & ped_toggle){
     add_on.year <- seq(max(attr(dt, 'specfp')$pmtct_dropout$year) + 1 , stop.year)
     add_on.dropouts <- attr(dt, 'specfp')$pmtct_dropout[attr(dt, 'specfp')$pmtct_dropout$year == max(attr(dt, 'specfp')$pmtct_dropout$year), 2:ncol(attr(dt, 'specfp')$pmtct_dropout)]
     attr(dt, 'specfp')$pmtct_dropout <- rbind(attr(dt, 'specfp')$pmtct_dropout, c(year = unlist(add_on.year), add_on.dropouts))
   }
-  if(length(unique(attr(dt, 'specfp')$pmtct_dropout$year)) < attr(dt, 'specfp')$SIM_YEARS){
+  if(length(unique(attr(dt, 'specfp')$pmtct_dropout$year)) < attr(dt, 'specfp')$SIM_YEARS & ped_toggle){
     missing_years <- setdiff(seq(start.year, stop.year), attr(dt, 'specfp')$pmtct_dropout$year)
     temp.dt <- data.table( attr(dt, 'specfp')$pmtct_dropout)
     extend_back <- temp.dt[year == min(year),]
