@@ -13,7 +13,7 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 library(data.table)
 
 ## Arguments
-run.name <- "200921_socialdets"
+run.name <- "200908_test"
 spec.name <- "200908_test"
 compare.run <- c("200505_xylo")
 
@@ -32,11 +32,12 @@ test = NULL
 run_eppasm = F
 compile_plot = F
 throttle_flag <- "-tc 800"
-n.draws = 100
+n.draws = 1000
 mc.cores = 10
 rep_each = n.draws / mc.cores
 loc.table <- data.table(get_locations(hiv_metadata = T))
-locs <- c(loc.table[epp == 1, ihme_loc_id], 'MRT', 'COM', 'STP')
+# locs <- c(loc.table[epp == 1, ihme_loc_id], 'MRT', 'COM', 'STP')
+locs = c('AGO', 'BEN', 'BDI', 'DJI')
 
 param_map <- data.table(expand.grid(draws = c(1:rep_each), ihme_loc_id = locs))
 write.csv(param_map, file = paste0('/ihme/hiv/epp_input/gbd20/', run.name, '/param_map.csv'), row.names = F)
@@ -152,7 +153,7 @@ if(redo_offsets){
 
 
 if(run_eppasm){
-  epp.string <- paste0("qsub -l m_mem_free=200G -l fthread=2 -l h_rt=24:00:00 -l archive=True -q all.q -P ", cluster.project, " ",
+  epp.string <- paste0("qsub -l m_mem_free=300G -l fthread=5 -l h_rt=24:00:00 -l archive=True -q all.q -P ", cluster.project, " ",
                      "-e /share/temp/sgeoutput/", user, "/errors ",
                      "-o /share/temp/sgeoutput/", user, "/output ",
                      "-N ", "eppasm_", run.name, ' ',

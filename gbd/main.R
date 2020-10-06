@@ -16,7 +16,7 @@ if(length(args) > 0) {
   paediatric <- as.logical(args[4])
   cores <- as.integer(args[5])
 } else {
-  run.name <- "200921_socialdets"
+  run.name <- "200908_test"
   stop.year <- 2022
   j <- 1
   paediatric <- TRUE
@@ -193,11 +193,12 @@ eppasm_functions <- function(draw, obj, B_0 = 1e5, B = 1e3, k = 500){
     fit$fp$pmtct_dropout <- rbind(fit$fp$pmtct_dropout, c(year = unlist(add_on.year), add_on.dropouts))
   }
   print(draw)
-  result <- gbd_sim_mod(fit, VERSION = "R", draw)
+  result <- gbd_sim_mod(fit, VERSION = "R")
   
   dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/'), recursive = T)
   saveRDS(result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/', draw, '.RDS'))
   
+  paediatric = T
   output.dt <- get_gbd_outputs(result, attr(obj, 'specfp'), paediatric = paediatric)
   output.dt[,run_num := draw]
   ## Write output to csv
@@ -218,9 +219,8 @@ eppasm_functions <- function(draw, obj, B_0 = 1e5, B = 1e3, k = 500){
   }
 
 }
-#mclapply(draws, eppasm_functions, obj = dt, B_0 = 1e3, B = 1e3, k = 2, mc.cores = length(draws))
 mclapply(draws, eppasm_functions, obj = dt,
-         B_0 = 1e3, B = 1e3, k = 100,
-         mc.cores = 10)
+         B_0 = 1e5, B = 1e3, k = 500,
+         mc.cores = 20)
 
 
