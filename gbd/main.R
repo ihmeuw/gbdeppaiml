@@ -16,7 +16,7 @@ if(length(args) > 0) {
   j <- as.integer(Sys.getenv("SGE_TASK_ID"))
   paediatric <- as.logical(args[4])
 } else {
-  run.name <- "201001_socialdets"
+  run.name <- "201005_socialdets"
   loc <- 'AGO'
   stop.year <- 2022
   j <- 1
@@ -107,7 +107,7 @@ if(loc %in% c("MAR","MRT","COM")){
 }
 dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
                        pop.sub, anc.sub, anc.backcast, prev.sub = prev_sub, art.sub = TRUE,
-                       sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = ped_toggle,
+                       sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = FALSE,
                        anc.prior.sub = TRUE, lbd.anc = lbd.anc,
                        geoadjust = geoadjust, use_2019 = TRUE,
                        test.sub_prev_granular = test)
@@ -154,7 +154,9 @@ if(loc %in% zero_prev_locs){
 }else{
   # 
   # fit <- eppasm::fitmod(dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 500, fitincrr = 'regincrr')
-  fit <- eppasm::fitmod(obj = dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 300)
+  fit <- eppasm::fitmod(obj = dt, eppmod = epp.mod, B0 = 1e5, B = 1e3, number_k = 100)
+  # fit <- eppasm::fitmod(obj = dt, eppmod = epp.mod, B0 = 1e3, B = 1e3, number_k = 1)
+  
   
 
 }
@@ -180,11 +182,16 @@ if(max(fit$fp$pmtct_dropout$year) < stop.year & ped_toggle){
 
 
 draw <- j
+# result = fit$mod
+# attr(result, "theta") <- fit$par
+# output.dt <- get_gbd_outputs(result, attr(dt, 'specfp'), paediatric = FALSE)
+# output.dt[,run_num := j]
 
+###RUN IF PED
   result <- gbd_sim_mod(fit, VERSION = "R")
-  # rvec <- fnCreateParam(theta = attr(result, 'theta'), fp =fit$fp)
-  # saveRDS(rvec, file = paste0("/ihme/homes/mwalte10/hiv_gbd2020/", run.name, '/', loc, ".RDS"))
-  # 
+  rvec <- fnCreateParam(theta = attr(result, 'theta'), fp =fit$fp)
+  saveRDS(rvec, file = paste0("/ihme/homes/mwalte10/hiv_gbd2020/", run.name, '/', loc, ".RDS"))
+
   dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/'), recursive = T)
   saveRDS(result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/', draw, '.RDS'))
   
