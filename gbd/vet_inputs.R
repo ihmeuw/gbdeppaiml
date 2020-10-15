@@ -1,14 +1,40 @@
+## ---------------------------
+## Script name: vet_inputs.R
+## Purpose of script: checks that the version that was used is equal to the version that was anticipated
+##
+## Author: Maggie Walters
+## Date Created: 2018-04-11
+## Email: mwalte10@uw.edu
+## ---------------------------
+##
+## Notes:
+##   
+##
+## ---------------------------
+
+## Used in basically every script
+Sys.umask(mode = "0002")
+windows <- Sys.info()[1][["sysname"]]=="Windows"
+root <- ifelse(windows,"J:/","/home/j/")
+user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
+
+source(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/gbd/00_req_packages.R"))
 proj.end <- 2022
-run.group2 <- FALSE
-decomp.step <- "iterative"
-ASFR <- 439
-population <- 232
-population_sa <- 186
-migration <- 86
-mlt <- 333
-birth = 73
 locs <- loc.table[epp == 1, ihme_loc_id]
+id_table <- fread(paste0('/ihme/homes/', user, '/gbdeppaiml/gbd/input_ids.csv'))
+run.name = '200713_yuka'
+population = id_table[run == run.name, population]
+population_sa = id_table[run == run.name, population_sa]
+ASFR = id_table[run == run.name, ASFR]
+birth = id_table[run == run.name, birth]
+migration = id_table[run == run.name, migration]
+
+
 diff <- list()
+
+diff_func <- function(loc, input){
+  
+}
 for (loc in locs) {
  used <- fread(paste0('/ihme/hiv/epp_input/gbd20/200713_yuka/population/',loc,'.csv'))
  correct_pull <- get_mort_outputs(

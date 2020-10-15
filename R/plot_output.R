@@ -89,8 +89,9 @@ plot_15to49 <- function(loc="KEN_35618",  compare.run = c('2020_ind_test_agg8', 
                         paediatric =TRUE, plot.deaths = FALSE, compare.gbd17=TRUE, 
                         compare.unraked = T, lbd_unraked = TRUE,
                         compare.stage2 = FALSE, gbdyear = "gbd20", simplify = F,
-                        test_run = NULL){
-  x <- data.table(cbind(name = names, run_name = c(new.run, compare.run, '200316_windchime_ind')))
+                        test_run = NULL,
+                        loc_name){
+  x <- data.table(cbind(name = names, run_name = c(new.run, compare.run)))
 
   
   if(loc %in% loc.table[grepl("IND",ihme_loc_id) & epp != 1,ihme_loc_id]){
@@ -270,7 +271,7 @@ plot_15to49 <- function(loc="KEN_35618",  compare.run = c('2020_ind_test_agg8', 
           
         }else{
           compare.dt <- fread(paste0('/share/hiv/epp_output/gbd20/',run, '/compiled/', loc, '.csv'))
-          compare.dt <- get_summary(compare.dt, loc, run.name.old = run, run.name.new = run, paediatric, old.splits = F, test_run = NULL)
+          compare.dt <- get_summary(compare.dt, loc, run.name.old = run, run.name.new = run, paediatric, old.splits = F, test_run = NULL, loc_name)
           
           
         }
@@ -365,9 +366,9 @@ plot_15to49 <- function(loc="KEN_35618",  compare.run = c('2020_ind_test_agg8', 
   }
   
   data <- rbind(data, anc[,age := NULL], fill = T)
+  
 
-
-  cur.dt <- get_summary(cur.dt, loc, run.name.old = '190630_rhino2', run.name.new = new.run,  paediatric, old.splits = F, test_run)
+  cur.dt <- get_summary(cur.dt, loc, run.name.old = '190630_rhino2', run.name.new = new.run,  paediatric, old.splits = F, test_run, loc_name = loc)
   run <- x[run_name == new.run, name]
   cur.dt <- cur.dt[age_group_id == 24 & sex == 'both' & measure %in% meas.list & metric == "Rate",.(type = 'line', year, indicator = measure, model = run, mean, lower, upper)]
 
@@ -409,10 +410,14 @@ dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/15to49_plot
 # }
   gg <- ggplot()
   if(nrow(plot.dt[model == 'ANC Site']) > 0){
-    gg <- gg + geom_point(data = plot.dt[model == 'ANC Site'], aes(x = year, y = mean, shape = 'ANC Site'), alpha = 0.2)
+    # gg <- gg + geom_point(data = plot.dt[model == 'ANC Site'], aes(x = year, y = mean, shape = 'ANC Site'), alpha = 0.2)
+    gg <- gg + geom_point(data = plot.dt[type == 'ancss'], aes(x = year, y = mean, shape = 'ANC-SS'), alpha = 0.2)
+    if(nrow(plot.dt[type == 'ancrt']) > 0){
+      gg <- gg + geom_point(data = plot.dt[type == 'ancrt'], aes(x = year, y = mean, shape = 'ANC-RT'), alpha = 0.2)
+    }
   }
   gg <- gg + geom_line(data = plot.dt[type == 'line'], aes(x = year, y = mean, color = model)) +
-    geom_ribbon(data = plot.dt[type == 'line' & model == new.run], aes(x = year, ymin = lower, ymax = upper,  fill = model), alpha = 0.2) +
+    # geom_ribbon(data = plot.dt[type == 'line' & model == new.run], aes(x = year, ymin = lower, ymax = upper,  fill = model), alpha = 0.2) +
     facet_wrap(~indicator, scales = 'free_y') +
     theme_bw() +
     scale_fill_manual(values=color.list) + scale_colour_manual(values=color.list)  +

@@ -1065,7 +1065,7 @@ geo_adj <- function(loc, dt, i, uncertainty) {
     
   
     anc.dt.all <- as.data.table(anc.dt.all)
-    anc.dt.all <- anc.dt.all[type == 'ancss']
+    # anc.dt.all <- anc.dt.all[type == 'ancss']
     anc.dt.all  <- anc.dt.all[,c( "site","year_id","mean","site_pred","adm0_mean","adm0_lower", "adm0_upper","subpop","high_risk")]
     
 
@@ -1173,6 +1173,13 @@ geo_adj <- function(loc, dt, i, uncertainty) {
           anc.dt[,high_risk := FALSE]
           anc.dt[,high_risk := unique(site.dat[,high_risk])]
         }
+        if(!'high_risk' %in% colnames(site.dat)){
+          site.dat[subpop %in% c('Urban', 'Rural'), high_risk := FALSE]
+          site.dat[,high_risk := as.logical(high_risk)]
+        }
+        if('year' %in% colnames(site.dat)){
+          setnames(site.dat, 'year', 'year_id')
+        }
         anc.dt <- merge(site.dat, anc.dt, by.x = c('site',  "year_id" ,"subpop" ,"high_risk" ),
               by.y = c('site',  'year_id',  'subpop', 'high_risk'))
 
@@ -1260,7 +1267,9 @@ geo_adj <- function(loc, dt, i, uncertainty) {
           temp.dat[,subpop := subpop2]
           
         }
-        temp.dat <- rbind(temp.dat, site.dat[type == 'ancrt'], fill = T)
+       # temp.dat <- rbind(temp.dat, site.dat[type == 'ancrt'], fill = T)
+        temp.dat <- rbind(temp.dat, site.dat, fill = T)
+        
         # min.dt <- unique(min.dt)
         # add_on <- as.data.table(setdiff(merge.dt$site, min.dt$site))
         # setnames(add_on, old = 'V1', new = 'site')

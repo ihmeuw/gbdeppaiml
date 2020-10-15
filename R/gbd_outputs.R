@@ -286,9 +286,14 @@ split_u5_gbd2017 <- function(dt){
 }
 
 
-split_u1.new_ages <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd20", test_run = NULL){
+split_u1.new_ages <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd20", test_run = NULL, loc_name, inherits = TRUE){
+  # if(!grepl('socialdets', run.name.new)){
+  #   loc_name = loc
+  # }else{
+  #   loc_name = loc_name
+  # }
   #change to the new population splits folder
-  pop <- data.table(fread(paste0('/ihme/hiv/epp_input/',gbdyear,"/" ,run.name.new, "/population_splits/", loc, '.csv')))
+  pop <- data.table(fread(paste0('/ihme/hiv/epp_input/',"gbd20","/" ,run.name.new, "/population_splits/", loc, '.csv')))
 
   u1.pop <- pop[age_group_id %in% c(2,3,388,389)]
   u1.pop[,pop_total := sum(population), by = c('sex_id', 'year_id')]
@@ -327,7 +332,13 @@ split_u1.new_ages <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd2
       split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/200505_xylo/compiled/', loc, '_under1_splits.csv'))
       
     }else{
-      split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/', run.name.new ,'/compiled/', loc, '_under1_splits.csv'))
+      if(grepl('_', loc_name)){
+        split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/', run.name.new ,'/compiled/', loc_name, '_under1_splits.csv'))
+
+      }else{
+        split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/', run.name.new ,'/compiled/', loc, '_under1_splits.csv'))
+        
+      }
       
     }
     
@@ -393,7 +404,7 @@ split_u1 <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd20"){
 
 
 
-get_summary <- function(output, loc, run.name.old, run.name.new, paediatric = FALSE, old.splits, test_run = NULL){
+get_summary <- function(output, loc, run.name.old, run.name.new, paediatric = FALSE, old.splits, test_run = NULL, loc_name){
   ## create gbd age groups
   output[age >= 5,age_gbd :=  age - age%%5]
   output[age %in% 1:4, age_gbd := 1]
@@ -408,7 +419,7 @@ get_summary <- function(output, loc, run.name.old, run.name.new, paediatric = FA
       output.u1 <- split_u1(output[age == 0], loc, run.name.old, run.name.new)
       
     }else{
-      output.u1 <- split_u1.new_ages(output[age == 0], loc, run.name.old, run.name.new, test_run = test_run)
+      output.u1 <- split_u1.new_ages(output[age == 0], loc, run.name.old, run.name.new, gbdyear, test_run = test_run, loc_name)
       
     }
     output <- output[age != 0]
@@ -502,7 +513,9 @@ save_data <- function(loc, eppd, run.name){
   }
   if(exists("ancsitedat",where=eppd)){
     ancdata <- data.table(eppd$ancsitedat)
-    ancdata <- ancdata[type=="ancss",.(sex = 'female', age = agegr, type = 'point', model = 'ANC Site', indicator = 'Prevalence', mean = prev, upper = NA, lower = NA, year, age_group_id = 24)]
+   # ancdata <- ancdata[type=="ancss",.(sex = 'female', age = agegr, type = 'point', model = 'ANC Site', indicator = 'Prevalence', mean = prev, upper = NA, lower = NA, year, age_group_id = 24)]
+    ancdata <- ancdata[,.(sex = 'female', age = agegr, model = 'ANC Site', indicator = 'Prevalence', mean = prev, upper = NA, lower = NA, year, age_group_id = 24, type = type)]
+    
   } else {
     ancdata <- NULL
   }

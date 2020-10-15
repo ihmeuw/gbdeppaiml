@@ -83,7 +83,7 @@ plot_15to49_draw <- function(loc, output, eppd, run.name, compare.run = '190630_
   dev.off()
 }
 
-plot_15to49 <- function(loc="KEN_35618",  compare.run = c('2020_ind_test_agg8', '2020_ind_test_agg7'), 
+plot_15to49_group2 <- function(loc="KEN_35618",  compare.run = c('2020_ind_test_agg8', '2020_ind_test_agg7'), 
                         names = c('EPPASM', 'Rlog, disagg', 'Rhybrid, disagg', 'EPP'),
                         new.run = '200316_windchime_testing3',
                         paediatric =TRUE, plot.deaths = FALSE, compare.gbd17=TRUE, 

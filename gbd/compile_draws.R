@@ -1,34 +1,60 @@
-### Setup
-rm(list=ls())
+##Set up --------------------------- 
+## Script name: compile_draws.R
+## Purpose of script: Average across draws
+##
+## Author: Maggie Walters
+## Date Created: 2018-04-11
+## Email: mwalte10@uw.edu
+## 
+##
+## Notes: Created by Tahvi Frank and modified for GBD20 by Maggie Walters
+## Some arguments are likely to stay constant across runs, others we're more likely to test different options.
+## The arguments that are more likely to vary are pulled from the eppasm run table
+##
+
+## Used in basically every script
+Sys.umask(mode = "0002")
 windows <- Sys.info()[1][["sysname"]]=="Windows"
 root <- ifelse(windows,"J:/","/home/j/")
 user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
-code.dir <- paste0(ifelse(windows, "H:", paste0("/homes/", user)), "/gbdeppaiml/")
-## Packages
-library(data.table); library(mvtnorm); library(survey);library(assertable)
-library(mortdb, lib = "/share/mortality/shared/r")
 
+source(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/gbd/00_req_packages.R"))
 
-## Arguments
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
-if(length(args) > 0) {
-   run.name <- args[1]
-  #run.name <- "191002_sitar"
-  loc <- args[2]
-  n <- as.integer(args[3])
-  draw.fill <- as.logical(args[4])
-  paediatric <- as.logical(args[5])
-  gbdyear <- 'gbd20'
-} else {
-  run.name <- "200713_yuka"
-  loc <- "ETH_44856"
-  n <- 1000
+if(length(args) == 0){
+  array.job = FALSE
+  run.name <- "201007_socialdets_sens"
+  loc <- 'MDG_0.1'
   draw.fill <- TRUE
   paediatric <- TRUE
+  n = 1000
+}else{
+  run.name <- args[1]
+  draw.fill <- as.logical(args[3])
+  paediatric <- as.logical(args[4])
+  array.job <- as.logical(args[5])
+
 }
+if(!array.job & length(args) > 0){
+  loc <- args[2]
+  draw.fill <- as.logical(args[3])
+  paediatric <- as.logical(args[4])
+  n = 1000
+}
+
 gbdyear <- 'gbd20'
+stop.year = 2022
 test = NULL
+n.draws = 2
+
+# Array job ---------------------------------------
+if(array.job){
+  array.dt <- fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
+  task_id <- as.integer(Sys.getenv("SGE_TASK_ID"))
+  loc <- array.dt[task_id,loc_scalar]
+}
+
 
 ## Functions
 fill_draws <- function(fill.dt,type=NULL){
@@ -71,6 +97,10 @@ print('loc.table loaded')
       
     }
     draw.list <- list.files(draw.path)
+    if(n.draws < n){
+      draw.list <- intersect(draw.list, paste0(seq(1:n.draws), '.csv'))
+    }
+    
     print('draw.list exists')
     ## subset out additional outputs (theta, under-1 splits)
     ## this could probably be tidied up
