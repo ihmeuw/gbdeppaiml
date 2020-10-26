@@ -30,10 +30,10 @@ loc.table <- get_locations(hiv_metadata = T)
 # Aggregate and apply age splits ---------------------------------------
 ## Aggregate to higher levels for EPP-ASM child locs - not India because it goes through Spectrum
 ## Prepare for post-reckoning steps
+loc.list <- loc.table[epp == 1, ihme_loc_id]
 eppasm_parents <-  c("KEN","ZAF","ETH","KEN_44793" ,"KEN_44794","KEN_44795", "KEN_44796" ,"KEN_44797", "KEN_44798","KEN_44799", "KEN_44800","NGA")
 all_loc_list <- c(loc.list,eppasm_parents, 'MRT', 'COM', 'STP')
 ## Aggregation and reckoning prep for higher levels
-if(reckon_prep){
   for(loc in all_loc_list){
     if(loc %in% eppasm_parents[grepl("KEN", eppasm_parents)]){
       prep.string <- paste0("qsub -l m_mem_free=100G -l fthread=2 -l h_rt=02:00:00 -l archive -q all.q -P ", cluster.project, " ",
@@ -61,6 +61,6 @@ if(reckon_prep){
     system(prep.string)
     
   }
-}
+
 
 check_loc_results(c(loc.list,eppasm_parents),paste0("/ihme/hiv/spectrum_prepped/art_draws/",spec.name,"/"),prefix="",postfix="_ART_data.csv")

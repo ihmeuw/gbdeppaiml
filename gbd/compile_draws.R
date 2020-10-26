@@ -18,35 +18,46 @@ windows <- Sys.info()[1][["sysname"]]=="Windows"
 root <- ifelse(windows,"J:/","/home/j/")
 user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 
-source(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/gbd/00_req_packages.R"))
+# source(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/gbd/00_req_packages.R"))
+
+
 
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
   array.job = FALSE
-  run.name <- "201007_socialdets_sens"
-  loc <- 'MDG_0.1'
+  run.name <- "201015_socialdets_sens"
+  loc <- 'CPV_0.75'
   draw.fill <- TRUE
   paediatric <- TRUE
   n = 1000
 }else{
   run.name <- args[1]
-  draw.fill <- as.logical(args[3])
-  paediatric <- as.logical(args[4])
-  array.job <- as.logical(args[5])
+  array.job <- as.logical(args[2])
+  draw.fill <- as.logical(args[4])
+  paediatric <- as.logical(args[5])
 
 }
-if(!array.job & length(args) > 0){
-  loc <- args[2]
-  draw.fill <- as.logical(args[3])
-  paediatric <- as.logical(args[4])
-  n = 1000
-}
+
 
 gbdyear <- 'gbd20'
 stop.year = 2022
 test = NULL
-n.draws = 2
+loc = 'AGO'
+library(data.table); library(mvtnorm); library(survey); library(ggplot2); library(plyr); library(dplyr); library(assertable); library(parallel)
+gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
+eppasm_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/")
+hiv_gbd2019_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/hiv_gbd2019/")
+library(mortdb, lib = "/share/mortality/shared/r/")
+
+setwd(eppasm_dir)
+devtools::load_all()
+setwd(gbdeppaiml_dir)
+devtools::load_all()
+if(!array.job & length(args) > 0){
+  loc <- args[3]
+  n = 1000
+}
 
 # Array job ---------------------------------------
 if(array.job){
@@ -97,9 +108,7 @@ print('loc.table loaded')
       
     }
     draw.list <- list.files(draw.path)
-    if(n.draws < n){
-      draw.list <- intersect(draw.list, paste0(seq(1:n.draws), '.csv'))
-    }
+  
     
     print('draw.list exists')
     ## subset out additional outputs (theta, under-1 splits)

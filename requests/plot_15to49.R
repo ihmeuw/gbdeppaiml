@@ -174,10 +174,10 @@ library(parallel)
 # }
 
 plot_15to49_new <- function(loc="AGO",  
-                                    new.run = '201007_socialdets_sens',
+                                    new.run = '201015_socialdets_sens',
                                     names.list = 'new method',
                                     paediatric =TRUE,  gbdyear = "gbd20"){
-  compare.locs <- fread('/ihme/hiv/epp_input/gbd20/201007_socialdets_sens/array_table.csv')
+  compare.locs <- fread('/ihme/hiv/epp_input/gbd20/201015_socialdets_sens/array_table.csv')
   compare.run <- unique(compare.locs[ihme_loc_id == loc,loc_scalar])
   names(names.list) <- new.run
   
@@ -187,10 +187,10 @@ plot_15to49_new <- function(loc="AGO",
   anc <- data[model == 'ANC Site']
   anc[,sex := NULL]
   
-  if(!any(grep(loc, list.files('/share/hiv/epp_output/gbd20/201007_socialdets_sens/compiled/')))){
+  if(!any(grep(loc, list.files('/share/hiv/epp_output/gbd20/201015_socialdets_sens/compiled/')))){
     return('no compiled files')
   }else{
-    cur.dt <- fread(paste0('/share/hiv/epp_output/gbd20/201007_socialdets_sens/compiled/',loc,'_1.csv'))
+    cur.dt <- fread(paste0('/share/hiv/epp_output/gbd20/201015_socialdets_sens/compiled/',loc,'_1.csv'))
     
   }
   ## post stratify age-specific data using Spectrum population
@@ -317,7 +317,7 @@ plot_15to49_new <- function(loc="AGO",
   
 }
 
-compare.locs <- fread('/ihme/hiv/epp_input/gbd20/201007_socialdets_sens/array_table.csv')
+compare.locs <- fread('/ihme/hiv/epp_input/gbd20/201015_socialdets_sens/array_table.csv')
 locs <- unique(compare.locs[,ihme_loc_id])
 library(parallel)
 mclapply(locs, plot_15to49_new, mc.cores = 5)

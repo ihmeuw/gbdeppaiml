@@ -70,21 +70,21 @@ loc.list <- epp.list
 
 # Array job EPP-ASM ---------------------------------------
 if(array.job){
-  epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive=True -q all.q -P ", cluster.project, " ",
+  epp.string <- paste0("qsub -l m_mem_free=100G -l fthread=20 -l h_rt=24:00:00 -l archive=True -q all.q -P ", cluster.project, " ",
                      "-e /share/temp/sgeoutput/", user, "/errors ",
                      "-o /share/temp/sgeoutput/", user, "/output ",
                      "-N ", "eppasm_", run.name, ' ',
-                     "-tc 100 ",
+                     "-tc 3000 ",
                      "-t 1:", n.draws, " ",
                      "-hold_jid eppasm_prep_inputs_", run.name," ",
                      code.dir, "gbd/singR_shell.sh ",
-                     code.dir, "gbd/main.R ",
+                     code.dir, "gbd/parallel/main_par.R ",
                      run.name, " ", array.job)
-# print(epp.string)
-# system(epp.string)
+print(epp.string)
+system(epp.string)
 
 #Draw compilation
-draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q long.q -P ", cluster.project, " ",
+draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
                       "-e /share/temp/sgeoutput/", user, "/errors ",
                       "-o /share/temp/sgeoutput/", user, "/output ",
                       "-N ", "save_draws_", run.name, ' ',
@@ -124,7 +124,7 @@ for(loc in loc.list) {
                             "-hold_jid ", loc,"_",run.name, "_eppasm ",
                             code.dir, "gbd/singR_shell.sh ",
                             code.dir, "gbd/compile_draws.R ",
-                            run.name, " ", loc, ' ', n.draws, ' TRUE ', paediatric)
+                            run.name, " ", array.job, ' ', loc, ' TRUE ', paediatric)
       print(draw.string)
       system(draw.string)
 
