@@ -21,7 +21,10 @@ gbd_sim_mod <-  function(fit, rwproj=fit$fp$eppmod == "rspline", VERSION = 'C'){
   ## We only need 1 draw, so let's save time and subset to that now
   rand.draw <- round(runif(1, min = 1, max = 3000))
   if(!(exists('group', where = fit$fp) & fit$fp$group == '2')){
+    ##create an argument in fnCreateParam to call a modified create_rvec that doesn't scale
+    #fit$param <- lapply(seq_len(nrow(fit$resample)), function(ii) fnCreateParam(fit$resample[ii,], fit$fp, proj = T))
     fit$param <- lapply(seq_len(nrow(fit$resample)), function(ii) fnCreateParam(fit$resample[ii,], fit$fp))
+    
     
     if(rwproj){
       if(exists("eppmod", where=fit$fp) && fit$fp$eppmod == "rtrend")
@@ -283,9 +286,14 @@ split_u5_gbd2017 <- function(dt){
 }
 
 
-split_u1.new_ages <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd20"){
+split_u1.new_ages <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd20", test_run = NULL, loc_name, inherits = TRUE){
+  # if(!grepl('socialdets', run.name.new)){
+  #   loc_name = loc
+  # }else{
+  #   loc_name = loc_name
+  # }
   #change to the new population splits folder
-  pop <- data.table(fread(paste0('/ihme/hiv/epp_input/',gbdyear,"/" ,run.name.new, "/population_splits/", loc, '.csv')))
+  pop <- data.table(fread(paste0('/ihme/hiv/epp_input/',"gbd20","/" ,run.name.new, "/population_splits/", loc, '.csv')))
 
   u1.pop <- pop[age_group_id %in% c(2,3,388,389)]
   u1.pop[,pop_total := sum(population), by = c('sex_id', 'year_id')]
@@ -318,7 +326,26 @@ split_u1.new_ages <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd2
   spec_u1[, age_group_id := NULL]
   
   ## pull in incidence proportions from eppasm
-  split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/', run.name.new ,'/compiled/', loc, '_under1_splits.csv'))
+
+  if(is.null(test_run)){
+    if(!file.exists(paste0('/share/hiv/epp_output/gbd20/200713_yuka/compiled/', loc, '.csv'))){
+      split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/200505_xylo/compiled/', loc, '_under1_splits.csv'))
+      
+    }else{
+      if(grepl('_', loc_name)){
+        split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/', run.name.new ,'/compiled/', loc_name, '_under1_splits.csv'))
+
+      }else{
+        split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/', run.name.new ,'/compiled/', loc, '_under1_splits.csv'))
+        
+      }
+      
+    }
+    
+  }else{
+    split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/', run.name.new ,'/compiled/', loc, '_', test_run,'_under1_splits.csv'))
+    
+  }
   split.dt <- melt(split.dt, id.vars = c('year', 'run_num'))
   setnames(split.dt, 'variable', 'age')
   spec_u1 <- merge(spec_u1, split.dt, by = c('year', 'run_num', 'age'))
@@ -377,7 +404,7 @@ split_u1 <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd20"){
 
 
 
-get_summary <- function(output, loc, run.name.old, run.name.new, paediatric = FALSE, old.splits){
+get_summary <- function(output, loc, run.name.old, run.name.new, paediatric = FALSE, old.splits, test_run = NULL, loc_name){
   ## create gbd age groups
   output[age >= 5,age_gbd :=  age - age%%5]
   output[age %in% 1:4, age_gbd := 1]
@@ -392,7 +419,7 @@ get_summary <- function(output, loc, run.name.old, run.name.new, paediatric = FA
       output.u1 <- split_u1(output[age == 0], loc, run.name.old, run.name.new)
       
     }else{
-      output.u1 <- split_u1.new_ages(output[age == 0], loc, run.name.old, run.name.new)
+      output.u1 <- split_u1.new_ages(output[age == 0], loc, run.name.old, run.name.new, gbdyear, test_run = test_run, loc_name)
       
     }
     output <- output[age != 0]
@@ -486,7 +513,9 @@ save_data <- function(loc, eppd, run.name){
   }
   if(exists("ancsitedat",where=eppd)){
     ancdata <- data.table(eppd$ancsitedat)
-    ancdata <- ancdata[type=="ancss",.(sex = 'female', age = agegr, type = 'point', model = 'ANC Site', indicator = 'Prevalence', mean = prev, upper = NA, lower = NA, year, age_group_id = 24)]
+   # ancdata <- ancdata[type=="ancss",.(sex = 'female', age = agegr, type = 'point', model = 'ANC Site', indicator = 'Prevalence', mean = prev, upper = NA, lower = NA, year, age_group_id = 24)]
+    ancdata <- ancdata[,.(sex = 'female', age = agegr, model = 'ANC Site', indicator = 'Prevalence', mean = prev, upper = NA, lower = NA, year, age_group_id = 24, type = type)]
+    
   } else {
     ancdata <- NULL
   }

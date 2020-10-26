@@ -3,11 +3,13 @@
 read_spec_object <- function(loc, j, start.year = 1970, stop.year, trans.params.sub = TRUE, 
                              pop.sub = TRUE,  prev.sub = TRUE, art.sub = TRUE, sexincrr.sub = TRUE, 
                              popadjust = TRUE, age.prev = FALSE, paediatric, anc.rt = FALSE, geoadjust=TRUE,
-anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE){
+anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE,
+test.sub_prev_granular = NULL){
 
 
   #Do this for now as something is weird with the new PJNZ files - don't need subpop anyway
   #Eventually these hsould all be regenerated with subpopulations
+
   if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))) {
     dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))
     
@@ -24,19 +26,20 @@ anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE){
         dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))
       }
 
-  # if(grepl("ZAF",loc) | grepl("IND",loc) | grepl("SDN",loc)){
-  #   dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))
-  # } else {
-  #   dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', loc, '.rds'))
-  # }
-  # 
-  # if(use_2019 & loc != 'SWZ'){
-  #   #search 2019, then 2018, then subpop, then prep
-  #   dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))
-  # }
-
+ 
   if(lbd.anc){
       replace <- as.data.table(readRDS(paste0('/share/hiv/data/PJNZ_prepped/lbd_anc/2019/', loc, '.rds')))
+
+      if(grepl("KEN",loc)){
+        replace <- replace[which(subpop == attr(dt,"eppd")$ancsitedat$subpop[1])]
+      }
+      
+      
+      if(grepl("SOM",loc)){
+        replace <- replace[subpop %in% "Remaining females" & type=="ancss"]
+      }
+      
+
       if(!geoadjust){
         replace[,offset := NULL]
       }
@@ -50,10 +53,7 @@ anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE){
         replace[,adm0_lower:=NULL]
         replace[,adm0_upper:=NULL]
         replace[,site_pred:=NULL]
-        
-        
-        
-        
+ 
       }
 
       attr(dt, 'eppd')$ancsitedat <- replace
@@ -103,7 +103,7 @@ anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE){
       
       ##adding in age.prev arg
       if(age.prev){
-        dt <- sub.prev.granular(dt, loc)
+        dt <- sub.prev.granular(dt, loc, test.sub_prev_granular)
         attr(dt, 'specfp')$fitincrr <- 'regincrr'
       } else{
         dt <- sub.prev(loc, dt)	
@@ -117,8 +117,13 @@ anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE){
     if(geoadjust){
       
       print("Merging ANC bias offsets")
-      
-      dt <- geo_adj(loc, dt, j, uncertainty=TRUE)
+      # if(geoadj_test){
+      #   dt <- geo_adj_old(loc, dt, j, uncertainty=TRUE)
+      #   
+      # }else{
+        dt <- geo_adj(loc, dt, j, uncertainty=TRUE)
+        
+      # }
 
     } 
     
@@ -138,34 +143,52 @@ anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE){
       dt <- gbdeppaiml::sub.anc.prior(dt,loc)
     }
     
-    ## Subsetting KEN counties from province
+
+
+    ## Subsetting KEN counties from province, updated 5/5/2020
+
     # if(grepl('KEN', loc)){
-    #   ken.anc.path <- paste0('/share/hiv/epp_input/gbd19/kenya_anc_map.csv')
+    #   ken.anc.path <- paste0('/share/hiv/epp_input/gbd20/kenya_anc_map.csv')
     #   ken.anc <- fread(ken.anc.path)
-    #   county.sites <- ken.anc[ihme_loc_id == loc, site]
-    #   prov.sites <- row.names(attr(dt, "eppd")$anc.prev)
-    #   keep.index <- which(prov.sites %in% county.sites  | grepl(loc.table[ihme_loc_id == loc, location_name], prov.sites))
-    #   attr(dt, "eppd")$anc.used[] <- FALSE
-    #   if(length(keep.index) > 0) {
-    #     attr(dt, "eppd")$anc.used[keep.index] <- TRUE
-    #   }
-    #   ##TODO - need to update mapping, take out grepl on location name
-    #   attr(dt, 'eppd')$ancsitedat$used[!(attr(dt, 'eppd')$ancsitedat$site %in% county.sites | grepl(loc.table[ihme_loc_id == loc, location_name], attr(dt, 'eppd')$ancsitedat$site))] <- FALSE
-    #   # ART
-    #   prop.path <- paste0("/share/hiv/epp_input/gbd19/KEN_ART_props.csv")
-    #   prop.dt <- fread(prop.path)
-    #   prop <- prop.dt[ihme_loc_id == loc, prop_pepfar]
-    #   attr(dt,"specfp")$art15plus_num <- attr(dt,"specfp")$art15plus_num * prop
+    #   if(loc %in% ken.anc$ihme_loc_id){
+    #     county.sites <- ken.anc[ihme_loc_id == loc, site]
+    #     prov.sites <- unique(attr(dt, "eppd")$ancsitedat$site)
+    # 
+    # 
+    #     attr(dt, "eppd")$anc.used[] <- FALSE
+    #     
+    #     temp1 <- attr(dt, "eppd")$anc.prev[]
+    #     temp1 <- temp1[0,]
+    # 
+    #     temp2 <- attr(dt, "eppd")$anc.n[]
+    #     temp2 <- temp2[0,]
+    #  
+    #     for(site in unique(county.sites)){
+    #       attr(dt, "eppd")$anc.used[grepl(site,names(attr(dt, "eppd")$anc.used))] <- TRUE
+    #       keep_index <- which(grepl(site,rownames(attr(dt, "eppd")$anc.prev)))
+    #       temp1 <- rbind(temp1,attr(dt, "eppd")$anc.prev[keep_index,,drop =FALSE])
+    #       temp2 <- rbind(temp2,attr(dt, "eppd")$anc.n[keep_index,,drop =FALSE])
+    #       
+    #     }
+    #     
+    #     attr(dt, "eppd")$anc.prev <- temp1
+    #     attr(dt, "eppd")$anc.n <- temp2
+    #     attr(dt, "eppd")$anc.used <- attr(dt, "eppd")$anc.used[attr(dt, "eppd")$anc.used] 
+    #     attr(dt, 'eppd')$ancsitedat$used[!(attr(dt, 'eppd')$ancsitedat$site %in% county.sites | grepl(loc.table[ihme_loc_id == loc, location_name], attr(dt, 'eppd')$ancsitedat$site))] <- FALSE
+    #     attr(dt, 'eppd')$ancsitedat <- attr(dt, 'eppd')$ancsitedat[which(attr(dt, 'eppd')$ancsitedat$used==TRUE),]
+    #  }
     # }
       
-  
-    # if(!anc.rt){
-    #   attr(dt, 'eppd')$ancrtsite.prev <- NULL
-    #   attr(dt, 'eppd')$ancrtsite.n <- NULL
-    #   attr(dt, 'eppd')$ancrtcens <- NULL
-    # }
+    # 
+    if(!anc.rt){
+      attr(dt, 'eppd')$ancrtsite.prev <- NULL
+      attr(dt, 'eppd')$ancrtsite.n <- NULL
+      attr(dt, 'eppd')$ancrtcens <- NULL
+    }
+
     attr(dt, 'specfp')$prior_args <- list(logiota.unif.prior = c(log(1e-14), log(0.000025)))
     attr(dt, 'specfp')$group <- '1'
+    
   }else{
     ## Group 2 inputs
     print('Appending vital registration death data')
@@ -188,7 +211,7 @@ anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE){
     print('Appending FRR')
     dt <- add_frr_noage_fp(dt)
   }
-  
+
   
     return(dt)
     
@@ -246,14 +269,19 @@ update_spectrum_fixpar <- function(specfp, hiv_steps_per_year = 10L, proj_start 
   ss$h.age15plus.idx <- which((AGE_START-1 + cumsum(ss$h.ag.span)) >= 15)
   
   ## Paediatric state space
-  ss$pAGu5 <- 5 ## under 5 ages
-  ss$hDSu5 <- 7 ## cd4 percent
-  ss$hMT <- 4 ## perinatal, bf0, bf6, bf12
-  ss$pAGu15 <- 10 ## 5-15 ages
-  ss$hDSu15 <- 6 ##under 15 cd4 count categories
-  ss$u5.elig.groups <- list('30' = 1, '25' = 2, '20' = 3, '15' = 4, '10' = 5, '5' = 6, '0' = 7)
-  ss$u15.elig.groups <- list('1000' = 1, '750' = 2, '500' = 3, '350' = 4, '200' = 5, '0' = 6)  
-  ss$prenat.opt <- c('tripleARTdurPreg', 'tripleARTbefPreg', 'singleDoseNevir', 'prenat_optionB', 'prenat_optionA', 'dualARV')
+  if(paediatric){
+    ss$pAGu5 <- 5 ## under 5 ages
+    ss$hDSu5 <- 7 ## cd4 percent
+    ss$hMT <- 4 ## perinatal, bf0, bf6, bf12
+    ss$pAGu15 <- 10 ## 5-15 ages
+    ss$hDSu15 <- 6 ##under 15 cd4 count categories
+    ss$u5.elig.groups <- list('30' = 1, '25' = 2, '20' = 3, '15' = 4, '10' = 5, '5' = 6, '0' = 7)
+    ss$u15.elig.groups <- list('1000' = 1, '750' = 2, '500' = 3, '350' = 4, '200' = 5, '0' = 6)  
+    ss$prenat.opt <- c('tripleARTdurPreg', 'tripleARTbefPreg', 'singleDoseNevir', 'prenat_optionB', 'prenat_optionA', 'dualARV')
+    
+  }
+  
+
   
   
   invisible(list2env(ss, environment())) # put ss variables in environment for convenience

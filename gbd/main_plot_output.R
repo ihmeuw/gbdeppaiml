@@ -19,19 +19,22 @@ if(length(args) > 0) {
   if(compare.run == 'NA'){
     compare.run <- NA
   }
-  testing <- args[5]
+  test <- args[5]
 } else {
-  run.name <- "200316_windchime"
-  loc <- "AGO"
-  draw.fill <- TRUE
 
+  run.name <- "201007_socialdets_sens"
+  loc <- "MDG_0.1"
+
+  draw.fill <- TRUE
   paediatric <- TRUE
-  compare.run <- '200213_violin'
-  testing <- FALSE
+
+  compare.run <- c('200713_yuka')
+  test <-  NULL
+
 }
 
 gbd_year_new <- "gbd20"
-if(compare.run == '190630_rhino2'){
+if( '190630_rhino2' %in% compare.run){
   gbd_year_old <- "gbd19"
   
 }else{
@@ -39,7 +42,9 @@ if(compare.run == '190630_rhino2'){
   
 }
 gbdyear <- 'gbd20'
-run.name.old <- compare.run
+
+
+run.names.comp <- compare.run
 ### Functions
 library(mortdb, lib = "/ihme/mortality/shared/r")
 setwd(paste0(ifelse(windows, "H:", paste0("/homes/", user)), "/eppasm/"))
@@ -50,41 +55,52 @@ dir.table <- fread(paste0('/share/hiv/epp_input/gbd20//dir_table_gbd20.csv'))
 
 
 
+if(!file.exists(paste0('/share/hiv/epp_input/gbd20/', run.name, '/location_table.csv'))){
+  loc.table <- get_locations(hiv_metadata = T)
+}else{
+  loc.table <- fread(paste0('/share/hiv/epp_input/gbd20/', run.name, '/location_table.csv'))
+  
+}
 
 
-loc.table <- fread(paste0('/share/hiv/epp_input/gbd20/', run.name, '/location_table.csv'))
-if(run.name.old != '190630_rhino2' | is.na(run.name.old)){
-  if(file.exists(paste0('/share/hiv/epp_input/gbd20/', run.name.old, '/location_table.csv'))){
+
+if(!is.na(compare.run)){
+  run.name.old = compare.run[1]
+  if(run.name.old != '190630_rhino2'){
     loc.table.old <- fread(paste0('/share/hiv/epp_input/gbd20/', run.name.old, '/location_table.csv'))
+    
   }else{
-    loc.table.old <- fread(paste0('/share/hiv/epp_input/gbd20/', run.name, '/location_table.csv'))
+    loc.table.old <- fread(paste0('/share/hiv/epp_input/gbd19/', run.name.old, '/location_table.csv'))
     
   }
-  
-}else{
-  loc.table.old <- fread(paste0('/share/hiv/epp_input/gbd19/', run.name.old, '/location_table.csv'))
-  
 }
 
 if(loc %in% c('STP', 'COM', 'MAR')){
   compare.run = NA
 }
-# 
+run.names.comp <- compare.run
+test = NULL
 # ## 15-49 plots
-dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/15to49_plots/'), recursive = TRUE, showWarnings = FALSE)
+# dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/15to49_plots/'), recursive = TRUE, showWarnings = FALSE)
 plot_15to49(loc,new.run = run.name, paediatric, plot.deaths = TRUE,  lbd_unraked = FALSE,
-            compare.gbd17=TRUE, compare.run = compare.run, compare.gbd19.unraked = FALSE,
-            compare.spec = FALSE, compare.stage = 'stage_1', 
-            compare.epp = FALSE, gbdyear = "gbd20")
+
+            names = c('New Rvec manip', 'GBD20'),
+            compare.gbd17=FALSE, compare.run = run.names.comp, compare.unraked = TRUE,
+            compare.stage2 = FALSE, simplify = FALSE, test_run = test, loc_name = loc, gbdyear = 'gbd20')
 
 #Age-specific plots
-for(c.indicator in c( 'Prevalence','Incidence','Deaths')){
+for(c.indicator in rev(c( 'Prevalence','Incidence','Deaths'))){
   dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/age_specific_plots/', c.indicator, '/'), recursive = TRUE, showWarnings = FALSE)
 }
-plot_age_specific(loc, run.name.new=run.name, paediatric=TRUE, run.name.old = '190630_rhino2', compare.run = compare.run, gbdyear = gbd_year_new, c.metric = 'Count')
+
+#plot_age_specific(loc, run.name.new=run.name, paediatric=TRUE, run.name.old = '190630_rhino2', compare.run = run.names.comp, gbdyear = gbd_year_new, c.metric = 'Rate', test_run = test)
+plot_age_specific(loc, run.name.new=run.name, paediatric=TRUE, run.name.old = '190630_rhino2', 
+                         compare.run = run.names.comp, gbdyear = gbd_year_new, c.metric = 'Rate', test_run = test,
+                         comp.2019 =T)
 
 # ## Birth prevalence
 dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/paeds_plots/'), showWarnings = F)
+run.name.old = '200505_xylo'
 plot_birthprev(loc,run.name.new =  run.name, run.name.old = run.name.old)
 
 

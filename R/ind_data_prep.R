@@ -8,7 +8,7 @@ prepare_eppd_ind <- function(loc, proj.end=2019, anc.sub = FALSE){
     dir <- paste0("/ihme/limited_use/LIMITED_USE/PROJECT_FOLDERS/UNAIDS_ESTIMATES/", unaids.year, "/IND/")        
   }
   filepath <- dir
-  eppd <- ind.prepare.epp.fit(filepath, proj.end = proj.end, anc.sub = FALSE)
+  eppd <- ind.prepare.epp.fit(filepath, proj.end = proj.end, anc.sub = T)
   gen.pop.dict <- c("General Population", "General population", "GP", "GENERAL POPULATION", "GEN. POPL.", "General population(Low Risk)", "Remaining Pop")
   gen.pop.i <- which(names(eppd) %in% gen.pop.dict)
   temp.eppd <- list()

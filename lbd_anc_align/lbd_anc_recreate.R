@@ -1,10 +1,32 @@
-rm(list=ls())
+## ---------------------------
+## Script name: lbd_anc_recreate.R
+## Purpose of script:
+##
+## Author: Maggie Walters
+## Date Created: 2020-10-12
+## Email: mwalte10@uw.edu
+## ---------------------------
+##
+## Notes:
+##   
+##
+## ---------------------------
+
+## Used in basically every script
+Sys.umask(mode = "0002")
 windows <- Sys.info()[1][["sysname"]]=="Windows"
 root <- ifelse(windows,"J:/","/home/j/")
 user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
-run.name <- '200316_windchime'
+
 code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/hiv_gbd2019/")
-input_table <- fread(paste0('/ihme/hiv/epp_input/gbd20/inputs.csv'))
+
+
+source(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/gbd/00_req_packages.R"))
+libs <- c("data.table", "openxlsx", "raster", "foreign", "rgdal", "geosphere", "fossil", "dplyr", "rgeos", "car","plyr", 'sf')
+sapply(libs, require, character.only = T)
+
+run.name <- '200316_windchime'
+input_table <- fread(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), '/gbdeppaiml/lbd_anc_align/inputs.csv'))
 c.args <- input_table[run_name==run.name]
 run_name <- run.name
 lbd.anc <- c.args[['lbd.anc']]
@@ -21,16 +43,8 @@ UNAIDS_year <- 2019
 lat_long_table <- c.args[['lat_long_table']]
 
 date <- substr(gsub("-","",Sys.Date()),3,8)
-dir.create(output.dir)
-## Packages
-library(data.table)
 
-
-
-
-
-###easy locs, called keep
-#load('/homes/mwalte10/lbd_anc_align/examine_first.RData')
+##load in LBD data
 loc.table <- get_locations(hiv_metadata = TRUE)
 anc_dat <- as.data.table(readRDS(lbd_anc_data)) 
 keep <- unique(anc_dat$country)
@@ -38,8 +52,6 @@ keep <- cbind(keep, loc.table[ihme_loc_id %in% keep, unaids_recent])
 colnames(keep) <- c('countries', 'years')
 keep <- as.data.frame(keep)
 
-library(mortdb, lib = '/ihme/mortality/shared/r')
-loc.table <- get_locations(hiv_metadata = TRUE)
 hiv_locs_nat <- loc.table[level == 3 & epp == 1, ihme_loc_id]
 lat_long_table <- fread(lat_long_table)
 colnames(lat_long_table) <- c('ihme_loc_id','longitude', 'latitude')
@@ -47,14 +59,11 @@ colnames(lat_long_table) <- c('ihme_loc_id','longitude', 'latitude')
 tracking_sheet <- list()
 nrow_sheet <- list()
   
-libs <- c("data.table", "openxlsx", "raster", "foreign", "rgdal", "geosphere", "fossil", "dplyr", "rgeos", "car","plyr", 'sf')
-sapply(libs, require, character.only = T)
-
-## Bind all UNAIDS Survaillance files together---------------------------------------------------------------------------------------------
-
+#add_info comes from: https://stash.ihme.washington.edu/projects/GEOSP/repos/lbd_hiv/browse/data/anc/1_data_extraction/addtional_info.csv
 additional <- read.csv(add_info)
 ## Merge Geography codebook and UNAIDS data -----------------------------------------------------------------------------------------------
 geocodebook <- read.csv(geo_codebook, stringsAsFactors = FALSE)
+#anc_snap.R is from: https://stash.ihme.washington.edu/projects/GEOSP/repos/lbd_hiv/browse/data/anc/3_post_processing/anc_snap.r
 source('/homes/mwalte10/gbdeppaiml/lbd_anc_align/anc_snap.R')
 geocodebook <- snap_codebook(geocodebook)
 
@@ -75,10 +84,6 @@ loc.table <- data.table(get_locations(hiv_metadata = T))
 epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
 loc.list <- epp.list
 
-#We did not use EPP-ASM for India in GBD19, instead EPP + Spectrum
-if(T){
-  loc.list <- loc.list[!grepl("IND",loc.list)]
-}
 #################
 #we don't do this for zaf and png
 loc.list <- loc.list[!grepl('ZAF', loc.list)]
@@ -87,9 +92,9 @@ loc.list <- loc.list[-which(loc.list == 'PNG')]
 
 use_2019 <- T
 use_2018 <- F
-use_subpop <- T
+use_subpop <- F
 use_prepped <- F
-loc.list <- loc.list[grepl('KEN', loc.list)]
+loc.list <- loc.list[grepl('ETH', loc.list)]
 additional <- additional[Prev < 1,]
 for (countries in loc.list) {
 
@@ -127,7 +132,7 @@ for (countries in loc.list) {
     if(!exists("df.2018") | !use_2018){
       df.2018 <- NULL
     }
-    if(!exists("df.subpop") ){
+    if(!exists("df.subpop") | !use_subpop ){
       df.subpop <- NULL
     }
     if(!exists("df.prepped") | !use_prepped){

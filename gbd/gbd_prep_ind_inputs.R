@@ -31,7 +31,7 @@ if(length(args) > 0) {
   proj.end <- args[2]
   run.group2 <- args[3]
 } else {
-  run.name <- "191002_sitar_ind"
+  run.name <- "2020_ind_test_agg9"
   proj.end <- 2022
   run.group2 <- FALSE
 }
@@ -42,9 +42,9 @@ dir.create(out.dir, recursive = TRUE, showWarnings = TRUE)
 
 ## Functions
 library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
-source(paste0(root, "/temp/central_comp/libraries/2019_gbd_env/r/get_population.R"))
-source('/home/j/temp/central_comp/libraries/2019_gbd_env/r/get_covariate_estimates.R')
-source(paste0(root, '/temp/central_comp/libraries/2019_gbd_env/r/get_cod_data.R'))}
+source( "/ihme/cc_resources/libraries/current/r/get_population.R")
+source('/ihme/cc_resources/libraries/current/r/get_covariate_estimates.R')
+source('/ihme/cc_resources/libraries/current/r/get_cod_data.R')}
 
 #########################
 ##India location ids

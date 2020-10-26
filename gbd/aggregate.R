@@ -27,9 +27,9 @@ if(length(args) > 0) {
   ncores <- args[4]
   
 } else {
-  parent <- "IND"
-  run.name <- "190630_rhino2"
-  spec.run.name <- "190630_rhino"
+  parent <- "ETH"
+  run.name <- "200713_yuka"
+  spec.run.name <- "200713_yuka"
   ncores <- 2
 }
 
@@ -102,6 +102,9 @@ id.vars <- c("year","run_num")
   loc_i <- child.locs[1]
   combined.dt <- fread(paste0(in.dir, "/", loc_i, suffix))
   for(loc in child.locs[2:length(child.locs)]){
+    if(is.na(loc)){
+      next
+    }
     print(loc)
     in.path <- paste0(in.dir, "/", loc, suffix)
     dt <- fread(in.path,blank.lines.skip = T)

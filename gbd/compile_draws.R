@@ -1,33 +1,71 @@
-### Setup
-rm(list=ls())
+##Set up --------------------------- 
+## Script name: compile_draws.R
+## Purpose of script: Average across draws
+##
+## Author: Maggie Walters
+## Date Created: 2018-04-11
+## Email: mwalte10@uw.edu
+## 
+##
+## Notes: Created by Tahvi Frank and modified for GBD20 by Maggie Walters
+## Some arguments are likely to stay constant across runs, others we're more likely to test different options.
+## The arguments that are more likely to vary are pulled from the eppasm run table
+##
+
+## Used in basically every script
+Sys.umask(mode = "0002")
 windows <- Sys.info()[1][["sysname"]]=="Windows"
 root <- ifelse(windows,"J:/","/home/j/")
 user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
-code.dir <- paste0(ifelse(windows, "H:", paste0("/homes/", user)), "/gbdeppaiml/")
-## Packages
-library(data.table); library(mvtnorm); library(survey);library(assertable)
-library(mortdb, lib = "/share/mortality/shared/r")
+
+# source(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/gbd/00_req_packages.R"))
 
 
-## Arguments
+
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
-if(length(args) > 0) {
-   run.name <- args[1]
-  #run.name <- "191002_sitar"
-  loc <- args[2]
-  n <- as.integer(args[3])
-  draw.fill <- as.logical(args[4])
-  paediatric <- as.logical(args[5])
-  gbdyear <- 'gbd20'
-} else {
-  run.name <- "200119_ukelele"
-  loc <- "BFA"
-  n <- 1
+if(length(args) == 0){
+  array.job = FALSE
+  run.name <- "201015_socialdets_sens"
+  loc <- 'CPV_0.75'
   draw.fill <- TRUE
   paediatric <- TRUE
+  n = 1000
+}else{
+  run.name <- args[1]
+  array.job <- as.logical(args[2])
+  draw.fill <- as.logical(args[4])
+  paediatric <- as.logical(args[5])
+
 }
+
+
 gbdyear <- 'gbd20'
+stop.year = 2022
+test = NULL
+loc = 'AGO'
+library(data.table); library(mvtnorm); library(survey); library(ggplot2); library(plyr); library(dplyr); library(assertable); library(parallel)
+gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
+eppasm_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/")
+hiv_gbd2019_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/hiv_gbd2019/")
+library(mortdb, lib = "/share/mortality/shared/r/")
+
+setwd(eppasm_dir)
+devtools::load_all()
+setwd(gbdeppaiml_dir)
+devtools::load_all()
+if(!array.job & length(args) > 0){
+  loc <- args[3]
+  n = 1000
+}
+
+# Array job ---------------------------------------
+if(array.job){
+  array.dt <- fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
+  task_id <- as.integer(Sys.getenv("SGE_TASK_ID"))
+  loc <- array.dt[task_id,loc_scalar]
+}
+
 
 ## Functions
 fill_draws <- function(fill.dt,type=NULL){
@@ -58,17 +96,20 @@ fill_draws <- function(fill.dt,type=NULL){
 loc.table <- data.table(get_locations(hiv_metadata = T))
 print('loc.table loaded')
 
-#loc.table <- data.table(get_locations(hiv_metadata = T))
 
 ### Code
 
 
-
-# for(loc in loc.list){ 
-#   
-#   tryCatch({
-    draw.path <- paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, "/", loc)
+    if(!is.null(test)){
+      draw.path <- paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, "/", loc, '_', test)
+      
+    }else{
+      draw.path <- paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, "/", loc)
+      
+    }
     draw.list <- list.files(draw.path)
+  
+    
     print('draw.list exists')
     ## subset out additional outputs (theta, under-1 splits)
     ## this could probably be tidied up
@@ -76,6 +117,7 @@ print('loc.table loaded')
     draw.list <- draw.list[gsub('.csv', '', draw.list) %in% 1:n]
     
     dt <- lapply(draw.list, function(draw){
+      print(draw)
       draw.dt <- fread(paste0(draw.path, '/', draw))
     })
     
@@ -96,7 +138,13 @@ print('loc.table loaded')
     print('fill_draws done')
     compiled.path <- paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, "/compiled/")
     dir.create(compiled.path, recursive = TRUE, showWarnings = FALSE)
-    write.csv(dt, paste0(compiled.path, loc, '.csv'), row.names = F)
+    if(!is.null(test)){
+      write.csv(dt, paste0(compiled.path, loc, '_', test, '.csv'), row.names = F)
+      
+    }else{
+      write.csv(dt, paste0(compiled.path, loc, '.csv'), row.names = F)
+      
+    }
     print('first file saved')
     print(compiled.path)
     
@@ -105,6 +153,7 @@ print('loc.table loaded')
       split.list <- list.files(draw.path)
       split.list <- split.list[grepl('under_', split.list)]
       split.dt <- lapply(split.list, function(draw){
+       
         draw.dt <- fread(paste0(draw.path, '/', draw))
       })
       
@@ -120,14 +169,15 @@ print('loc.table loaded')
         split.dt <- fill_draws(split.dt,type="child")
       }
       
-      write.csv(split.dt, paste0(compiled.path, loc, '_under1_splits.csv'), row.names = F)
+      if(!is.null(test)){
+        write.csv(split.dt, paste0(compiled.path, loc,'_', test, '_under1_splits.csv'), row.names = F)
+        
+      }else{
+        write.csv(split.dt, paste0(compiled.path, loc, '_under1_splits.csv'), row.names = F)
+        
+      }
     }
-  # }, error=function(e){})
-  # 
-  # 
-  # 
-  # 
-  # }
+
 
 
 
