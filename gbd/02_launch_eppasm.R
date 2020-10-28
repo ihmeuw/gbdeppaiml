@@ -1,16 +1,30 @@
-## Tahvi Frank
-## tahvif@uw.edu/tahvif@gmail.com
-### Setup
-rm(list=ls())
+## ---------------------------
+## Script name: 02_launch_eppasm.R
+## Purpose of script: launch the eppasm model
+##
+## Author: Tahvi Frank
+## Date Created: 2019
+## Modified by Maggie Walters, mwalte10@uw.edu
+## Email: mwalte10@uw.edu
+## ---------------------------
+##
+## Notes:
+##   
+##
+## ---------------------------
+
+## Used in basically every script
 Sys.umask(mode = "0002")
 windows <- Sys.info()[1][["sysname"]]=="Windows"
 root <- ifelse(windows,"J:/","/home/j/")
 user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
-code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
+eppasm_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/")
+setwd(eppasm_dir)
+devtools::load_all()
+gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
+setwd(gbdeppaiml_dir)
+devtools::load_all()
 date <- substr(gsub("-","",Sys.Date()),3,8)
-
-## Packages
-library(data.table)
 
 ## Arguments
 run.name <- "201015_socialdets_sens"

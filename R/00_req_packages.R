@@ -23,7 +23,7 @@ run.name = '200713_yuka'
 windows <- Sys.info()[1][["sysname"]]=="Windows"
 user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 root <- ifelse(windows,"J:/","/home/j/")
-gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
+# gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
 eppasm_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/")
 hiv_gbd2019_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/hiv_gbd2019/")
 
@@ -37,10 +37,10 @@ library(mortdb, lib = "/share/mortality/shared/r/")
 invisible(sapply(list.files("/share/cc_resources/libraries/current/r/", full.names = T), source))
 
 ## load in hiv functions
-setwd(eppasm_dir)
-devtools::load_all()
-setwd(gbdeppaiml_dir)
-devtools::load_all()
+# setwd(eppasm_dir)
+# devtools::load_all()
+# setwd(gbdeppaiml_dir)
+# devtools::load_all()
 source(paste0(root,"/Project/Mortality/shared/functions/check_loc_results.r"))
 
 ##load in loc.table

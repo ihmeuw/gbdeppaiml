@@ -32,9 +32,7 @@ migration = id_table[run == run.name, migration]
 
 diff <- list()
 
-diff_func <- function(loc, input){
-  
-}
+
 for (loc in locs) {
  used <- fread(paste0('/ihme/hiv/epp_input/gbd20/200713_yuka/population/',loc,'.csv'))
  correct_pull <- get_mort_outputs(
