@@ -24,15 +24,15 @@ setwd(gbdeppaiml_dir)
 devtools::load_all()
 
 loc.list <- loc.table[epp == 1, ihme_loc_id]
-loc.list <- c('AGO', 'CAF', 'COD', 'COG', 'CPV', 'CIV')
-run.name <- "201015_socialdets_sens"
+run.name <- "201113_socialdets"
 
-array.dt <- list(ihme_loc_id = loc.list, scale_foi = seq(0.1, 1, by = 0.05), draws = c(1:100))
+pred.mat <- readRDS('/ihme/homes/mwalte10/hiv_gbd2019/requests/haidong_proj/maggie/pref_mat.RDS')
+array.dt <- list(ihme_loc_id = unique(pred.mat$ihme_loc_id)[1:5], year_id = c(2000,2022), draws = 1, combos = c(1:128))
 array.dt <- expand.grid(array.dt)
 array.dt <- data.table(array.dt)
-colnames(array.dt) <- c('ihme_loc_id', 'scale_foi', 'draws')
+colnames(array.dt) <- c('ihme_loc_id', 'year_id', 'draws', 'combo')
 array.dt <- array.dt[!grepl('_', array.dt[,ihme_loc_id])]
-array.dt[,loc_scalar := paste0(ihme_loc_id, '_', scale_foi)]
+array.dt[,loc_scalar := paste0(ihme_loc_id, '_', combo)]
 
 ##run name needs to be changed here
 dir.create(paste0('/ihme/hiv/epp_input/gbd20/', run.name))

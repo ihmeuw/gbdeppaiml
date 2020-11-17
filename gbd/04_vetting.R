@@ -25,21 +25,35 @@ setwd(gbdeppaiml_dir)
 devtools::load_all()
 
 # Toggles ---------------------------------------
-compare_demo_inputs = T
-unaids_inputs = F
-compare_covariates = F
+new_run  = '200713_yuka'
+old_run = '200505_xylo'
+epp.locs <- (loc.table[epp == 1, ihme_loc_id])
+
+if(compare.inputs){
+  compare_demo_inputs = T
+  unaids_inputs = F
+  compare_dt_obj = F
+}
+if(compare.results){
+  age_specific_outputs = T
+  compare_covariates = F
+}
+
 
 # Vet UNAIDS inputs ---------------------------------------
 #ned to create script that plots the unaids inputs against each other
 if(unaids_inputs){
+  ###this script can be used as a basis, should hand off to Ned
+  source('/ihme/homes/mwalte10/hiv_gbd2020/vetting/dt_vetting.R')
+  source('/ihme/homes/mwalte10/hiv_gbd2020/vetting/vet_inputs.R')
+  source('/ihme/homes/mwalte10/hiv_gbd2020/vetting/vetting.R')
+  
   
 }
 
 # Compare run inputs ---------------------------------------
 if(compare_demo_inputs){
-  new_run  = '200713_yuka'
-  old_run = '200505_xylo'
-  epp.locs <- (loc.table[epp == 1, ihme_loc_id])
+
   compare_run_inputs <- function(loc, new.run, old.run){
     dt <- NULL
     if(file.exists(paste0('/ihme/hiv/epp_input/gbd20/',old.run,'/births/',loc, '.csv'))){
@@ -128,6 +142,49 @@ if(compare_demo_inputs){
   
 }
 
+# Compare dt objects ---------------------------------------
+if(compare_dt_obj){
+  dt_obj_compare <- function(loc, new.run, old.run){
+    new <- readRDS(paste0('/ihme/hiv/epp_output/gbd20/',new.run,'/dt_objects/',loc,'_dt.RDS'))
+    old <- readRDS(paste0('/ihme/hiv/epp_output/gbd20/',old.run,'/dt_objects/',loc,'_dt.RDS'))
+    
+    new.pop <- attr(new, 'specfp')$entrantpop
+    old.pop <- attr(old, 'specfp')$entrantpop
+    new.pop <- data.table(melt(new.pop))[,model := 'new']
+    old.pop <- data.table(melt(old.pop))[,model := 'old']
+    pop <- rbind(new.pop, old.pop)
+    entrant_pop <- ggplot(pop, aes(Var2, value, col = factor(model))) + geom_line() + facet_wrap(~Var1)
+    
+    
+    new.pop <- attr(new, 'specfp')$art_mort
+    old.pop <- attr(old, 'specfp')$art_mort
+    men.old <- data.table(melt(old.pop[,,1,1]))[,model := 'old']
+    men.old[,sex := 1]
+    men.new <- data.table(melt(new.pop[,,1,1]))[,model := 'new']
+    men.new[,sex := 1]
+    women.old <- data.table(melt(old.pop[,,1,2]))[,model := 'old']
+    women.old[,sex := 2]
+    women.new <- data.table(melt(new.pop[,,1,2]))[,model := 'new']
+    women.new[,sex := 2]
+    dt <- rbind(men.old, men.new, women.old, women.new)
+    art_mort <- ggplot(dt, aes(x = cd4stage, y = value, col = factor(model))) + geom_line(aes(linetype = factor(artdur))) + facet_wrap(~sex)
+    
+    new.dt <- attr(new, 'specfp')$pmtct_num
+    old.dt <- attr(old, 'specfp')$pmtct_num
+    new.dt <- data.table(melt(new.dt, id.vars = 'year'))[,model := 'new']
+    old.dt <- data.table(melt(old.dt, id.vars = 'year'))[,model := 'old']
+    dt <- rbind(new.dt, old.dt)
+    pmtct <- ggplot(dt, aes(x = year, y = value, col = factor(model))) + geom_line() + facet_wrap(~variable)
+    
+    dir.create(paste0('/ihme/hiv/epp_input/gbd20/', new.run, '/dt_obj_vet/'), recursive = T, showWarnings = F)
+    pdf(paste0('/ihme/hiv/epp_input/gbd20/', new.run, '/dt_obj_vet/', loc, '.pdf'))
+    print(entrant_pop) ; print(art_mort) : print(pmtct)
+    dev.off()
+    
+  }
+  
+  lapply(epp.locs, dt_obj_compare, new.run = new_run, old.run = old_run)
+}
 # Compare covariates ---------------------------------------
 if(compare_covariates){
   run.name_base = "200713_yuka"
@@ -368,3 +425,75 @@ if(compare_covariates){
   dev.off()
   
 }
+
+
+# Age specific outputs ---------------------------------------
+if(age_specific_outputs){
+  age_map <- get_age_map(gbd_year = 7)
+  
+  pdiff_age <- function(loc, new.run, old.run){
+    run.list <- c(new.run, old.run)
+    
+    cur.dt.list <- list()
+    for(run in run.list){
+      print(run)
+      input.path <- paste0("/ihme/hiv/spectrum_prepped/summary/",run,"/locations/")
+      if(run == '200316_windchime'){
+        input.path <- paste0(root, "WORK/04_epi/01_database/02_data/hiv/spectrum/summary/",run,"/locations/")
+      }
+      
+      
+      if(file.exists(paste0(input.path, loc, "_spectrum_prep.csv"))){
+        cur.dt <- fread(paste0(input.path, loc, "_spectrum_prep.csv"))[sex_id==3]
+        cur.dt[,c("ihme_loc_id", "clinic", "type"):=.(loc, NA, "line")]
+        cur.dt[,source := run]
+        cur.dt <- cur.dt[measure != 'Spec_Deaths']
+        cur.dt <- cur.dt[measure != 'Spec_Deaths']
+        cur.dt <- cur.dt[measure != 'Incidence']
+        cur.dt <- cur.dt[metric == 'Count']
+        cur.dt[measure=="Scaled_Inc", c('source','measure') := .(run,"Incidence")]
+        cur.dt[measure == 'ART', line_type := 'ART']
+        cur.dt[is.na(line_type), line_type := 'All']
+        if(run == old.run){
+          setnames(cur.dt, 'mean', 'old_run')
+          cur.dt <- cur.dt[,mget(c('year_id', 'sex_id', 'age_group_id', 'measure', 'old_run'))]
+          
+        }
+        if(run == new.run){
+          setnames(cur.dt, 'mean', 'new_run')
+          cur.dt <- cur.dt[,mget(c('year_id', 'sex_id', 'age_group_id', 'measure', 'new_run'))]
+          
+        }
+        cur.dt.list[[run]] = cur.dt
+      }
+    }
+    
+    cur.dt <- merge(cur.dt.list[[1]], cur.dt.list[[2]])
+    cur.dt[,gbd_epp_pdiff := 100 *abs(new_run - old_run) / old_run]
+    
+    cur.dt <- cur.dt[old_run != 0,]
+    
+    cur.dt[gbd_epp_pdiff < 20, level_pdiff:= 'lessthan20']
+    cur.dt[gbd_epp_pdiff  > 20 , level_pdiff:= '20to40']
+    cur.dt[gbd_epp_pdiff > 40, level_pdiff:= '40plus']
+    cur.dt <- merge(cur.dt, age_map, by = 'age_group_id')
+    
+    dir.create(paste0('/ihme/hiv/epp_output/gbd20/',new.run,'/vetting/',loc), recursive = T, showWarnings = F)
+    pdf(paste0('/ihme/hiv/epp_output/gbd20/',new.run,'/vetting/',loc,'.pdf'), height = 10, width = 10)
+    measure.list <- unique(cur.dt[,measure])
+    for(measure.x in measure.list){
+      gg <- ggplot(cur.dt[measure == measure.x], aes(x = old_run, y = new_run, col = as.factor(level_pdiff))) + geom_point() + facet_wrap(~age_group_name, scales = 'free') +
+        geom_abline(intercept = 1, slope = 1) + ggtitle(paste0(loc.table[ihme_loc_id == loc, plot_name], ' ', measure.x))
+      print(gg)
+    }
+    graphics.off()
+    
+  }
+  
+  lapply(epp.locs, pdiff_age, new.run = new_run, old.run = old_run)
+  
+}
+
+
+
+

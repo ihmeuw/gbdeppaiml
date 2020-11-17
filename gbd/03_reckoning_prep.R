@@ -26,10 +26,11 @@ devtools::load_all()
 
 # Arguments ---------------------------------------
 gbdyear = 'gbd20'
-run.name = '200713_yuka'
-spec.name = '200713_yuka'
+run.name = '200713_yuka_ETH_test'
+spec.name = '200713_yuka_ETH_test'
 code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
 loc.table <- get_locations(hiv_metadata = T)
+cluster.project = 'proj_hiv'
 
 # Aggregate and apply age splits ---------------------------------------
 ## Aggregate to higher levels for EPP-ASM child locs - not India because it goes through Spectrum
@@ -37,9 +38,10 @@ loc.table <- get_locations(hiv_metadata = T)
 loc.list <- loc.table[epp == 1, ihme_loc_id]
 eppasm_parents <-  c("KEN","ZAF","ETH","KEN_44793" ,"KEN_44794","KEN_44795", "KEN_44796" ,"KEN_44797", "KEN_44798","KEN_44799", "KEN_44800","NGA")
 all_loc_list <- c(loc.list,eppasm_parents, 'MRT', 'COM', 'STP')
+all_loc_list <- all_loc_list[grepl('ETH', all_loc_list)]
 ## Aggregation and reckoning prep for higher levels
   for(loc in all_loc_list){
-    if(loc %in% eppasm_parents[grepl("KEN", eppasm_parents)]){
+    if(loc %in% eppasm_parents){
       prep.string <- paste0("qsub -l m_mem_free=100G -l fthread=2 -l h_rt=02:00:00 -l archive -q all.q -P ", cluster.project, " ",
                             "-e /share/temp/sgeoutput/", user, "/errors ",
                             "-o /share/temp/sgeoutput/", user, "/output ",

@@ -27,8 +27,8 @@ devtools::load_all()
 date <- substr(gsub("-","",Sys.Date()),3,8)
 
 ## Arguments
-run.name <- "201015_socialdets_sens"
-spec.name <- "200713_yuka"
+run.name <- "201113_socialdets"
+spec.name <- "201113_socialdets"
 compare.run <- c("200713_yuka")
 
 proj.end <- 2022
@@ -51,6 +51,7 @@ testing = FALSE
 test = NULL
 run_eppasm = T
 gbdyear = 'gbd20'
+code.dir = '/homes/mwalte10/gbdeppaiml/'
 
 ### Paths
 input.dir <- paste0("/ihme/hiv/epp_input/", gbdyear, '/', run.name, "/")
@@ -88,14 +89,14 @@ if(array.job){
                      "-e /share/temp/sgeoutput/", user, "/errors ",
                      "-o /share/temp/sgeoutput/", user, "/output ",
                      "-N ", "eppasm_", run.name, ' ',
-                     "-tc 100 ",
+                     "-tc 1000 ",
                      "-t 1:", n.draws, " ",
                      "-hold_jid eppasm_prep_inputs_", run.name," ",
                      code.dir, "gbd/singR_shell.sh ",
                      code.dir, "gbd/main.R ",
                      run.name, " ", array.job)
-# print(epp.string)
-# system(epp.string)
+print(epp.string)
+system(epp.string)
 
 #Draw compilation
 draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q long.q -P ", cluster.project, " ",
@@ -138,9 +139,9 @@ for(loc in loc.list) {
                             "-hold_jid ", loc,"_",run.name, "_eppasm ",
                             code.dir, "gbd/singR_shell.sh ",
                             code.dir, "gbd/compile_draws.R ",
-                            run.name, " ", loc, ' ', n.draws, ' TRUE ', paediatric)
-      print(draw.string)
-      system(draw.string)
+                            run.name, " ", array.job, ' ', loc, ' ', n.draws, ' TRUE ', paediatric)
+      # print(draw.string)
+      # system(draw.string)
 
       plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
                             "-e /share/temp/sgeoutput/", user, "/errors ",
@@ -151,8 +152,8 @@ for(loc in loc.list) {
                             code.dir, "gbd/main_plot_output.R ",
                             loc, " ", run.name, ' ', paediatric, ' ', compare.run, ' ', test)
      
-      # print(plot.string)
-      # system(plot.string)
+      print(plot.string)
+      system(plot.string)
 
 }
 }

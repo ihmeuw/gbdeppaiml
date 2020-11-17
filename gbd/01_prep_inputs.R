@@ -25,7 +25,7 @@ devtools::load_all()
 
 # Arguments ---------------------------------------
 gbdyear = 'gbd20'
-run.name = '201015_socialdets_sens'
+run.name = '201113_socialdets'
 old_run.name = '201007_socialdets_sens'
 spec.name = '200713_yuka'
 code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")

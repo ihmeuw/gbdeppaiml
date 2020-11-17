@@ -149,72 +149,32 @@ plot_15to49 <- function(loc="KEN_35618",  compare.run = c('2020_ind_test_agg8', 
                         paediatric =TRUE, plot.deaths = FALSE,
                         group = 1,
                         gbdyear = "gbd20", simplify = F,
-                        loc_name){
-  x <- data.table(cbind(name = names, run_name = compare.run))
+                        loc_name, array.job = F){
+  if(!array.job){
+    x <- data.table(cbind(name = names, run_name = compare.run))
+  }else{
+    array.dt <- fread(paste0('/ihme/hiv/epp_input/gbd20/', compare.run[1], '/array_table.csv'))
+    loc_scalar <- unique(array.dt[ihme_loc_id == loc, loc_scalar])
+    x <- expand.grid(list(name = names[1], loc = loc_scalar, run_name = compare.run[1]))
+    y <- expand.grid(list(name = names[2], loc = loc, run_name = compare.run[2]))
+    x <- as.data.table(rbind(x, y))
+  }
   if(plot.deaths){
     meas.list <- c('Incidence', 'Prevalence', 'Deaths')
   }else{
     meas.list <- c('Incidence', 'Prevalence')
   }
   # Load in all runs ---------------------------------------
-  dt <- c()
-  for(run in x[,run_name]){
-    if(run == '200316_windchime' & grepl('IND', loc)){
-      child_ids <- loc.table[parent_id == gsub('IND_', '', loc), ihme_loc_id]
-      child.list <- list()
-      
-      for(child in child_ids){
-        prev <- fread(paste0('/ihme/hiv/spectrum_input/', run, '/prevalence/', child, '.csv'))
-        inc <- fread(paste0('/ihme/hiv/spectrum_input/', run, '/incidence/', child, '.csv'))
-        prev <- melt(prev, id.vars  = 'year')
-        prev[,mean := mean(value), by = 'year']
-        prev <-   prev[,.(year, mean)]
-        prev[,lower := NA]
-        prev[,upper := NA]
-        inc <- melt(inc, id.vars  = 'year')
-        inc[,mean := mean(value), by = 'year']
-        inc <-   inc[,.(year, mean)]
-        inc[,lower := NA]
-        inc[,upper := NA]
-        inc[,indicator := 'Incidence']
-        prev[,indicator := 'Prevalence']
-        both <- data.table(rbind(inc, prev))
-        both[,loc := child]
-        child.list <- rbind(both, child.list)
-        
-      }
-      child.list <- unique(child.list)
-      child.list[, mean := sum(mean), by = c('year', 'indicator')]
-      child.list[,loc := NULL]
-      child.list <- unique(child.list)
-      pop <- fread(paste0('/ihme/hiv/epp_input/gbd20/2020_ind_test_agg2/population/', loc, '.csv'))[age_group_id %in% c(8:14),]
-      pop[,population := sum(population), by = 'year_id']
-      pop <- unique(pop[,.(year_id,population)])
-      setnames(pop, 'year_id', 'year')
-      child.list <- merge(pop, child.list)
-      child.list[,mean := mean / population]
-      child.list[indicator == 'Prevalence',mean := mean * 100000]
-      child.list[indicator == 'Incidence',mean := mean * 100000]
-      child.list[,model := 'EPP']
-      child.list[,type := 'line']
-      child.list[,population := NULL]
-      child.list <- child.list[,.(type, year, indicator, model, mean, lower, upper)]
-      dt <- rbind(dt, child.list)
-      
-    }else{
-      if(run == '190630_rhino2'){
-        compare.dt <- fread(paste0('/share/hiv/epp_output/gbd19/',run, '/compiled/', loc, '.csv'))
-        compare.dt <- get_summary(compare.dt, loc, run.name.old = run, run.name.new = run, paediatric, old.splits = T, test_run = NULL)
-      }else{
-        compare.dt <- fread(paste0('/share/hiv/epp_output/gbd20/',run, '/compiled/', loc, '.csv'))
-        compare.dt <- get_summary(compare.dt, loc, run.name.old = run, run.name.new = run, paediatric, old.splits = F, test_run = NULL, loc_name)
-      }
-      run <- x[run_name == run, name]
-      compare.dt <- compare.dt[age_group_id == 24 & sex == 'both' & measure %in% meas.list & metric == "Rate",.(type = 'line', year, indicator = measure, model = run, mean, lower, upper)]
-      dt <- rbind(compare.dt, dt) 
-    }
-    
+  get_sum_mod <- function(row, run){
+    compare.dt <- fread(paste0('/share/hiv/epp_output/gbd20/',run[row,run_name], '/compiled/', run[row,loc], '.csv'))
+    compare.dt <- get_summary(output = compare.dt, loc = loc, run.name.old = run[row,run_name], run.name.new = run[row,run_name], paediatric = T, 
+                              old.splits = F, test_run = NULL, loc_name = run[row,loc])
+    run <- x[run_name == run[,run_name], paste0(loc, ', ', name)]
+    compare.dt <- compare.dt[age_group_id == 24 & sex == 'both' & measure %in% meas.list & metric == "Rate",.(type = 'line', year, indicator = measure, model = run, mean, lower, upper)]
+    return(compare.dt)
   }
+  dt <- mclapply(1:nrow(unique(x[,.(loc,run_name)])), get_sum_mod, run = unique(x[,.(loc, run_name)]), mc.cores = 30)
+  dt <- rbindlist(dt)
   compare.dt <- dt
   
  # Load in data ---------------------------------------
@@ -223,8 +183,14 @@ plot_15to49 <- function(loc="KEN_35618",  compare.run = c('2020_ind_test_agg8', 
     loc1 <- loc.table[location_id==parent_id1,ihme_loc_id]
     data <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/', new.run, '/fit_data/', loc1, '.csv'))
   } else {
-    hhs <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/', new.run, '/fit_data/', loc, '.csv'))
-    data <- readRDS(paste0('/share/hiv/epp_output/', gbdyear, '/', new.run, '/dt_objects/', loc, '_dt.RDS'))
+    if(!array.job){
+      hhs <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/', new.run, '/fit_data/', loc, '.csv'))
+      data <- readRDS(paste0('/share/hiv/epp_output/', gbdyear, '/', new.run, '/dt_objects/', loc, '_dt.RDS'))
+    }else{
+      hhs <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/', new.run, '/fit_data/', loc, '.csv'))
+      data <- readRDS(paste0('/share/hiv/epp_output/', gbdyear, '/200713_yuka/dt_objects/', loc, '_dt.RDS'))
+    }
+
     anc <- data.table(attr(data, 'eppd')$ancsitedat)
     # hhs <- data.table(attr(data, 'eppd')$hhs)
     # setnames(hhs, 'prev', 'mean')
@@ -247,7 +213,12 @@ plot_15to49 <- function(loc="KEN_35618",  compare.run = c('2020_ind_test_agg8', 
   
   anc <- data[model == 'ANC Site']
   anc[,sex := NULL]
-  cur.dt <- fread(paste0('/share/hiv/epp_output/', gbdyear, '/', new.run, '/compiled/', loc, '.csv'))
+  if(!array.job){
+    cur.dt <- fread(paste0('/share/hiv/epp_output/', gbdyear, '/', new.run, '/compiled/', loc, '.csv'))
+  }else{
+    cur.dt <- fread(paste0('/share/hiv/epp_output/', gbdyear, '/', new.run, '/compiled/', loc, '_1.csv'))
+    
+  }
 
   ## post stratify age-specific data using Spectrum population
   if(nrow(data[age != '15-49']) > 0){
@@ -338,7 +309,8 @@ plot_15to49 <- function(loc="KEN_35618",  compare.run = c('2020_ind_test_agg8', 
   }
 
   color.list <- c('blue', 'red', 'green','purple','orange','black', 'darkgreen')
-  names(color.list) <- unique(plot.dt$model)
+  color.list <- rep('black', length(unique(plot.dt$model)))
+   names(color.list) <- unique(plot.dt$model)
   plot.dt[,model := factor(model)]
 
   
@@ -375,6 +347,7 @@ dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', new.run, '/15to49_plots
     gg <- gg + geom_point(data = plot.dt[model == 'VR'], aes(x = year, y = mean, shape = 'VR'), size = 0.75)
   }
   
+  gg <- gg + theme(legend.position = "none")
   print(gg)
   dev.off()
   

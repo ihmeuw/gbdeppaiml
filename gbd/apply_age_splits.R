@@ -13,9 +13,9 @@ if(length(args) > 0) {
   spec.name <- args[3]
 } else {
 
-  loc <- "ETH_44856"
-  run.name <- "200713_yuka"
-  spec.name <- "200713_yuka"
+  loc <- "ETH_44861"
+  run.name <- "200713_yuka_ETH_test"
+  spec.name <- "200713_yuka_ETH_test"
 
 }
 fill.draw <- T
@@ -42,7 +42,7 @@ devtools::load_all()
 ## Libraries etc.
 library(data.table); library(foreign); library(assertable)
 
-if(run.name == '200505_xylo' | run.name == '200713_yuka'){
+if(run.name == '200505_xylo' | run.name == '200713_yuka' | run.name == '200713_yuka_ETH_test'){
   age_map <- data.table(fread(paste0('/ihme/hiv/epp_input/', gbdyear, '/', '200316_windchime', "/age_map.csv")))
   
 }else{
@@ -73,10 +73,13 @@ loc_id <- locations[ihme_loc_id==loc,location_id]
 
 
 ## Bring in EPPASM Draws
-dir.list <- c('/ihme/hiv/epp_output/gbd20/200713_yuka/', '/ihme/hiv/epp_output/gbd20/200505_xylo/')
+#dir.list <- c('/ihme/hiv/epp_output/gbd20/200713_yuka_ETH_test/', '/ihme/hiv/epp_output/gbd20/200713_yuka/', '/ihme/hiv/epp_output/gbd20/200505_xylo/')
+dir.list <- c('/ihme/hiv/epp_output/gbd20/200713_yuka_ETH_test/')
+
 for(dir in dir.list){
   if(file.exists(paste0(dir, '/compiled/', loc, '.csv'))){
     eppasm_dir <- dir
+    break
     
   }else{
     next

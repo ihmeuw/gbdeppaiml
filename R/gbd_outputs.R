@@ -286,12 +286,12 @@ split_u5_gbd2017 <- function(dt){
 }
 
 
-split_u1.new_ages <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd20", test_run = NULL, loc_name, inherits = TRUE){
-  # if(!grepl('socialdets', run.name.new)){
-  #   loc_name = loc
-  # }else{
-  #   loc_name = loc_name
-  # }
+split_u1.new_ages <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd20", test_run = NULL, loc_name = loc, inherits = TRUE){
+  if(!grepl('socialdets', run.name.new)){
+    loc_name = loc
+  }else{
+    loc_name = loc_name
+  }
   #change to the new population splits folder
   pop <- data.table(fread(paste0('/ihme/hiv/epp_input/',"gbd20","/" ,run.name.new, "/population_splits/", loc, '.csv')))
 

@@ -18,15 +18,19 @@ windows <- Sys.info()[1][["sysname"]]=="Windows"
 root <- ifelse(windows,"J:/","/home/j/")
 user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 
-source(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/gbd/00_req_packages.R"))
-
+eppasm_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/")
+setwd(eppasm_dir)
+devtools::load_all()
+gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
+setwd(gbdeppaiml_dir)
+devtools::load_all()
 # Arguments ---------------------------------------
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
   array.job = FALSE
-  run.name <- "201014_socialdets_rvec"
-  loc <- 'AGO'
+  run.name <- "200713_yuka"
+  loc <- 'CMR'
   stop.year <- 2022
   j <- 1
   paediatric <- TRUE
@@ -86,8 +90,10 @@ if(array.job){
   task_id <- as.integer(Sys.getenv("SGE_TASK_ID"))
   j <- array.dt[task_id,draws]
   file_name <- array.dt[task_id,loc_scalar]
-  foi_scalar <- array.dt[task_id,scale_foi]
+  combo_num <- array.dt[task_id,combo]
   loc <- array.dt[task_id,ihme_loc_id]
+  pred.mat <- readRDS('/ihme/homes/mwalte10/hiv_gbd2019/requests/haidong_proj/maggie/pref_mat.RDS')
+  foi_scalar <- unique(pred.mat[ihme_loc_id == loc & combo == combo_num])[,.(year_id, scalar)]
 }else{
   file_name <- loc
   foi_scalar = 1
@@ -95,7 +101,7 @@ if(array.job){
 
 out.dir <- paste0('/ihme/hiv/epp_output/',gbdyear,'/', run.name, "/", file_name)
 
-
+source('/ihme/homes/mwalte10/gbdeppaiml/gbd/data_prep.R')
 # Location specific toggles ---------------------------------------
 # ANC data bias adjustment
 ##### These locations do not have information from LBD team estimates
@@ -170,15 +176,15 @@ zero_prev_locs <- unique(zero_prev_locs[prev == 0.0005,iso3])
 
 # Fit model ---------------------------------------
 fit <- eppasm::fitmod(dt, eppmod = ifelse(grepl('IND', loc),'rlogistic',epp.mod), 
-                      B0 = 1e5, B = 1e3, number_k = 500, 
+                      B0 = 1e5, B = 1e3, number_k = 50, 
                       ageprev = ifelse(loc %in% zero_prev_locs,'binom','probit'))
-    
+
 
 dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/inc_rate/'))
 dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/prev_rate/'))
 
 data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc,'.csv')
-save_data(loc, attr(dt, 'eppd'), run.name)
+# save_data(loc, attr(dt, 'eppd'), run.name)
 
 ## When fitting, the random-walk based models only simulate through the end of the
 ## data period. The `extend_projection()` function extends the random walk for r(t)
@@ -206,13 +212,13 @@ saveRDS(result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/',
 output.dt <- get_gbd_outputs(result, attr(dt, 'specfp'), paediatric = paediatric)
 output.dt[,run_num := j]
 dir.create(out.dir, showWarnings = FALSE)
-write.csv(output.dt, paste0(out.dir, '/', j, '.csv'), row.names = F)
+ write.csv(output.dt, paste0(out.dir, '/', j, '.csv'), row.names = F)
 
 ## under-1 splits
 if(paediatric){
   split.dt <- get_under1_splits(result, attr(dt, 'specfp'))
   split.dt[,run_num := j]
-  write.csv(split.dt, paste0(out.dir, '/under_1_splits_', j, '.csv' ), row.names = F)
+ write.csv(split.dt, paste0(out.dir, '/under_1_splits_', j, '.csv' ), row.names = F)
 }
 ## Write out theta for plotting posterior
 param <- data.table(theta = attr(result, 'theta'))
@@ -220,4 +226,9 @@ write.csv(param, paste0(out.dir,'/theta_', j, '.csv'), row.names = F)
 if(plot.draw){
   plot_15to49_draw(loc, output.dt, attr(dt, 'eppd'), run.name)
 }
+params <- fnCreateParam(theta = unlist(param), fp = fit$fp)
+saveRDS(params, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '.RDS'))
+
+
+
 

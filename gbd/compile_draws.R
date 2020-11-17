@@ -26,16 +26,17 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
   array.job = FALSE
-  run.name <- "201015_socialdets_sens"
-  loc <- 'CPV_0.75'
+  run.name <- "201113_socialdets"
+  loc <- 'AGO'
   draw.fill <- TRUE
   paediatric <- TRUE
   n = 1000
 }else{
   run.name <- args[1]
   array.job <- as.logical(args[2])
-  draw.fill <- as.logical(args[4])
-  paediatric <- as.logical(args[5])
+ # n <- as.numeric(args[4])
+  draw.fill <- as.logical(args[3])
+  paediatric <- as.logical(args[4])
 
 }
 
@@ -43,8 +44,9 @@ if(length(args) == 0){
 gbdyear <- 'gbd20'
 stop.year = 2022
 test = NULL
-loc = 'AGO'
-library(data.table); library(mvtnorm); library(survey); library(ggplot2); library(plyr); library(dplyr); library(assertable); library(parallel)
+# loc = 'AGO'
+n = 1000
+#library(data.table); library(mvtnorm); library(survey); library(ggplot2); library(plyr); library(dplyr); library(assertable); library(parallel)
 gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
 eppasm_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/")
 hiv_gbd2019_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/hiv_gbd2019/")
@@ -114,7 +116,7 @@ print('loc.table loaded')
     ## subset out additional outputs (theta, under-1 splits)
     ## this could probably be tidied up
     draw.list <- draw.list[grepl('.csv', draw.list) & !grepl('theta_', draw.list) & !grepl('under_', draw.list)]
-    draw.list <- draw.list[gsub('.csv', '', draw.list) %in% 1:n]
+    draw.list <- draw.list[gsub('.csv', '', draw.list) %in% 1:1000]
     
     dt <- lapply(draw.list, function(draw){
       print(draw)
