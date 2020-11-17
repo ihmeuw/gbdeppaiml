@@ -13,7 +13,6 @@
 ##
 ## Notes:
 ##loading in the hiv functions requires some specification of loc, gbdyear, and run.name
-loc = 'AGO'
 gbdyear = 'gbd20'
 run.name = '200713_yuka'
 ##
