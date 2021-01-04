@@ -66,6 +66,25 @@ modify_dt <- function(dt){
   if(!is.null(inputs)){
     print(paste0(inputs, ' need to be extended to the appropriate year'))
   }
+  ###########################################################################
+  # Remove duplicates from ancsitedat -------------------------------------------
+  ###########################################################################
+  ancsitedat <- data.table(attr(dt,'eppd')$ancsitedat)
+  if('subpop' %in% colnames(ancsitedat)){
+    if(nrow(unique(ancsitedat[,.(site, subpop, year, used, prev, n, type, agegr, age,agspan)])) != nrow(ancsitedat) ){
+      ancsitedat <- ancsitedat[!duplicated(ancsitedat[,.(site, subpop, year, used, prev, n, type, agegr, age,agspan)]),]
+      attr(dt, 'eppd')$ancsitedat <- data.frame(ancsitedat)
+      print('Removed duplicates from sitedat')
+    }
+    
+  }else{
+    if(nrow(unique(ancsitedat[,.(site,  year, used, prev, n, type, agegr, age,agspan)])) != nrow(ancsitedat) ){
+      ancsitedat <- ancsitedat[!duplicated(ancsitedat[,.(site,  year, used, prev, n, type, agegr, age,agspan)]),]
+      attr(dt, 'eppd')$ancsitedat <- data.frame(ancsitedat)
+      print('Removed duplicates from sitedat')
+    }
+  }
+
 
 ###########################################################################
 # Location Specific corrections -------------------------------------------
@@ -78,6 +97,12 @@ modify_dt <- function(dt){
   if(grepl('ETH', loc)){
     attr(dt, 'eppd')$hhs <-  subset(attr(dt, 'eppd')$hhs, year != '2018')
     print(paste0(loc, ' removed 2018 survey'))
+
+      check = cbind(attr(dt, 'eppd')$anc.prev,use = attr(dt, 'eppd')$anc.used)
+      check = subset(check, check[,'use'] == 1, drop = FALSE)
+      check = check[,-ncol(check),drop = FALSE]
+      attr(dt,'eppd')$ancsitedat <-  attr(dt,'eppd')$ancsitedat[ attr(dt,'eppd')$ancsitedat$site %in% rownames(check),] 
+      print(paste0(loc, ' dropping use = FALSE ANC data'))
     
   }
   if(loc == 'IND_4842'){

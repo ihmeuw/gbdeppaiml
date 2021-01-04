@@ -68,6 +68,7 @@ gbd_sim_mod <-  function(fit, rwproj=fit$fp$eppmod == "rspline", VERSION = 'C'){
     
     
   }
+  fp.draw$rvec <- pred_foi
   mod <- simmod(fp.draw, VERSION = VERSION)
   attr(mod, 'theta') <- fit$resample[rand.draw,]
   return(mod)
@@ -286,14 +287,14 @@ split_u5_gbd2017 <- function(dt){
 }
 
 
-split_u1.new_ages <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd20", test_run = NULL, loc_name = loc, inherits = TRUE){
-  if(!grepl('socialdets', run.name.new)){
+split_u1.new_ages <- function(dt, loc, run.name, gbdyear="gbd20", test_run = NULL, loc_name = loc, inherits = TRUE){
+  if(!grepl('socialdets', run.name) & !grepl('tvfoi', run.name)){
     loc_name = loc
   }else{
     loc_name = loc_name
   }
   #change to the new population splits folder
-  pop <- data.table(fread(paste0('/ihme/hiv/epp_input/',"gbd20","/" ,run.name.new, "/population_splits/", loc, '.csv')))
+  pop <- data.table(fread(paste0('/ihme/hiv/epp_input/',"gbd20","/" ,run.name, "/population_splits/", loc_name, '.csv')))
 
   u1.pop <- pop[age_group_id %in% c(2,3,388,389)]
   u1.pop[,pop_total := sum(population), by = c('sex_id', 'year_id')]
@@ -327,25 +328,21 @@ split_u1.new_ages <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd2
   
   ## pull in incidence proportions from eppasm
 
-  if(is.null(test_run)){
     if(!file.exists(paste0('/share/hiv/epp_output/gbd20/200713_yuka/compiled/', loc, '.csv'))){
-      split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/200505_xylo/compiled/', loc, '_under1_splits.csv'))
+      split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/200505_xylo/compiled/', loc_name, '_under1_splits.csv'))
       
     }else{
       if(grepl('_', loc_name)){
-        split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/', run.name.new ,'/compiled/', loc_name, '_under1_splits.csv'))
+        split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/', run.name ,'/compiled/', loc_name, '_under1_splits.csv'))
 
       }else{
-        split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/', run.name.new ,'/compiled/', loc, '_under1_splits.csv'))
+        split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/', run.name ,'/compiled/', loc, '_under1_splits.csv'))
         
       }
       
     }
     
-  }else{
-    split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/', run.name.new ,'/compiled/', loc, '_', test_run,'_under1_splits.csv'))
-    
-  }
+
   split.dt <- melt(split.dt, id.vars = c('year', 'run_num'))
   setnames(split.dt, 'variable', 'age')
   spec_u1 <- merge(spec_u1, split.dt, by = c('year', 'run_num', 'age'))
@@ -358,8 +355,8 @@ split_u1.new_ages <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd2
   
 }
 
-split_u1 <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd20"){
-  pop <- fread(paste0('/ihme/hiv/epp_input/gbd19/', run.name.old, "/population_splits/", loc, '.csv'))
+split_u1 <- function(dt, loc, run.name, gbdyear="gbd20"){
+  pop <- fread(paste0('/ihme/hiv/epp_input/gbd19/', run.name, "/population_splits/", loc, '.csv'))
   u1.pop <- pop[age_group_id < 5]
   u1.pop[,pop_total := sum(population), by = c('sex_id', 'year_id')]
   u1.pop[,pop_prop := population/sum(population), by = c('sex_id', 'year_id')]
@@ -389,7 +386,7 @@ split_u1 <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd20"){
   
   ## pull in incidence proportions from eppasm
 
-  split.dt <- fread(paste0('/share/hiv/epp_output/gbd19/', run.name.old ,'/compiled/', loc, '_under1_splits.csv'))
+  split.dt <- fread(paste0('/share/hiv/epp_output/gbd19/', run.name ,'/compiled/', loc, '_under1_splits.csv'))
   split.dt <- melt(split.dt, id.vars = c('year', 'run_num'))
   setnames(split.dt, 'variable', 'age')
   spec_u1 <- merge(spec_u1, split.dt, by = c('year', 'run_num', 'age'))
@@ -404,7 +401,13 @@ split_u1 <- function(dt, loc, run.name.old, run.name.new, gbdyear="gbd20"){
 
 
 
-get_summary <- function(output, loc, run.name.old, run.name.new, paediatric = FALSE, old.splits, test_run = NULL, loc_name){
+get_summary <- function(loc, run.name, paediatric = FALSE, old.splits, gbdyear){
+ output <- fread(paste0('/share/hiv/epp_output/', gbdyear, '/',run.name, '/compiled/', loc, '.csv'))
+  if(grepl('socialdets', run.name) | grepl('tvfoi', run.name)){
+    loc_name = unlist(strsplit(loc, '_'))[[1]]
+  }else{
+    loc_name = loc
+  }
   ## create gbd age groups
   output[age >= 5,age_gbd :=  age - age%%5]
   output[age %in% 1:4, age_gbd := 1]
@@ -416,10 +419,10 @@ get_summary <- function(output, loc, run.name.old, run.name.new, paediatric = FA
   if(paediatric){
 
     if(old.splits){
-      output.u1 <- split_u1(output[age == 0], loc, run.name.old, run.name.new)
+      output.u1 <- split_u1(output[age == 0], loc, run.name = run.name)
       
     }else{
-      output.u1 <- split_u1.new_ages(output[age == 0], loc, run.name.old, run.name.new, gbdyear, test_run = test_run, loc_name)
+      output.u1 <- split_u1.new_ages(output[age == 0], loc, run.name = run.name, gbdyear, test_run = test_run, loc_name)
       
     }
     output <- output[age != 0]
@@ -431,10 +434,10 @@ get_summary <- function(output, loc, run.name.old, run.name.new, paediatric = FA
   
 
   if(old.splits){
-    age.map <- fread(paste0('/ihme/hiv/epp_input/gbd19', '/', run.name.old, "/age_map.csv"))
+    age.map <- fread(paste0('/ihme/hiv/epp_input/gbd19', '/', run.name, "/age_map.csv"))
     
   }else{
-    age.map <- fread(paste0('/ihme/hiv/epp_input/gbd20', '/', run.name.new, "/age_map.csv"))
+    age.map <- fread(paste0('/ihme/hiv/epp_input/gbd20', '/', run.name, "/age_map.csv"))
     age.map[age_group_id == 388, age_group_name_short := 'x_388']
     age.map[age_group_id == 389, age_group_name_short := 'x_389']
   }
@@ -489,6 +492,9 @@ get_summary <- function(output, loc, run.name.old, run.name.new, paediatric = FA
   ##STOP MAGGIE
   out.dt <- merge(out.dt, age.map[,.(age_group_id, age = age_group_name_short)], by = 'age_group_id', allow.cartesian = TRUE)
   out.dt <- out.dt[,.(mean = mean(value), lower = quantile(value, 0.025), upper = quantile(value, 0.975)), by = c('age_group_id', 'sex', 'year', 'measure', 'metric', 'age')]
+  
+  dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/summary_files/'))
+  write.csv(out.dt, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/summary_files/', loc, '.csv'), row.names = F)
   return(out.dt)
 }
 

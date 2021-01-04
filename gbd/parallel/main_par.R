@@ -18,15 +18,14 @@ windows <- Sys.info()[1][["sysname"]]=="Windows"
 root <- ifelse(windows,"J:/","/home/j/")
 user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 
-source(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/gbd/00_req_packages.R"))
 
 # Arguments ---------------------------------------
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
   array.job = FALSE
-  run.name <- "201015_socialdets_sens"
-  loc <- 'AGO'
+  run.name <- "201226_socialdets"
+  loc <- 'AGO_1'
   stop.year <- 2022
   j <- 1
   paediatric <- TRUE
@@ -34,6 +33,7 @@ if(length(args) == 0){
 }else{
   run.name <- args[1]
   array.job <- as.logical(args[2])
+  draws = 100
 }
 
 if(!array.job & length(args) > 0){
@@ -49,6 +49,13 @@ if(array.job){
 
 gbdyear <- 'gbd20'
 stop.year = 2022
+
+eppasm_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/")
+setwd(eppasm_dir)
+devtools::load_all()
+gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
+setwd(gbdeppaiml_dir)
+devtools::load_all()
 
 run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
 in_run_table = F
@@ -82,22 +89,36 @@ prev_sub <- c.args[['prev_sub']]
 sexincrr.sub <- c.args[['sexincrr.sub']]
 
 lbd.anc <- T
-ped_toggle = TRUE
-paediatric = TRUE
+ped_toggle = FALSE
+paediatric <- TRUE
+
 
 # Array job ---------------------------------------
 if(array.job){
   array.dt <- fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
   task_id <- as.integer(Sys.getenv("SGE_TASK_ID"))
-  draws <- as.vector(unname(array.dt[task_id,grepl('draw_', colnames(array.dt)), with = F]))
-  file_name <- array.dt[task_id,loc_scalar]
-  foi_scalar <- array.dt[task_id,scale_foi]
-  loc <- array.dt[task_id,ihme_loc_id]
+  ##task_id will serve as the difference combos
+  get_loc_scalar <- unique(array.dt$loc_scalar)
+  array.dt = array.dt[loc_scalar == get_loc_scalar[task_id],]
+  draws <- c(1:draws)
+  file_name <- unique(array.dt[,loc_scalar])
+  # foi_scalar <- unique(array.dt[,.(year_id, scale_foi)])
+  foi_scalar <- unique(array.dt[,.(year_id, pred, scale_foi)])
+  loc <- unique(array.dt[,ihme_loc_id])
+  
+  if(run.name == '201226_socialdets'){
+    foi_scalar <- data.table(year_id = (c(1990:2020)))
+    pred <- readRDS('/ihme/hiv/epp_output/gbd20/200713_yuka/fit/AGO.RDS')
+    pred_foi <- pred$rvec
+  }
 }else{
   foi_scalar = 1
 }
 
 out.dir <- paste0('/ihme/hiv/epp_output/',gbdyear,'/', run.name, "/", file_name)
+
+
+source('/ihme/homes/mwalte10/gbdeppaiml/gbd/data_prep.R')
 
 
 # Location specific toggles ---------------------------------------
@@ -134,13 +155,14 @@ if(loc %in% c("MAR","MRT","COM")){
 # Prepare the dt object ---------------------------------------
 dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
                        pop.sub, anc.sub,  prev.sub = prev_sub, art.sub = TRUE,
-                       sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = TRUE,
+                       sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = paediatric,
                        anc.prior.sub = TRUE, lbd.anc = lbd.anc,
                        geoadjust = geoadjust, use_2019 = TRUE,
                        test.sub_prev_granular = test,
                        anc.rt = FALSE
                        # anc.backcast,
                        )
+
 ###Switched to a binomial model, so we can now handle observations of zero
 mod <- data.table(attr(dt, 'eppd')$hhs)[prev == 0.0005,se := 0]
 mod[prev == 0.0005, prev := 0]
@@ -172,15 +194,23 @@ zero_prev_locs <- fread("/ihme/hiv/epp_input/gbd20/prev_surveys.csv")
 zero_prev_locs <- unique(zero_prev_locs[prev == 0.0005,iso3])
 
 # Fit model ---------------------------------------
+system(paste0('rm ', out.dir, '/*')) 
+
 eppasm_functions <- function(draw, obj, B_0 = 1e5, B = 1e3, k = 500){
- j = draw
-   fit <- eppasm::fitmod(dt, eppmod = ifelse(grepl('IND', loc),'rlogistic',epp.mod), 
-                        B0 = B_0, B = B, number_k = k, 
+  j = draw
+ print(j)
+ if(j %in% draw_vec){
+   return('done')
+ }
+ dir.create(paste0("/ihme/hiv/epp_output/gbd20/", run.name, "/scaled_foi/"), recursive = T) 
+   fit <- eppasm::fitmod(dt, eppmod = ifelse(grepl('IND', loc),'rlogistic',epp.mod),
+                        B0 = B_0, B = B, number_k = k,
                         ageprev = ifelse(loc %in% zero_prev_locs,'binom','probit'))
-  
-  
-  dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/inc_rate/'))
-  dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/prev_rate/'))
+
+
+   
+  dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/inc_rate/'), recursive = T)
+  dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/prev_rate/'), recursive = T)
   
   data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc,'.csv')
   save_data(loc, attr(dt, 'eppd'), run.name)
@@ -203,8 +233,8 @@ eppasm_functions <- function(draw, obj, B_0 = 1e5, B = 1e3, k = 500){
   
   # draw <- j
   result <- gbd_sim_mod(fit, VERSION = "R")
-  dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/'), recursive = T)
-  saveRDS(result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/', j, '.RDS'))
+  dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', file_name, '/'), recursive = T)
+  saveRDS(result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', file_name, '/', j, '.RDS'))
   
   #results
   ##track the output of the prev and inc through get_gbd_outputs
@@ -226,9 +256,21 @@ eppasm_functions <- function(draw, obj, B_0 = 1e5, B = 1e3, k = 500){
     plot_15to49_draw(loc, output.dt, attr(dt, 'eppd'), run.name)
   }
   
+  param <- data.table(theta = attr(result, 'theta'))
+  # write.csv(param, paste0(out.dir,'/theta_', j, '.csv'), row.names = F)
+  # if(plot.draw){
+  #   plot_15to49_draw(loc, output.dt, attr(dt, 'eppd'), run.name)
+  # }
+  params <- fnCreateParam(theta = unlist(param), fp = fit$fp)
+  saveRDS(params, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', file_name, '.RDS'))
+  draw_vec <- c(draw_vec, j)
+  
 }
+# mclapply(draws, eppasm_functions, obj = dt,
+#          B_0 = 1e5, B = 1e3, k = 500,
+#          mc.cores = 20)
+
+draw_vec = NULL
 mclapply(draws, eppasm_functions, obj = dt,
          B_0 = 1e5, B = 1e3, k = 500,
          mc.cores = 20)
-
-

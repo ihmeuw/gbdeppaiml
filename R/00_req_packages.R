@@ -40,7 +40,7 @@ invisible(sapply(list.files("/share/cc_resources/libraries/current/r/", full.nam
 # devtools::load_all()
 # setwd(gbdeppaiml_dir)
 # devtools::load_all()
-source(paste0(root,"/Project/Mortality/shared/functions/check_loc_results.r"))
+#source(paste0(root,"/Project/Mortality/shared/functions/check_loc_results.r"))
 
 ##load in loc.table
 loc.table <- get_locations(hiv_metadata = TRUE)

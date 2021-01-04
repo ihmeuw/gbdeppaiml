@@ -28,7 +28,7 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 
 ## Arguments
 run.name <- "201113_socialdets"
-spec.name <- "201113_socialdets"
+spec.name <- "201202_ancrt"
 compare.run <- c("200713_yuka")
 
 proj.end <- 2022
@@ -36,7 +36,7 @@ if(file.exists(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
   n.draws = nrow(fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv')))
   array.job = T
 }else{
-  n.draws = 10
+  n.draws = 50
   array.job = F
 }
 run.group2 <- FALSE
@@ -82,6 +82,8 @@ loc.table <- data.table(get_locations(hiv_metadata = T))
 ### Code
 epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
 loc.list <- epp.list
+loc.list <- loc.list[!grepl('IND', loc.list)]
+# loc.list <- setdiff(loc.list, 'RWA')
 
 # Array job EPP-ASM ---------------------------------------
 if(array.job){
@@ -114,14 +116,15 @@ system(draw.string)
 }
 
 # EPP-ASM ---------------------------------------
+temp.loc.list <- list.files('/ihme/hiv/epp_output/gbd20/201012_ancrt/fit/')[!grepl('.RDS', list.files('/ihme/hiv/epp_output/gbd20/201012_ancrt/fit/'))]
 if(run_eppasm & !array.job){
-for(loc in loc.list) {    
+for(loc in temp.loc.list) {    
   ## Run EPPASM
     epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive=True -q all.q -P ", cluster.project, " ",
                          "-e /share/temp/sgeoutput/", user, "/errors ",
                          "-o /share/temp/sgeoutput/", user, "/output ",
                          "-N ", loc,"_",run.name, "_eppasm ",
-                         "-tc 100 ",
+                         "-tc 1000 ",
                          "-t 1:", n.draws, " ",
                          "-hold_jid eppasm_prep_inputs_", run.name," ",
                          code.dir, "gbd/singR_shell.sh ",
@@ -142,12 +145,23 @@ for(loc in loc.list) {
                             run.name, " ", array.job, ' ', loc, ' ', n.draws, ' TRUE ', paediatric)
       # print(draw.string)
       # system(draw.string)
+      
+      summary.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
+                            "-e /share/temp/sgeoutput/", user, "/errors ",
+                            "-o /share/temp/sgeoutput/", user, "/output ",
+                            "-N ", loc,"_",run.name, "_summary ",
+                            "-hold_jid ", loc,"_",run.name, "_save_draws ",
+                            code.dir, "gbd/singR_shell.sh ",
+                            code.dir, "gbd/get_summary_files.R ",
+                            run.name)
+      # print(summary.string)
+      # system(summary.string)
 
       plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
                             "-e /share/temp/sgeoutput/", user, "/errors ",
                             "-o /share/temp/sgeoutput/", user, "/output ",
                             "-N ", loc, "_plot_eppasm ",
-                            "-hold_jid ", loc,"_",run.name, "_save_draws ",
+                            "-hold_jid ", loc,"_",run.name, "_summary ",
                             code.dir, "gbd/singR_shell.sh ",
                             code.dir, "gbd/main_plot_output.R ",
                             loc, " ", run.name, ' ', paediatric, ' ', compare.run, ' ', test)

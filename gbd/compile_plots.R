@@ -15,11 +15,11 @@ if(length(args) > 0) {
   run.name <- args[1]
   gbdyear <- args[2]
 } else {
-  run.name <- '190630_ind_noanc'
-  gbdyear <- 'gbd19'
+  run.name <- '201209_socialdets'
+  gbdyear <- 'gbd20'
 }
 
-dir <- paste0("/ihme/hiv/epp_output/", gbdyear, run.name, "/")
+dir <- paste0("/ihme/hiv/epp_output/", gbdyear ,'/', run.name, "/")
 ###### Combine all plots of locations #####
 setwd(paste0(dir, '/15to49_plots/'))
 system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=", run.name, "_15to49.pdf -f $(ls | sort -n | xargs)"))

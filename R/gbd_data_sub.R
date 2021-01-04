@@ -1535,7 +1535,12 @@ geo_adj_old <- function(loc, dt, i, uncertainty) {
     }
     rr <- rr.dt[draw == i, FtoM_inc_ratio]
     final.rr <- rr[length(rr)]
-    rr <- c(rr, rep(final.rr, length(start.year:stop.year) - length(rr)))
+    if(length(rr) < length(start.year:stop.year)){
+      rr <- c(rr, rep(final.rr, length(start.year:stop.year) - length(rr)))
+    }else{
+      dt_length <-length(start.year:stop.year)
+      rr <- rr[(length(rr) - dt_length):length(rr)]
+    }
     names(rr) <- start.year:stop.year
     attr(dt, 'specfp')$incrr_sex <- rr
     return(dt)
@@ -1546,9 +1551,6 @@ geo_adj_old <- function(loc, dt, i, uncertainty) {
   sub.anc.prior <- function(dt,loc){
 
    if(loc %in%  c("SDN","SSD","SOM","GNB","MDG","PNG", "COM")){
-   #   if(loc %in%  c("SDN","SSD","SOM","MDG","PNG", "COM")){
-        
-
       ancbias.pr.mean <<- 0.15
       ancbias.pr.sd <<- 0.001
     }else {

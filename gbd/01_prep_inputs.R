@@ -25,12 +25,13 @@ devtools::load_all()
 
 # Arguments ---------------------------------------
 gbdyear = 'gbd20'
-run.name = '201113_socialdets'
-old_run.name = '201007_socialdets_sens'
-spec.name = '200713_yuka'
+run.name = '201218_sdtvfoi'
+old_run.name = '200713_yuka'
+spec.name = '201202_ancrt'
 code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
 loc.table <- get_locations(hiv_metadata = T)
-loc.list <- loc.table[epp == 1, ihme_loc_id]
+loc.list <-  list.files('/ihme/hiv/epp_output/gbd20/201012_ancrt/fit/')[!grepl('.RDS', list.files('/ihme/hiv/epp_output/gbd20/201012_ancrt/fit/'))]
+loc.list = c('AGO', 'BDI', 'MWI')
 
 # Toggles ---------------------------------------
 new_inputs = F
@@ -40,6 +41,7 @@ eppasm_inputs = F
 prev_surveys = F
 art_proportions = F
 redo_offsets = F
+
 
 # Copy Inputs ---------------------------------------
 if(copy_inputs){

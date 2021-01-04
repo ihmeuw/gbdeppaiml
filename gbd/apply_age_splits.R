@@ -13,9 +13,9 @@ if(length(args) > 0) {
   spec.name <- args[3]
 } else {
 
-  loc <- "ETH_44861"
+  loc <- "ETH_44852"
   run.name <- "200713_yuka_ETH_test"
-  spec.name <- "200713_yuka_ETH_test"
+  spec.name <- "200713_yuka"
 
 }
 fill.draw <- T
@@ -30,6 +30,7 @@ dir.create(out_dir_death, recursive = T, showWarnings = F)
 out_dir_birth <- paste0("/ihme/hiv/spectrum_prepped/birth_prev/",spec.name, '/')
 dir.create(out_dir_birth, recursive = T, showWarnings = F)
 
+
 ### Functions
 library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
 source( "/ihme/cc_resources/libraries/current/r/get_population.R")
@@ -41,8 +42,10 @@ devtools::load_all()
 
 ## Libraries etc.
 library(data.table); library(foreign); library(assertable)
+ids <- fread('/ihme/hiv/epp_input/gbd20/input_ids.csv')
 
-if(run.name == '200505_xylo' | run.name == '200713_yuka' | run.name == '200713_yuka_ETH_test'){
+
+if(run.name == '200505_xylo' | run.name == '200713_yuka' | run.name == '200713_yuka_ETH_test' | run.name == '200713_yuka_ETH_test_rlog' |  run.name == '200713_yuka_ETH_test_rspline'){
   age_map <- data.table(fread(paste0('/ihme/hiv/epp_input/', gbdyear, '/', '200316_windchime', "/age_map.csv")))
   
 }else{
@@ -74,7 +77,7 @@ loc_id <- locations[ihme_loc_id==loc,location_id]
 
 ## Bring in EPPASM Draws
 #dir.list <- c('/ihme/hiv/epp_output/gbd20/200713_yuka_ETH_test/', '/ihme/hiv/epp_output/gbd20/200713_yuka/', '/ihme/hiv/epp_output/gbd20/200505_xylo/')
-dir.list <- c('/ihme/hiv/epp_output/gbd20/200713_yuka_ETH_test/')
+dir.list <- paste0('/ihme/hiv/epp_output/gbd20/',run.name, '/')
 
 for(dir in dir.list){
   if(file.exists(paste0(dir, '/compiled/', loc, '.csv'))){
@@ -136,7 +139,16 @@ spec_draw[, suscept_pop := pop_neg]
 
 
 ## Calculate birth prevalence rate
-birth_pop <- get_population(age_group_id=164, location_id=loc_id, year_id=1970:2022, sex_id=1:2, gbd_round_id = 7, decomp_step = 'iterative')
+birth_pop <-  get_mort_outputs(
+  "birth", "estimate",
+  gbd_year = 2020,
+  run_id = ids[run_name == run.name, births],
+  ##all ages 10-54
+  age_group_id = 169,
+  location_id = loc_id, year_id = seq(1970, 2022), sex_id = 1:2)
+setnames(birth_pop, 'mean', 'population')
+birth_pop[,population := sum(population), by = c('location_id', 'year_id', 'sex_id')]
+birth_pop[,age_group_id := 164]
 setnames(birth_pop, c("year_id", "population"), c("year", "gbd_pop"))
 birth_dt <- copy(spec_draw)
 birth_dt <- birth_dt[,.(age_group_id = 164, birth_prev = sum(birth_prev), total_births = sum(total_births)), by = c('year', 'run_num', 'sex_id')]

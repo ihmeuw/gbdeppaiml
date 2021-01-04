@@ -14,23 +14,16 @@ print(args)
 if(length(args) > 0) {
   loc <- args[1]
   run.name <- args[2]
-  paediatric <- as.logical(args[3])
-  compare.run <- args[4]
+  compare.run <- args[3]
   if(compare.run == 'NA'){
     compare.run <- NA
   }
-  test <- args[5]
 } else {
-
-  run.name <- "200713_yuka_ETH_test"
-  loc <- "ETH_44861"
-
+  run.name <- "201226_socialdets"
+  loc <- "AGO_1"
   draw.fill <- TRUE
-  paediatric <- TRUE
-
   compare.run <- c('200713_yuka')
   test <-  NULL
-
 }
 
 gbd_year_new <- "gbd20"
@@ -43,8 +36,9 @@ if( '190630_rhino2' %in% compare.run){
 }
 gbdyear <- 'gbd20'
 
+array.dt <- fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
+loc.name <- unique(array.dt[loc_scalar == loc, ihme_loc_id])
 
-run.names.comp <- compare.run
 ### Functions
 library(mortdb, lib = "/ihme/mortality/shared/r")
 setwd(paste0(ifelse(windows, "H:", paste0("/homes/", user)), "/eppasm/"))
@@ -79,28 +73,30 @@ if(loc %in% c('STP', 'COM', 'MAR')){
   compare.run = NA
 }
 run.names.comp <- compare.run
-test = NULL
 # ## 15-49 plots
-# dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/15to49_plots/'), recursive = TRUE, showWarnings = FALSE)
-plot_15to49(loc,new.run = run.name, paediatric, plot.deaths = TRUE,  
-            names = c('ANCRT', 'GBD20'),
-            compare.run = c(run.name, compare.run), 
-            simplify = FALSE,  loc_name = loc, gbdyear = 'gbd20')
+dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/15to49_plots/'), recursive = TRUE, showWarnings = FALSE)
+plot_15to49(loc,
+            run.vec = c(paste0(gbdyear, '/', run.name), paste0(gbdyear, '/', compare.run)),
+            base.run = paste0(run.name),
+            names = c('Social dets, test method', 'GBD20'),
+            gbdyear = gbdyear,
+            loc_name = loc.name)
 
-#Age-specific plots
+# #Age-specific plots
 for(c.indicator in rev(c( 'Prevalence','Incidence','Deaths'))){
   dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/age_specific_plots/', c.indicator, '/'), recursive = TRUE, showWarnings = FALSE)
 }
 
 #plot_age_specific(loc, run.name.new=run.name, paediatric=TRUE, run.name.old = '190630_rhino2', compare.run = run.names.comp, gbdyear = gbd_year_new, c.metric = 'Rate', test_run = test)
-plot_age_specific(loc, run.name.new=run.name, paediatric=TRUE, run.name.old = '190630_rhino2', 
+plot_age_specific(loc, run.name.new=run.name, paediatric=TRUE, run.name.old = '190630_rhino2',
                          compare.run = run.names.comp, gbdyear = gbd_year_new, c.metric = 'Rate', test_run = test,
-                         comp.2019 =T)
+                         comp.2019 =F)
 
 # ## Birth prevalence
 dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/paeds_plots/'), showWarnings = F)
 run.name.old = '200505_xylo'
-plot_birthprev(loc,run.name.new =  run.name, run.name.old = run.name.old)
+loc_temp <- unlist(strsplit(loc,split =  '_'))[[1]]
+plot_birthprev(loc = loc_temp,run.name.new =  run.name, run.name.old = run.name.old, array = T)
 
 
 
