@@ -26,7 +26,7 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
   array.job = FALSE
-  run.name <- "201226_socialdets"
+  run.name <- "210205_socialdets"
   loc <- 'AGO_1'
   draw.fill <- TRUE
   paediatric <- TRUE
@@ -63,6 +63,7 @@ if(!array.job & length(args) > 0){
 # Array job ---------------------------------------
 if(array.job){
   array.dt <- fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
+  array.dt <- array.dt[grep('ZAF_490', ihme_loc_id)]
   array.dt <- unique(array.dt[,(loc_scalar)])
   task_id <- as.integer(Sys.getenv("SGE_TASK_ID"))
   loc <- array.dt[task_id]
@@ -118,11 +119,12 @@ print('loc.table loaded')
     draw.list <- draw.list[grepl('.csv', draw.list) & !grepl('theta_', draw.list) & !grepl('under_', draw.list)]
     draw.list <- draw.list[gsub('.csv', '', draw.list) %in% 1:1000]
     
+    
     dt <- lapply(draw.list, function(draw){
       print(draw)
       draw.dt <- fread(paste0(draw.path, '/', draw))
+      draw.dt <- draw.dt[year < 2019]
     })
-    
     ##Sometimes there are negative values, need to replace
     
     dt.check <- lapply(dt,function(draw.dt)

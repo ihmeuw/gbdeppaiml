@@ -29,7 +29,7 @@ args <- commandArgs(trailingOnly = TRUE)
 if(length(args) > 0) {
   run.name = args[1]
 } else {
-  run.name = '201226_socialdets'
+  run.name = '210205_socialdets'
 }
 
 loc.table <- get_locations(gbd_year = 2020, hiv_metadata = T)
@@ -41,5 +41,5 @@ if(file.exists(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
   locs <- loc.table[epp == 1, ihme_loc_id]
 }
 
-mclapply(locs[1], get_summary, run.name = run.name, gbdyear = 'gbd20', 
-         paediatric = T, old.splits = F, mc.cores = 1)
+mclapply(locs, get_summary, run.name = run.name, gbdyear = 'gbd20', 
+         paediatric = T, old.splits = F, mc.cores =20)

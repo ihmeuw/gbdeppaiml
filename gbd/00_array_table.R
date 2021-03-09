@@ -24,11 +24,31 @@ setwd(gbdeppaiml_dir)
 devtools::load_all()
 
 loc.list <- loc.table[epp == 1, ihme_loc_id]
-run.name <- "201218_sdtvfoi"
+run.name <- "210205_socialdets"
+
+parent_child <- loc.table[epp  == 1 & level == 4 | epp == 1 & level == 5,.(ihme_loc_id, parent_id)]
+parent_child <- parent_child[!grep('IND', ihme_loc_id)]
+parent_child <- parent_child[grep('KEN', ihme_loc_id), parent_id := 180]
+
 
 pred.mat <- readRDS(paste0('/ihme/hiv/epp_input/gbd20/', run.name, '/pred_mat.RDS'))
 
-array.dt <- list(ihme_loc_id = unique(pred.mat$ihme_loc_id)[1:10], combos = unique(pred.mat$combo))
+copy <- list()
+for(loc in c('NGA', 'KEN', 'ETH', 'ZAF')){
+  x <- copy(pred.mat[ihme_loc_id == loc,])
+  children <- parent_child[loc.table[ihme_loc_id == loc, location_id] == parent_id, ihme_loc_id]
+  child.dt <- list()
+  for(child in children){
+    y <- copy(x)
+    y[,ihme_loc_id := child]
+    y[,loc_year := paste0(ihme_loc_id, '_', year_id)]
+    child.dt <- rbind(child.dt, y)
+  }
+  copy <- rbind(copy, child.dt)
+}
+pred.mat <- rbind(pred.mat[!ihme_loc_id %in% c('NGA', 'KEN', 'ETH', 'ZAF'),], copy)
+
+array.dt <- list(ihme_loc_id = unique(pred.mat$ihme_loc_id), combos = unique(pred.mat$combo))
 array.dt <- expand.grid(array.dt)
 array.dt <- data.table(array.dt)
 if(run.name == '201217_socialdets'){
@@ -36,7 +56,6 @@ if(run.name == '201217_socialdets'){
 }
 # colnames(array.dt) <- c('ihme_loc_id', 'year_id', 'draws', 'combo')
 colnames(array.dt) <- c('ihme_loc_id','combo')
-array.dt <- array.dt[!grepl('_', array.dt[,ihme_loc_id])]
 array.dt[,loc_scalar := paste0(ihme_loc_id, '_', combo)]
 
 scalar <- unique(pred.mat[ihme_loc_id %in% unique(array.dt$ihme_loc_id),.(ihme_loc_id, combo, pred, foi, year_id)])

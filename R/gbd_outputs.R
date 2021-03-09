@@ -17,14 +17,18 @@
 #'
 #' @export
 
-gbd_sim_mod <-  function(fit, rwproj=fit$fp$eppmod == "rspline", VERSION = 'C'){
+gbd_sim_mod <-  function(fit, rwproj=fit$fp$eppmod == "rspline",VERSION = 'C'){
   ## We only need 1 draw, so let's save time and subset to that now
-  rand.draw <- round(runif(1, min = 1, max = 3000))
+  #rand.draw <- round(runif(1, min = 1, max = 3000))
+  rand.draw =1
   if(!(exists('group', where = fit$fp) & fit$fp$group == '2')){
     ##create an argument in fnCreateParam to call a modified create_rvec that doesn't scale
-    #fit$param <- lapply(seq_len(nrow(fit$resample)), function(ii) fnCreateParam(fit$resample[ii,], fit$fp, proj = T))
     fit$param <- lapply(seq_len(nrow(fit$resample)), function(ii) fnCreateParam(fit$resample[ii,], fit$fp))
-    
+    # fit$param <- lapply(seq_len(nrow(fit$resample)), function(ii) fnCreateParam(fit$resample[ii,], fit$fp))
+    # fit$param <- fnCreateParam(unlist(fread(paste0('/ihme/hiv/epp_output/gbd20/200713_yuka/', loc, '/',  'theta_1.csv'))), fit$fp)
+    # dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/params/'))
+    # saveRDS(fit$param, paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/params/', file_name, '.RDS'))
+    # 
     
     if(rwproj){
       if(exists("eppmod", where=fit$fp) && fit$fp$eppmod == "rtrend")
@@ -47,7 +51,15 @@ gbd_sim_mod <-  function(fit, rwproj=fit$fp$eppmod == "rspline", VERSION = 'C'){
     }
     fit$fp$incrr_age <- fit$fp$incrr_age[,,1:fit$fp$SIM_YEARS]
     fp.list <- lapply(fit$param, function(par) update(fit$fp, list=par, keep.attr = FALSE))
+    #fp.list <-  update(fit$fp, list=fit$param, keep.attr = FALSE)
     fp.draw <- fp.list[[rand.draw]]
+    #fp.draw = fit$param
+    ##pull in new rvec
+    {
+      print('Pulling in a different RVEC')
+      new_rvec = pred
+      fp.draw$rvec[(length(fp.draw$rvec) - length(new_rvec) + 1):length(fp.draw$rvec)] <- new_rvec
+    }
   }else{
     fp.draw <- fit$fp
     theta <- fit$resample[rand.draw,]
@@ -68,9 +80,10 @@ gbd_sim_mod <-  function(fit, rwproj=fit$fp$eppmod == "rspline", VERSION = 'C'){
     
     
   }
-  fp.draw$rvec <- pred_foi
-  mod <- simmod(fp.draw, VERSION = VERSION)
+  # fp.draw$rvec <- pred_foi
+  mod <- simmod((fp.draw), VERSION = VERSION)
   attr(mod, 'theta') <- fit$resample[rand.draw,]
+  
   return(mod)
 }
 

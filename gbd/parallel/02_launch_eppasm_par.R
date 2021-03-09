@@ -13,7 +13,7 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 library(data.table)
 
 ## Arguments
-run.name <- "201226_socialdets"
+run.name <- "210205_socialdets"
 spec.name <- "200713_yuka"
 compare.run <- c("200713_yuka")
 
@@ -68,12 +68,15 @@ loc.table <- data.table(get_locations(hiv_metadata = T))
 ### Code
 epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
 loc.list <- epp.list
-loc.list <- fread('/ihme/hiv/epp_input/gbd20/201218_sdtvfoi/array_table.csv')
+loc.list <- fread('/ihme/hiv/epp_input/gbd20/210205_socialdets/array_table.csv')
+loc.list <- loc.list[grep('ZAF_490', ihme_loc_id)]
 loc.list <- unique(loc.list$loc_scalar)
+reps <- length(loc.list)
 
 # Array job EPP-ASM ---------------------------------------
 if(array.job){
-  epp.string <- paste0("qsub -l m_mem_free=200G -l fthread=40 -l h_rt=24:00:00 -l archive=True -q all.q -P ", cluster.project, " ",
+  # epp.string <- paste0("qsub -l m_mem_free=20G -l fthread=3 -l h_rt=24:00:00 -l archive=True -q long.q -P ", cluster.project, " ",
+  epp.string <- paste0("qsub -l m_mem_free=20G -l fthread=10 -l h_rt=24:00:00 -l archive=True -q long.q -P ", cluster.project, " ",
                      "-e /share/temp/sgeoutput/", user, "/errors ",
                      "-o /share/temp/sgeoutput/", user, "/output ",
                      "-N ", "eppasm_", run.name, ' ',
@@ -91,7 +94,7 @@ draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q a
                       "-e /share/temp/sgeoutput/", user, "/errors ",
                       "-o /share/temp/sgeoutput/", user, "/output ",
                       "-N ", "save_draws_", run.name, ' ',
-                      "-hold_jid ",    "eppasm_", run.name, ' ',
+                      # "-hold_jid ",    "eppasm_", run.name, ' ',
                       "-tc 100 ",
                       "-t 1:", reps, " ",
                       code.dir, "gbd/singR_shell.sh ",
@@ -101,7 +104,7 @@ print(draw.string)
 system(draw.string)
 
 
-summary.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
+summary.string <- paste0("qsub -l m_mem_free=30G -l fthread=25 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
                          "-e /share/temp/sgeoutput/", user, "/errors ",
                          "-o /share/temp/sgeoutput/", user, "/output ",
                          "-N ", 'summary_', run.name, " ",

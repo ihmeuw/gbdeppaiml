@@ -24,8 +24,8 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
   array.job = FALSE
-  run.name <- "201209_socialdets"
-  loc <- 'AGO'
+  run.name <- "200713_yuka"
+  loc <- 'ZAF_482'
   stop.year <- 2022
   j <- 1
   paediatric <- FALSE
@@ -189,61 +189,70 @@ zero_prev_locs <- fread("/ihme/hiv/epp_input/gbd20/prev_surveys.csv")
 zero_prev_locs <- unique(zero_prev_locs[prev == 0.0005 & use == TRUE,iso3])
 
 # Fit model ---------------------------------------
+dt <- readRDS(paste0('/ihme/hiv/epp_output/gbd20/200713_yuka/dt_objects/',loc,'_dt.RDS'))
+attr(dt,"eppd")$ancsitedat <- as.data.frame(attr(dt,"eppd")$ancsitedat)
+
 fit <- eppasm::fitmod(dt, eppmod = ifelse(grepl('IND', loc),'rlogistic',epp.mod), 
-                      B0 = 1e3, B = 1e3, number_k = 50, 
+                      B0 = 1e5, B = 1e3, number_k = 100, 
                       ageprev = ifelse(loc %in% zero_prev_locs,'binom','probit'))
+dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/fitmod/'))
+saveRDS(fit, file = paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/fitmod/', loc, '_', j, '.RDS'))
 
 
-dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/inc_rate/'))
-dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/prev_rate/'))
-data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc,'.csv')
-
-
-## When fitting, the random-walk based models only simulate through the end of the
-## data period. The `extend_projection()` function extends the random walk for r(t)
-## through the end of the projection period.
-
-if(epp.mod == 'rhybrid'){
-  fit <- extend_projection(fit, proj_years = stop.year - start.year + 1)
-}
-
-if(max(fit$fp$pmtct_dropout$year) < stop.year & ped_toggle){
-  add_on.year <- seq(max(fit$fp$pmtct_dropout$year) + 1 , stop.year)
-  add_on.dropouts <- fit$fp$pmtct_dropout[fit$fp$pmtct_dropout$year == max(fit$fp$pmtct_dropout$year), 2:ncol(fit$fp$pmtct_dropout)]
-  fit$fp$pmtct_dropout <- rbind(fit$fp$pmtct_dropout, c(year = unlist(add_on.year), add_on.dropouts))
-}
-
-
-
-draw <- j
-result <- gbd_sim_mod(fit, VERSION = "R")
-dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/'), recursive = T)
-saveRDS(result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/', draw, '.RDS'))
-
-#results
-##track the output of the prev and inc through get_gbd_outputs
-output.dt <- get_gbd_outputs(result, attr(dt, 'specfp'), paediatric = paediatric)
-output.dt[,run_num := j]
-dir.create(out.dir, showWarnings = FALSE)
- write.csv(output.dt, paste0(out.dir, '/', j, '.csv'), row.names = F)
-
-# ## under-1 splits
-if(paediatric){
-  split.dt <- get_under1_splits(result, attr(dt, 'specfp'))
-  split.dt[,run_num := j]
- write.csv(split.dt, paste0(out.dir, '/under_1_splits_', j, '.csv' ), row.names = F)
-}
-## Write out theta for plotting posterior
-param <- data.table(theta = attr(result, 'theta'))
-write.csv(param, paste0(out.dir,'/theta_', j, '.csv'), row.names = F)
-if(plot.draw){
-  plot_15to49_draw(loc, output.dt, attr(dt, 'eppd'), run.name)
-}
-params <- fnCreateParam(theta = unlist(param), fp = fit$fp)
-saveRDS(params, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', file_name, '.RDS'))
-
-
-data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc,'.csv')
-save_data(loc, attr(dt, 'eppd'), run.name)
+# dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/inc_rate/'))
+# dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/prev_rate/'))
+# data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc,'.csv')
+# 
+# 
+# ## When fitting, the random-walk based models only simulate through the end of the
+# ## data period. The `extend_projection()` function extends the random walk for r(t)
+# ## through the end of the projection period.
+# 
+# if(epp.mod == 'rhybrid'){
+#   fit <- extend_projection(fit, proj_years = stop.year - start.year + 1)
+# }
+# 
+# if(max(fit$fp$pmtct_dropout$year) < stop.year & ped_toggle){
+#   add_on.year <- seq(max(fit$fp$pmtct_dropout$year) + 1 , stop.year)
+#   add_on.dropouts <- fit$fp$pmtct_dropout[fit$fp$pmtct_dropout$year == max(fit$fp$pmtct_dropout$year), 2:ncol(fit$fp$pmtct_dropout)]
+#   fit$fp$pmtct_dropout <- rbind(fit$fp$pmtct_dropout, c(year = unlist(add_on.year), add_on.dropouts))
+# }
+# 
+# 
+# 
+# draw <- j
+# result <- gbd_sim_mod(fit, VERSION = "R")
+# # dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/'), recursive = T)
+# # saveRDS(result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/', draw, '.RDS'))
+# 
+# dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', file_name, '/'), recursive = T)
+# saveRDS(result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', file_name, '/', draw, '.RDS'))
+# # 
+# # #results
+# # ##track the output of the prev and inc through get_gbd_outputs
+# output.dt <- get_gbd_outputs(result, attr(dt, 'specfp'), paediatric = paediatric)
+# output.dt[,run_num := j]
+# out.dir <- paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/', file_name, '/')
+# dir.create(out.dir, showWarnings = FALSE)
+# write.csv(output.dt, paste0(out.dir, '/', j, '.csv'), row.names = F)
+# 
+# # ## under-1 splits
+# if(paediatric){
+#   split.dt <- get_under1_splits(result, attr(dt, 'specfp'))
+#   split.dt[,run_num := j]
+#   write.csv(split.dt, paste0(out.dir, '/under_1_splits_', j, '.csv' ), row.names = F)
+# }
+# ## Write out theta for plotting posterior
+# param <- data.table(theta = attr(result, 'theta'))
+# write.csv(param, paste0(out.dir,'/theta_', j, '.csv'), row.names = F)
+# if(plot.draw){
+#   plot_15to49_draw(loc, output.dt, attr(dt, 'eppd'), run.name)
+# }
+# params <- fnCreateParam(theta = unlist(param), fp = fit$fp)
+# saveRDS(params, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', file_name, '.RDS'))
+#
+#
+# data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc,'.csv')
+# save_data(loc, attr(dt, 'eppd'), run.name)
 
 

@@ -11,7 +11,7 @@ library(data.table)
 
 ## Arguments
 cluster.project <- "proj_hiv"
-unaids_year <- 2019
+unaids_year <- 2020
 
 ### Functions
 library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
@@ -28,7 +28,7 @@ loc.table <- data.table(get_locations(hiv_metadata = T))
 ### Code
 epp.list <- sort(loc.table[epp == 1, ihme_loc_id])
 loc.list <- epp.list
-
+dir.create(paste0('/ihme/hiv/data/PJNZ_prepped/', unaids_year, '/'))
 
 ## Launch prepare locations file
 for(loc in loc.list) {

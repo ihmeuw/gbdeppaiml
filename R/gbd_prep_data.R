@@ -11,6 +11,11 @@ find_pjnz <- function(loc){
   loc.name <- loc.table[ihme_loc_id == temp.loc, location_name]
   
   unaids.year <- loc.table[ihme_loc_id == temp.loc, unaids_recent]
+  unaids_2020 <- strsplit(list.dirs('/snfs1/DATA/UNAIDS_ESTIMATES/2020/'), split = '//')
+  unaids_2020 <- sapply(unaids_2020[2:length(unaids_2020)], '[[', 2)
+  if(loc %in% unaids_2020){
+    unaids.year = 2020
+  }
 
   #Subnational files are stored in national folders
   if(grepl("ETH",loc)){temp.loc <- "ETH"}
@@ -23,7 +28,7 @@ find_pjnz <- function(loc){
   ##make exception for india
   if(grepl('IND', loc)){dir <-paste0("/ihme/limited_use/LIMITED_USE/PROJECT_FOLDERS/UNAIDS_ESTIMATES/2013/IND")}else{
   
-  if(unaids.year %in% 2016:2019) {
+  if(unaids.year %in% 2016:2020) {
     dir <- paste0("/home/j/DATA/UNAIDS_ESTIMATES/", unaids.year, "/", temp.loc, '/')
   } else {
     dir <- paste0("/ihme/limited_use/LIMITED_USE/PROJECT_FOLDERS/UNAIDS_ESTIMATES/", unaids.year, "/", temp.loc, "/")        

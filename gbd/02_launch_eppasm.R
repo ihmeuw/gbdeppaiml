@@ -27,7 +27,7 @@ devtools::load_all()
 date <- substr(gsub("-","",Sys.Date()),3,8)
 
 ## Arguments
-run.name <- "201113_socialdets"
+run.name <- "200713_yuka"
 spec.name <- "201202_ancrt"
 compare.run <- c("200713_yuka")
 
@@ -117,6 +117,8 @@ system(draw.string)
 
 # EPP-ASM ---------------------------------------
 temp.loc.list <- list.files('/ihme/hiv/epp_output/gbd20/201012_ancrt/fit/')[!grepl('.RDS', list.files('/ihme/hiv/epp_output/gbd20/201012_ancrt/fit/'))]
+temp.loc.list <- unique(readRDS(paste0('/ihme/hiv/epp_input/gbd20/210122_socialdets/pred_mat.RDS'))[,ihme_loc_id])
+temp.loc.list <- loc.list[grepl('ZAF', loc.list)]
 if(run_eppasm & !array.job){
 for(loc in temp.loc.list) {    
   ## Run EPPASM
@@ -130,8 +132,8 @@ for(loc in temp.loc.list) {
                          code.dir, "gbd/singR_shell.sh ",
                          code.dir, "gbd/main.R ",
                          run.name, " ", array.job," ", loc, " ", proj.end, " ", paediatric)
-  #  print(epp.string)
-  # system(epp.string)
+   print(epp.string)
+  system(epp.string)
 
   
       #Draw compilation
@@ -166,8 +168,8 @@ for(loc in temp.loc.list) {
                             code.dir, "gbd/main_plot_output.R ",
                             loc, " ", run.name, ' ', paediatric, ' ', compare.run, ' ', test)
      
-      print(plot.string)
-      system(plot.string)
+      # print(plot.string)
+      # system(plot.string)
 
 }
 }
