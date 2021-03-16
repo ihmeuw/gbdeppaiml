@@ -15,8 +15,8 @@ if(length(args) > 0) {
   loc <- args[1]
   unaids_year <- args[2]
 } else {
-  loc <- "COG"
-  unaids_year <- 2019
+  loc <- "AGO"
+  unaids_year <- 2020
 
 
 }
@@ -29,10 +29,10 @@ devtools::load_all()
 
 ### Tables
 loc.table <- data.table(get_locations(hiv_metadata = T))
-
+loc.list <- loc.table[epp==1,ihme_loc_id]
 ##MAR IS NOT WORKING
-for(loc in c("MRT","COM")){
-unaids_year <- loc.table[ihme_loc_id==loc, unaids_recent]
+# for(loc in loc.list){
+# unaids_year <- loc.table[ihme_loc_id==loc, unaids_recent]
 dir.create(paste0("/share/hiv/data/PJNZ_prepped/",unaids_year,"/"),recursive = TRUE, showWarnings = FALSE)
 
 
@@ -50,7 +50,7 @@ if(grepl('1', loc.table[ihme_loc_id == loc, group])){
 
 saveRDS(val, paste0("/share/hiv/data/PJNZ_prepped/",unaids_year,"/", loc, '.rds'))
 
-}
+# }
 cal = readRDS(paste0("/share/hiv/data/PJNZ_EPPASM_prepped/", loc, '.rds'))
 nrow(unique(attr(cal,"eppd")$ancsitedat))
 
