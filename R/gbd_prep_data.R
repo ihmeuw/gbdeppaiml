@@ -34,6 +34,10 @@ find_pjnz <- function(loc){
     }
   if(file.exists(dir)) {
     pjnz.list <- list.files(dir, pattern = "PJNZ", full.names = T)
+    if(unaids.year == 2020 & loc == 'MWI'){
+      pjnz.list <- list.files(dir, pattern = "pjnz", full.names = T)
+
+    }
     pjn.list <- list.files(dir, pattern = "PJN", full.names = T)
     
     file.list <- grep(temp.loc, pjnz.list, value = T)

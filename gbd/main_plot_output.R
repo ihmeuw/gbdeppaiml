@@ -19,14 +19,14 @@ if(length(args) > 0) {
     compare.run <- NA
   }
 } else {
-  run.name <- "201226_socialdets"
-  loc <- "AGO_1"
+  run.name <- "210408_antman"
+  loc <- "BEN"
   draw.fill <- TRUE
   compare.run <- c('200713_yuka')
   test <-  NULL
 }
 
-gbd_year_new <- "gbd20"
+gbd_year_new <- "gbd21"
 if( '190630_rhino2' %in% compare.run){
   gbd_year_old <- "gbd19"
   
@@ -34,18 +34,17 @@ if( '190630_rhino2' %in% compare.run){
   gbd_year_old <- "gbd20"
   
 }
-gbdyear <- 'gbd20'
+gbdyear <- 'gbd21'
 
-array.dt <- fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
-loc.name <- unique(array.dt[loc_scalar == loc, ihme_loc_id])
+# array.dt <- fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
+# loc.name <- unique(array.dt[loc_scalar == loc, ihme_loc_id])
 
 ### Functions
-library(mortdb, lib = "/ihme/mortality/shared/r")
 setwd(paste0(ifelse(windows, "H:", paste0("/homes/", user)), "/eppasm/"))
 devtools::load_all()
 setwd(code.dir)
 devtools::load_all()
-dir.table <- fread(paste0('/share/hiv/epp_input/gbd20//dir_table_gbd20.csv'))
+# dir.table <- fread(paste0('/share/hiv/epp_input/gbd20//dir_table_gbd20.csv'))
 
 
 
@@ -57,46 +56,40 @@ if(!file.exists(paste0('/share/hiv/epp_input/gbd20/', run.name, '/location_table
 }
 
 
-
 if(!is.na(compare.run)){
   run.name.old = compare.run[1]
-  if(run.name.old != '190630_rhino2'){
+  # if(run.name.old != '200714_yuka'){
+  #   loc.table.old <- fread(paste0('/share/hiv/epp_input/gbd21/', run.name.old, '/location_table.csv'))
+  #   
+  # }else{
     loc.table.old <- fread(paste0('/share/hiv/epp_input/gbd20/', run.name.old, '/location_table.csv'))
     
-  }else{
-    loc.table.old <- fread(paste0('/share/hiv/epp_input/gbd19/', run.name.old, '/location_table.csv'))
-    
-  }
+  # }
 }
 
-if(loc %in% c('STP', 'COM', 'MAR')){
-  compare.run = NA
-}
+
 run.names.comp <- compare.run
 # ## 15-49 plots
-dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/15to49_plots/'), recursive = TRUE, showWarnings = FALSE)
+dir.create(paste0('/ihme/hiv/epp_output/gbd21/', run.name, '/15to49_plots/'), recursive = TRUE, showWarnings = FALSE)
 plot_15to49(loc,
-            run.vec = c(paste0(gbdyear, '/', run.name), paste0(gbdyear, '/', compare.run)),
+            run.vec = c(paste0(gbdyear, '/', run.name), paste0(gbd_year_old, '/', compare.run)),
             base.run = paste0(run.name),
-            names = c('Social dets, test method', 'GBD20'),
+            names = c('GBD21', 'GBD20'),
             gbdyear = gbdyear,
-            loc_name = loc.name)
+            loc_name = loc)
 
 # #Age-specific plots
 for(c.indicator in rev(c( 'Prevalence','Incidence','Deaths'))){
-  dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/age_specific_plots/', c.indicator, '/'), recursive = TRUE, showWarnings = FALSE)
+  dir.create(paste0('/ihme/hiv/epp_output/gbd21/', run.name, '/age_specific_plots/', c.indicator, '/'), recursive = TRUE, showWarnings = FALSE)
 }
 
-#plot_age_specific(loc, run.name.new=run.name, paediatric=TRUE, run.name.old = '190630_rhino2', compare.run = run.names.comp, gbdyear = gbd_year_new, c.metric = 'Rate', test_run = test)
-plot_age_specific(loc, run.name.new=run.name, paediatric=TRUE, run.name.old = '190630_rhino2',
-                         compare.run = run.names.comp, gbdyear = gbd_year_new, c.metric = 'Rate', test_run = test,
+plot_age_specific(loc, run.name.new=run.name, paediatric=TRUE, run.name.old = compare.run,
+                         compare.run = run.names.comp, gbdyear = gbd_year_new, c.metric = 'Rate', test_run = NULL,
                          comp.2019 =F)
 
 # ## Birth prevalence
-dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/paeds_plots/'), showWarnings = F)
-run.name.old = '200505_xylo'
-loc_temp <- unlist(strsplit(loc,split =  '_'))[[1]]
-plot_birthprev(loc = loc_temp,run.name.new =  run.name, run.name.old = run.name.old, array = T)
+dir.create(paste0('/ihme/hiv/epp_output/gbd21/', run.name, '/paeds_plots/'), showWarnings = F)
+plot_birthprev(loc ,run.name.new =  run.name, run.name.old = run.name.old, array = F)
 
 
 

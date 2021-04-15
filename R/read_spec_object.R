@@ -10,7 +10,10 @@ test.sub_prev_granular = NULL){
   #Do this for now as something is weird with the new PJNZ files - don't need subpop anyway
   #Eventually these hsould all be regenerated with subpopulations
 
-  if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))) {
+  if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2020/', loc, '.rds'))) {
+    dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2020/', loc, '.rds'))
+    
+  }else if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))) {
     dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))
     
   } else if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2018/', loc, '.rds'))) {
@@ -24,11 +27,11 @@ test.sub_prev_granular = NULL){
         
   } else if(file.exists(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))) {
         dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))
-      }
+      } 
 
  
   if(lbd.anc){
-      replace <- as.data.table(readRDS(paste0('/share/hiv/data/PJNZ_prepped/lbd_anc/2019/', loc, '.rds')))
+      replace <- as.data.table(readRDS(paste0('/share/hiv/data/PJNZ_prepped/lbd_anc/2020/', loc, '.rds')))
 
       if(grepl("KEN",loc)){
         replace <- replace[which(subpop == attr(dt,"eppd")$ancsitedat$subpop[1])]
@@ -47,7 +50,7 @@ test.sub_prev_granular = NULL){
       replace[,'agspan' := as.numeric(replace[,agspan])]
       replace[,'site' := as.character(replace[,site])]
       replace[,'high_risk' := FALSE]
-      replace <- replace[type == 'ancss',]
+      # replace <- replace[type == 'ancss',]
       if(!geoadjust){
         replace[,adm0_mean:=NULL]
         replace[,adm0_lower:=NULL]

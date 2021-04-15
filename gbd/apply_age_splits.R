@@ -13,8 +13,8 @@ if(length(args) > 0) {
   spec.name <- args[3]
 } else {
 
-  loc <- "ETH_44852"
-  run.name <- "200713_yuka_ETH_test"
+  loc <- 'SSD'
+  run.name <- "200713_yuka"
   spec.name <- "200713_yuka"
 
 }
@@ -32,7 +32,6 @@ dir.create(out_dir_birth, recursive = T, showWarnings = F)
 
 
 ### Functions
-library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
 source( "/ihme/cc_resources/libraries/current/r/get_population.R")
 setwd(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/"))
 devtools::load_all()
@@ -98,7 +97,7 @@ spec_draw <- spec_draw[,.(pop = sum(pop), hiv_deaths = sum(hiv_deaths), non_hiv_
                     total_births = sum(total_births), hiv_births = sum(hiv_births), birth_prev = sum(birth_prev),
                     pop_art = sum(pop_art), pop_gt350 = sum(pop_gt350), pop_200to350 = sum(pop_200to350), pop_lt200 = sum(pop_lt200)), by = c('age_gbd', 'sex', 'year', 'run_num')]
 setnames(spec_draw, 'age_gbd', 'age')
-output.u1 <- split_u1.new_ages(spec_draw[age == 0], loc, run.name.old=run.name, run.name.new = run.name)
+output.u1 <- split_u1.new_ages(spec_draw[age == 0], loc, run.name = run.name)
 output.u1[age=="x_388", age := "1-5 mo."]
 output.u1[age=="x_389", age := "6-11 mo."]
 spec_draw <- spec_draw[age != 0]
@@ -239,6 +238,7 @@ spec_combined <- merge(spec_combined, spec_combined_last, by=c("year", "sex_id",
 ## We want incidence and deaths to be calendar year, and populations to be midyear
 convert_vars <- c('non_hiv_deaths', 'hiv_deaths', 'new_hiv', 'hiv_births', 'total_births')
 spec_combined[,(convert_vars) := lapply(.SD,shift_to_midyear),.SDcols=convert_vars, by=c("sex_id", "run_num", "age_group_id")] 
+###this is where the value changes, issue is that we draw from a distribution of populations
 spec_combined[,(convert_vars) := lapply(.SD,convert_to_rate),.SDcols=convert_vars] 
 print(head(spec_combined))
 
@@ -257,11 +257,18 @@ print(head(spec_combined))
 assert_values(spec_combined, names(spec_combined), "gte", 0)
 assert_values(spec_combined, colnames(spec_combined), "not_na")
 
+if(file.exists(paste0(out_dir_death,"/",loc,"_ART_deaths.csv"))){
+  unlink(paste0(out_dir_death,"/",loc,"_ART_deaths.csv"))
+}
 write.csv(spec_combined[,list(sex_id,year_id,age_group_id,run_num,hiv_deaths,non_hiv_deaths, non_hiv_deaths_prop)],paste0(out_dir_death,"/",loc,"_ART_deaths.csv"),row.names=F)
+#for some reason this isn't overwriting files, deleting them now so they can be wrote out again, -MKW 03/17/2021
+if(file.exists(paste0(out_dir,"/",loc,"_ART_data.csv"))){
+  unlink(paste0(out_dir,"/",loc,"_ART_data.csv"))
+}
+write.csv(spec_combined[,list(sex_id,year_id,run_num,hiv_deaths, non_hiv_deaths, new_hiv,hiv_births,suscept_pop,total_births,pop_neg,pop_lt200,pop_200to350,pop_gt350,pop_art,age_group_id)],paste0(out_dir,"/",loc,"_ART_data.csv"),row.names=F)
 
 # # Rescramble draws to match Reckoning output before outputting non-fatal results (can't do it to the fatal that feeds into the Reckoning because we want to preserve within-draw correlation between them)
 # spec_combined <- merge(spec_combined,draw_map,by="run_num")
 
-write.csv(spec_combined[,list(sex_id,year_id,run_num,hiv_deaths, non_hiv_deaths, new_hiv,hiv_births,suscept_pop,total_births,pop_neg,pop_lt200,pop_200to350,pop_gt350,pop_art,age_group_id)],paste0(out_dir,"/",loc,"_ART_data.csv"),row.names=F)
 
 

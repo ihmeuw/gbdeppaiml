@@ -38,22 +38,21 @@ cluster.project = 'proj_hiv'
 loc.list <- loc.table[epp == 1, ihme_loc_id]
 eppasm_parents <-  c("KEN","ZAF","ETH","KEN_44793" ,"KEN_44794","KEN_44795", "KEN_44796" ,"KEN_44797", "KEN_44798","KEN_44799", "KEN_44800","NGA")
 all_loc_list <- c(loc.list,eppasm_parents, 'MRT', 'COM', 'STP')
-redo <- readRDS('/ihme/homes/mwalte10/redo.RDS')
-all_loc_list <- intersect(all_loc_list, redo)
+
 ## Aggregation and reckoning prep for higher levels
   for(loc in all_loc_list){
-    if(loc %in% eppasm_parents){
-      prep.string <- paste0("qsub -l m_mem_free=100G -l fthread=2 -l h_rt=02:00:00 -l archive -q all.q -P ", cluster.project, " ",
-                            "-e /share/temp/sgeoutput/", user, "/errors ",
-                            "-o /share/temp/sgeoutput/", user, "/output ",
-                            "-N ", loc, "_aggregate ",
-                            "-hold_jid ", loc,"_save_draws ",
-                            code.dir, "gbd/singR_shell.sh ",
-                            code.dir, "gbd/aggregate.R ",
-                            loc, " ", run.name, " ", spec.name," ",2)
-      print(prep.string)
-      system(prep.string)
-    }
+    # if(loc %in% eppasm_parents){
+    #   prep.string <- paste0("qsub -l m_mem_free=100G -l fthread=2 -l h_rt=02:00:00 -l archive -q all.q -P ", cluster.project, " ",
+    #                         "-e /share/temp/sgeoutput/", user, "/errors ",
+    #                         "-o /share/temp/sgeoutput/", user, "/output ",
+    #                         "-N ", loc, "_aggregate ",
+    #                         "-hold_jid ", loc,"_save_draws ",
+    #                         code.dir, "gbd/singR_shell.sh ",
+    #                         code.dir, "gbd/aggregate.R ",
+    #                         loc, " ", run.name, " ", spec.name," ",2)
+    #   print(prep.string)
+    #   system(prep.string)
+    # }
     
     
     prep.string <- paste0("qsub -l m_mem_free=50G -l fthread=1 -l h_rt=02:00:00 -l archive -q all.q -P ", cluster.project, " ",
@@ -61,7 +60,10 @@ all_loc_list <- intersect(all_loc_list, redo)
                           "-o /share/temp/sgeoutput/", user, "/output ",
                           "-N ", loc, "_apply_age_splits ",
                           "-hold_jid ", loc,"_aggregate ",
-                          code.dir, "gbd/singR_shell.sh ",
+                          '/ihme/singularity-images/rstudio/shells/execR.sh -i ',
+                          '/ihme/singularity-images/hiv/hiv_11.img ',
+                          # code.dir, "gbd/singR_shell.sh ",
+                          '-s ',
                           code.dir, "gbd/apply_age_splits.R ",
                           loc, " ", run.name, " ", spec.name)
     print(prep.string)

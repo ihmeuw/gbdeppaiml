@@ -11,9 +11,9 @@ library(data.table); library(survey); library(assertable)
 
 ### Paths
 ##out.dir <- paste0("/ihme/hiv/epp_output/gbd19/", run.name, "/")
-out.dir <- paste0("/ihme/hiv/epp_input/gbd20/")
+out.dir <- paste0("/ihme/hiv/epp_input/gbd21/")
 dir.create(out.dir, showWarnings = F)
-out.path <- paste0("/ihme/hiv/epp_input/gbd20/prev_surveys_ind.csv")
+out.path <- paste0("/ihme/hiv/epp_input/gbd21/prev_surveys_ind.csv")
 
 ### Change this to the newest extraction sheet
 supp.survey.path <- paste0("/ihme/hiv/data/prevalence_surveys/avinav_GBD2019_prevalence_surveys_decomp4_FORUSE.csv")
@@ -294,5 +294,5 @@ out.dt = rbind(out.dt,save_all)
 #out.dt[grepl("IND_",iso3) & age_year=="15-49", use := TRUE]
 out.dt[prev == 0.000 & use==TRUE, prev := 0.0005]
 
-write.csv(out.dt[,.(year,iso3,age_year,sex_id,prev,se,n,nid_loc_year, use)],"/ihme/hiv/epp_input/gbd20/prev_surveys_ind.csv",row.names = FALSE)
+write.csv(out.dt[,.(year,iso3,age_year,sex_id,prev,se,n,nid_loc_year, use)],"/ihme/hiv/epp_input/gbd21/prev_surveys_ind.csv",row.names = FALSE)
 

@@ -27,16 +27,16 @@ devtools::load_all()
 date <- substr(gsub("-","",Sys.Date()),3,8)
 
 ## Arguments
-run.name <- "201113_socialdets"
-spec.name <- "201202_ancrt"
+run.name <- "210408_antman"
+spec.name <- "210408_antman"
 compare.run <- c("200713_yuka")
 
-proj.end <- 2022
+proj.end <- 2023
 if(file.exists(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))){
   n.draws = nrow(fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv')))
   array.job = T
 }else{
-  n.draws = 50
+  n.draws = 10
   array.job = F
 }
 run.group2 <- FALSE
@@ -45,12 +45,11 @@ cluster.project <- "proj_hiv"
 plot_ART <- FALSE
 reckon_prep <- FALSE
 decomp.step <- "iterative"
-gbdyear <- "gbd20"
+gbdyear <- "gbd21"
 redo_offsets <- F
 testing = FALSE
 test = NULL
 run_eppasm = T
-gbdyear = 'gbd20'
 code.dir = '/homes/mwalte10/gbdeppaiml/'
 
 ### Paths
@@ -58,9 +57,9 @@ input.dir <- paste0("/ihme/hiv/epp_input/", gbdyear, '/', run.name, "/")
 dir.create(input.dir, recursive = TRUE, showWarnings = FALSE)
 dir <- paste0("/ihme/hiv/epp_output/", gbdyear, '/', run.name, "/")
 dir.create(dir, showWarnings = FALSE)
-dir.table <- fread(paste0('/share/hiv/epp_input/gbd20//dir_table_log_gbd20.csv'))
+dir.table <- fread(paste0('/share/hiv/epp_input/gbd21//dir_table_log_gbd20.csv'))
 
-run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
+run.table <- fread(paste0('/share/hiv/epp_input/gbd21//eppasm_run_table.csv'))
 
 # if(!run.name %in% unique(run.table$run_name)){
 #   stop("Add run comment and new run to run tracker")
@@ -74,16 +73,14 @@ run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
 
 ### Functions
 source(paste0(root,"/Project/Mortality/shared/functions/check_loc_results.r"))
-library(mortdb, lib = "/ihme/mortality/shared/r")
 
 ### Tables
 loc.table <- data.table(get_locations(hiv_metadata = T))
 
 ### Code
 epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
-loc.list <- epp.list
-loc.list <- loc.list[!grepl('IND', loc.list)]
-# loc.list <- setdiff(loc.list, 'RWA')
+loc.list <- c(epp.list, 'STP', 'MRT', 'COM')
+# loc.list <- c(loc.list[grepl('IND', loc.list)])
 
 # Array job EPP-ASM ---------------------------------------
 if(array.job){
@@ -94,7 +91,10 @@ if(array.job){
                      "-tc 1000 ",
                      "-t 1:", n.draws, " ",
                      "-hold_jid eppasm_prep_inputs_", run.name," ",
-                     code.dir, "gbd/singR_shell.sh ",
+                     '/ihme/singularity-images/rstudio/shells/execR.sh -i ',
+                     '/ihme/singularity-images/hiv/hiv_11.img ',
+                     # code.dir, "gbd/singR_shell.sh ",
+                     '-s ', 
                      code.dir, "gbd/main.R ",
                      run.name, " ", array.job)
 print(epp.string)
@@ -116,9 +116,8 @@ system(draw.string)
 }
 
 # EPP-ASM ---------------------------------------
-temp.loc.list <- list.files('/ihme/hiv/epp_output/gbd20/201012_ancrt/fit/')[!grepl('.RDS', list.files('/ihme/hiv/epp_output/gbd20/201012_ancrt/fit/'))]
 if(run_eppasm & !array.job){
-for(loc in temp.loc.list) {    
+for(loc in loc.list) {    
   ## Run EPPASM
     epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive=True -q all.q -P ", cluster.project, " ",
                          "-e /share/temp/sgeoutput/", user, "/errors ",
@@ -127,7 +126,10 @@ for(loc in temp.loc.list) {
                          "-tc 1000 ",
                          "-t 1:", n.draws, " ",
                          "-hold_jid eppasm_prep_inputs_", run.name," ",
-                         code.dir, "gbd/singR_shell.sh ",
+                         '/ihme/singularity-images/rstudio/shells/execR.sh -i ',
+                         '/ihme/singularity-images/hiv/hiv_11.img ',
+                         # code.dir, "gbd/singR_shell.sh ",
+                         '-s ', 
                          code.dir, "gbd/main.R ",
                          run.name, " ", array.job," ", loc, " ", proj.end, " ", paediatric)
   #  print(epp.string)
@@ -140,31 +142,40 @@ for(loc in temp.loc.list) {
                             "-o /share/temp/sgeoutput/", user, "/output ",
                             "-N ", loc,"_",run.name, "_save_draws ",
                             "-hold_jid ", loc,"_",run.name, "_eppasm ",
-                            code.dir, "gbd/singR_shell.sh ",
+                            '/ihme/singularity-images/rstudio/shells/execR.sh -i ',
+                            '/ihme/singularity-images/hiv/hiv_11.img ',
+                            # code.dir, "gbd/singR_shell.sh ",
+                            '-s ', 
                             code.dir, "gbd/compile_draws.R ",
-                            run.name, " ", array.job, ' ', loc, ' ', n.draws, ' TRUE ', paediatric)
+                            run.name, " ", array.job, ' ', loc, ' TRUE ', paediatric)
       # print(draw.string)
       # system(draw.string)
       
-      summary.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
+      summary.string <- paste0("qsub -l m_mem_free=10G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
                             "-e /share/temp/sgeoutput/", user, "/errors ",
                             "-o /share/temp/sgeoutput/", user, "/output ",
-                            "-N ", loc,"_",run.name, "_summary ",
+                            "-N ", loc,  '_summary_', run.name, " ",
                             "-hold_jid ", loc,"_",run.name, "_save_draws ",
-                            code.dir, "gbd/singR_shell.sh ",
+                            '/ihme/singularity-images/rstudio/shells/execR.sh -i ',
+                            '/ihme/singularity-images/hiv/hiv_11.img ',
+                            # code.dir, "gbd/singR_shell.sh ",
+                            '-s ',                             
                             code.dir, "gbd/get_summary_files.R ",
-                            run.name)
-      # print(summary.string)
-      # system(summary.string)
+                            run.name, ' ', loc)
+      print(summary.string)
+      system(summary.string)
 
       plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
                             "-e /share/temp/sgeoutput/", user, "/errors ",
                             "-o /share/temp/sgeoutput/", user, "/output ",
                             "-N ", loc, "_plot_eppasm ",
-                            "-hold_jid ", loc,"_",run.name, "_summary ",
-                            code.dir, "gbd/singR_shell.sh ",
+                            "-hold_jid ", loc,"_summary_",run.name, " ",
+                            '/ihme/singularity-images/rstudio/shells/execR.sh -i ',
+                            '/ihme/singularity-images/hiv/hiv_11.img ',
+                            # code.dir, "gbd/singR_shell.sh ",
+                            '-s ', 
                             code.dir, "gbd/main_plot_output.R ",
-                            loc, " ", run.name, ' ', paediatric, ' ', compare.run, ' ', test)
+                            loc, " ", run.name, ' ', compare.run)
      
       print(plot.string)
       system(plot.string)
@@ -173,8 +184,31 @@ for(loc in temp.loc.list) {
 }
 
 
+
 #Make sure all locations are done
 check_loc_results(loc.list,paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/compiled/'),prefix="",postfix=".csv")
+have <- list.files(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/compiled/'))
+have <- have[!grepl('under1', have)]
+have <- unlist(lapply(have, gsub, pattern = '.csv', replacement = ''))
+plotting_dirs <- c(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/15to49_plots/'),
+                   paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/age_specific_plots/Deaths/'),
+                   paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/age_specific_plots/Incidence/'),
+                   paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/age_specific_plots/Prevalence/'),
+                   paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/paeds_plots/'))
+for(dir in plotting_dirs){
+  setwd(dir)
+  name <- tail(unlist(strsplit(dir, split = '/')), 1)
+  if(file.exists(paste0(dir, name, '.pdf'))){
+    unlink(paste0(dir, name, '.pdf'), recursive = T)
+  }
+    
+  system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=", name, ".pdf -f $(ls | sort -n | xargs)"))
+  dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/plots/'))
+  if(file.exists(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/plots/', name, '.pdf'))){
+    unlink(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/plots/', name, '.pdf'), recursive = T)
+  }
+  file.copy(paste0(dir, name, '.pdf'), paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/plots/', name, '.pdf'))
+}
 
 # Compile plots ---------------------------------------
 plot.holds <- paste(paste0(loc.list, '_plot_eppasm'), collapse = ",")

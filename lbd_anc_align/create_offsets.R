@@ -23,7 +23,7 @@ source(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
-  run.name <- '200316_windchime'
+  run.name <- '210408_antman'
 }else{
   run.name <- args[1]
 }
@@ -42,7 +42,7 @@ add_info <- c.args[['add_info']]
 add_info <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), add_info)
 geo_codebook <- c.args[['geo_codebook']]
 geo_codebook <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), geo_codebook)
-UNAIDS_year <- 2019
+UNAIDS_year <- 2020
 geo_repository <- c.args[['geo_repository']]
 sf_dir <- c.args[['sf_dir']]
 lbd_core <- c.args[['lbd_core']]
@@ -163,8 +163,11 @@ loc.table <- data.table(get_locations(hiv_metadata = T))
 
 ### Code
 epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
-loc.list <- epp.list[grepl('ETH',epp.list)]
-for(loc in loc.list){
+loc.list <- setdiff(epp.list, c('ETH_44859', 'HTI','PNG', 'GNQ'))
+loc.list <- loc.list[!grepl('IND', loc.list)]
+loc.list <- loc.list[!grepl('ZAF', loc.list)]
+
+for(loc in loc.list[which(loc.list == 'UGA'):length(loc.list)]){
 gen.pop.dict <- c("General Population", "General population", "GP", 
                   "GENERAL POPULATION", "GEN. POPL.", "General population(Low Risk)", 'Pop restante',
                   "Remaining Pop", "population feminine restante","Pop féminine restante","Rift Valley", 
@@ -173,6 +176,7 @@ gen.pop.dict <- c("General Population", "General population", "GP",
 
 if(grepl("ZAF",loc) | grepl("IND",loc)){
   dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))
+  dt <- attr(dt, 'eppd')$ancsitedat
 } else {
   dt <- readRDS(paste0(anc_no_offset, loc, '.rds'))
 }
@@ -181,11 +185,15 @@ if(loc == 'GNQ'){
 }
 
 anc.dt <- dt %>% data.table()
-anc.dt <- anc.dt[type == 'ancss']
+# if(any(colnames(anc.dt) == 'type')){
+#   anc.dt <- anc.dt[type == 'ancss']
+# }else{
+#   anc.dt[,type:='ancss']
+# }
 
 new.anc <- readRDS(lbd_anc_data)
 loc1 <- substring(loc,1,3)
-if(grepl('ETH', loc) | grepl('KEN', loc) | grepl('NGA', loc)){
+if(grepl('ETH', loc) | grepl('KEN', loc) | grepl('NGA', loc) | grepl('ZAF', loc)){
   countr <- unlist(strsplit(loc, split = '_'))[1]
   new.anc <- as.data.table(new.anc)[country == countr,]
   full_geo <- fread(paste0(geo_repository))[iso3==countr]
@@ -230,10 +238,13 @@ if(grepl('ETH', loc) | grepl('KEN', loc) | grepl('NGA', loc)){
     lbd.anc <- lbd.anc
   }else{
     lbd.anc <- lbd.anc[iso3_adm1 == loc]
-    
   }
 }else{
   lbd.anc <- lbd.anc[iso3==loc]
+}
+if(grepl('ZAF', loc)){
+  lbd.anc <- read.csv(lbd_anc_mean_est) %>% data.table()
+  lbd.anc <- lbd.anc[iso3 == 'ZAF',]
 }
 if(loc == 'ZMB'){
   lbd.anc <- lbd.anc[is.na(iso3_adm1)]
@@ -243,8 +254,7 @@ if(loc == 'MDG'){
   sites <- gsub(' ', '',sites)
   lbd.anc$site <- sites
   all.dat$site <- gsub(' ', '',all.dat$site)
-  site.dat.li
-  
+
 }
 if(loc == 'UGA'){
   sites <- gsub("\\(%)", '', as.character(lbd.anc$site))
@@ -258,8 +268,8 @@ if(loc == 'UGA'){
 
 }
 all.dat <- merge(all.dat,lbd.anc,by = c('site', 'year'),all.x=TRUE)
-if(grepl('ETH', loc) | grepl('KEN', loc) | grepl('NGA', loc)){
-  if(grepl('KEN', loc)){
+if(grepl('ETH', loc) | grepl('KEN', loc) | grepl('NGA', loc) | grepl('ZAF', loc)){
+  if(grepl('KEN', loc) | grepl('ZAF', loc)){
     all.dat <- all.dat[,iso3 := loc]
     
   }else{
@@ -279,13 +289,21 @@ gbd.anc.all  <- data.table(unique(site.dat.list))
 
 
 ##Flag high risk data that will not get matched to LBD data
-gbd.anc.all[,high_risk := FALSE]
-gbd.anc.all[!subpop %in% c(loc,gen.pop.dict, 'Urban', 'Rural', 'Urbaine', 'Rurale', 'TOTAL', 'POPULATION TOTALE'),high_risk := TRUE] 
-gbd.anc.all[is.na(subpop),high_risk:=FALSE]
-#Remove high risk data to complete LBD matching (but bind it later)
-gbd.anc <- gbd.anc.all[high_risk==FALSE]
+if(!grepl('ZAF', loc)){
+  gbd.anc.all[,high_risk := FALSE]
+  gbd.anc.all[!subpop %in% c(loc,gen.pop.dict, 'Urban', 'Rural', 'Urbaine', 'Rurale', 'TOTAL', 'POPULATION TOTALE'),high_risk := TRUE] 
+  gbd.anc.all[is.na(subpop),high_risk:=FALSE]
+  #Remove high risk data to complete LBD matching (but bind it later)
+  gbd.anc <- gbd.anc.all[high_risk==FALSE]
+}else{
+  gbd.anc.all[,high_risk := FALSE]
+  gbd.anc <- gbd.anc.all[high_risk==FALSE]
+  
+}
+
 
 lbd.anc <- all.dat
+print('here_1')
 #######################################
 ######  General character fixes  ######
 #######################################
@@ -422,7 +440,7 @@ if(length(gbd_diff) > 0){
 
 ##ID missingness from LBD
 missing <- lbd.anc[is.na(site_pred) & site %in% gbd.anc$site]
-
+lbd.anc <- lbd.anc[!is.na(site_pred)]
 
 ##Add back subpopulations
 if(nrow(gbd.anc) != nrow(gbd.anc.all)){
@@ -434,6 +452,7 @@ if(nrow(gbd.anc) != nrow(gbd.anc.all)){
 ###############################
 ######  Combined data    ######
 ###############################
+print('here_2')
 setnames(lbd.anc, c('site'), c('clinic'))
 
 
@@ -460,29 +479,51 @@ merge_on <- intersect(colnames(gbd.anc), colnames(lbd.anc))
 merge_on <- merge_on[which(merge_on != 'source')]
 merge_on <- merge_on[which(merge_on != 'prev')]
 lbd.anc[,prev:=NULL]
-lbd.anc[,type := 'ancss']
+# lbd.anc[,type := 'ancss']
 gbd.anc[,source := NULL]
 lbd.anc[,source := NULL]
 
 
+if(!grepl(loc, 'ZAF')){
+  both.dt <- list()
+  for(subpop.x in unique(gbd.anc[,subpop])){
+    pre.2000 <- merge(gbd.anc[subpop == subpop.x & year < 2000,], unique(lbd.anc[subpop == subpop.x,]), by= merge_on, all.x = TRUE)
+    pre.2000[,c('adm1_mean', 'adm1_lower', 'adm1_upper') := NULL]
+    pre.2000[,c("iso3_adm1" ,  "loc_id_adm1") := NA]
+    
+    ## Post 2000 merge on site-years
+    post.2000 <- merge(gbd.anc[subpop == subpop.x & year >= 2000], unique(lbd.anc[subpop == subpop.x,]), by = merge_on, all.x = TRUE)
+    post.2000[,c('latitude','longitude') := NULL]
+    post.2000[,c('adm1_mean', 'adm1_lower', 'adm1_upper') := NULL]
+    
+    
+    setdiff(colnames(post.2000),colnames(pre.2000))
+    both.dt.sp <- rbind(pre.2000, post.2000, use.names = T, fill = T)
+    both.dt.sp <- unique(both.dt.sp)
+    both.dt <- rbind(both.dt, both.dt.sp)
+  }
+}else{
+  both.dt <- list()
+  lbd.anc[,age := as.numeric(age)]
+  lbd.anc[,agspan := as.numeric(agspan)]
+  
+    pre.2000 <- merge(gbd.anc[year < 2000,], unique(lbd.anc), by= merge_on, all.x = TRUE)
+    pre.2000[,c('adm1_mean', 'adm1_lower', 'adm1_upper') := NULL]
+    pre.2000[,c("iso3_adm1" ,  "loc_id_adm1") := NA]
+    
+    ## Post 2000 merge on site-years
+    post.2000 <- merge(gbd.anc[ year >= 2000], unique(lbd.anc), by = merge_on, all.x = TRUE)
+    post.2000[,c('latitude','longitude') := NULL]
+    post.2000[,c('adm1_mean', 'adm1_lower', 'adm1_upper') := NULL]
+    
+    
+    setdiff(colnames(post.2000),colnames(pre.2000))
+    both.dt.sp <- rbind(pre.2000, post.2000, use.names = T, fill = T)
+    both.dt.sp <- unique(both.dt.sp)
+    both.dt <- rbind(both.dt, both.dt.sp)
 
-both.dt <- list()
-for(subpop.x in unique(gbd.anc[,subpop])){
-  pre.2000 <- merge(gbd.anc[subpop == subpop.x & year < 2000,], unique(lbd.anc[subpop == subpop.x,]), by= merge_on, all.x = TRUE)
-  pre.2000[,c('adm1_mean', 'adm1_lower', 'adm1_upper') := NULL]
-  pre.2000[,c("iso3_adm1" ,  "loc_id_adm1") := NA]
-  
-  ## Post 2000 merge on site-years
-  post.2000 <- merge(gbd.anc[subpop == subpop.x & year >= 2000], unique(lbd.anc[subpop == subpop.x,]), by = merge_on, all.x = TRUE)
-  post.2000[,c('latitude','longitude') := NULL]
-  post.2000[,c('adm1_mean', 'adm1_lower', 'adm1_upper') := NULL]
-  
-  
-  setdiff(colnames(post.2000),colnames(pre.2000))
-  both.dt.sp <- rbind(pre.2000, post.2000, use.names = T, fill = T)
-  both.dt.sp <- unique(both.dt.sp)
-  both.dt <- rbind(both.dt, both.dt.sp)
 }
+
 
 
 
@@ -493,7 +534,13 @@ both.dt <- rbind(both.dt, gbd.anc[clinic %in% setdiff(gbd.anc$site,both.dt$clini
 ###FINAL CHECK for site names
 setdiff(gbd.anc$clinic,both.dt$clinic)
 setnames(both.dt, 'year', 'year_id')
-both.dt <- both.dt[,.( year_id, used, prev, n, clinic, subpop, type, agegr, age, agspan, offset, ihme_loc_id, high_risk, site_pred, adm0_mean, adm0_lower, adm0_upper)]
+if(any(colnames(both.dt) == 'subpop')){
+  both.dt <- both.dt[,.( year_id, used, prev, n, clinic, subpop, type, agegr, age, agspan, offset, ihme_loc_id, high_risk, site_pred, adm0_mean, adm0_lower, adm0_upper)]
+  
+}else{
+  both.dt <- both.dt[,.( year_id, used, prev, n, clinic, type, agegr, age, agspan,ihme_loc_id, high_risk, site_pred, adm0_mean, adm0_lower, adm0_upper)]
+  
+}
 
 #######################################
 ######   Check for duplicates    ######

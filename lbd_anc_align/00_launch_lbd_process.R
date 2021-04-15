@@ -33,16 +33,16 @@ if(length(args) > 0) {
   run.name <- args[1]
   run.name.old <- args[2]
 } else {
-  run.name <- '200316_windchime'
-  run.name.old <- '191224_trumpet'
+  run.name.old <- '200316_windchime'
+  run.name.x <- '210408_antman'
 }
 
 ##This only needs to be rerun if any of the file paths in the input file have changed. Note that between runs the anc_no_offset WILL change
-rerun_conditions <- c(input_table[run.name == run.name.old, lbd_anc_data] != input_table[run.name == run.name.old, lbd_anc_data],
-                      input_table[run.name == run.name.old, geo_codebook] != input_table[run.name == run.name.old, geo_codebook],
-                      input_table[run.name == run.name.old, sf_dir] != input_table[run.name == run.name.old, sf_dir],
-                      input_table[run.name == run.name.old, rd] != input_table[run.name == run.name.old, rd],
-                      input_table[run.name == run.name.old, lbd_anc_mean_est] != input_table[run.name == run.name.old, lbd_anc_mean_est])
+rerun_conditions <- c(input_table[run_name == run.name.old, lbd_anc_data] != input_table[run_name == run.name, lbd_anc_data],
+                      input_table[run_name == run.name.old, geo_codebook] != input_table[run_name == run.name, geo_codebook],
+                      input_table[run_name == run.name.old, sf_dir] != input_table[run_name == run.name, sf_dir],
+                      input_table[run_name == run.name.old, rd] != input_table[run_name == run.name, rd],
+                      input_table[run_name == run.name.old, lbd_anc_mean_est] != input_table[run_name == run.name, lbd_anc_mean_est])
 
 # Run scripts ---------------------------------------
 if(any(rerun_conditions == TRUE)){

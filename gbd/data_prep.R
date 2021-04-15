@@ -135,9 +135,10 @@ if(dir.table[ref == max(ref),fp_root]){
   
 }
 if(dir.table[ref == max(ref),childARTcoverage]){
-  for(c.year in c('UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
-    if(file.exists(paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/childARTcoverage/',c.year, '/', loc, '_Child_ART_cov.csv'))){
-      art <- paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/childARTcoverage/',c.year, '/', loc, '_Child_ART_cov.csv')
+  for(c.year in c('UNAIDS_2020', 'UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
+    if(file.exists(paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD21/childARTcoverage/',c.year, '/', loc, '_Child_ART_cov.csv'))){
+      print(loc)
+      art <- paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD21/childARTcoverage/',c.year, '/', loc, '_Child_ART_cov.csv')
       break
     }}
 }else{
@@ -152,9 +153,9 @@ if(loc %in% c('NGA', 'KEN', 'KEN_44796')){
   
 }
 if(dir.table[ref == max(ref),pmtct]){
-  for(c.year in c('UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
-    if(file.exists( paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/PMTCT/', c.year,'/', temp.loc, '_PMTCT_ART_cov.csv'))){
-      pmtct <- paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/PMTCT/', c.year,'/', temp.loc, '_PMTCT_ART_cov.csv')
+  for(c.year in c('UNAIDS_2020', 'UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
+    if(file.exists( paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD21/PMTCT/', c.year,'/', temp.loc, '_PMTCT_ART_cov.csv'))){
+      pmtct <- paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD21/PMTCT/', c.year,'/', temp.loc, '_PMTCT_ART_cov.csv')
       break
     }}
 }else{

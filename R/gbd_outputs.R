@@ -68,7 +68,6 @@ gbd_sim_mod <-  function(fit, rwproj=fit$fp$eppmod == "rspline", VERSION = 'C'){
     
     
   }
-  fp.draw$rvec <- pred_foi
   mod <- simmod(fp.draw, VERSION = VERSION)
   attr(mod, 'theta') <- fit$resample[rand.draw,]
   return(mod)
@@ -294,7 +293,7 @@ split_u1.new_ages <- function(dt, loc, run.name, gbdyear="gbd20", test_run = NUL
     loc_name = loc_name
   }
   #change to the new population splits folder
-  pop <- data.table(fread(paste0('/ihme/hiv/epp_input/',"gbd20","/" ,run.name, "/population_splits/", loc_name, '.csv')))
+  pop <- data.table(fread(paste0('/ihme/hiv/epp_input/',gbdyear,"/" ,run.name, "/population_splits/", loc_name, '.csv')))
 
   u1.pop <- pop[age_group_id %in% c(2,3,388,389)]
   u1.pop[,pop_total := sum(population), by = c('sex_id', 'year_id')]
@@ -333,10 +332,10 @@ split_u1.new_ages <- function(dt, loc, run.name, gbdyear="gbd20", test_run = NUL
       
     }else{
       if(grepl('_', loc_name)){
-        split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/', run.name ,'/compiled/', loc_name, '_under1_splits.csv'))
+        split.dt <- fread(paste0('/share/hiv/epp_output/',  gbdyear, '/', run.name ,'/compiled/', loc_name, '_under1_splits.csv'))
 
       }else{
-        split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/', run.name ,'/compiled/', loc, '_under1_splits.csv'))
+        split.dt <- fread(paste0('/share/hiv/epp_output/', gbdyear, '/', run.name ,'/compiled/', loc, '_under1_splits.csv'))
         
       }
       
@@ -400,8 +399,11 @@ split_u1 <- function(dt, loc, run.name, gbdyear="gbd20"){
 }
 
 
-
 get_summary <- function(loc, run.name, paediatric = FALSE, old.splits, gbdyear){
+  print(loc)
+  if(!file.exists(paste0('/share/hiv/epp_output/', gbdyear, '/',run.name, '/compiled/', loc, '.csv'))){
+    return('file not compiled')
+  }
  output <- fread(paste0('/share/hiv/epp_output/', gbdyear, '/',run.name, '/compiled/', loc, '.csv'))
   if(grepl('socialdets', run.name) | grepl('tvfoi', run.name)){
     loc_name = unlist(strsplit(loc, '_'))[[1]]
@@ -525,11 +527,11 @@ save_data <- function(loc, eppd, run.name){
   } else {
     ancdata <- NULL
   }
-  output <- rbind(prevdata, ancdata, use.names = T)
+  output <- rbind(prevdata, ancdata, use.names = T, fill = T)
   output[, metric := 'Rate']
   output[, ihme_loc_id := loc]
-  path <- paste0('/share/hiv/epp_input/gbd20/', run.name, '/fit_data/', loc, '.csv')
-  dir.create(paste0('/share/hiv/epp_input/gbd20/', run.name, '/fit_data/'), recursive = TRUE, showWarnings = FALSE)
+  path <- paste0('/share/hiv/epp_input/gbd21/', run.name, '/fit_data/', loc, '.csv')
+  dir.create(paste0('/share/hiv/epp_input/gbd21/', run.name, '/fit_data/'), recursive = TRUE, showWarnings = FALSE)
   write.csv(output, path, row.names = F)
   return(output)
 }

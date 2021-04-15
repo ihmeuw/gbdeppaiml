@@ -21,7 +21,7 @@ if(length(args) > 0) {
 
 }
 ### Functions
-library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
+library(mortdb, lib = "/mnt/team/mortality/pub/shared/r")
 setwd(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/"))
 devtools::load_all()
 setwd(code.dir)

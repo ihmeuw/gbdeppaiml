@@ -14,8 +14,8 @@ if(length(args) > 0) {
 	run.group2 <- args[3]
 	decomp.step <- args[4]
 } else {
-	run.name <- "200713_yuka"
-	proj.end <- 2022
+	run.name <- "210408_antman"
+	proj.end <- 2023
 	run.group2 <- FALSE
 	decomp.step <- "iterative"
 }
@@ -30,7 +30,7 @@ mlt <- c.args[['mlt']]
 birth <- c.args[['births']]
 
 
-gbdyear <- 'gbd20'
+gbdyear <- 'gbd21'
 out.dir <- paste0('/ihme/hiv/epp_input/', gbdyear, '/', run.name, "/")
 dir.create(out.dir, recursive = TRUE, showWarnings = TRUE)
 
@@ -91,14 +91,16 @@ pop.o80 <-  get_mort_outputs(
   location_id = c(epp.locs, parent.locs), year_id = seq(1970, proj.end), sex_id = 1:2)
 pop.o80 <- pop.o80[,.(age_group_id, location_id, year_id, sex_id, population, run_id)]
 
-# pop.all.20 <- pop.all[year_id == 2019,]
-# pop.all.20[,year_id := rep(2020, nrow(pop.all.20))] 
-# pop.all <- rbind(pop.all, pop.all.20)
-## this is a separate call because you can't get 80+ with single_age_pop = TRUE
-# pop.o80 <- get_population(age_group_id = c( 21), location_id = c(epp.locs, parent.locs), year_id = seq(1970, proj.end), gbd_round_id = 7, sex_id = 1:2, decomp_step = decomp.step)
-# pop.o80.20 <- pop.o80[year_id == 2019,]
-# pop.o80.20[,year_id := rep(2020, nrow(pop.o80.20))] 
-# pop.o80 <- rbind(pop.o80, pop.o80.20)
+if(max(pop.all$year_id) != proj.end){
+  pop.all.maxyear <- pop.all[year_id == max(year_id),]
+  pop.all.maxyear[,year_id := rep(proj.end, nrow(pop.all.maxyear))]
+  pop.all <- rbind(pop.all, pop.all.maxyear)
+  # this is a separate call because you can't get 80+ with single_age_pop = TRUE
+  pop.o80.maxyear <- pop.o80[year_id == max(year_id),]
+  pop.o80.maxyear[,year_id := rep(proj.end, nrow(pop.o80.maxyear))]
+  pop.o80 <- rbind(pop.o80, pop.o80.maxyear)
+}
+
 
 pop.all <- rbind(pop.all,  pop.o80, use.names = T)
 dir.create(paste0(out.dir, '/population_single_age'), showWarnings = F)
@@ -114,12 +116,12 @@ invisible(lapply(c(epp.locs, parent.locs), function(c.location_id) {
 # pop.238 <- get_population(age_group_id = c(238), location_id = india.locs, year_id = seq(1970, proj.end), gbd_round_id = 7, sex_id = 1:2, decomp_step = decomp.step)
 # pop <- rbind(pop, pop.238)
 # pop.all.20 <- pop[year_id == 2019,]
-# pop.all.20[,year_id := rep(2020, nrow(pop.all.20))] 
+# pop.all.20[,year_id := rep(2020, nrow(pop.all.20))]
 # pop <- rbind(pop, pop.all.20)
 ## this is a separate call because you can't get 80+ with single_age_pop = TRUE
 # pop.o80 <- get_population(age_group_id = c(21), location_id = india.locs, year_id = seq(1970, proj.end), gbd_round_id = 7, sex_id = 1:2, decomp_step = decomp.step)
 # pop.o80.20 <- pop.o80[year_id == 2019,]
-# pop.o80.20[,year_id := rep(2020, nrow(pop.o80.20))] 
+# pop.o80.20[,year_id := rep(2020, nrow(pop.o80.20))]
 # pop.o80 <- rbind(pop.o80, pop.o80.20)
 india.locs <- loc.table[level>4 & grepl("IND", ihme_loc_id) ,location_id]
 pop.all <-  get_mort_outputs(
@@ -136,6 +138,15 @@ pop.o80 <-  get_mort_outputs(
   age_group_id = 21,
   location_id = india.locs, year_id = seq(1970, proj.end), sex_id = 1:2)
 pop.o80 <- pop.o80[,.(age_group_id, location_id, year_id, sex_id, population, run_id)]
+if(max(pop.all$year_id) != proj.end){
+  pop.all.maxyear <- pop.all[year_id == max(year_id),]
+  pop.all.maxyear[,year_id := rep(proj.end, nrow(pop.all.maxyear))]
+  pop.all <- rbind(pop.all, pop.all.maxyear)
+  # this is a separate call because you can't get 80+ with single_age_pop = TRUE
+  pop.o80.maxyear <- pop.o80[year_id == max(year_id),]
+  pop.o80.maxyear[,year_id := rep(proj.end, nrow(pop.o80.maxyear))]
+  pop.o80 <- rbind(pop.o80, pop.o80.maxyear)
+}
 pop.all <- rbind(pop.all,  pop.o80, use.names = T)
 
 dir.create(paste0(out.dir, '/population_single_age/india_splitting_locs/'), showWarnings = F)
@@ -156,9 +167,12 @@ pop <-  get_mort_outputs(
 setnames(pop, 'mean', 'population')
 pop <- pop[,.(age_group_id, location_id, year_id, sex_id, population, run_id)]
 
-# pop.all.20 <- pop[year_id == 2019,]
-# pop.all.20[,year_id := rep(2020, nrow(pop.all.20))] 
-# pop <- rbind(pop, pop.all.20)
+if(max(pop.all$year_id) != proj.end){
+  pop.all.maxyear <- pop[year_id == max(year_id),]
+  pop.all.maxyear[,year_id := rep(proj.end, nrow(pop.all.maxyear))]
+  pop <- rbind(pop, pop.all.maxyear)
+}
+
 
 dir.create(paste0(out.dir, '/population'), showWarnings = F)
 invisible(lapply(c(epp.locs, parent.locs), function(c.location_id) {
@@ -167,22 +181,23 @@ invisible(lapply(c(epp.locs, parent.locs), function(c.location_id) {
   write.csv(out.pop, paste0(out.dir, '/population/', c.iso, ".csv"), row.names = F)
 }))
 
-# pop.splits <-  get_mort_outputs(
-#   "population single year", "estimate",
-#   gbd_year = 2020,
-#   run_id = population_sa,
-#   age_group_id = c(2,3,30,31,32,34,235,238,388,389),
-#   location_id = c(epp.locs, parent.locs), year_id = seq(1970, proj.end), sex_id = 1:2)
-pop.splits <-  get_population(age_group_id =  c(2,3,30,31,32,34,235,238,388,389),
-                                              location_id = c(epp.locs, parent.locs), year_id = seq(1970, proj.end), sex_id = 1:2, 
-                                gbd_round_id = 7, decomp_step = 'iterative')
+pop.splits <-  get_mort_outputs(
+  "population", "estimate",
+  gbd_year = 2020,
+  run_id = population,
+  age_group_id = c(2,3,30,31,32,34,235,238,388,389),
+  location_id = c(epp.locs, parent.locs), year_id = seq(1970, proj.end), sex_id = 1:2)
+# pop.splits <-  get_population(age_group_id =  c(2,3,30,31,32,34,235,238,388,389),
+#                                               location_id = c(epp.locs, parent.locs), year_id = seq(1970, proj.end), sex_id = 1:2,
+#                                 gbd_round_id = 7, decomp_step = 'iterative')
+setnames(pop.splits, 'mean', 'population')
 pop.splits <- pop.splits[,.(age_group_id, location_id, year_id, sex_id, population, run_id)]
+if(max(pop.all$year_id) != proj.end){
+  pop.all.maxyear <- pop.splits[year_id == max(year_id),]
+  pop.all.maxyear[,year_id := rep(proj.end, nrow(pop.all.maxyear))]
+  pop.splits <- rbind(pop.splits, pop.all.maxyear)
+}
 
-
-
-# pop.splits.20 <- pop.splits[year_id == 2019,]
-# pop.splits.20[,year_id := rep(2020, nrow(pop.splits.20))] 
-# pop.splits <- rbind(pop.splits, pop.splits.20)
 
 dir.create(paste0(out.dir, '/population_splits'), showWarnings = F)
 invisible(lapply(c(epp.locs,id.parents), function(c.location_id) {
@@ -192,7 +207,12 @@ invisible(lapply(c(epp.locs,id.parents), function(c.location_id) {
 
 ###For India Rural-urban Splitting locations
 india.locs <- loc.table[level>4 & grepl("IND", ihme_loc_id) ,location_id]
-pop.splits <- get_population(age_group_id = c(2,3,30,31,32,34,235,238,388,389), location_id = india.locs, year_id = 1970:2022, gbd_round_id = 7, sex_id = 1:2, decomp_step = decomp.step)
+pop.splits <- get_population(age_group_id = c(2,3,30,31,32,34,235,238,388,389), location_id = india.locs, year_id = 1970:proj.end, gbd_round_id = 7, sex_id = 1:2, decomp_step = decomp.step)
+if(max(pop.all$year_id) != proj.end){
+  pop.all.maxyear <- pop.splits[year_id == max(year_id),]
+  pop.all.maxyear[,year_id := rep(proj.end, nrow(pop.all.maxyear))]
+  pop.splits <- rbind(pop.splits, pop.all.maxyear)
+}
 dir.create(paste0(out.dir, '/population_splits/'), showWarnings = F)
 invisible(lapply(india.locs, function(c.location_id) {
   c.iso <- loc.table[location_id == c.location_id, ihme_loc_id]
@@ -201,7 +221,7 @@ invisible(lapply(india.locs, function(c.location_id) {
 
 ## Migration
 ##got 226 from Spencer on 8/6/2020
-mig <- fread(paste0('/ihme/fertilitypop/population/popReconstruct/226/upload/net_migration_single_year.csv'))[measure_id==19]
+mig <- fread(paste0('/mnt/team/fertilitypop/pub/population/popReconstruct/226/upload/net_migration_single_year.csv'))[measure_id==19]
 #fread(paste0('/ihme/fertilitypop/gbd_2017/population/modeling/popReconstruct/v96/best/net_migrants.csv'))
 # mig<- get_mort_outputs(model_name = 'migration single year',model_type = 'estimate', run_id = migration, location_id = epp.locs,
 #                              age_group_ids = c(28, 238,21 ,50:127))[measure_id == 19]
@@ -220,6 +240,15 @@ setnames(mig, c('year_id', 'sex_id','mean','age_group_name'), c('year', 'sex','v
 
 mig[age > 80, age := 80]
 mig <- mig[year >= 1970, .(value = sum(value)), by = c('age', 'sex', 'year', 'ihme_loc_id')]
+if(max(mig$year) != proj.end){
+  mig.all.maxyear <- mig[year == max(year),]
+  mig.all.maxyear[,year := rep(2022, nrow(mig.all.maxyear))]
+  mig <- rbind(mig, mig.all.maxyear)
+  
+  mig.all.maxyear <- mig[year == max(year),]
+  mig.all.maxyear[,year := rep(proj.end, nrow(mig.all.maxyear))]
+  mig <- rbind(mig, mig.all.maxyear)
+}
 dir.create(paste0(out.dir, '/migration'), showWarnings = F)
 invisible(lapply(epp.locs, function(c.location_id){
   c.iso <- loc.table[location_id == c.location_id, ihme_loc_id]
@@ -254,9 +283,13 @@ asfr <- get_mort_outputs(model_name = 'ASFR', model_type = 'estimate', run_id = 
 setnames(asfr, c('mean', 'lower', 'upper'), c('mean_value','lower_value', 'upper_value'))
 asfr[,sex_id := 2]
 asfr <- data.table(asfr)
-# asfr.20 <- data.table(asfr[year_id == max(year_id),])
-# asfr.20 <- asfr.20[,year_id := rep(2020, nrow(asfr.20))]
-# asfr <- rbind(asfr, asfr.20)
+
+if(max(asfr$year_id) != proj.end){
+  asfr.maxyear <- data.table(asfr[year_id == max(year_id),])
+  asfr.maxyear <- asfr.maxyear[,year_id := rep(proj.end, nrow(asfr.maxyear))]
+  asfr <- rbind(asfr, asfr.maxyear)
+}
+
 
 asfr <- asfr[age_group_id %in% c(8:14) & sex_id == 2, list(year_id, age_group_id, mean_value, location_id)]
 asfr[, age := (age_group_id - 5) * 5]
@@ -279,11 +312,17 @@ setnames(births, 'mean', 'population')
 births[,population := sum(population), by = c('location_id', 'year_id', 'sex_id')]
 births[,age_group_id := 164]
 births <- unique(births[,.(age_group_id, location_id, year_id, sex_id, population, run_id)])
+if(max(births$year_id) != proj.end){
+  births.maxyear <- data.table(births[year_id == max(year_id),])
+  births.maxyear <- births.maxyear[,year_id := rep(proj.end, nrow(births.maxyear))]
+  births <- rbind(births, births.maxyear)
+}
 # births <- get_population(age_group_id = 164, location_id = epp.locs,
 #                          year_id = seq(1970, 2022), gbd_round_id = 7, sex_id = 1:2, decomp_step = decomp.step)
 # #creating dummy variable for births
 # births = extrapolate_years(births, 2022, trans_vars = "population", id_vars = c("age_group_id","location_id","sex_id","run_id"))
-  
+
+
   dir.create(paste0(out.dir, '/births'), showWarnings = F)
   dir.create(paste0(out.dir, '/SRB'), showWarnings = F)
   invisible(lapply(epp.locs, function(c.location_id) {
@@ -321,8 +360,8 @@ if(run.group2 == TRUE){
   cod.dt[, sex := ifelse(sex_id == 1, 'male', 'female')]
   cod.dt[,sex_id := NULL]
   cod.dt <- merge(cod.dt, age.map[,.(age_group_id, age = age_group_name_short)], by = 'age_group_id')
-  
-  
+
+
   ########################
   ##RIGHT NOW RUN.GROUP2 == FALSE BUT WOULD THIS NEED TO BE UPDATED IF IT WEREN'T?
   diagn.dt <- fread(paste0('/ihme/hiv/results_comparison/comparison_data/high_income_incidence_extractions/combined_high_income_cases_outlier.csv'))
@@ -331,7 +370,7 @@ if(run.group2 == TRUE){
   diagn.dt[sex_id == 2, sex := 'female']
   diagn.dt[sex_id == 1, sex := 'male']
   diagn.dt[, sex_id := NULL]
-  
+
   group2.fitdata <- rbind(cod.dt, diagn.dt, use.names = T)
   dir.create(paste0('/share/hiv/epp_input/gbd19/', run.name, '/fit_data/'), showWarnings = F, recursive = T)
   invisible(lapply(unique(group2.fitdata$ihme_loc_id), function(loc){
@@ -341,9 +380,9 @@ if(run.group2 == TRUE){
 }
 
 
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+

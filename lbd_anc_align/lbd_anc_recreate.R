@@ -25,7 +25,7 @@ source(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/
 libs <- c("data.table", "openxlsx", "raster", "foreign", "rgdal", "geosphere", "fossil", "dplyr", "rgeos", "car","plyr", 'sf')
 sapply(libs, require, character.only = T)
 
-run.name <- '200316_windchime'
+run.name <- '210408_antman'
 input_table <- fread(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), '/gbdeppaiml/lbd_anc_align/inputs.csv'))
 c.args <- input_table[run_name==run.name]
 run_name <- run.name
@@ -88,15 +88,16 @@ loc.list <- epp.list
 #we don't do this for zaf and png
 loc.list <- loc.list[!grepl('ZAF', loc.list)]
 loc.list <- loc.list[-which(loc.list == 'PNG')]
+loc.list <- loc.list[-which(loc.list == 'CPV')]
 
 
 use_2019 <- T
 use_2018 <- F
+use_2020 = T
 use_subpop <- F
 use_prepped <- F
-loc.list <- loc.list[grepl('ETH', loc.list)]
 additional <- additional[Prev < 1,]
-for (countries in loc.list) {
+for (countries in loc.list[(which(loc.list == 'SDN') + 1) : length(loc.list)]) {
 
   if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', countries, '.rds')) & !grepl('ETH', countries)){
     df.2019 <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2019/', countries, '.rds'))
@@ -121,7 +122,12 @@ for (countries in loc.list) {
           df.prepped[,subpop := 'NA']
           
         }
-  
+  if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2020/', countries, '.rds'))){
+    df.2020 <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2020/', countries, '.rds'))
+    df.2020 <- attr(df.2020, 'eppd')$ancsitedat
+    
+    
+  }
   
   if(countries == 'SWZ'){
     df <- data.table(df.2018)
@@ -138,12 +144,18 @@ for (countries in loc.list) {
     if(!exists("df.prepped") | !use_prepped){
       df.prepped <- NULL
     }
+    if(!exists("df.2020") | !use_2020){
+      df.2020<- NULL
+    }
     
-    df <- rbind(df.2019, df.2018, df.subpop, df.prepped)
+    df <- rbind(df.2019, df.2018, df.subpop, df.prepped, df.2020)
     if(countries == 'ETH_44859'){
       df <- df.subpop
     }
     df <- as.data.table(df)
+  }
+  if(nrow(df) ==0){
+    next
   }
 
   df[,country := countries]
@@ -214,7 +226,7 @@ for (countries in loc.list) {
   
   
   parent <- unlist(strsplit(countries , split = '_'))[1]
-
+ print('stop1')
   #################################
   #Add additional data
   #################################
@@ -359,7 +371,7 @@ for (countries in loc.list) {
   all$site <- unlist(lapply(strsplit((all$site), split=' '), function(x) paste(x[which(x != '')], collapse = ' ')))
   all$site <- unlist(lapply(strsplit((all$site), split=' '), function(x) paste(x[which(x != '(%)')], collapse = ' ')))
   
-  
+  print('stop2')
   #################################
   #Remove differently named duplicates
   #################################
@@ -412,6 +424,7 @@ for (countries in loc.list) {
     diff_10 <- outlier_pre - outlier_post}else{diff_10 <- 0}
     nrow_11 <- nrow(all)  
   
+    print('stop3')
   #################################
   #Replace sample size place holders
   #################################
@@ -520,6 +533,7 @@ for (countries in loc.list) {
         final_file <- subset(anc_point_new.dat, ihme_loc_id == unique(anc_point_new.dat$ihme_loc_id)[k])
         anc_site_dat.colnames <- c('site', 'year', 'used', 'prev','n' ,'subpop','type' ,'agegr' ,'age','agspan','offset', 'country')
         final_file <- final_file[,anc_site_dat.colnames, with = FALSE]
+        dir.create(anc_no_offset, recursive = T) ; dir.create(anc_offset, recursive = T)
         saveRDS(final_file, file = paste0(anc_no_offset, unique(anc_point_new.dat$ihme_loc_id)[k], '.rds'))
         assign(paste0('diff_11_', k), nrow(final_file))
       }

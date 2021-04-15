@@ -507,6 +507,7 @@ sub.paeds <- function(dt, loc, k, start.year = 1970, stop.year = stop.year){
   
   attr(dt, 'specfp')$perc_bf_on_art <- percbf[,on_arv]
   attr(dt, 'specfp')$perc_bf_off_art <- percbf[,no_arv]
+  ##I just copied this over from last gbd cycle, not sure where it comes from?
   mtctrans <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/paeds/PMTCT_transmission_rts_2016.csv'))
   attr(dt, 'specfp')$MTCtrans <- data.frame(mtctrans)
   childCTXeffect <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/paeds/Child_treatment_effects_cotrim.csv'))
@@ -1048,7 +1049,7 @@ geo_adj <- function(loc, dt, i, uncertainty) {
     ##Bring in the matched data - reading in as CSV rather then fread because the latter seems to add quotations when there are escape characters, which messes up the matching
     #######change the directory here
 
-    anc.dt.all <- read.csv(paste0('/ihme/hiv/data/PJNZ_prepped/lbd_anc/2019/', loc, '_ANC_matched.csv'))  
+    anc.dt.all <- read.csv(paste0('/ihme/hiv/data/PJNZ_prepped/lbd_anc/2020/', loc, '_ANC_matched.csv'))  
     
     if(grepl("KEN",loc)){
       anc.dt.all <- anc.dt.all[which(anc.dt.all$subpop == attr(dt,"eppd")$ancsitedat$subpop[1]),]
@@ -1142,9 +1143,12 @@ geo_adj <- function(loc, dt, i, uncertainty) {
     ##Generate the local:national offest term as the probit difference between national and predicted site prevalence - by subpopulation to avoid duplicates
     all.anc <- data.table()
     
-   
+      if(grepl('NGA', loc)){
+        eppd$ancsitedat <- data.table(eppd$ancsitedat)[subpop == 'Pop féminine restante',] %>% data.frame()
+        anc.dt.all <- data.table(eppd$ancsitedat)
+      }
       for(subpop2 in unique(anc.dt.all$subpop)){
-        
+        print(subpop2)
         if(subpop2 %in% unique(eppd$ancsitedat$subpop)){
           anc.dt <- anc.dt.all[subpop == subpop2] 
           site.dat <- eppd$ancsitedat[eppd$ancsitedat$subpop==subpop2,]

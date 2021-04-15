@@ -26,22 +26,22 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
   array.job = FALSE
-  run.name <- "201226_socialdets"
-  loc <- 'AGO_1'
+  run.name <- "210408_antman"
+  loc <- 'AGO'
   draw.fill <- TRUE
   paediatric <- TRUE
   n = 1000
 }else{
   run.name <- args[1]
   array.job <- as.logical(args[2])
-  draw.fill <- as.logical(args[3])
-  paediatric <- as.logical(args[4])
+  draw.fill <- as.logical(args[4])
+  paediatric <- as.logical(args[5])
 
 }
 
 
-gbdyear <- 'gbd20'
-stop.year = 2022
+gbdyear <- 'gbd21'
+stop.year = 2023
 test = NULL
 # loc = 'AGO'
 n = 1000
@@ -49,7 +49,6 @@ n = 1000
 gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
 eppasm_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/")
 hiv_gbd2019_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/hiv_gbd2019/")
-library(mortdb, lib = "/share/mortality/shared/r/")
 
 setwd(eppasm_dir)
 devtools::load_all()

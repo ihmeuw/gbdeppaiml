@@ -25,13 +25,13 @@ devtools::load_all()
 
 # Arguments ---------------------------------------
 gbdyear = 'gbd20'
-run.name = '201218_sdtvfoi'
+run.name = '210408_antman'
 old_run.name = '200713_yuka'
-spec.name = '201202_ancrt'
+spec.name = '210408_antman'
+proj.end = 2023
 code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
 loc.table <- get_locations(hiv_metadata = T)
-loc.list <-  list.files('/ihme/hiv/epp_output/gbd20/201012_ancrt/fit/')[!grepl('.RDS', list.files('/ihme/hiv/epp_output/gbd20/201012_ancrt/fit/'))]
-loc.list = c('AGO', 'BDI', 'MWI')
+loc.list <- loc.table[epp==1, ihme_loc_id]
 
 # Toggles ---------------------------------------
 new_inputs = F

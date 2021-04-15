@@ -11,7 +11,7 @@ library(data.table)
 
 ## Arguments
 cluster.project <- "proj_hiv"
-unaids_year <- 2019
+unaids_year <- 2020
 
 ### Functions
 library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
@@ -36,12 +36,20 @@ for(loc in loc.list) {
                          "-e /share/temp/sgeoutput/", user, "/errors ",
                          "-o /share/temp/sgeoutput/", user, "/output ",
                          "-N ", loc, "_prep_data ",
-                         "/homes/", user, "/gbdeppaiml/gbd/singR_shell.sh ", 
-                         code.dir,"main_prep_data.R ", loc, unaids_year)
+                         '/ihme/singularity-images/rstudio/shells/execR.sh -i ',
+                         '/ihme/singularity-images/hiv/hiv_11.img ',
+                         # code.dir, "gbd/singR_shell.sh ",
+                         '-s ',  
+                         code.dir,"main_prep_data.R ", loc, ' ', unaids_year)
 
     print(prep.files.string)
     system(prep.files.string)
         
 }
-      
+
+
+##set up a check files thing
+source(paste0(root,"/Project/Mortality/shared/functions/check_loc_results.r"))
+check_loc_results(loc.list,paste0('/share/hiv/data/PJNZ_prepped/', unaids_year, '/'),prefix="",postfix=".rds")
+##we have .pjn for BDI but not the .pjnz
 ### End

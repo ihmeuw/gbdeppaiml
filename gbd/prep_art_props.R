@@ -22,17 +22,17 @@ args <- commandArgs(trailingOnly = TRUE)
 if(length(args) > 0) {
     run.name <- args[1]
 } else {
-    run.name <- "190129_rspline_1549dat"
+    run.name <- "210408_antman"
 }
 
 ### Paths
-surv.path <- paste0("/share/hiv/epp_output/gbd19/", run.name, "/prev_surveys.csv")
+surv.path <- paste0("/share/hiv/epp_input/gbd21/prev_surveys.csv")
 
-pop.dir <- paste0('/ihme/hiv/epp_input/gbd19/', run.name, "/population_single_age/india_splitting_locs/")
-pop.dir <- paste0('/ihme/hiv/epp_input/gbd19/', run.name, "/population_single_age/")
+pop.dir <- paste0('/ihme/hiv/epp_input/gbd21/', run.name, "/population_single_age/india_splitting_locs/")
+pop.dir <- paste0('/ihme/hiv/epp_input/gbd21/', run.name, "/population_single_age/")
 
-out.path = paste0('/ihme/hiv/epp_input/gbd19/', run.name, '/art_prop.csv')
-plot.path <- paste0("/ihme/hiv/epp_output/gbd19/", run.name, "/art_prop.pdf")
+out.path = paste0('/ihme/hiv/epp_input/gbd21/', run.name, '/art_prop.csv')
+plot.path <- paste0("/ihme/hiv/epp_output/gbd21/", run.name, "/art_prop.pdf")
 
 ### Functions
 library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
@@ -63,19 +63,24 @@ for(loc in unique(surv[nyears != 2 & grepl("IND", iso3), iso3])) {
     subset.dt <- copy(surv[iso3 == loc])
     missing <- setdiff(unique(surv[grepl("IND", iso3), year]), unique(subset.dt$year))
     print(missing)
-    if(loc %in% urban.locs){
+    if(length(missing) != 0){
+      if(loc %in% urban.locs){
         fill.dt <- data.table(iso3 = loc, year = missing, prev = ifelse(missing == 2006, nat.urban06, nat.urban15)) 
-    } else {
+      } else {
         fill.dt <- data.table(iso3 = loc, year = missing, prev = ifelse(missing == 2006, nat.rural06, nat.rural15)) 
+      }
+      surv <- rbind(surv, fill.dt, fill = T)
+      
+    }else{
+      next
     }
-    surv <- rbind(surv, fill.dt, fill = T)
 }
 
 # Apply population to survey rates
 pop <- rbindlist(lapply(locs, function(loc) {
     #loc.id <- loc.table[ihme_loc_id == loc, location_id]
     #path <- paste0(pop.dir, loc.id, ".csv")
-    path <- paste0(pop.dir, loc, ".csv")
+    path <- paste0(pop.dir, 'india_splitting_locs/', loc, ".csv")
     dt <- fread(path)
     collapse.dt <- dt[, .(population = sum(population)), by = .(year_id, location_id)]
 }), fill = T)
@@ -97,7 +102,7 @@ print(gg)
 dev.off()
 
 ## Add Kenya
-prop.path <- paste0("/share/hiv/epp_input/gbd19/KEN_ART_props.csv")
+prop.path <- paste0("/share/hiv/epp_input/gbd21/KEN_ART_props.csv")
 prop.dt <- fread(prop.path)
 ken.prop <- prop.dt[, .(ihme_loc_id, prop_pepfar)]
 setnames(ken.prop, "prop_pepfar", "prop")

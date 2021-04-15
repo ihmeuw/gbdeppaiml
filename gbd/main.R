@@ -24,9 +24,9 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
   array.job = FALSE
-  run.name <- "201209_socialdets"
-  loc <- 'AGO'
-  stop.year <- 2022
+  run.name <- "210408_antman"
+  loc <- 'NGA_25318'
+  stop.year <- 2023
   j <- 1
   paediatric <- FALSE
 }else{
@@ -48,10 +48,10 @@ gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/
 setwd(gbdeppaiml_dir)
 devtools::load_all()
 
-gbdyear <- 'gbd20'
-stop.year = 2022
+gbdyear <- 'gbd21'
+stop.year = 2023
 
-run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
+run.table <- fread(paste0('/share/hiv/epp_input/gbd21//eppasm_run_table.csv'))
 in_run_table = F
 if(in_run_table){
   c.args <- run.table[run_name==run.name]
@@ -120,7 +120,7 @@ print(paste0(loc, ' geoadjust set to ', geoadjust))
 
 # LBD Adjustments
 ##### Location that don't undergo LBD adjustment, set to TRUE as a default above
-if(!loc %in% unlist(strsplit(list.files('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/2019/'), '.rds')) | loc %in% c('ZAF', 'PNG') | grepl('IND', loc)){
+if(!loc %in% unlist(strsplit(list.files('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/2020/'), '.rds')) | loc %in% c( 'PNG') | grepl('IND', loc) | grepl('ZAF', loc)){
   lbd.anc <- FALSE
 }
 if(grepl('ancrt', run.name)){
@@ -137,6 +137,7 @@ if(loc %in% c("MAR","MRT","COM")){
 
 
 # Prepare the dt object ---------------------------------------
+#check NGA in the morn
 dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
                        pop.sub, anc.sub,  prev.sub = prev_sub, art.sub = TRUE,
                        sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = TRUE,
@@ -190,7 +191,7 @@ zero_prev_locs <- unique(zero_prev_locs[prev == 0.0005 & use == TRUE,iso3])
 
 # Fit model ---------------------------------------
 fit <- eppasm::fitmod(dt, eppmod = ifelse(grepl('IND', loc),'rlogistic',epp.mod), 
-                      B0 = 1e3, B = 1e3, number_k = 50, 
+                      B0 = 1e3, B = 1e3, number_k = 100, 
                       ageprev = ifelse(loc %in% zero_prev_locs,'binom','probit'))
 
 
@@ -203,7 +204,7 @@ data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/
 ## data period. The `extend_projection()` function extends the random walk for r(t)
 ## through the end of the projection period.
 
-if(epp.mod == 'rhybrid'){
+if(epp.mod == 'rhybrid' & !grepl('IND',loc)){
   fit <- extend_projection(fit, proj_years = stop.year - start.year + 1)
 }
 

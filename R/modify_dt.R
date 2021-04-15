@@ -66,10 +66,52 @@ modify_dt <- function(dt){
   if(!is.null(inputs)){
     print(paste0(inputs, ' need to be extended to the appropriate year'))
   }
+  
+  
   ###########################################################################
   # Remove duplicates from ancsitedat -------------------------------------------
-  ###########################################################################
+  ##########################################################################
+  
   ancsitedat <- data.table(attr(dt,'eppd')$ancsitedat)
+  
+  if(any(is.na(ancsitedat$prev))){
+    ancsitedat <-  data.table(attr(dt, 'eppd')$ancsitedat)[!is.na(prev)]
+    attr(dt, 'eppd')$ancsitedat <- data.frame(ancsitedat)
+  }
+  
+  ancsitedat <- data.table(attr(dt,'eppd')$ancsitedat)
+  
+  if(any(colnames(ancsitedat) == 'year_id')){
+    setnames(ancsitedat, 'year_id', 'year')
+    attr(dt,'eppd')$ancsitedat <- data.frame(ancsitedat)
+  }
+  ancsitedat <- data.table(attr(dt,'eppd')$ancsitedat)
+  
+  ##find copied observations
+  if('subpop' %in% colnames(ancsitedat)){
+    ancsitedat[,id := paste0(site, '_', subpop, '_', year)]
+    if(grepl('NGA', loc)){
+      ancsitedat[,id := NULL]
+      attr(dt,'eppd')$ancsitedat <- data.frame(ancsitedat)
+      
+    }else{
+      zero_offset <- ancsitedat[offset == 0,]
+      if(nrow(unique(zero_offset)) != nrow(zero_offset)){
+        zero_offset[,length := length(unique(id)), by = c('site', 'subpop', 'year')]
+        keep <- zero_offset[length > 1]
+        keep[,length := NULL]
+      }else{
+        keep = NULL
+      }
+      ancsitedat = ancsitedat[id %in% unique(zero_offset$id) & offset != 0,]
+      ancsitedat <- rbind(ancsitedat, keep)
+      ancsitedat[,id := NULL]
+      attr(dt,'eppd')$ancsitedat <- data.frame(ancsitedat)
+    }
+
+  }
+
+  
   if('subpop' %in% colnames(ancsitedat)){
     if(nrow(unique(ancsitedat[,.(site, subpop, year, used, prev, n, type, agegr, age,agspan)])) != nrow(ancsitedat) ){
       ancsitedat <- ancsitedat[!duplicated(ancsitedat[,.(site, subpop, year, used, prev, n, type, agegr, age,agspan)]),]
@@ -84,6 +126,8 @@ modify_dt <- function(dt){
       print('Removed duplicates from sitedat')
     }
   }
+  
+ 
 
 
 ###########################################################################
