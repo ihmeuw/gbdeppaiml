@@ -19,8 +19,8 @@
 
 gbd_sim_mod <-  function(fit, rwproj=fit$fp$eppmod == "rspline",VERSION = 'C'){
   ## We only need 1 draw, so let's save time and subset to that now
-  #rand.draw <- round(runif(1, min = 1, max = 3000))
-  rand.draw =1
+  rand.draw <- round(runif(1, min = 1, max = 3000))
+  # rand.draw =1
   if(!(exists('group', where = fit$fp) & fit$fp$group == '2')){
     ##create an argument in fnCreateParam to call a modified create_rvec that doesn't scale
     fit$param <- lapply(seq_len(nrow(fit$resample)), function(ii) fnCreateParam(fit$resample[ii,], fit$fp))
@@ -56,9 +56,9 @@ gbd_sim_mod <-  function(fit, rwproj=fit$fp$eppmod == "rspline",VERSION = 'C'){
     #fp.draw = fit$param
     ##pull in new rvec
     {
-      print('Pulling in a different RVEC')
-      new_rvec = pred
-      fp.draw$rvec[(length(fp.draw$rvec) - length(new_rvec) + 1):length(fp.draw$rvec)] <- new_rvec
+      # print('Pulling in a different RVEC')
+      # new_rvec = pred
+      # fp.draw$rvec[(length(fp.draw$rvec) - length(new_rvec) + 1):length(fp.draw$rvec)] <- new_rvec
     }
   }else{
     fp.draw <- fit$fp

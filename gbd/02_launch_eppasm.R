@@ -27,8 +27,8 @@ devtools::load_all()
 date <- substr(gsub("-","",Sys.Date()),3,8)
 
 ## Arguments
-run.name <- "200713_yuka"
-spec.name <- "201202_ancrt"
+run.name <- "210415_zanfona"
+run.name <- "210415_zanfona"
 compare.run <- c("200713_yuka")
 
 proj.end <- 2022
@@ -36,7 +36,7 @@ if(file.exists(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
   n.draws = nrow(fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv')))
   array.job = T
 }else{
-  n.draws = 50
+  n.draws = 1000
   array.job = F
 }
 run.group2 <- FALSE
@@ -82,7 +82,7 @@ loc.table <- data.table(get_locations(hiv_metadata = T))
 ### Code
 epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
 loc.list <- epp.list
-loc.list <- loc.list[!grepl('IND', loc.list)]
+loc.list <- c(loc.list, 'MRT', 'STP', 'COM')
 # loc.list <- setdiff(loc.list, 'RWA')
 
 # Array job EPP-ASM ---------------------------------------
