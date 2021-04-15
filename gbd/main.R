@@ -24,8 +24,8 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
   array.job = FALSE
-  run.name <- "200713_yuka"
-  loc <- 'ZAF_482'
+  run.name <- "210415_zanfona"
+  loc <- 'AGO'
   stop.year <- 2022
   j <- 1
   paediatric <- FALSE

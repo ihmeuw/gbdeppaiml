@@ -25,13 +25,12 @@ devtools::load_all()
 
 # Arguments ---------------------------------------
 gbdyear = 'gbd20'
-run.name = '210205_socialdets'
+run.name = '210415_zanfona'
 old_run.name = '200713_yuka'
-spec.name = '201202_ancrt'
+spec.name = '200713_yuka'
 code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
 loc.table <- get_locations(hiv_metadata = T)
-loc.list <-  fread('/ihme/hiv/epp_input/gbd20/210205_socialdets/array_table.csv')$ihme_loc_id %>% unique
-# loc.list = c('AGO', 'BDI', 'MWI')
+loc.list <-  c(loc.table[epp == 1, ihme_loc_id], 'MRT', 'STP', 'COM')
 
 # Toggles ---------------------------------------
 new_inputs = F
@@ -47,7 +46,7 @@ redo_offsets = F
 if(copy_inputs){
   from = old_run.name
   to = run.name
-  dir.create(paste0('/ihme/hiv/epp_input/', gbdyear, '/', to, '/'), recursive = T, showWarnings = F)
+  dir.create(paste0('/ihme/hiv/epp_input/', gbdyear, '/', to, '/'), recursive = T, showWarnings = T)
   dirs <- list.dirs(paste0('/ihme/hiv/epp_input/gbd20/', from, '/'))
   file_paths <- lapply(dirs, list.files, full.names = T)
   file_paths.list <- list()
