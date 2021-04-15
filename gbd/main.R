@@ -25,7 +25,7 @@ print(args)
 if(length(args) == 0){
   array.job = FALSE
   run.name <- "210415_zanfona"
-  loc <- 'AGO'
+  loc <- 'BEN'
   stop.year <- 2022
   j <- 1
   paediatric <- FALSE
@@ -147,9 +147,9 @@ dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
                        # anc.backcast,
                        )
 ###Switched to a binomial model, so we can now handle observations of zero
-# mod <- data.table(attr(dt, 'eppd')$hhs)[prev == 0.0005,se := 0]
-# mod[prev == 0.0005, prev := 0]
-# attr(dt, 'eppd')$hhs <- data.frame(mod)
+mod <- data.table(attr(dt, 'eppd')$hhs)[prev == 0.0005,se := 0]
+mod[prev == 0.0005, prev := 0]
+attr(dt, 'eppd')$hhs <- data.frame(mod)
 
 ###Extends inputs to the projection year as well as does some site specific changes. This should probably be examined by cycle
 dt <- modify_dt(dt)
@@ -193,7 +193,7 @@ zero_prev_locs <- unique(zero_prev_locs[prev == 0.0005 & use == TRUE,iso3])
 # attr(dt,"eppd")$ancsitedat <- as.data.frame(attr(dt,"eppd")$ancsitedat)
 
 fit <- eppasm::fitmod(dt, eppmod = ifelse(grepl('IND', loc),'rlogistic',epp.mod), 
-                      B0 = 1e5, B = 1e3, number_k = 100, 
+                      B0 = 1e5, B = 1e3, number_k = 500, 
                       ageprev = ifelse(loc %in% zero_prev_locs,'binom','probit'))
 dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/fitmod/'))
 saveRDS(fit, file = paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/fitmod/', loc, '_', j, '.RDS'))

@@ -116,20 +116,20 @@ system(draw.string)
 }
 
 # EPP-ASM ---------------------------------------
-temp.loc.list <- list.files('/ihme/hiv/epp_output/gbd20/201012_ancrt/fit/')[!grepl('.RDS', list.files('/ihme/hiv/epp_output/gbd20/201012_ancrt/fit/'))]
-temp.loc.list <- unique(readRDS(paste0('/ihme/hiv/epp_input/gbd20/210122_socialdets/pred_mat.RDS'))[,ihme_loc_id])
-temp.loc.list <- loc.list[grepl('ZAF', loc.list)]
 if(run_eppasm & !array.job){
-for(loc in temp.loc.list) {    
+for(loc in loc.list) {    
   ## Run EPPASM
     epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive=True -q all.q -P ", cluster.project, " ",
                          "-e /share/temp/sgeoutput/", user, "/errors ",
                          "-o /share/temp/sgeoutput/", user, "/output ",
                          "-N ", loc,"_",run.name, "_eppasm ",
-                         "-tc 1000 ",
+                         "-tc 5000 ",
                          "-t 1:", n.draws, " ",
                          "-hold_jid eppasm_prep_inputs_", run.name," ",
-                         code.dir, "gbd/singR_shell.sh ",
+                         '/ihme/singularity-images/rstudio/shells/execR.sh -i ',
+                         '/ihme/singularity-images/hiv/hiv_11.img ',
+                         # code.dir, "gbd/singR_shell.sh ",
+                         '-s ',
                          code.dir, "gbd/main.R ",
                          run.name, " ", array.job," ", loc, " ", proj.end, " ", paediatric)
    print(epp.string)
@@ -142,7 +142,10 @@ for(loc in temp.loc.list) {
                             "-o /share/temp/sgeoutput/", user, "/output ",
                             "-N ", loc,"_",run.name, "_save_draws ",
                             "-hold_jid ", loc,"_",run.name, "_eppasm ",
-                            code.dir, "gbd/singR_shell.sh ",
+                            '/ihme/singularity-images/rstudio/shells/execR.sh -i ',
+                            '/ihme/singularity-images/hiv/hiv_11.img ',
+                            # code.dir, "gbd/singR_shell.sh ",
+                            '-s ',
                             code.dir, "gbd/compile_draws.R ",
                             run.name, " ", array.job, ' ', loc, ' ', n.draws, ' TRUE ', paediatric)
       # print(draw.string)
@@ -153,23 +156,29 @@ for(loc in temp.loc.list) {
                             "-o /share/temp/sgeoutput/", user, "/output ",
                             "-N ", loc,"_",run.name, "_summary ",
                             "-hold_jid ", loc,"_",run.name, "_save_draws ",
-                            code.dir, "gbd/singR_shell.sh ",
+                            '/ihme/singularity-images/rstudio/shells/execR.sh -i ',
+                            '/ihme/singularity-images/hiv/hiv_11.img ',
+                            # code.dir, "gbd/singR_shell.sh ",
+                            '-s ',
                             code.dir, "gbd/get_summary_files.R ",
                             run.name)
-      # print(summary.string)
-      # system(summary.string)
+      print(summary.string)
+      system(summary.string)
 
       plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
                             "-e /share/temp/sgeoutput/", user, "/errors ",
                             "-o /share/temp/sgeoutput/", user, "/output ",
                             "-N ", loc, "_plot_eppasm ",
                             "-hold_jid ", loc,"_",run.name, "_summary ",
-                            code.dir, "gbd/singR_shell.sh ",
+                            '/ihme/singularity-images/rstudio/shells/execR.sh -i ',
+                            '/ihme/singularity-images/hiv/hiv_11.img ',
+                            # code.dir, "gbd/singR_shell.sh ",
+                            '-s ',
                             code.dir, "gbd/main_plot_output.R ",
                             loc, " ", run.name, ' ', paediatric, ' ', compare.run, ' ', test)
      
-      # print(plot.string)
-      # system(plot.string)
+      print(plot.string)
+      system(plot.string)
 
 }
 }

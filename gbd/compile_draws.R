@@ -49,7 +49,6 @@ n = 1000
 gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
 eppasm_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/")
 hiv_gbd2019_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/hiv_gbd2019/")
-library(mortdb, lib = "/share/mortality/shared/r/")
 
 setwd(eppasm_dir)
 devtools::load_all()

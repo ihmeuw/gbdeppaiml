@@ -40,7 +40,6 @@ array.dt <- fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv
 loc.name <- unique(array.dt[loc_scalar == loc, ihme_loc_id])
 
 ### Functions
-library(mortdb, lib = "/ihme/mortality/shared/r")
 setwd(paste0(ifelse(windows, "H:", paste0("/homes/", user)), "/eppasm/"))
 devtools::load_all()
 setwd(code.dir)

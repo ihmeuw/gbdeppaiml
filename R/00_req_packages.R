@@ -14,7 +14,7 @@
 ## Notes:
 ##loading in the hiv functions requires some specification of loc, gbdyear, and run.name
 gbdyear = 'gbd20'
-run.name = '200713_yuka'
+run.name <- "210415_zanfona"
 ##
 ## ---------------------------
 
@@ -29,8 +29,7 @@ hiv_gbd2019_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "
 ## ---------------------------
 ##Frequently used packages
 library(data.table); library(mvtnorm); library(survey); library(ggplot2); library(plyr); library(dplyr); library(assertable); library(parallel)
-library(mortdb, lib = "/share/mortality/shared/r/")
-
+library(mortdb, lib = "/mnt/team/mortality/pub/shared/r")
 
 ## load in ihme functions
 invisible(sapply(list.files("/share/cc_resources/libraries/current/r/", full.names = T), source))
