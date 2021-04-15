@@ -77,6 +77,7 @@ additional <- as.data.table(additional)
 additional <- additional[,.(Site, iso3, Prev, Year, Group, N, latitude, longitude, type_of_additional)]
 additional <- merge(additional, lat_long_table, by = c('latitude', 'longitude'))
 additional[,type:='ancss']
+additional[,ihme_loc_id := ifelse(is.na(ihme_loc_id), iso3, ihme_loc_id)]
 
 loc.table <- data.table(get_locations(hiv_metadata = T))
 
@@ -90,94 +91,53 @@ loc.list <- loc.list[!grepl('ZAF', loc.list)]
 loc.list <- loc.list[-which(loc.list == 'PNG')]
 loc.list <- loc.list[-which(loc.list == 'CPV')]
 
-
-use_2019 <- T
-use_2018 <- F
-use_2020 = T
-use_subpop <- F
-use_prepped <- F
 additional <- additional[Prev < 1,]
-for (countries in loc.list[(which(loc.list == 'SDN') + 1) : length(loc.list)]) {
+for (countries in loc.list) {
 
-  if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', countries, '.rds')) & !grepl('ETH', countries)){
-    df.2019 <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2019/', countries, '.rds'))
-    df.2019 <- attr(df.2019, 'eppd')$ancsitedat
-    
-  }
-    if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2018/', countries, '.rds'))){
-      df.2018 <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2018/', countries, '.rds'))
-      df.2018 <- attr(df.2018, 'eppd')$ancsitedat
-      
-      
-    }
-      if(file.exists(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', countries, '.rds'))){
-        df.subpop <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', countries, '.rds'))
-        df.subpop <- attr(df.subpop, 'eppd')$ancsitedat
-        
-      }
-        if(file.exists(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', countries, '.rds'))){
-          df.prepped <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', countries, '.rds'))
-          df.prepped <- attr(df.prepped, 'eppd')$ancsitedat
-          df.prepped <- as.data.table(df.prepped)
-          df.prepped[,subpop := 'NA']
-          
-        }
-  if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2020/', countries, '.rds'))){
+  if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2020/', countries, '.rds'))) {
     df.2020 <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2020/', countries, '.rds'))
     df.2020 <- attr(df.2020, 'eppd')$ancsitedat
+    df.2019 <- NULL ; df.2018 <- NULL ; df.subpop <- NULL ; df.prepped <- NULL
+    
+  }else if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', countries, '.rds'))) {
+    df.2019 <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2019/', countries, '.rds'))
+    df.2019 <- attr(df.2019, 'eppd')$ancsitedat
+    df.2020 <- NULL ; df.2018 <- NULL ; df.subpop <- NULL ; df.prepped <- NULL
     
     
-  }
+  } else if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2018/', countries, '.rds'))) {
+    df.2018 <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2018/', countries, '.rds'))
+    df.2018 <- attr(df.2018, 'eppd')$ancsitedat
+    df.2019 <- NULL ; df.2020 <- NULL ; df.subpop <- NULL ; df.prepped <- NULL
+    
+    
+  } else if(file.exists(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', countries, '.rds'))) {
+    df.subpop <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', countries, '.rds'))
+    df.subpop <- attr(df.subpop, 'eppd')$ancsitedat 
+    df.2019 <- NULL ; df.2018 <- NULL ; df.2020 <- NULL ; df.prepped <- NULL
+    
+    
+  } else if(file.exists(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', countries, '.rds'))) {
+    df.prepped <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', countries, '.rds'))
+    df.prepped <- attr(df.prepped, 'eppd')$ancsitedat
+    df.prepped <- as.data.table(df.prepped)
+    df.prepped[,subpop := 'NA']
+    df.2019 <- NULL ; df.2018 <- NULL ; df.subpop <- NULL ; df.2020 <- NULL
+    
+  } 
   
-  if(countries == 'SWZ'){
-    df <- data.table(df.2018)
-  }else{
-    if(!exists("df.2019") | !use_2019){
-      df.2019 <- NULL
-    }
-    if(!exists("df.2018") | !use_2018){
-      df.2018 <- NULL
-    }
-    if(!exists("df.subpop") | !use_subpop ){
-      df.subpop <- NULL
-    }
-    if(!exists("df.prepped") | !use_prepped){
-      df.prepped <- NULL
-    }
-    if(!exists("df.2020") | !use_2020){
-      df.2020<- NULL
-    }
-    
+    ##a few country specific suggestions
     df <- rbind(df.2019, df.2018, df.subpop, df.prepped, df.2020)
-    if(countries == 'ETH_44859'){
-      df <- df.subpop
-    }
     df <- as.data.table(df)
-  }
-  if(nrow(df) ==0){
+    df[,country := countries]
+    df[,ihme_loc_id := countries]
+    df$country <- countries
+    df$ihme_loc_id <- countries
+    
+   if(nrow(df) ==0){
     next
-  }
-
-  df[,country := countries]
-  df[,ihme_loc_id := countries]
-  df$country <- countries
-  df$ihme_loc_id <- countries
-  
-  if(countries ==  "NGA_25343"){
-    df <- as.data.table(df)
-    df[site == 'Site 3', site := 'Nasarawa(Doma)']
-    df[site == 'Site 1 - N/ Eggon', site := 'Nasarawa(N/Eggon)']
-    df[site == 'Site 2 - Lafia', site := 'Nasarawa (Lafia)']
-    df[site == 'Site 4', site := 'Nasarawa (Garaku)']
-  }
-  if(countries ==  "NGA_25343"){
-    df <- as.data.table(df)
-    df[site == 'Site 3', site := 'Nasarawa(Doma)']
-    df[site == 'Site 1 - N/ Eggon', site := 'Nasarawa(N/Eggon)']
-    df[site == 'Site 2 - Lafia', site := 'Nasarawa (Lafia)']
-    df[site == 'Site 4', site := 'Nasarawa (Garaku)']
-  }
-  nrow_1 <- nrow(df)
+   }
+   print('df loaded in')
   
   #################################
   #change incorrect site names
@@ -223,10 +183,17 @@ for (countries in loc.list[(which(loc.list == 'SDN') + 1) : length(loc.list)]) {
   if(countries == "CMR"){
     df$site[df$country == "CMR" & df$site == "CMA  Tyo"] <- "CMA Tyo"
   }
-  
+  if(countries ==  "NGA_25343"){
+    df <- as.data.table(df)
+    df[site == 'Site 3', site := 'Nasarawa(Doma)']
+    df[site == 'Site 1 - N/ Eggon', site := 'Nasarawa(N/Eggon)']
+    df[site == 'Site 2 - Lafia', site := 'Nasarawa (Lafia)']
+    df[site == 'Site 4', site := 'Nasarawa (Garaku)']
+  }
   
   parent <- unlist(strsplit(countries , split = '_'))[1]
- print('stop1')
+  nrow_1 <- nrow(df)
+  print('Corrected site names')
   #################################
   #Add additional data
   #################################
@@ -247,11 +214,12 @@ for (countries in loc.list[(which(loc.list == 'SDN') + 1) : length(loc.list)]) {
     new_data[,age:= 15]
     new_data[,agspan := 35]
     
-    
-    
     setDT(df)
     diff_2 <- nrow(new_data)
-  }else{diff_2 <- 0}
+    print('Additional data added')
+  }else{
+    diff_2 <- 0
+  }
   nrow_3 <- nrow(df)
   
   #################################
@@ -276,7 +244,10 @@ for (countries in loc.list[(which(loc.list == 'SDN') + 1) : length(loc.list)]) {
     replace_N[,agspan := 35]
     df <- rbind.fill(df, replace_N)
     diff_3 <- nrow(replace_N)
-  }else{diff_3 <- 0}
+    print('Sample sizes replaced')
+  }else{
+    diff_3 <- 0
+  }
   nrow_4 <- nrow(df)
   
   #################################
@@ -299,7 +270,10 @@ for (countries in loc.list[(which(loc.list == 'SDN') + 1) : length(loc.list)]) {
     replace_Prev[,agspan := 35]
     df <- rbind.fill(df, replace_Prev)
     diff_4 <- nrow(replace_Prev)
-  }else{diff_4 <- 0}
+    print('Some prevalences replaced')
+  }else{
+    diff_4 <- 0
+    }
   nrow_5 <- nrow(df)
   
   #################################
@@ -311,7 +285,10 @@ for (countries in loc.list[(which(loc.list == 'SDN') + 1) : length(loc.list)]) {
     df <- subset(df, !(country == "TGO" & subpop %in% c("POLULATION TOTALE","POPULATION TOTALE")))
     post_tgo_dup <- nrow(df)
     diff_5 <- pre_tgo_dup - post_tgo_dup
-  }else{diff_5 <- 0}
+    print('TGO duplicates removed')
+  }else{
+    diff_5 <- 0
+    }
   nrow_6 <- nrow(df)
   
   #################################
@@ -331,7 +308,9 @@ for (countries in loc.list[(which(loc.list == 'SDN') + 1) : length(loc.list)]) {
   #################################
   #Rename ZAF blank site
   #################################
-  if(countries == 'ZAF'){all$site[all$country == "ZAF" & all$site =="NULL"] <- "KWAZULU-NATAL PROVINCE"
+  if(countries == 'ZAF'){
+    all$site[all$country == "ZAF" & all$site =="NULL"] <- "KWAZULU-NATAL PROVINCE"
+    print('Blank ZAF site replaced')
   }
   
   #################################
@@ -342,6 +321,7 @@ for (countries in loc.list[(which(loc.list == 'SDN') + 1) : length(loc.list)]) {
     all <- subset(all, !(country == "MOZ" & site %in% c("pseudo site", "Pseudo site", "Pseudo sites")))
     all_post <- nrow(all)
     diff_7 <- all_pre - all_post
+    print('Mozambique pseudosites removed')
   }else{diff_7 = 0}
   nrow_8 <- nrow(all)
   
@@ -362,6 +342,7 @@ for (countries in loc.list[(which(loc.list == 'SDN') + 1) : length(loc.list)]) {
     all <- subset(all, !(country == "SEN" & !(subpop %in% c("Pop féminine restante"))))
     anc_post <- nrow(all)
     diff_8 <- anc_pre - anc_post
+    print('Non-ANC data removed')
   }else{diff_8 <- 0}
   nrow_9 <- nrow(all)
   
@@ -371,7 +352,6 @@ for (countries in loc.list[(which(loc.list == 'SDN') + 1) : length(loc.list)]) {
   all$site <- unlist(lapply(strsplit((all$site), split=' '), function(x) paste(x[which(x != '')], collapse = ' ')))
   all$site <- unlist(lapply(strsplit((all$site), split=' '), function(x) paste(x[which(x != '(%)')], collapse = ' ')))
   
-  print('stop2')
   #################################
   #Remove differently named duplicates
   #################################
@@ -380,6 +360,7 @@ for (countries in loc.list[(which(loc.list == 'SDN') + 1) : length(loc.list)]) {
     all <- as.data.table(all)
     all[,subpop:='all']
     all <- as.data.frame(all)
+    print('ZAF subpop set to all')
   }
   if(countries == 'RWA' | countries == 'TZA'){
     dup_pre <- nrow(all)
@@ -392,6 +373,7 @@ for (countries in loc.list[(which(loc.list == 'SDN') + 1) : length(loc.list)]) {
     all$site[all$country == "TZA"& all$site == "Kagera (Lukole Refugee Camp)"] <- "Lukole Refugee"
     dup_post <- nrow(all)
     diff_9 <- dup_pre - dup_post 
+    print(paste0(parent, ' site changed'))
   }else{diff_9 <- 0}
   nrow_10 <- nrow(all)
   
@@ -421,10 +403,13 @@ for (countries in loc.list[(which(loc.list == 'SDN') + 1) : length(loc.list)]) {
     # removing duplicate site_year with different prev, this prev for 2018 was zero (6.0 from 2017 was closer)
     all <- subset(all, !(country == "GHA" & site == "Nadowli" & year == 2006 ))
     outlier_post <- nrow(all)
-    diff_10 <- outlier_pre - outlier_post}else{diff_10 <- 0}
+    diff_10 <- outlier_pre - outlier_post
+    print('Outliers removed')
+  }else{
+      diff_10 <- 0
+      }
     nrow_11 <- nrow(all)  
   
-    print('stop3')
   #################################
   #Replace sample size place holders
   #################################
@@ -440,7 +425,9 @@ for (countries in loc.list[(which(loc.list == 'SDN') + 1) : length(loc.list)]) {
     all$n[all$country == "UGA" & all$n == 300] <- 470
     all$n[all$country == "ZWE" & all$n == 300] <- 333
     all$n[all$country == "AGO" & all$n == 500] <- 498
-
+    if(parent %in% c('AGO', 'ZWE', 'UGA', 'TGO', 'MLI', 'LSO', 'COG', 'CMR', 'BDI')){
+      print('Sample sizes replaced')
+    }
     # Only keep variables we need
     if(!'ihme_loc_id' %in% colnames(all)){
       all[,ihme_loc_id := countries]
@@ -457,19 +444,15 @@ for (countries in loc.list[(which(loc.list == 'SDN') + 1) : length(loc.list)]) {
   ####create all_mapped for areas that we do subnats for
   ####for countries we don't do subnats for we can just keep all data and put into gbd format
   if(countries %in% hiv_locs_nat){ 
+ 
   all_mapped <- all
-
-  all_mapped <- transform(all_mapped)
-  all_mapped$prev <- all_mapped$prev 
   all_mapped <- unique(all_mapped)
-  all_mapped$cluster_id <- 1:dim(all_mapped)[1]
-  
+  all_mapped[,cluster_id := c(1:nrow(all_mapped))]
   all_mapped <- data.frame(all_mapped)
   
   #remove duplcates
-  all_mapped <- all_mapped[!duplicated(all_mapped), ]
+  all_mapped <- unique(all_mapped)
   all_mapped <- as.data.table(all_mapped)
-  
   anc_point_dat <- all_mapped[,point:= NULL]
   anc_point_dat[, agegr := "15-49"]
   anc_point_dat[, age := "15"]
@@ -484,18 +467,15 @@ for (countries in loc.list[(which(loc.list == 'SDN') + 1) : length(loc.list)]) {
   }else{
 
     all_mapped <- all
-    all_mapped$prev <- all_mapped$prev
-    all_mapped <- unique(all_mapped)
-    all_mapped$cluster_id <- 1:dim(all_mapped)[1]
-    
+    all_mapped <- data.table(unique(all_mapped))
+    all_mapped[,cluster_id := c(1:nrow(all_mapped))]
     all_mapped <- data.frame(all_mapped)
     
     #remove duplcates
-    all_mapped <- all_mapped[!duplicated(all_mapped), ]
+    all_mapped <- unique(all_mapped)
     
 
     if(parent == 'ZAF'){
-      # all_point <- subset(all_mapped, point == 0)
       all_mapped <- all
       all_mapped <- as.data.table(all_mapped)
       anc_point_dat <- all_mapped[,point:= NULL]
@@ -508,7 +488,6 @@ for (countries in loc.list[(which(loc.list == 'SDN') + 1) : length(loc.list)]) {
       anc_point_dat[, used := TRUE]
       anc_point_dat[, offset := NA]
       anc_point_dat[, country := countries]
-      #anc_point_dat[, type := "ancss"]
       anc_site_dat.colnames <- c('site', 'year', 'used', 'prev','n' ,'subpop','type' ,'agegr' ,'age','agspan','offset', 'country', 'ihme_loc_id')
       anc_point_new.dat <- anc_point_dat[,anc_site_dat.colnames, with = FALSE]
       saveRDS(anc_point_new.dat, file = paste0(anc_no_offset, countries, '.rds'))
@@ -521,8 +500,6 @@ for (countries in loc.list[(which(loc.list == 'SDN') + 1) : length(loc.list)]) {
       anc_point_dat[, agegr := "15-49"]
       anc_point_dat[, age := "15"]
       anc_point_dat[, agspan := "35"]
-      ##not sure how to get region
-      #anc_point_dat[, subpop := NA]
       anc_point_dat[, used := TRUE]
       anc_point_dat[, offset := NA]
       anc_point_dat[, country := countries]

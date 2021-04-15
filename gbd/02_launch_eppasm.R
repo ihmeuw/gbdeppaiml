@@ -132,8 +132,8 @@ for(loc in loc.list) {
                          '-s ', 
                          code.dir, "gbd/main.R ",
                          run.name, " ", array.job," ", loc, " ", proj.end, " ", paediatric)
-  #  print(epp.string)
-  # system(epp.string)
+   print(epp.string)
+  system(epp.string)
 
   
       #Draw compilation
@@ -148,8 +148,8 @@ for(loc in loc.list) {
                             '-s ', 
                             code.dir, "gbd/compile_draws.R ",
                             run.name, " ", array.job, ' ', loc, ' TRUE ', paediatric)
-      # print(draw.string)
-      # system(draw.string)
+      print(draw.string)
+      system(draw.string)
       
       summary.string <- paste0("qsub -l m_mem_free=10G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
                             "-e /share/temp/sgeoutput/", user, "/errors ",
@@ -162,8 +162,8 @@ for(loc in loc.list) {
                             '-s ',                             
                             code.dir, "gbd/get_summary_files.R ",
                             run.name, ' ', loc)
-      print(summary.string)
-      system(summary.string)
+      # print(summary.string)
+      # system(summary.string)
 
       plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
                             "-e /share/temp/sgeoutput/", user, "/errors ",
@@ -177,8 +177,8 @@ for(loc in loc.list) {
                             code.dir, "gbd/main_plot_output.R ",
                             loc, " ", run.name, ' ', compare.run)
      
-      print(plot.string)
-      system(plot.string)
+      # print(plot.string)
+      # system(plot.string)
 
 }
 }
