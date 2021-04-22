@@ -14,7 +14,7 @@
 ## Notes:
 ##loading in the hiv functions requires some specification of loc, gbdyear, and run.name
 gbdyear = 'gbd20'
-run.name = '200713_yuka'
+run.name <- "210415_zanfona"
 ##
 ## ---------------------------
 
@@ -40,7 +40,7 @@ invisible(sapply(list.files("/share/cc_resources/libraries/current/r/", full.nam
 # devtools::load_all()
 # setwd(gbdeppaiml_dir)
 # devtools::load_all()
-# source(paste0(root,"/Project/Mortality/shared/functions/check_loc_results.r"))
+
 
 ##load in loc.table
 loc.table <- get_locations(hiv_metadata = TRUE)

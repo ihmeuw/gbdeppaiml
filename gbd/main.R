@@ -18,12 +18,7 @@ windows <- Sys.info()[1][["sysname"]]=="Windows"
 root <- ifelse(windows,"J:/","/home/j/")
 user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 
-eppasm_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/")
-setwd(eppasm_dir)
-devtools::load_all()
-gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
-setwd(gbdeppaiml_dir)
-devtools::load_all()
+
 # Arguments ---------------------------------------
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
@@ -33,7 +28,7 @@ if(length(args) == 0){
   loc <- 'AGO'
   stop.year <- 2022
   j <- 1
-  paediatric <- TRUE
+  paediatric <- FALSE
 }else{
   run.name <- args[1]
   array.job <- as.logical(args[2])
@@ -45,6 +40,13 @@ if(!array.job & length(args) > 0){
   j <- as.integer(Sys.getenv("SGE_TASK_ID"))
   paediatric <- as.logical(args[5])
 }
+
+eppasm_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/")
+setwd(eppasm_dir)
+devtools::load_all()
+gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
+setwd(gbdeppaiml_dir)
+devtools::load_all()
 
 gbdyear <- 'gbd20'
 stop.year = 2022
@@ -121,7 +123,7 @@ print(paste0(loc, ' geoadjust set to ', geoadjust))
 if(!loc %in% unlist(strsplit(list.files('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/2019/'), '.rds')) | loc %in% c('ZAF', 'PNG') | grepl('IND', loc)){
   lbd.anc <- FALSE
 }
-if(run.name == '201012_ancrt'){
+if(grepl('ancrt', run.name)){
   lbd.anc = F
 }
 
@@ -141,7 +143,7 @@ dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
                        anc.prior.sub = TRUE, lbd.anc = lbd.anc,
                        geoadjust = geoadjust, use_2019 = TRUE,
                        test.sub_prev_granular = test,
-                       anc.rt = FALSE
+                       anc.rt = TRUE
                        # anc.backcast,
                        )
 ###Switched to a binomial model, so we can now handle observations of zero
@@ -152,6 +154,18 @@ attr(dt, 'eppd')$hhs <- data.frame(mod)
 
 ###Extends inputs to the projection year as well as does some site specific changes. This should probably be examined by cycle
 dt <- modify_dt(dt, run_name = run.name)
+# if(loc == 'CAF'){
+#   print('outliering some ancrt points')
+#   dat <- data.table(attr(dt, 'eppd')$ancsitedat)
+#   dat <- dat[!(site %in% c('Mambélé', "N'Gaoundaye", "Gobongo") & type == 'ancrt')]
+#   attr(dt, 'eppd')$ancsitedat <- as.data.frame(dat)
+# }
+# if(loc == 'CMR'){
+#   print('outliering some ancrt points')
+#   dat <- data.table(attr(dt, 'eppd')$ancsitedat)
+#   dat <- dat[!(site %in% c("Fondation Chantal Biya") & type == 'ancrt' & prev > 0.2)]
+#   attr(dt, 'eppd')$ancsitedat <- as.data.frame(dat)
+# }
 
 ###Replacement of a few priors
 attr(dt, 'specfp')$art_alloc_mxweight <- 0.5
@@ -173,19 +187,23 @@ dt <- sub.anc.prior(dt, loc)
 ###Get the locations that should be run with the binomial likelihood
 # zero_prev_locs <- fread(prev_surveys)
 zero_prev_locs <- fread("/ihme/hiv/epp_input/gbd20/prev_surveys.csv")
-zero_prev_locs <- unique(zero_prev_locs[prev == 0.0005,iso3])
+zero_prev_locs <- unique(zero_prev_locs[prev == 0.0005 & use == TRUE,iso3])
 
 # Fit model ---------------------------------------
+# dt <- readRDS(paste0('/ihme/hiv/epp_output/gbd20/200713_yuka/dt_objects/',loc,'_dt.RDS'))
+# attr(dt,"eppd")$ancsitedat <- as.data.frame(attr(dt,"eppd")$ancsitedat)
+
 fit <- eppasm::fitmod(dt, eppmod = ifelse(grepl('IND', loc),'rlogistic',epp.mod), 
-                      B0 = 1e5, B = 1e3, number_k = 100, 
+                      B0 = 1e5, B = 1e3, number_k = 500, 
                       ageprev = ifelse(loc %in% zero_prev_locs,'binom','probit'))
+dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/fitmod/'))
+saveRDS(fit, file = paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/fitmod/', loc, '_', j, '.RDS'))
 
 
 dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/inc_rate/'))
 dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/prev_rate/'))
-
 data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc,'.csv')
-# save_data(loc, attr(dt, 'eppd'), run.name)
+
 
 ## When fitting, the random-walk based models only simulate through the end of the
 ## data period. The `extend_projection()` function extends the random walk for r(t)
@@ -205,21 +223,25 @@ if(max(fit$fp$pmtct_dropout$year) < stop.year & ped_toggle){
 
 draw <- j
 result <- gbd_sim_mod(fit, VERSION = "R")
-dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/'), recursive = T)
-saveRDS(result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/', draw, '.RDS'))
+# dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/'), recursive = T)
+# saveRDS(result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/', draw, '.RDS'))
 
-#results
-##track the output of the prev and inc through get_gbd_outputs
+dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', file_name, '/'), recursive = T)
+saveRDS(result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', file_name, '/', draw, '.RDS'))
+#
+# #results
+# ##track the output of the prev and inc through get_gbd_outputs
 output.dt <- get_gbd_outputs(result, attr(dt, 'specfp'), paediatric = paediatric)
 output.dt[,run_num := j]
+out.dir <- paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/', file_name, '/')
 dir.create(out.dir, showWarnings = FALSE)
- write.csv(output.dt, paste0(out.dir, '/', j, '.csv'), row.names = F)
+write.csv(output.dt, paste0(out.dir, '/', j, '.csv'), row.names = F)
 
-## under-1 splits
+# ## under-1 splits
 if(paediatric){
   split.dt <- get_under1_splits(result, attr(dt, 'specfp'))
   split.dt[,run_num := j]
- write.csv(split.dt, paste0(out.dir, '/under_1_splits_', j, '.csv' ), row.names = F)
+  write.csv(split.dt, paste0(out.dir, '/under_1_splits_', j, '.csv' ), row.names = F)
 }
 ## Write out theta for plotting posterior
 param <- data.table(theta = attr(result, 'theta'))
@@ -228,8 +250,10 @@ if(plot.draw){
   plot_15to49_draw(loc, output.dt, attr(dt, 'eppd'), run.name)
 }
 params <- fnCreateParam(theta = unlist(param), fp = fit$fp)
-saveRDS(params, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '.RDS'))
+saveRDS(params, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', file_name, '.RDS'))
 
 
+data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc,'.csv')
+save_data(loc, attr(dt, 'eppd'), run.name)
 
 

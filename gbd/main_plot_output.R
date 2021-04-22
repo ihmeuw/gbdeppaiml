@@ -40,6 +40,7 @@ gbdyear <- 'gbd20'
 # loc.name <- unique(array.dt[loc_scalar == loc, ihme_loc_id])
 loc.name = loc
 
+
 ### Functions
 setwd(paste0(ifelse(windows, "H:", paste0("/homes/", user)), "/eppasm/"))
 devtools::load_all()
@@ -82,6 +83,7 @@ plot_15to49(loc,
             gbdyear = gbdyear,
             loc_name = loc.name)
 
+
 # #Age-specific plots
 for(c.indicator in rev(c( 'Prevalence','Incidence','Deaths'))){
   dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/age_specific_plots/', c.indicator, '/'), recursive = TRUE, showWarnings = FALSE)
@@ -98,8 +100,8 @@ plot_birthprev(loc = loc_temp,run.name.new =  run.name,
                gbdyear = gbd_year_new,
                compare.run= run.names.comp)
 
-# 
-# 
+
+
 
 
 

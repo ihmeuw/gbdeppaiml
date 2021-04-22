@@ -151,7 +151,7 @@ for(loc in loc.list) {
                             run.name, " ", array.job, ' ', loc,  ' TRUE ', paediatric)
       print(draw.string)
       system(draw.string)
-      # 
+      
       summary.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
                             "-e /share/temp/sgeoutput/", user, "/errors ",
                             "-o /share/temp/sgeoutput/", user, "/output ",
@@ -163,6 +163,7 @@ for(loc in loc.list) {
                             '-s ',
                             code.dir, "gbd/get_summary_files.R ",
                             run.name, ' ', loc)
+
       print(summary.string)
       system(summary.string)
 
