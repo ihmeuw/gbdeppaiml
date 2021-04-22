@@ -149,7 +149,7 @@ plot_15to49 <- function(loc="KEN_35618",
                         gbdyear = "gbd20",
                         loc_name = NULL){
   x <- data.table(cbind(name = names, run_name = run.vec))
-  meas.list <- c('Incidence', 'Prevalence', 'Deaths')
+  meas.list <- c('Incidence', 'Prevalence', 'Deaths', 'ART')
   
   if(is.null(loc_name)){
     loc_name = loc
@@ -246,30 +246,30 @@ plot_15to49 <- function(loc="KEN_35618",
   
   # Add on Rvec ---------------------------------------
   rvec.full <- list()
-  for(run in x[,run_name]){
-    # if(!grepl('socialdets', base.run)){
-      if(file.exists(paste0('/ihme/hiv/epp_output/', run, '/fit/', loc, '.RDS'))){
-      parm <- readRDS(paste0('/ihme/hiv/epp_output/', run, '/fit/', loc, '.RDS'))
-    }else{
-      parm <- readRDS(paste0('/ihme/hiv/epp_output/', run, '/fit/', loc_name, '.RDS'))
-    }
-    years <- seq(1970, 2022, length.out = length(parm$rvec))
-    rvec <- data.table(cbind(mean = parm$rvec, year = years))
-    # }else{
-    #   if(file.exists(paste0('/ihme/hiv/epp_output/gbd20/', base.run,'/scaled_foi/', loc, '.RDS'))){
-    #     rvec <- readRDS(paste0('/ihme/hiv/epp_output/gbd20/', base.run,'/scaled_foi/', loc, '.RDS'))
-    #   }else{
-    #     rvec <- readRDS(paste0('/ihme/hiv/epp_output/gbd20/', base.run,'/scaled_foi/', loc_name, '.RDS'))
-    #   }
-    # }
-    rvec[,year := floor(year)]
-    rvec <- rvec[year %in% c(1970:2022), mean := mean(mean), by = 'year']
-    rvec <- unique(rvec)
-    rvec[,indicator := 'Transmission rate']
-    rvec[,type := 'line']
-    rvec[, model := x[run_name == run,name]]
-    rvec.full <- rbind(rvec.full, rvec)
-  }
+  # for(run in x[,run_name]){
+  #   # if(!grepl('socialdets', base.run)){
+  #     if(file.exists(paste0('/ihme/hiv/epp_output/', run, '/fit/', loc, '.RDS'))){
+  #     parm <- readRDS(paste0('/ihme/hiv/epp_output/', run, '/fit/', loc, '.RDS'))
+  #   }else{
+  #     parm <- readRDS(paste0('/ihme/hiv/epp_output/', run, '/fit/', loc_name, '.RDS'))
+  #   }
+  #   years <- seq(1970, 2022, length.out = length(parm$rvec))
+  #   rvec <- data.table(cbind(mean = parm$rvec, year = years))
+  #   # }else{
+  #   #   if(file.exists(paste0('/ihme/hiv/epp_output/gbd20/', base.run,'/scaled_foi/', loc, '.RDS'))){
+  #   #     rvec <- readRDS(paste0('/ihme/hiv/epp_output/gbd20/', base.run,'/scaled_foi/', loc, '.RDS'))
+  #   #   }else{
+  #   #     rvec <- readRDS(paste0('/ihme/hiv/epp_output/gbd20/', base.run,'/scaled_foi/', loc_name, '.RDS'))
+  #   #   }
+  #   # }
+  #   rvec[,year := floor(year)]
+  #   rvec <- rvec[year %in% c(1970:2022), mean := mean(mean), by = 'year']
+  #   rvec <- unique(rvec)
+  #   rvec[,indicator := 'Transmission rate']
+  #   rvec[,type := 'line']
+  #   rvec[, model := x[run_name == run,name]]
+  #   rvec.full <- rbind(rvec.full, rvec)
+  # }
   # plot.dt <- rbind( plot.dt, rvec.full, fill = T)
   plot.dt <- rbind( plot.dt, fill = T)
   
@@ -292,8 +292,10 @@ plot_15to49 <- function(loc="KEN_35618",
       gg <- gg + geom_point(data = plot.dt[type == 'ancrt'], aes(x = year, y = mean, shape = 'ANC-RT'), alpha = 0.2)
     }
   }
+  gg <- gg + geom_ribbon(data = plot.dt[type == 'line'], aes(year, ymin = lower, ymax = upper, fill = model), alpha = 0.2)
+  
   gg <- gg + geom_line(data = plot.dt[type == 'line'], aes(x = year, y = mean, color = model)) +
-    facet_wrap(~indicator) +
+    facet_wrap(~indicator, scales = 'free') +
     theme_bw() +
     scale_fill_manual(values=color.list) + scale_colour_manual(values=color.list)  +
     xlab("Year") + ylab("Mean") + ggtitle(paste0(loc.table[ihme_loc_id == loc, plot_name], ' EPPASM Results'))

@@ -25,8 +25,8 @@ setwd(gbdeppaiml_dir)
 devtools::load_all()
 
 # Toggles ---------------------------------------
-new_run  = '210415_zanfona'
-old_run = '200713_yuka'
+new_run  = '210415_zanfona' ; new.run = new_run
+old_run = '200713_yuka_test' ; old.run = old_run
 epp.locs <- (loc.table[epp == 1, ihme_loc_id])
 compare.inputs = T
 
@@ -146,6 +146,8 @@ if(compare_demo_inputs){
 # Compare dt objects ---------------------------------------
 if(compare_dt_obj){
   dt_obj_compare <- function(loc, new.run, old.run){
+    if(!file.exists(paste0('/ihme/hiv/epp_output/gbd20/',new.run,'/dt_objects/',loc,'_dt.RDS'))){next}
+    
     new <- readRDS(paste0('/ihme/hiv/epp_output/gbd20/',new.run,'/dt_objects/',loc,'_dt.RDS'))
     if(!file.exists(paste0('/ihme/hiv/epp_output/gbd20/',old.run,'/dt_objects/',loc,'_dt.RDS'))){next}
     old <- readRDS(paste0('/ihme/hiv/epp_output/gbd20/',old.run,'/dt_objects/',loc,'_dt.RDS'))

@@ -29,8 +29,8 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
   array.job = FALSE
-  run.name <- "200713_yuka"
-  loc <- 'CMR'
+  run.name <- "210415_zanfona"
+  loc <- 'AGO'
   stop.year <- 2022
   j <- 1
   paediatric <- TRUE
@@ -149,8 +149,9 @@ mod <- data.table(attr(dt, 'eppd')$hhs)[prev == 0.0005,se := 0]
 mod[prev == 0.0005, prev := 0]
 attr(dt, 'eppd')$hhs <- data.frame(mod)
 
+
 ###Extends inputs to the projection year as well as does some site specific changes. This should probably be examined by cycle
-dt <- modify_dt(dt)
+dt <- modify_dt(dt, run_name = run.name)
 
 ###Replacement of a few priors
 attr(dt, 'specfp')$art_alloc_mxweight <- 0.5
@@ -176,7 +177,7 @@ zero_prev_locs <- unique(zero_prev_locs[prev == 0.0005,iso3])
 
 # Fit model ---------------------------------------
 fit <- eppasm::fitmod(dt, eppmod = ifelse(grepl('IND', loc),'rlogistic',epp.mod), 
-                      B0 = 1e5, B = 1e3, number_k = 50, 
+                      B0 = 1e5, B = 1e3, number_k = 100, 
                       ageprev = ifelse(loc %in% zero_prev_locs,'binom','probit'))
 
 

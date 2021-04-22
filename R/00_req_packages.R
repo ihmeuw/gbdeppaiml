@@ -29,7 +29,7 @@ hiv_gbd2019_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "
 ## ---------------------------
 ##Frequently used packages
 library(data.table); library(mvtnorm); library(survey); library(ggplot2); library(plyr); library(dplyr); library(assertable); library(parallel)
-library(mortdb, lib = "/share/mortality/shared/r/")
+library(mortdb, lib = "/mnt/team/mortality/pub/shared/r")
 
 
 ## load in ihme functions
@@ -40,7 +40,7 @@ invisible(sapply(list.files("/share/cc_resources/libraries/current/r/", full.nam
 # devtools::load_all()
 # setwd(gbdeppaiml_dir)
 # devtools::load_all()
-source(paste0(root,"/Project/Mortality/shared/functions/check_loc_results.r"))
+# source(paste0(root,"/Project/Mortality/shared/functions/check_loc_results.r"))
 
 ##load in loc.table
 loc.table <- get_locations(hiv_metadata = TRUE)

@@ -167,15 +167,15 @@ invisible(lapply(c(epp.locs, parent.locs), function(c.location_id) {
   write.csv(out.pop, paste0(out.dir, '/population/', c.iso, ".csv"), row.names = F)
 }))
 
-# pop.splits <-  get_mort_outputs(
-#   "population single year", "estimate",
-#   gbd_year = 2020,
-#   run_id = population_sa,
-#   age_group_id = c(2,3,30,31,32,34,235,238,388,389),
-#   location_id = c(epp.locs, parent.locs), year_id = seq(1970, proj.end), sex_id = 1:2)
-pop.splits <-  get_population(age_group_id =  c(2,3,30,31,32,34,235,238,388,389),
-                                              location_id = c(epp.locs, parent.locs), year_id = seq(1970, proj.end), sex_id = 1:2, 
-                                gbd_round_id = 7, decomp_step = 'iterative')
+pop.splits <-  get_mort_outputs(
+  "population single year", "estimate",
+  gbd_year = 2020,
+  run_id = population_sa,
+  age_group_id = c(2,3,30,31,32,34,235,238,388,389),
+  location_id = c(epp.locs, parent.locs), year_id = seq(1970, proj.end), sex_id = 1:2)
+# pop.splits <-  get_population(age_group_id =  c(2,3,30,31,32,34,235,238,388,389),
+#                                               location_id = c(epp.locs, parent.locs), year_id = seq(1970, proj.end), sex_id = 1:2, 
+#                                 gbd_round_id = 7, decomp_step = 'iterative')
 pop.splits <- pop.splits[,.(age_group_id, location_id, year_id, sex_id, population, run_id)]
 
 

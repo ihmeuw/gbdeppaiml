@@ -36,7 +36,7 @@ if(file.exists(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
   n.draws = nrow(fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv')))
   array.job = T
 }else{
-  n.draws = 1000
+  n.draws = 100
   array.job = F
 }
 run.group2 <- FALSE
@@ -116,6 +116,7 @@ system(draw.string)
 }
 
 # EPP-ASM ---------------------------------------
+loc.list = c('AGO')
 if(run_eppasm & !array.job){
 for(loc in loc.list) {    
   ## Run EPPASM
@@ -147,10 +148,10 @@ for(loc in loc.list) {
                             # code.dir, "gbd/singR_shell.sh ",
                             '-s ',
                             code.dir, "gbd/compile_draws.R ",
-                            run.name, " ", array.job, ' ', loc, ' ', n.draws, ' TRUE ', paediatric)
-      # print(draw.string)
-      # system(draw.string)
-      
+                            run.name, " ", array.job, ' ', loc,  ' TRUE ', paediatric)
+      print(draw.string)
+      system(draw.string)
+      # 
       summary.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
                             "-e /share/temp/sgeoutput/", user, "/errors ",
                             "-o /share/temp/sgeoutput/", user, "/output ",
@@ -161,7 +162,7 @@ for(loc in loc.list) {
                             # code.dir, "gbd/singR_shell.sh ",
                             '-s ',
                             code.dir, "gbd/get_summary_files.R ",
-                            run.name)
+                            run.name, ' ', loc)
       print(summary.string)
       system(summary.string)
 
@@ -175,7 +176,7 @@ for(loc in loc.list) {
                             # code.dir, "gbd/singR_shell.sh ",
                             '-s ',
                             code.dir, "gbd/main_plot_output.R ",
-                            loc, " ", run.name, ' ', paediatric, ' ', compare.run, ' ', test)
+                            loc, " ", run.name, ' ', compare.run)
      
       print(plot.string)
       system(plot.string)

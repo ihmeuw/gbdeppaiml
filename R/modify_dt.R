@@ -60,7 +60,7 @@ check_inputs <- function(dt_obj){
 
 
 
-modify_dt <- function(dt){
+modify_dt <- function(dt, run_name){
 
   inputs <- check_inputs(dt)
   if(!is.null(inputs)){
@@ -399,9 +399,9 @@ modify_dt <- function(dt){
     attr(dt, 'eppd')$ancsitedat <- data.frame(temp)
     print('high risk pops removed and year_id col changed to year')
   }
-  
-  dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, "/", run.name, '/dt_objects/'), recursive = T)
-  saveRDS(dt, file = paste0('/ihme/hiv/epp_output/', gbdyear, "/", run.name, '/dt_objects/', loc, '_dt.RDS' ))
+  print(run_name)
+  dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, "/", run_name, '/dt_objects/'), recursive = T)
+  saveRDS(dt, file = paste0('/ihme/hiv/epp_output/', gbdyear, "/", run_name, '/dt_objects/', loc, '_dt.RDS' ))
   
   return(dt)
 }
