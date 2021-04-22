@@ -143,16 +143,17 @@ if(dir.table[ref == max(ref),childARTcoverage]){
 }else{
   art <- (paste0('/share/hiv/epp_input/gbd19/paeds/childARTcoverage/', loc, '.csv'))
 }
-if(!any(ls() == 'art')){
-  art <- (paste0('/share/hiv/epp_input/gbd19/paeds/childARTcoverage/', loc, '.csv'))
-  
-}
-if(loc %in% c('NGA', 'KEN', 'KEN_44796')){
-  art <- paste0('/share/hiv/epp_input/gbd19/paeds/childARTcoverage/', loc, '.csv')
-  
-}
+# if(!any(ls() == 'art')){
+#   art <- (paste0('/share/hiv/epp_input/gbd19/paeds/childARTcoverage/', loc, '.csv'))
+#   
+# }
+# if(loc %in% c('NGA', 'KEN', 'KEN_44796')){
+#   art <- paste0('/share/hiv/epp_input/gbd19/paeds/childARTcoverage/', loc, '.csv')
+#   
+# }
 if(dir.table[ref == max(ref),pmtct]){
   for(c.year in c('UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
+    print(c.year)
     if(file.exists( paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/PMTCT/', c.year,'/', temp.loc, '_PMTCT_ART_cov.csv'))){
       pmtct <- paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/PMTCT/', c.year,'/', temp.loc, '_PMTCT_ART_cov.csv')
       break

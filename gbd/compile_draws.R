@@ -26,15 +26,14 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
   array.job = FALSE
-  run.name <- "201113_socialdets"
-  loc <- 'AGO'
+  run.name <- "210205_socialdets"
+  loc <- 'AGO_1'
   draw.fill <- TRUE
   paediatric <- TRUE
   n = 1000
 }else{
   run.name <- args[1]
   array.job <- as.logical(args[2])
- # n <- as.numeric(args[4])
   draw.fill <- as.logical(args[3])
   paediatric <- as.logical(args[4])
 
@@ -50,7 +49,6 @@ n = 1000
 gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
 eppasm_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/")
 hiv_gbd2019_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/hiv_gbd2019/")
-library(mortdb, lib = "/share/mortality/shared/r/")
 
 setwd(eppasm_dir)
 devtools::load_all()
@@ -64,8 +62,10 @@ if(!array.job & length(args) > 0){
 # Array job ---------------------------------------
 if(array.job){
   array.dt <- fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
+  array.dt <- array.dt[grep('ZAF_490', ihme_loc_id)]
+  array.dt <- unique(array.dt[,(loc_scalar)])
   task_id <- as.integer(Sys.getenv("SGE_TASK_ID"))
-  loc <- array.dt[task_id,loc_scalar]
+  loc <- array.dt[task_id]
 }
 
 
@@ -110,7 +110,7 @@ print('loc.table loaded')
       
     }
     draw.list <- list.files(draw.path)
-  
+
     
     print('draw.list exists')
     ## subset out additional outputs (theta, under-1 splits)
@@ -118,11 +118,12 @@ print('loc.table loaded')
     draw.list <- draw.list[grepl('.csv', draw.list) & !grepl('theta_', draw.list) & !grepl('under_', draw.list)]
     draw.list <- draw.list[gsub('.csv', '', draw.list) %in% 1:1000]
     
+    
     dt <- lapply(draw.list, function(draw){
       print(draw)
       draw.dt <- fread(paste0(draw.path, '/', draw))
+      draw.dt <- draw.dt[year < 2019]
     })
-    
     ##Sometimes there are negative values, need to replace
     
     dt.check <- lapply(dt,function(draw.dt)

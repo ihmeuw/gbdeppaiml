@@ -17,11 +17,18 @@ Sys.umask(mode = "0002")
 windows <- Sys.info()[1][["sysname"]]=="Windows"
 root <- ifelse(windows,"J:/","/home/j/")
 user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
+code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
+## Packages
+library(data.table); library(mvtnorm); library(survey); library(ggplot2); library(plyr); library(dplyr)
+### Functions
+library(mortdb, lib = "/share/mortality/shared/r/")
+setwd(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/"))
+devtools::load_all()
+setwd(code.dir)
+devtools::load_all()
+loc.table <- get_locations(hiv_metadata = TRUE)
 
-code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/hiv_gbd2019/")
 
-
-source(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/gbd/00_req_packages.R"))
 libs <- c("data.table", "openxlsx", "raster", "foreign", "rgdal", "geosphere", "fossil", "dplyr", "rgeos", "car","plyr", 'sf')
 sapply(libs, require, character.only = T)
 
@@ -39,6 +46,7 @@ add_info <- c.args[['add_info']]
 add_info <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), add_info)
 geo_codebook <- c.args[['geo_codebook']]
 geo_codebook <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), geo_codebook)
+geo_codebook <- '/ihme/code/geospatial/aserfe/lbd_hiv/data/anc/2_geomatching/final_geo_codebook_2_12_2020.csv'
 UNAIDS_year <- 2019
 lat_long_table <- c.args[['lat_long_table']]
 
@@ -87,6 +95,7 @@ loc.list <- epp.list
 #################
 #we don't do this for zaf and png
 loc.list <- loc.list[!grepl('ZAF', loc.list)]
+loc.list <- loc.list[!grepl('ETH', loc.list)]
 loc.list <- loc.list[-which(loc.list == 'PNG')]
 
 
@@ -94,8 +103,8 @@ use_2019 <- T
 use_2018 <- F
 use_subpop <- F
 use_prepped <- F
-loc.list <- loc.list[grepl('ETH', loc.list)]
 additional <- additional[Prev < 1,]
+diff_vec = list()
 for (countries in loc.list) {
 
   if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', countries, '.rds')) & !grepl('ETH', countries)){
@@ -145,7 +154,7 @@ for (countries in loc.list) {
     }
     df <- as.data.table(df)
   }
-
+  dt <- as.data.table(df)
   df[,country := countries]
   df[,ihme_loc_id := countries]
   df$country <- countries
@@ -466,7 +475,7 @@ for (countries in loc.list) {
   anc_point_dat[, offset := NA]
   anc_site_dat.colnames <- c('site', 'year', 'used', 'prev','n' ,'subpop','type' ,'agegr' ,'age','agspan','offset', 'country', 'ihme_loc_id')
   anc_point_new.dat <- anc_point_dat[,anc_site_dat.colnames, with = FALSE]
-  saveRDS(anc_point_new.dat, file = paste0(anc_no_offset,countries, '.rds'))
+  # saveRDS(anc_point_new.dat, file = paste0(anc_no_offset,countries, '.rds'))
   diff_11 <- 0
   }else{
 
@@ -498,7 +507,7 @@ for (countries in loc.list) {
       #anc_point_dat[, type := "ancss"]
       anc_site_dat.colnames <- c('site', 'year', 'used', 'prev','n' ,'subpop','type' ,'agegr' ,'age','agspan','offset', 'country', 'ihme_loc_id')
       anc_point_new.dat <- anc_point_dat[,anc_site_dat.colnames, with = FALSE]
-      saveRDS(anc_point_new.dat, file = paste0(anc_no_offset, countries, '.rds'))
+    #  saveRDS(anc_point_new.dat, file = paste0(anc_no_offset, countries, '.rds'))
 
     }else{   
       ######get point data
@@ -520,7 +529,7 @@ for (countries in loc.list) {
         final_file <- subset(anc_point_new.dat, ihme_loc_id == unique(anc_point_new.dat$ihme_loc_id)[k])
         anc_site_dat.colnames <- c('site', 'year', 'used', 'prev','n' ,'subpop','type' ,'agegr' ,'age','agspan','offset', 'country')
         final_file <- final_file[,anc_site_dat.colnames, with = FALSE]
-        saveRDS(final_file, file = paste0(anc_no_offset, unique(anc_point_new.dat$ihme_loc_id)[k], '.rds'))
+      #  saveRDS(final_file, file = paste0(anc_no_offset, unique(anc_point_new.dat$ihme_loc_id)[k], '.rds'))
         assign(paste0('diff_11_', k), nrow(final_file))
       }
       }
@@ -528,10 +537,15 @@ for (countries in loc.list) {
 
   }
   
- 
+ diff <- lapply(paste0('diff_', c(2:10)), get)
+ x <- matrix(c(countries, unlist(diff)), nrow = 1)
+ x <- as.data.table(x)
+ diff_vec[[countries]] <- x
   
 }
 
-
-
-
+diff_vec <- rbindlist(diff_vec)
+row.names(diff_vec) <- diff_vec$V1
+diff_vec[,V1 := NULL]
+x = sapply(diff_vec, as.numeric)
+colSums(x)

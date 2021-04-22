@@ -1,4 +1,17 @@
 library(sf)
+h_root = '/homes/mwalte10/'
+lib.loc <- paste0(h_root,"R/",R.Version(),"/",R.Version(),".",R.Version())
+dir.create(lib.loc,recursive=T, showWarnings = F)
+.libPaths(c(lib.loc,.libPaths()))
+##this takes a long time
+packages <- c('spatialEco')
+for(p in packages){
+if(p %in% rownames(installed.packages())==FALSE){
+install.packages(p)
+}
+library(p, character.only = T)
+}
+
 library(spatialEco)
 sf <- st_read('/home/j/DATA/SHAPE_FILES/GBD_geographies/master/GBD_2019/master/shapefiles/GBD2019_analysis_final.shp')
 poss <- loc.table[most_detailed == 1,ihme_loc_id]

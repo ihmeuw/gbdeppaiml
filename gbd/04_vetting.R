@@ -25,9 +25,10 @@ setwd(gbdeppaiml_dir)
 devtools::load_all()
 
 # Toggles ---------------------------------------
-new_run  = '200713_yuka'
-old_run = '200505_xylo'
+new_run  = '210415_zanfona'
+old_run = '200713_yuka'
 epp.locs <- (loc.table[epp == 1, ihme_loc_id])
+compare.inputs = T
 
 if(compare.inputs){
   compare_demo_inputs = T
@@ -35,7 +36,7 @@ if(compare.inputs){
   compare_dt_obj = F
 }
 if(compare.results){
-  age_specific_outputs = T
+  age_specific_outputs = F
   compare_covariates = F
 }
 
@@ -146,6 +147,7 @@ if(compare_demo_inputs){
 if(compare_dt_obj){
   dt_obj_compare <- function(loc, new.run, old.run){
     new <- readRDS(paste0('/ihme/hiv/epp_output/gbd20/',new.run,'/dt_objects/',loc,'_dt.RDS'))
+    if(!file.exists(paste0('/ihme/hiv/epp_output/gbd20/',old.run,'/dt_objects/',loc,'_dt.RDS'))){next}
     old <- readRDS(paste0('/ihme/hiv/epp_output/gbd20/',old.run,'/dt_objects/',loc,'_dt.RDS'))
     
     new.pop <- attr(new, 'specfp')$entrantpop
@@ -153,8 +155,14 @@ if(compare_dt_obj){
     new.pop <- data.table(melt(new.pop))[,model := 'new']
     old.pop <- data.table(melt(old.pop))[,model := 'old']
     pop <- rbind(new.pop, old.pop)
-    entrant_pop <- ggplot(pop, aes(Var2, value, col = factor(model))) + geom_line() + facet_wrap(~Var1)
-    
+    if(any(colnames(pop) == 'X2')){
+      entrant_pop.gg <- ggplot(pop, aes(X2, value, col = factor(model))) + geom_line() + facet_wrap(~X1)
+      
+    }else{
+      entrant_pop.gg <- ggplot(pop, aes(Var2, value, col = factor(model))) + geom_line() + facet_wrap(~Var1)
+      
+    }
+    print('entrant')
     
     new.pop <- attr(new, 'specfp')$art_mort
     old.pop <- attr(old, 'specfp')$art_mort
@@ -167,19 +175,40 @@ if(compare_dt_obj){
     women.new <- data.table(melt(new.pop[,,1,2]))[,model := 'new']
     women.new[,sex := 2]
     dt <- rbind(men.old, men.new, women.old, women.new)
-    art_mort <- ggplot(dt, aes(x = cd4stage, y = value, col = factor(model))) + geom_line(aes(linetype = factor(artdur))) + facet_wrap(~sex)
+    art_mort.gg <- ggplot(dt, aes(x = cd4stage, y = value, col = factor(model))) + geom_line(aes(linetype = factor(artdur))) + facet_wrap(~sex)
+    print('art_mort')
     
     new.dt <- attr(new, 'specfp')$pmtct_num
     old.dt <- attr(old, 'specfp')$pmtct_num
     new.dt <- data.table(melt(new.dt, id.vars = 'year'))[,model := 'new']
     old.dt <- data.table(melt(old.dt, id.vars = 'year'))[,model := 'old']
     dt <- rbind(new.dt, old.dt)
-    pmtct <- ggplot(dt, aes(x = year, y = value, col = factor(model))) + geom_line() + facet_wrap(~variable)
+    pmtct.gg <- ggplot(dt, aes(x = year, y = value, col = factor(model))) + geom_line() + facet_wrap(~variable)
+    print('pmtct')
+    
+    new.anc <- data.table(attr(new, 'eppd')$ancsitedat)
+    old.anc <- data.table(attr(old, 'eppd')$ancsitedat)
+    new.anc[,model := 'new'] ; old.anc[,model := 'old']
+    anc <- rbind(new.anc, old.anc, fill = T)
+    if(!any(colnames(anc)=='offset')){
+      anc[,offset:=0]
+    }
+    ss <- copy(anc[,.(year, n, model)])
+    offset <- copy(anc[,.(year, offset, model)])
+    setnames(anc, 'prev', 'value') ; setnames(ss, 'n', 'value') ; setnames(offset, 'offset', 'value')
+    anc[,var := 'prev'] ; ss[,var := 'sample size'] ; offset[,var := 'offset']
+    anc.temp = copy(anc[,.(year, value, model, var)])
+    rm(anc)
+    anc <- rbind(anc.temp, ss, offset, fill = T)
+    anc <- as.data.table(anc)
+    anc.gg <- ggplot(anc, aes(year, value, col = factor(model))) + geom_point() + facet_wrap(~var, scales = 'free')
+    print('anc')
     
     dir.create(paste0('/ihme/hiv/epp_input/gbd20/', new.run, '/dt_obj_vet/'), recursive = T, showWarnings = F)
     pdf(paste0('/ihme/hiv/epp_input/gbd20/', new.run, '/dt_obj_vet/', loc, '.pdf'))
-    print(entrant_pop) ; print(art_mort) : print(pmtct)
+    print(entrant_pop.gg) ; print(art_mort.gg) ; print(pmtct.gg); print(anc.gg)
     dev.off()
+    print(loc)
     
   }
   
