@@ -578,6 +578,7 @@ plot_age_specific <- function(loc,
     compare.dt <- list()
     for(run.x in unique(final_runs[,run])){
       if(file.exists(paste0('/ihme/hiv/epp_output/', unique(final_runs[run == run.x, gbd_year]), '/', run.x, '/summary_files/', loc, '.csv'))){
+
         sum_file <- fread(paste0('/ihme/hiv/epp_output/', unique(final_runs[run == run.x, gbd_year]), '/', run.x, '/summary_files/', loc, '.csv'))
       }else{
         sum_file <- fread(paste0('/ihme/hiv/epp_output/', unique(final_runs[run == run.x, gbd_year]), '/', run.x, '/summary_files/', loc_name, '.csv'))
@@ -653,9 +654,9 @@ plot_age_specific <- function(loc,
 
 
 plot_birthprev <- function(loc, gbdyear, run.name.new, compare.run){
-  final_runs <- data.table('gbd_year' = c('gbd19','gbd20',gbdyear, rep(gbdyear, length(compare.run))), 
-                           'run' = c('190630_rhino2', '200713_yuka', run.name.new, compare.run),
-                           'run_name' = c('Final GBD19', 'Final GBD20', 'Current Run', compare.run))
+  final_runs <- data.table('gbd_year' = c('gbd20',gbdyear, rep(gbdyear, length(compare.run))), 
+                           'run' = c('200713_yuka', run.name.new, compare.run),
+                           'run_name' = c('Final GBD20', 'Current Run', compare.run))
   
   
       plot.dt<- list()
@@ -674,12 +675,18 @@ plot_birthprev <- function(loc, gbdyear, run.name.new, compare.run){
   
   ###load in pmtct data
   pmtct <- list()
-  for(year.x in unique(final_runs$gbd_year)){
-    dt <- paste0('/share/hiv/epp_input/', year.x, '/paeds/PMTCT/', loc, '.csv') %>% fread
+  find.files <- list()
+  for(c.year in c('covid','UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
+    find.files[[c.year]] <- file.exists( paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/PMTCT/', c.year,'/', loc, '_PMTCT_ART_cov.csv'))
+  }
+  find.files <- data.table(names = names(find.files), exists = unlist(find.files))
+  for(year.x in find.files[exists == 'TRUE', names]){
+    dt <- paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/PMTCT/', year.x,'/', loc, '_PMTCT_ART_cov.csv') %>% fread
     dt <- melt(dt, id.vars= 'year')
-    dt[,model:= unique(final_runs[gbd_year == year.x, run_name])[1]]
+    dt[,model:= year.x]
     pmtct <- rbind(dt, pmtct)
   }
+  
   
   ### prep plot
   plot.dt[variable == 'total_births', variable := 'total births']
@@ -696,13 +703,10 @@ plot_birthprev <- function(loc, gbdyear, run.name.new, compare.run){
   names(color.list) <- unique(plot.dt$model)
   
   if(!dir.exists(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name.new, '/paeds_plots/'))){dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name.new, '/paeds_plots/'), recursive= TRUE)}
-  if(!is.null(test)){
-    pdf(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name.new, '/paeds_plots/', loc, '_',test,'.pdf'), width = 10, height = 6)
-    
-  }else{
+ 
     pdf(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name.new, '/paeds_plots/', loc, '.pdf'), width = 10, height = 6)
     
-  }
+  
   gg <- ggplot()
   gg <- gg + geom_line(data = plot.dt, aes(x = year, y = value, color = model))
   gg <- gg + facet_wrap(~variable_f, scales = 'free')

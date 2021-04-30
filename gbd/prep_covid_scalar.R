@@ -25,6 +25,7 @@ setwd(gbdeppaiml_dir)
 devtools::load_all()
 
 locs <- loc.table[epp ==1 | ihme_loc_id %in% c('MRT', 'STP', 'COM'),]
+locs <- loc.table[grepl('IND', ihme_loc_id) & level == 4,]
 
 
 all_art = rbindlist(lapply(locs$location_id,function(iso){
@@ -60,7 +61,7 @@ all_art[level == 5, parent_id := 180]
 all_art[level != 3, location_id := parent_id]
 art_scalar = fread("/home/j/Project/goalkeepers_2020/covid_interruption_covariates/2020-07-30/any_missed_meds_WEIGHTED/mrbrt_any_missed_meds_WEIGHTED_results_annual.csv")[scenario_id == 0]
 art_scalar[,ihme_loc_id := NULL] ; art_scalar[,sex_id := NULL]
-art_scalar = merge(all_art, art_scalar,all.x=TRUE)
+art_scalar = merge(all_art, art_scalar,all.x=TRUE, by = c('location_id', 'year_id'))
 art_scalar[,art_covid := art * value]
 art_gg = art_scalar[,.(year_id, ihme_loc_id, art, art_covid, value, sex_id)]
 art_gg <- merge(art_gg, loc.table[,.(ihme_loc_id, location_id)])
@@ -129,6 +130,9 @@ write.csv(art, paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/childARTcoverage
 
 pmtct <- fread(pmtct)
 pmtct <- melt(pmtct, id.vars = 'year')
+pop <- 
+
+
 setnames(pmtct, 'value', 'no_covid')
 pmtct <- merge(pmtct, scalar[,.(year_id, value)], by.x = 'year', by.y = 'year_id', all.x = T)
 pmtct[,value := ifelse(is.na(value), 1, value)]

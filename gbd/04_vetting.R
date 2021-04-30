@@ -26,9 +26,10 @@ devtools::load_all()
 
 # Toggles ---------------------------------------
 new_run  = '210415_zanfona' ; new.run = new_run
-old_run = '200713_yuka_test' ; old.run = old_run
+old_run = '200713_yuka' ; old.run = old_run
 epp.locs <- (loc.table[epp == 1, ihme_loc_id])
-compare.inputs = T
+compare.inputs = F
+compare.results = T
 
 if(compare.inputs){
   compare_demo_inputs = T
@@ -36,8 +37,8 @@ if(compare.inputs){
   compare_dt_obj = F
 }
 if(compare.results){
-  age_specific_outputs = F
-  compare_covariates = F
+  age_specific_outputs = T
+  compare_covariates = T
 }
 
 
@@ -216,13 +217,14 @@ if(compare_dt_obj){
   
   lapply(epp.locs, dt_obj_compare, new.run = new_run, old.run = old_run)
 }
+
 # Compare covariates ---------------------------------------
 if(compare_covariates){
-  run.name_base = "200713_yuka"
+  run.name_base = "210415_zanfona"
   out_dir <- paste0("/ihme/hiv/epp_output/gbd20/",run.name_base, '/covariate_plots/')
   gbd_year = "gbd20"
-  dir.create(paste0(out_dir,gbd_year,"/"))
-  uploaded = T
+  dir.create(paste0(out_dir,gbd_year,"/"), recursive = T)
+  uploaded = F
   
   if(uploaded){
     get_covariate_changes <- function(
@@ -376,11 +378,11 @@ if(compare_covariates){
   run_base = "gbd20"
   gbd_round_base = 7 
   decomp_step_base="iterative"
-  gbd_round_compare =6
-  decomp_step_compare = "step4"
-  run_compare = "gbd19"
+  gbd_round_compare = 7
+  decomp_step_compare = "iterative"
+  run_compare = "gbd20"
   rate = F
-  run.name_base = "200713_yuka"
+  run.name_base = "210415_zanfona"
   
   if(!uploaded){
     dt_adult = get_covariate_changes(covariate = 5,
@@ -423,18 +425,15 @@ if(compare_covariates){
     max_val = 0.015
     thresh_val = 0.0025
   }
-  plot_title = "Adult Crude Death Rate by Sex"
+  plot_title = "Adult Crude Death Rate by Sex, Impact of COVID effects on Death Rate"
   run_compare_name <- '200713_yuka'
+  library('ggrepel')
   plot.dir <- paste0('/ihme/hiv/spectrum_plots/',  run_compare_name, '/')
   pdf(paste0(plot.dir,"_adult_deaths.pdf"), width = 10,height = 8)
-  gg <- ggplot(dt[year_id  >= 1995 & !is.na(change)],aes(get(run_compare),get(run_base),color = change, label = ihme_loc_id)) + 
+  gg <- ggplot(dt[year_id  >= 1995 & !is.na(change) & !is.na(`210415_zanfona`)],aes(get(run_compare),get(run_base),color = change, label = ihme_loc_id)) + 
     geom_point(size=0.5) + geom_abline(intercept = 0, slope = 1) + xlim(0,max_val) + ylim(0,max_val) + 
-    #geom_text_repel(data = dt[get(run_base) > thresh_val & change != "less20"& year_id %in% c(2000,2010,2019)],aes(label = ihme_loc_id), color="black",size=2.5) + theme_bw() +  facet_wrap(~sex_id) +
-    # geom_text_repel(data = dt[get(run_base) > thresh_val & change != "less20" & year_id %in% c(2000,2010,2019)| ihme_loc_id == 'VNM' & pct_change == max(dt[ihme_loc_id == 'VNM',pct_change], na.rm = T),],
-    #                 aes(label = ihme_loc_id), col = 'black', size=5) + 
+    geom_text_repel(data = dt[year_id %in% c(2020,2021) & change != 'less20'],aes(label = ihme_loc_id), color="black",size=2.5) + 
     theme_bw() +  facet_wrap(~sex_id) +
-    #geom_text_repel(data = dt[ihme_loc_id == 'VNM',],aes(label = ihme_loc_id), color="black",size=2.5) + theme_bw() +  facet_wrap(~sex_id) +
-    
     xlab(run_compare) + ylab(run_base) + ggtitle(plot_title)
   # ggplotly(gg)
   print(gg)

@@ -25,7 +25,7 @@ print(args)
 if(length(args) == 0){
   array.job = FALSE
   run.name <- "210415_zanfona"
-  loc <- 'AGO'
+  loc <- 'IND_4842'
   stop.year <- 2022
   j <- 1
   paediatric <- FALSE
@@ -100,7 +100,6 @@ if(array.job){
   file_name <- loc
   foi_scalar = 1
 }
-
 out.dir <- paste0('/ihme/hiv/epp_output/',gbdyear,'/', run.name, "/", file_name)
 
 source('/ihme/homes/mwalte10/gbdeppaiml/gbd/data_prep.R')
@@ -196,6 +195,7 @@ zero_prev_locs <- unique(zero_prev_locs[prev == 0.0005 & use == TRUE,iso3])
 fit <- eppasm::fitmod(dt, eppmod = ifelse(grepl('IND', loc),'rlogistic',epp.mod), 
                       B0 = 1e5, B = 1e3, number_k = 500, 
                       ageprev = ifelse(loc %in% zero_prev_locs,'binom','probit'))
+
 dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/fitmod/'))
 saveRDS(fit, file = paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/fitmod/', loc, '_', j, '.RDS'))
 
@@ -225,7 +225,6 @@ draw <- j
 result <- gbd_sim_mod(fit, VERSION = "R")
 # dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/'), recursive = T)
 # saveRDS(result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/', draw, '.RDS'))
-
 dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', file_name, '/'), recursive = T)
 saveRDS(result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', file_name, '/', draw, '.RDS'))
 #

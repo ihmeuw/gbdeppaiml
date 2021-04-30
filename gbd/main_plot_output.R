@@ -82,21 +82,21 @@ plot_15to49(loc,
             names = c('Current run', 'GBD20'),
             gbdyear = gbdyear,
             loc_name = loc.name)
-
-
-# #Age-specific plots
-for(c.indicator in rev(c( 'Prevalence','Incidence','Deaths'))){
-  dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/age_specific_plots/', c.indicator, '/'), recursive = TRUE, showWarnings = FALSE)
-}
-
-plot_age_specific(loc, run.name.new=run.name, 
+# 
+# 
+# # #Age-specific plots
+# for(c.indicator in rev(c( 'Prevalence','Incidence','Deaths'))){
+#   dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/age_specific_plots/', c.indicator, '/'), recursive = TRUE, showWarnings = FALSE)
+# }
+# 
+plot_age_specific(loc, run.name.new=run.name,
                          compare.run = run.names.comp, gbdyear = gbd_year_new, c.metric = 'Count')
 
 # # ## Birth prevalence
 dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/paeds_plots/'), showWarnings = F)
-run.name.old = '200505_xylo'
+run.names.comp = NULL
 loc_temp <- unlist(strsplit(loc,split =  '_'))[[1]]
-plot_birthprev(loc = loc_temp,run.name.new =  run.name,
+plot_birthprev(loc = loc,run.name.new =  run.name,
                gbdyear = gbd_year_new,
                compare.run= run.names.comp)
 

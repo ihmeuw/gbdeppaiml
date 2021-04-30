@@ -11,11 +11,14 @@ find_pjnz <- function(loc){
   loc.name <- loc.table[ihme_loc_id == temp.loc, location_name]
   
   unaids.year <- loc.table[ihme_loc_id == temp.loc, unaids_recent]
-  unaids_2020 <- strsplit(list.dirs('/snfs1/DATA/UNAIDS_ESTIMATES/2020/'), split = '//')
-  unaids_2020 <- sapply(unaids_2020[2:length(unaids_2020)], '[[', 2)
-  if(loc %in% unaids_2020){
-    unaids.year = 2020
+  if(gbdyear == 'gbd21'){
+    unaids_2020 <- strsplit(list.dirs('/snfs1/DATA/UNAIDS_ESTIMATES/2020/'), split = '//')
+    unaids_2020 <- sapply(unaids_2020[2:length(unaids_2020)], '[[', 2)
+    if(loc %in% unaids_2020){
+      unaids.year = 2020
+    }
   }
+
 
   #Subnational files are stored in national folders
   if(grepl("ETH",loc)){temp.loc <- "ETH"}

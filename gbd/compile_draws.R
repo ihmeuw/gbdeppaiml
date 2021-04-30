@@ -26,7 +26,7 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
   array.job = FALSE
-  run.name <- "210415_zanfona"
+  run.name <- "200713_yuka"
   loc <- 'AGO'
   draw.fill <- TRUE
   paediatric <- TRUE
@@ -110,6 +110,7 @@ print('loc.table loaded')
       
     }
     draw.list <- list.files(draw.path)
+    # draw.list <- paste0(c(1:100), '.csv')
     
     print('draw.list exists')
     ## subset out additional outputs (theta, under-1 splits)
@@ -121,7 +122,6 @@ print('loc.table loaded')
     dt <- lapply(draw.list, function(draw){
       print(draw)
       draw.dt <- fread(paste0(draw.path, '/', draw))
-      draw.dt <- draw.dt[year < 2019]
     })
     ##Sometimes there are negative values, need to replace
     

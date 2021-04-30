@@ -13,9 +13,9 @@ if(length(args) > 0) {
   spec.name <- args[3]
 } else {
 
-  loc <- "ETH_44852"
-  run.name <- "200713_yuka_ETH_test"
-  spec.name <- "200713_yuka"
+  loc <- "AGO"
+  run.name <- "210415_zanfona"
+  spec.name <- "210415_zanfona"
 
 }
 fill.draw <- T
@@ -32,7 +32,7 @@ dir.create(out_dir_birth, recursive = T, showWarnings = F)
 
 
 ### Functions
-library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
+# library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
 source( "/ihme/cc_resources/libraries/current/r/get_population.R")
 setwd(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/"))
 devtools::load_all()
@@ -43,6 +43,11 @@ devtools::load_all()
 ## Libraries etc.
 library(data.table); library(foreign); library(assertable)
 ids <- fread('/ihme/hiv/epp_input/gbd20/input_ids.csv')
+if(!run.name %in% unique(ids$run_name)){
+  id_copy <- copy(ids[run_name == '200713_yuka',])
+  id_copy[,run_name := run.name]
+  ids <- rbind(ids, id_copy)
+}
 
 
 if(run.name == '200505_xylo' | run.name == '200713_yuka' | run.name == '200713_yuka_ETH_test' | run.name == '200713_yuka_ETH_test_rlog' |  run.name == '200713_yuka_ETH_test_rspline'){
@@ -58,6 +63,7 @@ age_map[age == "12-23 mo.",age_group_id := 238]
 
 ## Create a map to scramble draws from Spectrum
 locations <- data.table(get_locations(hiv_metadata = T))
+# locations <- get_location_metadata(gbd_round_id = 7, decomp_step = 'iterative', location_set_id = 35)
 loc_id <- locations[ihme_loc_id==loc,location_id]
 
 ## Use draw maps to scramble draws so that they are not correlated over time
@@ -98,7 +104,7 @@ spec_draw <- spec_draw[,.(pop = sum(pop), hiv_deaths = sum(hiv_deaths), non_hiv_
                     total_births = sum(total_births), hiv_births = sum(hiv_births), birth_prev = sum(birth_prev),
                     pop_art = sum(pop_art), pop_gt350 = sum(pop_gt350), pop_200to350 = sum(pop_200to350), pop_lt200 = sum(pop_lt200)), by = c('age_gbd', 'sex', 'year', 'run_num')]
 setnames(spec_draw, 'age_gbd', 'age')
-output.u1 <- split_u1.new_ages(spec_draw[age == 0], loc, run.name.old=run.name, run.name.new = run.name)
+output.u1 <- split_u1.new_ages(spec_draw[age == 0], loc, run.name = run.name)
 output.u1[age=="x_388", age := "1-5 mo."]
 output.u1[age=="x_389", age := "6-11 mo."]
 spec_draw <- spec_draw[age != 0]

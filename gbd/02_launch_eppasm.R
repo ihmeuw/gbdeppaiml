@@ -36,7 +36,7 @@ if(file.exists(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
   n.draws = nrow(fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv')))
   array.job = T
 }else{
-  n.draws = 100
+  n.draws = 1000
   array.job = F
 }
 run.group2 <- FALSE
@@ -116,7 +116,8 @@ system(draw.string)
 }
 
 # EPP-ASM ---------------------------------------
-loc.list = c('AGO')
+# loc.list <- c(loc.list[grepl('IND', loc.list)], 'DOM', 'GAB', 'GHA', 'GIN', 'GMB', 'GNB', 'GBQ', 'HTI', 'NGA_25349', 'PNG', 'UGA')
+loc.list <- loc.list[grepl('IND', loc.list)]
 if(run_eppasm & !array.job){
 for(loc in loc.list) {    
   ## Run EPPASM
@@ -124,7 +125,7 @@ for(loc in loc.list) {
                          "-e /share/temp/sgeoutput/", user, "/errors ",
                          "-o /share/temp/sgeoutput/", user, "/output ",
                          "-N ", loc,"_",run.name, "_eppasm ",
-                         "-tc 5000 ",
+                         "-tc 1000 ",
                          "-t 1:", n.draws, " ",
                          "-hold_jid eppasm_prep_inputs_", run.name," ",
                          '/ihme/singularity-images/rstudio/shells/execR.sh -i ',
@@ -133,8 +134,8 @@ for(loc in loc.list) {
                          '-s ',
                          code.dir, "gbd/main.R ",
                          run.name, " ", array.job," ", loc, " ", proj.end, " ", paediatric)
-   print(epp.string)
-  system(epp.string)
+  #  print(epp.string)
+  # system(epp.string)
 
   
       #Draw compilation
@@ -149,8 +150,8 @@ for(loc in loc.list) {
                             '-s ',
                             code.dir, "gbd/compile_draws.R ",
                             run.name, " ", array.job, ' ', loc,  ' TRUE ', paediatric)
-      print(draw.string)
-      system(draw.string)
+      # print(draw.string)
+      # system(draw.string)
       
       summary.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
                             "-e /share/temp/sgeoutput/", user, "/errors ",
@@ -164,8 +165,8 @@ for(loc in loc.list) {
                             code.dir, "gbd/get_summary_files.R ",
                             run.name, ' ', loc)
 
-      print(summary.string)
-      system(summary.string)
+      # print(summary.string)
+      # system(summary.string)
 
       plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
                             "-e /share/temp/sgeoutput/", user, "/errors ",
