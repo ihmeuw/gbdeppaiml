@@ -506,7 +506,7 @@ get_summary <- function(loc, run.name, paediatric = FALSE, old.splits, gbdyear){
   out.dt <- merge(out.dt, age.map[,.(age_group_id, age = age_group_name_short)], by = 'age_group_id', allow.cartesian = TRUE)
   out.dt <- out.dt[,.(mean = mean(value), lower = quantile(value, 0.025), upper = quantile(value, 0.975)), by = c('age_group_id', 'sex', 'year', 'measure', 'metric', 'age')]
   
-  dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/summary_files/'))
+  dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/summary_files/'), recursive = T)
   write.csv(out.dt, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/summary_files/', loc, '.csv'), row.names = F)
   return(out.dt)
 }

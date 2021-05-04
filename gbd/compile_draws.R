@@ -27,7 +27,7 @@ print(args)
 if(length(args) == 0){
   array.job = FALSE
   run.name <- "200713_yuka"
-  loc <- 'AGO'
+  loc <- 'COM'
   draw.fill <- TRUE
   paediatric <- TRUE
   n = 1000
@@ -110,8 +110,7 @@ print('loc.table loaded')
       
     }
     draw.list <- list.files(draw.path)
-    # draw.list <- paste0(c(1:100), '.csv')
-    
+
     print('draw.list exists')
     ## subset out additional outputs (theta, under-1 splits)
     ## this could probably be tidied up

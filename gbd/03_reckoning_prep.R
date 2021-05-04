@@ -26,8 +26,8 @@ devtools::load_all()
 
 # Arguments ---------------------------------------
 gbdyear = 'gbd20'
-run.name = '210415_zanfona'
-spec.name = '210415_zanfona'
+run.name = '200713_yuka'
+spec.name = '200713_yuka'
 code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
 loc.table <- get_locations(hiv_metadata = T)
 cluster.project = 'proj_hiv'

@@ -28,7 +28,7 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 
 ## Arguments
 run.name <- "210415_zanfona"
-run.name <- "210415_zanfona"
+run.name <- "200713_yuka"
 compare.run <- c("200713_yuka")
 
 proj.end <- 2022
@@ -117,7 +117,6 @@ system(draw.string)
 
 # EPP-ASM ---------------------------------------
 # loc.list <- c(loc.list[grepl('IND', loc.list)], 'DOM', 'GAB', 'GHA', 'GIN', 'GMB', 'GNB', 'GBQ', 'HTI', 'NGA_25349', 'PNG', 'UGA')
-loc.list <- loc.list[grepl('IND', loc.list)]
 if(run_eppasm & !array.job){
 for(loc in loc.list) {    
   ## Run EPPASM
@@ -150,8 +149,8 @@ for(loc in loc.list) {
                             '-s ',
                             code.dir, "gbd/compile_draws.R ",
                             run.name, " ", array.job, ' ', loc,  ' TRUE ', paediatric)
-      # print(draw.string)
-      # system(draw.string)
+      print(draw.string)
+      system(draw.string)
       
       summary.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
                             "-e /share/temp/sgeoutput/", user, "/errors ",
@@ -165,8 +164,8 @@ for(loc in loc.list) {
                             code.dir, "gbd/get_summary_files.R ",
                             run.name, ' ', loc)
 
-      # print(summary.string)
-      # system(summary.string)
+      print(summary.string)
+      system(summary.string)
 
       plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
                             "-e /share/temp/sgeoutput/", user, "/errors ",
@@ -180,8 +179,8 @@ for(loc in loc.list) {
                             code.dir, "gbd/main_plot_output.R ",
                             loc, " ", run.name, ' ', compare.run)
      
-      print(plot.string)
-      system(plot.string)
+      # print(plot.string)
+      # system(plot.string)
 
 }
 }

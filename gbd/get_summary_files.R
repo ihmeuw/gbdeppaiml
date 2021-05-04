@@ -31,7 +31,7 @@ if(length(args) > 0) {
   loc = args[2]
 } else {
   run.name = '200713_yuka'
-  loc = 'AGO'
+  loc = 'COM'
 
 }
 

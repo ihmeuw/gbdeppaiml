@@ -28,8 +28,8 @@ if(length(args) > 0) {
   
 } else {
   parent <- "ETH"
-  run.name <- "210415_zanfona"
-  spec.run.name <-"210415_zanfona"
+  run.name <- "200713_yuka"
+  spec.run.name <-"200713_yuka"
   ncores <- 2
 }
 

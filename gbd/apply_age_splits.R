@@ -14,8 +14,9 @@ if(length(args) > 0) {
 } else {
 
   loc <- "AGO"
-  run.name <- "210415_zanfona"
-  spec.name <- "210415_zanfona"
+   run.name <- "200713_yuka"
+
+  spec.name <- "200713_yuka"
 
 }
 fill.draw <- T
