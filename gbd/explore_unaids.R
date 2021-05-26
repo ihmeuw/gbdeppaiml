@@ -58,16 +58,24 @@ ggplot(dt_by_month_ssa_init, aes(as.numeric(variable.1), value)) + geom_line() +
 
 
 dt_by_month <- dcast(dt_melt[sex_id == 3,.(ihme_loc_id, month, variable, value, super_region_name)], ihme_loc_id + variable + super_region_name ~ month, value.var = 'value')
+
+
+pdf('/ihme/homes/mwalte10/unaids_monthly_data.pdf', width = 15, height = 8)
 dt_by_month_ssa_init <- dt_by_month[variable == 'init_art' ]
 dt_by_month_ssa_init <- dt_by_month_ssa_init[!is.na(`1`) | !is.na(`2`) | !is.na(`3`),]
 dt_by_month_ssa_init <- melt(dt_by_month_ssa_init, id.vars = c('ihme_loc_id', 'variable', 'super_region_name'))
-ggplot(dt_by_month_ssa_init, aes(as.numeric(variable.1), value)) + geom_line() + geom_point() + facet_wrap(~ihme_loc_id, scales = 'free') + ggtitle('Initiated ART')
-
+months <- data.table(variable.1 = c(1:12), month = c('jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sept', 'oct', 'nov', 'dec'))
+dt_by_month_ssa_init <- merge(dt_by_month_ssa_init, months)
+dt_by_month_ssa_init <- merge(dt_by_month_ssa_init, loc.table[,.(ihme_loc_id, location_name)], by = 'ihme_loc_id')
+gg = ggplot(dt_by_month_ssa_init, aes(as.numeric(variable.1), value)) + geom_line() + geom_point() + facet_wrap(~location_name, scales = 'free') + ggtitle('Initiated ART') + labs(x = 'Month')
+print(gg)
 
 dt_by_month_ssa_init <- dt_by_month[variable == 'paed_on_art' ]
 dt_by_month_ssa_init <- dt_by_month_ssa_init[!is.na(`1`) | !is.na(`2`) | !is.na(`3`),]
 dt_by_month_ssa_init <- melt(dt_by_month_ssa_init, id.vars = c('ihme_loc_id', 'variable', 'super_region_name'))
-ggplot(dt_by_month_ssa_init, aes(as.numeric(variable.1), value)) + geom_line() + geom_point() + facet_wrap(~ihme_loc_id, scales = 'free') + ggtitle('Pediatric On ART')
-
+dt_by_month_ssa_init <- merge(dt_by_month_ssa_init, loc.table[,.(ihme_loc_id, location_name)], by = 'ihme_loc_id')
+gg = ggplot(dt_by_month_ssa_init, aes(as.numeric(variable.1), value)) + geom_line() + geom_point() + facet_wrap(~location_name, scales = 'free') + ggtitle('Pediatric On ART') + labs(x = 'Month')
+print(gg)
+dev.off()
 
 

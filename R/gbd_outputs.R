@@ -141,7 +141,7 @@ get_gbd_outputs <- function(mod, fp, paediatric = FALSE) {
     
     artpopu5 <- as.data.frame.table(apply(attr(mod, 'artpopu5'), 2:4, sum), responseName = 'pop_art')
     artpopu15 <- as.data.frame.table(apply(attr(mod, 'artpopu15'), 2:4, sum), responseName = 'pop_art')
-    artpop <- rbindlist(lapply(list(artpopu5, artpopu15), de_factor ))
+    artpop <- rbindlist(lapply(list(artpopu5, artpopu15), de_factor))
     
     ## divide into approx adult cd4 groups
     ## taken from spectrum
