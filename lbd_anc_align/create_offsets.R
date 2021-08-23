@@ -19,13 +19,17 @@ root <- ifelse(windows,"J:/","/home/j/")
 user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 
 source(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/gbd/00_req_packages.R"))
+library("slackr",lib.loc =paste0("/homes/", user,"/rlibs/"))
+library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
+source(paste0(code.dir,"/geo_extract_functions.R"))
+library(data.table); library(rgdal)
 
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
-if(length(args) == 0){
-  run.name <- '210408_antman'
-}else{
+if(length(args) > 0){
   run.name <- args[1]
+}else{
+  run.name <- '210408_antman'
 }
 
 code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/hiv_gbd2019/")
@@ -52,19 +56,12 @@ rd <- c.args[['rd']]
 lbd_anc_mean_est <- c.args[['lbd_anc_mean_est']]
 
 
-
 save_out_shapefiles <- FALSE
 covs <- "hiv_test"
 measures <- "mean"
 agg_method = "pop_weight"
 shapefile_field <- "GAUL_CODE"
 
-library("slackr",lib.loc =paste0("/homes/", user,"/rlibs/"))
-library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
-loc.table <- get_locations(hiv_metadata = T)
-
-source(paste0(code.dir,"/geo_extract_functions.R"))
-library(data.table); library(rgdal)
 
 ##File paths
 out_dir_areal <- paste0(root, areal_sites)
@@ -75,14 +72,12 @@ core_repo = paste0("/homes/",user,"/lbd_core/")
 shapefile_directory <- paste0(root,sf_dir)
 out_dir_geo <- "/ihme/hiv/data/shapefiles/"
 
+loc.table <- data.table(get_locations(hiv_metadata = T))
 lbd_map <- fread(paste0(geo_repository))
 lbd_map <- merge(lbd_map,loc.table[,.(ihme_loc_id,location_name)],by.x="iso3",by.y="ihme_loc_id",all.x=TRUE)
 loc.list <- unique(lbd_map$iso3)
 
-
-loc.table <- data.table(get_locations(hiv_metadata = T))
-
-### Code
+##Remove some locations that we don't do offsets for
 epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
 loc.list <- setdiff(epp.list, c('ETH_44859', 'HTI','PNG', 'GNQ'))
 loc.list <- loc.list[!grepl('IND', loc.list)]

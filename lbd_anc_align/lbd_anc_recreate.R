@@ -20,12 +20,17 @@ user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 
 code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/hiv_gbd2019/")
 
-
 source(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/gbd/00_req_packages.R"))
 libs <- c("data.table", "openxlsx", "raster", "foreign", "rgdal", "geosphere", "fossil", "dplyr", "rgeos", "car","plyr", 'sf')
 sapply(libs, require, character.only = T)
 
-run.name <- '210408_antman'
+args <- commandArgs(trailingOnly = TRUE)
+if(length(args) > 0) {
+  run.name <- args[1]
+} else {
+  run.name <- '210408_antman'
+}
+
 input_table <- fread(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), '/gbdeppaiml/lbd_anc_align/inputs.csv'))
 c.args <- input_table[run_name==run.name]
 run_name <- run.name
@@ -42,8 +47,6 @@ geo_codebook <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), geo_
 UNAIDS_year <- 2019
 lat_long_table <- c.args[['lat_long_table']]
 
-date <- substr(gsub("-","",Sys.Date()),3,8)
-
 ##load in LBD data
 loc.table <- get_locations(hiv_metadata = TRUE)
 anc_dat <- as.data.table(readRDS(lbd_anc_data)) 
@@ -56,6 +59,7 @@ hiv_locs_nat <- loc.table[level == 3 & epp == 1, ihme_loc_id]
 lat_long_table <- fread(lat_long_table)
 colnames(lat_long_table) <- c('ihme_loc_id','longitude', 'latitude')
 
+##set up lists to track where changes are occurring
 tracking_sheet <- list()
 nrow_sheet <- list()
   
@@ -66,34 +70,29 @@ geocodebook <- read.csv(geo_codebook, stringsAsFactors = FALSE)
 #anc_snap.R is from: https://stash.ihme.washington.edu/projects/GEOSP/repos/lbd_hiv/browse/data/anc/3_post_processing/anc_snap.r
 source('/homes/mwalte10/gbdeppaiml/lbd_anc_align/anc_snap.R')
 geocodebook <- snap_codebook(geocodebook)
-
-##added trim/whitespace code 
 geocodebook$site <- gsub(' $',"",as.character(geocodebook$site))
 geocodebook$site <- trimws(geocodebook$site)
-
 
 additional <- merge(additional, geocodebook, by.x = 'Site',by.y = 'site')
 additional <- as.data.table(additional)
 additional <- additional[,.(Site, iso3, Prev, Year, Group, N, latitude, longitude, type_of_additional)]
 additional <- merge(additional, lat_long_table, by = c('latitude', 'longitude'))
+##We only use ancss data in GBD20
 additional[,type:='ancss']
 additional[,ihme_loc_id := ifelse(is.na(ihme_loc_id), iso3, ihme_loc_id)]
 
 loc.table <- data.table(get_locations(hiv_metadata = T))
-
-### Code
 epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
 loc.list <- epp.list
 
 #################
-#we don't do this for zaf and png
-loc.list <- loc.list[!grepl('ZAF', loc.list)]
-loc.list <- loc.list[-which(loc.list == 'PNG')]
-loc.list <- loc.list[-which(loc.list == 'CPV')]
+#we do not align ZAF, PNG, or CPV data INSERT REASON HERE
+loc.list <- setdiff(loc.list, c('ZAF', 'PNG', 'CPV'))
 
 additional <- additional[Prev < 1,]
 for (countries in loc.list) {
 
+  ##Iteratively search for the most recent PJNZ file by location
   if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2020/', countries, '.rds'))) {
     df.2020 <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2020/', countries, '.rds'))
     df.2020 <- attr(df.2020, 'eppd')$ancsitedat
@@ -126,7 +125,6 @@ for (countries in loc.list) {
     
   } 
   
-    ##a few country specific suggestions
     df <- rbind(df.2019, df.2018, df.subpop, df.prepped, df.2020)
     df <- as.data.table(df)
     df[,country := countries]
@@ -163,7 +161,7 @@ for (countries in loc.list) {
     df$site[df$country == "LBR" & df$site == "Voinjama.Health.Center"] <- "Voinjama Health Center"
   }
   if(countries == "MDG"){
-    df$site[df$country == "MDG" & df$site == "Miarinarivo (%)"] <- "Miarinarivo (%)" # niot working
+    df$site[df$country == "MDG" & df$site == "Miarinarivo (%)"] <- "Miarinarivo (%)" 
     df$site[df$country == "MDG" & df$site == "Sambava  (%)"] <- "Sambava (%)"
     df$site[df$country == "MDG" & df$site == "Antsirabe  (%)"] <- "Antsirabe (%)"
   }
@@ -338,7 +336,7 @@ for (countries in loc.list) {
     all <- subset(all, !(country == "MRT" & !(subpop %in% c("Pop féminine restante"))))
     all <- subset(all, !(country == "NER" & !(subpop %in% c("Pop féminine restante"))))
     all <- subset(all, !(country == "SDN" & !(subpop %in% c("Female remaining pop"))))
-    #all <- subset(all, !(country == "STP" & !(subpop %in% c("Pop Fem_restante"))))
+    all <- subset(all, !(country == "STP" & !(subpop %in% c("Pop Fem_restante"))))
     all <- subset(all, !(country == "SEN" & !(subpop %in% c("Pop féminine restante"))))
     anc_post <- nrow(all)
     diff_8 <- anc_pre - anc_post
@@ -457,7 +455,6 @@ for (countries in loc.list) {
   anc_point_dat[, agegr := "15-49"]
   anc_point_dat[, age := "15"]
   anc_point_dat[, agspan := "35"]
-  ##not sure how to get region
   anc_point_dat[, used := TRUE]
   anc_point_dat[, offset := NA]
   anc_site_dat.colnames <- c('site', 'year', 'used', 'prev','n' ,'subpop','type' ,'agegr' ,'age','agspan','offset', 'country', 'ihme_loc_id')
@@ -470,8 +467,6 @@ for (countries in loc.list) {
     all_mapped <- data.table(unique(all_mapped))
     all_mapped[,cluster_id := c(1:nrow(all_mapped))]
     all_mapped <- data.frame(all_mapped)
-    
-    #remove duplcates
     all_mapped <- unique(all_mapped)
     
 
@@ -483,7 +478,6 @@ for (countries in loc.list) {
       anc_point_dat[, agegr := "15-49"]
       anc_point_dat[, age := "15"]
       anc_point_dat[, agspan := "35"]
-      ##not sure how to get region
       anc_point_dat[, subpop := NA]
       anc_point_dat[, used := TRUE]
       anc_point_dat[, offset := NA]
@@ -493,10 +487,8 @@ for (countries in loc.list) {
       saveRDS(anc_point_new.dat, file = paste0(anc_no_offset, countries, '.rds'))
 
     }else{   
-      ######get point data
-
-       anc_point_dat <- as.data.table(all_mapped)
-
+      
+      anc_point_dat <- as.data.table(all_mapped)
       anc_point_dat[, agegr := "15-49"]
       anc_point_dat[, age := "15"]
       anc_point_dat[, agspan := "35"]
@@ -515,11 +507,8 @@ for (countries in loc.list) {
         assign(paste0('diff_11_', k), nrow(final_file))
       }
       }
-    
 
   }
-  
- 
   
 }
 

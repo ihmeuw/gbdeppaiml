@@ -23,6 +23,7 @@ cluster.project <- 'proj.hiv'
 source(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/gbd/00_req_packages.R"))
 
 
+##The input table contains all relevant file paths, if any of them are updated then the appropriate scripts are launched to realign the ANC data
 input_table <- fread(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), '/gbdeppaiml/lbd_anc_align/inputs.csv'))
 
 # Arguments ---------------------------------------
@@ -34,7 +35,7 @@ if(length(args) > 0) {
   run.name.old <- args[2]
 } else {
   run.name.old <- '200316_windchime'
-  run.name.x <- '210408_antman'
+  run.name <- '210408_antman'
 }
 
 ##This only needs to be rerun if any of the file paths in the input file have changed. Note that between runs the anc_no_offset WILL change
@@ -46,7 +47,7 @@ rerun_conditions <- c(input_table[run_name == run.name.old, lbd_anc_data] != inp
 
 # Run scripts ---------------------------------------
 if(any(rerun_conditions == TRUE)){
-  #Writes out to mwalte10's personal directory, this should be changed in the future
+  #Creates latitude and longitude table
   lat_long.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
                             "-e /share/homes/", user,"/errors ",
                             "-o /share/temp/sgeoutput/", user, "/output ",
@@ -62,7 +63,8 @@ if(any(rerun_conditions == TRUE)){
                         "-N ",  "lbd_processing ",
                         "-hold_jid ", "lat_long ",
                         code.dir, "gbd/singR_shell.sh ",
-                        code.dir, "lbd_anc_align/lbd_anc_recreate.R ")
+                        code.dir, "lbd_anc_align/lbd_anc_recreate.R ", 
+                        run.name)
   print(recreate.string)
   system(recreate.string)
   
