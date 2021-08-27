@@ -23,9 +23,9 @@ user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
-  array.job = FALSE
-  run.name <- "210205_socialdets"
-  loc <- 'AGO_8'
+  array.job = TRUE
+  run.name <- "soc_dets_run"
+  loc <- 'BDI_1'
   stop.year <- 2022
   j <- 1
   paediatric <- TRUE
@@ -91,13 +91,12 @@ sexincrr.sub <- c.args[['sexincrr.sub']]
 lbd.anc <- T
 ped_toggle = FALSE
 paediatric <- TRUE
-
+loc.table <- get_locations(hiv_metadata = T)
 
 # Array job ---------------------------------------
 if(array.job){
   # have <- list.dirs('/ihme/hiv/epp_output/gbd20/210122_socialdets', full.names = F)
-  array.dt <- fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
-  array.dt <- array.dt[grep('ZAF_', ihme_loc_id),]
+  array.dt <- fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))[ihme_loc_id %in% loc.table[epp == 1, ihme_loc_id],]
   # missing <- setdiff(unique(array.dt$loc_scalar),have)
   
   task_id <- as.integer(Sys.getenv("SGE_TASK_ID"))
@@ -309,4 +308,4 @@ draw_vec = NULL
 #          mc.cores = 1)
 
 mclapply(draws, eppasm_functions, 
-         B_0 = 1e3, B = 1e3, k = 5, mc.cores = 7)
+         B_0 = 1e3, B = 1e3, k = 5, mc.cores = 2)

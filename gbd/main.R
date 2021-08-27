@@ -23,21 +23,22 @@ user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
-  array.job = FALSE
-  run.name <- "200713_yuka"
-  loc <- 'AGO'
-  stop.year <- 2022
+  array.job = TRUE
+  run.name <- "soc_dets_run"
+  loc <- 'BDI'
+  stop.year <- 2019
   j <- 1
   paediatric <- FALSE
 }else{
   run.name <- args[1]
   array.job <- as.logical(args[2])
+  j <- as.integer(Sys.getenv("SGE_TASK_ID"))
+  
 }
 
 if(!array.job & length(args) > 0){
   loc <- args[3]
   stop.year <- as.integer(args[4])
-  j <- as.integer(Sys.getenv("SGE_TASK_ID"))
   paediatric <- as.logical(args[5])
 }
 
@@ -49,7 +50,7 @@ setwd(gbdeppaiml_dir)
 devtools::load_all()
 
 gbdyear <- 'gbd20'
-stop.year = 2022
+stop.year = 2019
 
 run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
 in_run_table = F
@@ -90,11 +91,11 @@ paediatric = TRUE
 if(array.job){
   array.dt <- fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
   task_id <- as.integer(Sys.getenv("SGE_TASK_ID"))
-  j <- array.dt[task_id,draws]
   file_name <- array.dt[task_id,loc_scalar]
   combo_num <- array.dt[task_id,combo]
   loc <- array.dt[task_id,ihme_loc_id]
-  pred.mat <- readRDS('/ihme/homes/mwalte10/hiv_gbd2019/requests/haidong_proj/maggie/pref_mat.RDS')
+  pred.mat <- readRDS(paste0('/ihme/hiv/epp_input/gbd20/', run.name, '/pred_mat_country_spec.RDS'))
+  pred.mat[,year_id := year_var]
   foi_scalar <- unique(pred.mat[ihme_loc_id == loc & combo == combo_num])[,.(year_id, scalar)]
 }else{
   file_name <- loc

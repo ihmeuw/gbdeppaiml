@@ -56,9 +56,9 @@ gbd_sim_mod <-  function(fit, rwproj=fit$fp$eppmod == "rspline",VERSION = 'C'){
     #fp.draw = fit$param
     ##pull in new rvec
     {
-      # print('Pulling in a different RVEC')
-      # new_rvec = pred
-      # fp.draw$rvec[(length(fp.draw$rvec) - length(new_rvec) + 1):length(fp.draw$rvec)] <- new_rvec
+      print('Pulling in a different RVEC')
+       new_rvec = pred
+       fp.draw$rvec[(length(fp.draw$rvec) - length(new_rvec) + 1):length(fp.draw$rvec)] <- new_rvec
     }
   }else{
     fp.draw <- fit$fp
