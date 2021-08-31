@@ -22,10 +22,10 @@ source(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/
 
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
-if(length(args) == 0){
-  run.name <- '200316_windchime'
-}else{
+if(length(args) != 0){
   run.name <- args[1]
+}else{
+  run.name <- '200316_windchime'
 }
 
 code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/hiv_gbd2019/")
@@ -50,7 +50,6 @@ lbd_core <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), lbd_core
 areal_sites <- c.args[['areal_sites']]
 rd <- c.args[['rd']]
 lbd_anc_mean_est <- c.args[['lbd_anc_mean_est']]
-
 
 
 save_out_shapefiles <- FALSE
@@ -110,7 +109,6 @@ if(rd != '/share/geospatial/mbg/hiv/hiv_test/output/2019_02_26_30_11_35/'){
     
     
     agg_covs <- list()
-    
     for (shp in shp_path){
       print(shp)
       shapefile_path <- paste0(shapefile_directory, shp,".shp")
@@ -119,8 +117,6 @@ if(rd != '/share/geospatial/mbg/hiv/hiv_test/output/2019_02_26_30_11_35/'){
         print(paste0("no geofile for ",loc))
         next
       }
-      
-      #shp <- shp_path[1]
       
       
       if(shp %in% c("gadm_36_ad1","admin2013_2","admin2013_1")){
@@ -151,19 +147,9 @@ if(rd != '/share/geospatial/mbg/hiv/hiv_test/output/2019_02_26_30_11_35/'){
   
 }
 
-
-# ### Functions
-# loc.list <- loc.list[-1]
-# loc.list <- c(loc.list, loc.table[grep('ETH', ihme_loc_id),ihme_loc_id],
-#               loc.table[grep('KEN', ihme_loc_id),ihme_loc_id],
-#               loc.table[grep('NGA', ihme_loc_id),ihme_loc_id])
-# loc.list <- loc.list[!loc.list %in% c('MAR',
-#                                       'STP', 'ZAF','ETH','KEN','NGA')]
 loc.table <- data.table(get_locations(hiv_metadata = T))
-
 ### Code
 epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
-loc.list <- epp.list[grepl('ETH',epp.list)]
 for(loc in loc.list){
 gen.pop.dict <- c("General Population", "General population", "GP", 
                   "GENERAL POPULATION", "GEN. POPL.", "General population(Low Risk)", 'Pop restante',
@@ -215,15 +201,12 @@ all.dat$source <- "LBD"
 anc.dt$source <- "GBD"
 
 
-
 #Find different site years by subpopulation (if exists)
 all.dat[,site_year := paste0(site,year)]
 anc.dt$site_year <- paste0(anc.dt$site,anc.dt$year)
 
 
 ##Merge with source
-
-
 lbd.anc <- read.csv(lbd_anc_mean_est) %>% data.table()
 if(grepl('ETH', loc) | grepl('KEN', loc) | grepl('NGA', loc)){
   if(grepl('KEN', loc)){
@@ -268,9 +251,6 @@ if(grepl('ETH', loc) | grepl('KEN', loc) | grepl('NGA', loc)){
   }
 }
 
-#setnames(all.dat, 'N', 'n')
-
-
 site.dat.list <- anc.dt
 
 
@@ -291,8 +271,6 @@ lbd.anc <- all.dat
 #######################################
 lbd.anc$site <- gsub("&apos;",'\'',lbd.anc$site) 
 lbd.anc$site <- gsub("\xe9","é", lbd.anc$site)
-
-
 
 ######################################
 ######  Loc specific  fixes     ######
@@ -435,19 +413,9 @@ if(nrow(gbd.anc) != nrow(gbd.anc.all)){
 ######  Combined data    ######
 ###############################
 setnames(lbd.anc, c('site'), c('clinic'))
-
-
 lbd.anc <- unique(lbd.anc)
-
-# if(length(unique(lbd.anc$iso3)) > 1){
-#   lbd.anc <- lbd.anc[!is.na(iso3)]
-# }
-
 lbd.anc[,c('loc_id', 'subnational', 'country') := NULL]
 lbd.anc[,site_year := paste0(clinic, year)]
-## Pre 2000 we don't have any LBD estimates, so we just merge on the clinic metadata
-####NOTE, I TOOK OUT THE MATCH ON LATITUDE AND LONGITUDE HERE BECAUSE IT CAN BE MISSING OR MULTIPLE VALUES
-#################NOT SURE WHAT TO DO HERE NOW
 setnames(gbd.anc, 'site','clinic')
 if('group' %in% colnames(lbd.anc)){
   setnames(lbd.anc, 'group','subpop')
@@ -463,7 +431,6 @@ lbd.anc[,prev:=NULL]
 lbd.anc[,type := 'ancss']
 gbd.anc[,source := NULL]
 lbd.anc[,source := NULL]
-
 
 
 both.dt <- list()
@@ -483,9 +450,6 @@ for(subpop.x in unique(gbd.anc[,subpop])){
   both.dt.sp <- unique(both.dt.sp)
   both.dt <- rbind(both.dt, both.dt.sp)
 }
-
-
-
 
 
 both.dt <- rbind(both.dt, gbd.anc[clinic %in% setdiff(gbd.anc$site,both.dt$clinic),],fill = T)

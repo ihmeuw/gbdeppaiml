@@ -24,8 +24,8 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
   array.job = TRUE
-  run.name <- "soc_dets_run"
-  loc <- 'BDI'
+  run.name <- "soc_dets_run_sens"
+  loc <- 'AGO'
   stop.year <- 2019
   j <- 1
   paediatric <- FALSE
@@ -94,9 +94,11 @@ if(array.job){
   file_name <- array.dt[task_id,loc_scalar]
   combo_num <- array.dt[task_id,combo]
   loc <- array.dt[task_id,ihme_loc_id]
-  pred.mat <- readRDS(paste0('/ihme/hiv/epp_input/gbd20/', run.name, '/pred_mat_country_spec.RDS'))
-  pred.mat[,year_id := year_var]
-  foi_scalar <- unique(pred.mat[ihme_loc_id == loc & combo == combo_num])[,.(year_id, scalar)]
+  # pred.mat <- readRDS(paste0('/ihme/hiv/epp_input/gbd20/', run.name, '/pred_mat_country_spec.RDS'))
+  # pred.mat[,year_id := year_var]
+  # foi_scalar <- unique(pred.mat[ihme_loc_id == loc & combo == combo_num])[,.(year_id, scalar)]
+  foi_scalar <- array.dt[combo == combo_num,.(year_id, scale_foi)]
+  setnames(foi_scalar, 'scale_foi', 'scalar')
 }else{
   file_name <- loc
   foi_scalar = 1

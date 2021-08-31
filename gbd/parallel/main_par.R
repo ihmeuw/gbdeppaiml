@@ -24,8 +24,8 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
   array.job = TRUE
-  run.name <- "soc_dets_run"
-  loc <- 'BDI_1'
+  run.name <- "soc_dets_run_sens"
+  loc <- 'AGO_1'
   stop.year <- 2022
   j <- 1
   paediatric <- TRUE
@@ -33,7 +33,7 @@ if(length(args) == 0){
 }else{
   run.name <- args[1]
   array.job <- as.logical(args[2])
-  draws = 50
+  draws = args[3]
 }
 
 if(!array.job & length(args) > 0){
@@ -108,7 +108,9 @@ if(array.job){
   # draws <- draws + (draw_scal - 1) * 50
   file_name <- unique(array.dt[,loc_scalar])
   # foi_scalar <- unique(array.dt[,.(year_id, scale_foi)])
-  foi_scalar <- unique(array.dt[,.(year_id, pred, scale_foi)])
+  # foi_scalar <- unique(array.dt[,.(year_id, pred, scale_foi)])
+  foi_scalar <- unique(array.dt[,.(year_id, scale_foi)])
+  
   loc <- unique(array.dt[,ihme_loc_id])
   copy <- foi_scalar[year_id == 2019,]
   copy_1 <- copy(copy)[,year_id := 2020]
@@ -118,7 +120,7 @@ if(array.job){
   
   pred <- c()
   for(row in 1:nrow(foi_scalar)){
-    pred <- c(pred,rep(foi_scalar[row,pred],10))
+    pred <- c(pred,rep(foi_scalar[row,scale_foi],10))
   }
   # if(run.name == '201226_socialdets'){
   #   foi_scalar <- data.table(year_id = (c(1990:2020)))
@@ -127,6 +129,7 @@ if(array.job){
   # 
   #   pred_foi <- pred
   # }
+  pred <- unique(pred)
 }else{
   foi_scalar = 1
 }
@@ -308,4 +311,4 @@ draw_vec = NULL
 #          mc.cores = 1)
 
 mclapply(draws, eppasm_functions, 
-         B_0 = 1e3, B = 1e3, k = 5, mc.cores = 2)
+         B_0 = 1e5, B = 1e3, k = 500, mc.cores = 20)

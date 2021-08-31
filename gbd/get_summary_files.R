@@ -30,8 +30,8 @@ if(length(args) > 0) {
   run.name = args[1]
   loc = args[2]
 } else {
-  run.name = '200713_yuka'
-  loc = 'COM'
+  run.name = '2020_ind_test_agg4'
+  loc = 'IND_4856'
 
 }
 

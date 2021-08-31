@@ -13,7 +13,7 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 library(data.table)
 
 ## Arguments
-run.name <- "210205_socialdets"
+run.name <- "soc_dets_run_sens"
 spec.name <- "200713_yuka"
 compare.run <- c("200713_yuka")
 
@@ -68,22 +68,24 @@ loc.table <- data.table(get_locations(hiv_metadata = T))
 ### Code
 epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
 loc.list <- epp.list
-loc.list <- fread('/ihme/hiv/epp_input/gbd20/210205_socialdets/array_table.csv')
-loc.list <- loc.list[grep('ZAF_490', ihme_loc_id)]
+loc.list <- fread('/ihme/hiv/epp_input/gbd20/soc_dets_run_sens/array_table.csv')
 loc.list <- unique(loc.list$loc_scalar)
 reps <- length(loc.list)
 
 # Array job EPP-ASM ---------------------------------------
 if(array.job){
   # epp.string <- paste0("qsub -l m_mem_free=20G -l fthread=3 -l h_rt=24:00:00 -l archive=True -q long.q -P ", cluster.project, " ",
-  epp.string <- paste0("qsub -l m_mem_free=20G -l fthread=10 -l h_rt=24:00:00 -l archive=True -q long.q -P ", cluster.project, " ",
+  epp.string <- paste0("qsub -l m_mem_free=20G -l fthread=25 -l h_rt=24:00:00 -l archive=True -q long.q -P ", cluster.project, " ",
                      "-e /share/temp/sgeoutput/", user, "/errors ",
                      "-o /share/temp/sgeoutput/", user, "/output ",
                      "-N ", "eppasm_", run.name, ' ',
                      "-tc 3000 ",
                      "-t 1:", reps, " ",
                      "-hold_jid eppasm_prep_inputs_", run.name," ",
-                     code.dir, "gbd/singR_shell.sh ",
+                     '/ihme/singularity-images/rstudio/shells/execR.sh -i ',
+                     '/ihme/singularity-images/hiv/hiv_11.img ',
+                     # code.dir, "gbd/singR_shell.sh ",
+                     '-s ',
                      code.dir, "gbd/parallel/main_par.R ",
                      run.name, " ", array.job, ' ', draws)
 print(epp.string)
@@ -97,7 +99,10 @@ draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q a
                       # "-hold_jid ",    "eppasm_", run.name, ' ',
                       "-tc 100 ",
                       "-t 1:", reps, " ",
-                      code.dir, "gbd/singR_shell.sh ",
+                      '/ihme/singularity-images/rstudio/shells/execR.sh -i ',
+                      '/ihme/singularity-images/hiv/hiv_11.img ',
+                      # code.dir, "gbd/singR_shell.sh ",
+                      '-s ',
                       code.dir, "gbd/compile_draws.R ",
                       run.name, " ", array.job, ' TRUE ', paediatric)
 print(draw.string)

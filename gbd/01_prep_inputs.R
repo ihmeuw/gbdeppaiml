@@ -25,12 +25,13 @@ devtools::load_all()
 
 # Arguments ---------------------------------------
 gbdyear = 'gbd20'
-run.name = '210415_zanfona'
-old_run.name = '200713_yuka'
+run.name = 'soc_dets_run_sens'
+old_run.name = '210205_socialdets'
 spec.name = '200713_yuka'
 code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
 loc.table <- get_locations(hiv_metadata = T)
 loc.list <-  c(loc.table[epp == 1, ihme_loc_id], 'MRT', 'STP', 'COM')
+loc.list = 'AGO'
 
 # Toggles ---------------------------------------
 new_inputs = F

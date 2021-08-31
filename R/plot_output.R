@@ -142,7 +142,7 @@ plot_15to49_draw <- function(loc, output, eppd, run.name, compare.run = '190630_
   dev.off()
 }
 
-plot_15to49 <- function(loc="KEN_35618",  
+plot_15to49 <- function(loc="IND_4873",  
                         run.vec = c('/gbd19/190630_rhino2', '/gbd20/200713_yuka/'),
                         base.run = '200713_yuka',
                         names = c('GBD19', 'GBD20'),
@@ -150,6 +150,7 @@ plot_15to49 <- function(loc="KEN_35618",
                         loc_name = NULL){
   x <- data.table(cbind(name = names, run_name = run.vec))
   meas.list <- c('Incidence', 'Prevalence', 'Deaths', 'ART')
+  meas.list = 'Prevalence'
 
   
   if(is.null(loc_name)){
@@ -233,15 +234,15 @@ plot_15to49 <- function(loc="KEN_35618",
   
   
   # If switching models ---------------------------------------
-  if(!loc_name %in% loc.table[epp == 1, ihme_loc_id]){
-    compare.dt.s2 <- compare_spec.func(run_vec = c('200316_windchime'), stage = compare.stage)
-    compare_epp <- compare_epp.func(run_vec = c('200316_windchime_ind'))
+  if(!loc_name %in% loc.table[epp == 1, ihme_loc_id] | grepl('IND', loc)){
+    compare.dt.s2 <- compare_spec.func(run_vec = c('190630_rhino_combined'), stage = 'stage_2')
+    compare_epp <- compare_epp.func(run_vec = c('190630_rhino_ind'))
   }else{
     compare.dt.s2 = NULL
     compare_epp <- NULL
   }
   
-  plot.dt <- rbind(data,compare.dt,use.names = T, fill = T)
+  plot.dt <- rbind(data,compare.dt, compare.dt.s2, compare_epp,use.names = T, fill = T)
   
   plot.dt[,model := factor(model)]
   
@@ -275,32 +276,33 @@ plot_15to49 <- function(loc="KEN_35618",
   plot.dt <- rbind( plot.dt, fill = T)
   
   
-  color.list <- c('blue', 'red', 'green','purple','orange','black', 'darkgreen')
-  names(color.list) <- unique(plot.dt$model)
+  color.list <- c('blue', 'red', 'green','purple','orange','black', 'darkgreen', 'red')
+  names(color.list) <- c(unique(plot.dt$model)[1:2], '', 'Spectrum', 'EPP', 'rlogistic', 'Probit', 'Binomial')
   plot.dt[,model := factor(model)]
   
   dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', base.run, '/15to49_plots/'), recursive = TRUE)
   pdf(paste0('/ihme/hiv/epp_output/', gbdyear, '/', base.run, '/15to49_plots/', loc, '.pdf'), width = 10, height = 6)
   
   gg <- ggplot()
+
+  # gg <- gg + geom_ribbon(data = plot.dt[type == 'line'], aes(year, ymin = lower, ymax = upper, fill = model), alpha = 0.2)
+  
+  gg <- gg + geom_line(data = plot.dt[type == 'line' & indicator == 'Prevalence'], aes(x = year, y = mean, color = model), size = 1.5, alpha = 0.8) +
+   # facet_wrap(~indicator, scales = 'free') +
+
+    theme_bw() +
+    scale_fill_manual(values=color.list) + scale_colour_manual(values=color.list)  +
+    xlab("Year") + ylab("Mean") #+ ggtitle(paste0(loc.table[ihme_loc_id == loc, plot_name], ' EPPASM Results'))
   if(nrow(plot.dt[model == 'ANC Site']) > 0){
     if(nrow(plot.dt[type == 'ancss']) > 0){
-      gg <- gg + geom_point(data = plot.dt[type == 'ancss'], aes(x = year, y = mean, shape = 'ANC-SS'), alpha = 0.2)
+      gg <- gg + geom_point(data = plot.dt[type == 'ancss'], aes(x = year, y = mean, shape = 'ANC-SS'), alpha = 1)
     }else{
-      gg <- gg + geom_point(data = plot.dt[model == 'ANC Site'], aes(x = year, y = mean, shape = 'ANC Site'), alpha = 0.2)
+      gg <- gg + geom_point(data = plot.dt[model == 'ANC Site'], aes(x = year, y = mean, shape = 'ANC Site'), alpha = 1)
     }
     if(nrow(plot.dt[type == 'ancrt']) > 0){
       gg <- gg + geom_point(data = plot.dt[type == 'ancrt'], aes(x = year, y = mean, shape = 'ANC-RT'), alpha = 0.2)
     }
   }
-  gg <- gg + geom_ribbon(data = plot.dt[type == 'line'], aes(year, ymin = lower, ymax = upper, fill = model), alpha = 0.2)
-  
-  gg <- gg + geom_line(data = plot.dt[type == 'line'], aes(x = year, y = mean, color = model)) +
-    facet_wrap(~indicator, scales = 'free') +
-
-    theme_bw() +
-    scale_fill_manual(values=color.list) + scale_colour_manual(values=color.list)  +
-    xlab("Year") + ylab("Mean") + ggtitle(paste0(loc.table[ihme_loc_id == loc, plot_name], ' EPPASM Results'))
   if(nrow(plot.dt[model == 'Household Survey']) > 0){
     gg <- gg + geom_point(data = plot.dt[model == 'Household Survey'], aes(x = year, y = mean, shape = 'Household Survey'),size=3)
     gg <- gg + geom_errorbar(data = plot.dt[model == 'Household Survey'], aes(x = year, ymin = lower, ymax = upper))
@@ -312,6 +314,9 @@ plot_15to49 <- function(loc="KEN_35618",
   if(nrow(plot.dt[model == 'VR']) > 0){
     gg <- gg + geom_point(data = plot.dt[model == 'VR'], aes(x = year, y = mean, shape = 'VR'), size = 0.75)
   }
+  
+  gg <- gg + theme(axis.text = element_text(size = 16), axis.title = element_text(size = 18), legend.text = element_text(size = 16),
+                   legend.title = element_text(size = 18)) + ggtitle(paste0('High prevalence state, testing likelihood'))
   
   print(gg)
   dev.off()
@@ -607,11 +612,11 @@ plot_age_specific <- function(loc,
   both.dt <- rbind(data,  compare.dt, unaids.dt,use.names = T)
   both.dt[,model := factor(model)]
   both.dt[age == '15-49', age := '15 to 49']
-  color.list <- c('green','purple','orange','black', 'darkgreen')
+  color.list <- c('green','purple','red','black', 'red')
   color.list <- color.list[1:length(unique(both.dt$model))]
   names(color.list) <- unique(both.dt$model)
   both.dt[,age := factor(age, levels=c('enn', 'lnn', 'x_388', 'x_389', 'pnn', '1', paste0( seq(5, 80, 5)), 'All', '15 to 49'))]
-      
+  both.dt <- both.dt[!age %in% c('x_388', 'x_389'),]
 
   
 
@@ -627,8 +632,8 @@ plot_age_specific <- function(loc,
         gg <- gg + geom_point(data = plot.dt[model == 'ANC Site'], aes(x = year, y = mean, shape = 'ANC Site'), alpha = 0.2)
       }
       
-      gg <- gg + geom_line(data = plot.dt[type == 'line'], aes(x = year, y = mean, color = model)) +
-        geom_ribbon(data = plot.dt[type == 'line'], aes(x = year, ymin = lower, ymax = upper,  fill = model), alpha = 0.2) +
+      gg <- gg + geom_line(data = plot.dt[type == 'line'], aes(x = year, y = mean, color = model), size = 1.5, alpha = 0.8) +
+        # geom_ribbon(data = plot.dt[type == 'line'], aes(x = year, ymin = lower, ymax = upper,  fill = model), alpha = 0.2) +
         facet_wrap(~age, scales = 'free_y') +
         theme_bw() +
         scale_fill_manual(values=color.list) + scale_colour_manual(values=color.list)  +
@@ -644,7 +649,8 @@ plot_age_specific <- function(loc,
       if(nrow(plot.dt[model == 'Case Report']) > 0){
         gg <- gg + geom_point(data = plot.dt[model == 'Case Report'], aes(x = year, y = mean, shape = 'Case Report'), size = 0.75)
       }
-      
+      gg <- gg + theme(axis.text = element_text(size = 16), axis.title = element_text(size = 18), legend.text = element_text(size = 16),
+                    legend.title = element_text(size = 18)) + ggtitle(paste0('Low prevalence state, testing likelihood'))
       print(gg)
     }
     dev.off()

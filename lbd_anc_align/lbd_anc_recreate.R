@@ -78,8 +78,6 @@ geocodebook <- snap_codebook(geocodebook)
 ##added trim/whitespace code 
 geocodebook$site <- gsub(' $',"",as.character(geocodebook$site))
 geocodebook$site <- trimws(geocodebook$site)
-
-
 additional <- merge(additional, geocodebook, by.x = 'Site',by.y = 'site')
 additional <- as.data.table(additional)
 additional <- additional[,.(Site, iso3, Prev, Year, Group, N, latitude, longitude, type_of_additional)]
@@ -88,12 +86,12 @@ additional[,type:='ancss']
 
 loc.table <- data.table(get_locations(hiv_metadata = T))
 
-### Code
+### locations
 epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
 loc.list <- epp.list
 
 #################
-#we don't do this for zaf and png
+#We don't align LBD sites for ZAF, ETH, or PNG. See GBD20 documentation for more info
 loc.list <- loc.list[!grepl('ZAF', loc.list)]
 loc.list <- loc.list[!grepl('ETH', loc.list)]
 loc.list <- loc.list[-which(loc.list == 'PNG')]
@@ -206,10 +204,6 @@ for (countries in loc.list) {
   }
   if(countries == "NGA"){
     df$site[df$country == "NGA" & df$site == "Osun  (Iragbere)"] <- "Osun (Iragbere)"
-  }
-  if(countries == "ZAF"){
-    df$site[df$country == "ZAF" & df$site == "NULL"] <- "KWAZULU-NATAL PROVINCE" 
-    
   }
   if(countries == "COG"){
     df$site[df$country == "COG" & df$site == "Cuvette.ouest"] <- "Cuvette ouest"
@@ -326,12 +320,6 @@ for (countries in loc.list) {
   all <- df
   
   #################################
-  #Rename ZAF blank site
-  #################################
-  if(countries == 'ZAF'){all$site[all$country == "ZAF" & all$site =="NULL"] <- "KWAZULU-NATAL PROVINCE"
-  }
-  
-  #################################
   #Remove MOZ pseudosites
   #################################
   if(countries == "MOZ"){
@@ -372,12 +360,6 @@ for (countries in loc.list) {
   #################################
   #Remove differently named duplicates
   #################################
-  
-  if(parent == 'ZAF'){
-    all <- as.data.table(all)
-    all[,subpop:='all']
-    all <- as.data.frame(all)
-  }
   if(countries == 'RWA' | countries == 'TZA'){
     dup_pre <- nrow(all)
     all <- subset(all, !(country == "RWA" & site == "Gikondo A"& year != 2013))
@@ -397,8 +379,7 @@ for (countries in loc.list) {
   #################################
   if(countries %in% c('CIV', 'CMR', 'COD', 'AGO',
                       'MOZ', 'MWI', 'CMR', 'CPV',
-                      'ERI', 'KEN', 'TGO', 'ZAF',
-                      'GHA'))
+                      'ERI', 'KEN', 'TGO', 'GHA'))
     {
     outlier_pre <- nrow(all)
     all <- subset(all, !(country == "CIV" & site == "MATERNITE HG ABOBO SUD")) #outlier
@@ -407,14 +388,12 @@ for (countries in loc.list) {
     all <- subset(all, !(country == "AGO" & site %in% c("CMI Benguela - Benguela","Mat do Lobito - Benguela") & year == 2004)) #outlier
     all <- subset(all, !(country == "MOZ" & year >= 2013)) #RT vs SS (9 site-years)
     all <- subset(all, !(country == "MWI" & year == 2016)) #RT vs SS (3 site-years)
-    #duplicates from anc checks output 8/8/2019
     #exact duplicates to reports (zeros)
     all <- subset(all, !(country == "CMR" & site == "Ndop" & year == 2002))
     all <- subset(all, !(country == "CPV" & site == "S.Vicente" & year == 1995))
     all <- subset(all, !(country == "ERI" & site == "Akordet" & year == 2007 ))
     all <- subset(all, !(country == "KEN" & site == "Kisii" & year == 1992  ))
     all <- subset(all, !(country == "TGO" & site == "USP KATINDI" & year == 2011 ))
-    all <- subset(all, !(country == "ZAF" & site == "Namakwa DM" & year == 2009 ))
     # removing duplicate site_year with different prev, this prev for 2018 was zero (6.0 from 2017 was closer)
     all <- subset(all, !(country == "GHA" & site == "Nadowli" & year == 2006 ))
     outlier_post <- nrow(all)
@@ -428,7 +407,6 @@ for (countries in loc.list) {
     #    change it to be the median of the others
     all$n[all$country == "BDI" & all$n == 300] <- 349
     all$n[all$country == "CMR" & all$n == 300] <- 100
-    
     all$n[all$country == "COG" & all$n == 300] <- 121
     all$n[all$country == "LSO" & all$n == 300] <- 325
     all$n[all$country == "MLI" & all$n == 300] <- 299
@@ -470,7 +448,6 @@ for (countries in loc.list) {
   anc_point_dat[, agegr := "15-49"]
   anc_point_dat[, age := "15"]
   anc_point_dat[, agspan := "35"]
-  ##not sure how to get region
   anc_point_dat[, used := TRUE]
   anc_point_dat[, offset := NA]
   anc_site_dat.colnames <- c('site', 'year', 'used', 'prev','n' ,'subpop','type' ,'agegr' ,'age','agspan','offset', 'country', 'ihme_loc_id')
@@ -483,42 +460,16 @@ for (countries in loc.list) {
     all_mapped$prev <- all_mapped$prev
     all_mapped <- unique(all_mapped)
     all_mapped$cluster_id <- 1:dim(all_mapped)[1]
-    
     all_mapped <- data.frame(all_mapped)
-    
     #remove duplcates
     all_mapped <- all_mapped[!duplicated(all_mapped), ]
     
 
-    if(parent == 'ZAF'){
-      # all_point <- subset(all_mapped, point == 0)
-      all_mapped <- all
-      all_mapped <- as.data.table(all_mapped)
-      anc_point_dat <- all_mapped[,point:= NULL]
-
-      anc_point_dat[, agegr := "15-49"]
+    ######get point data
+    anc_point_dat <- as.data.table(all_mapped)
+    anc_point_dat[, agegr := "15-49"]
       anc_point_dat[, age := "15"]
       anc_point_dat[, agspan := "35"]
-      ##not sure how to get region
-      anc_point_dat[, subpop := NA]
-      anc_point_dat[, used := TRUE]
-      anc_point_dat[, offset := NA]
-      anc_point_dat[, country := countries]
-      #anc_point_dat[, type := "ancss"]
-      anc_site_dat.colnames <- c('site', 'year', 'used', 'prev','n' ,'subpop','type' ,'agegr' ,'age','agspan','offset', 'country', 'ihme_loc_id')
-      anc_point_new.dat <- anc_point_dat[,anc_site_dat.colnames, with = FALSE]
-    #  saveRDS(anc_point_new.dat, file = paste0(anc_no_offset, countries, '.rds'))
-
-    }else{   
-      ######get point data
-
-       anc_point_dat <- as.data.table(all_mapped)
-
-      anc_point_dat[, agegr := "15-49"]
-      anc_point_dat[, age := "15"]
-      anc_point_dat[, agspan := "35"]
-      ##not sure how to get region
-      #anc_point_dat[, subpop := NA]
       anc_point_dat[, used := TRUE]
       anc_point_dat[, offset := NA]
       anc_point_dat[, country := countries]
@@ -531,7 +482,7 @@ for (countries in loc.list) {
         final_file <- final_file[,anc_site_dat.colnames, with = FALSE]
       #  saveRDS(final_file, file = paste0(anc_no_offset, unique(anc_point_new.dat$ihme_loc_id)[k], '.rds'))
         assign(paste0('diff_11_', k), nrow(final_file))
-      }
+      
       }
     
 
@@ -544,8 +495,4 @@ for (countries in loc.list) {
   
 }
 
-diff_vec <- rbindlist(diff_vec)
-row.names(diff_vec) <- diff_vec$V1
-diff_vec[,V1 := NULL]
-x = sapply(diff_vec, as.numeric)
-colSums(x)
+
