@@ -625,7 +625,8 @@ plot_age_specific <- function(loc,
     pdf(paste0('/ihme/hiv/epp_output/', gbd_year_new, '/', run.name.new, '/age_specific_plots/', c.indicator, '/', loc, '.pdf'), width = 10, height = 6)
       
     for(c.sex in c('male', 'female', 'both')){
-      plot.dt <- both.dt[sex == c.sex & indicator == c.indicator]
+      plot.dt <- both.dt[sex == c.sex & indicator == c.indicator & year > 1979]
+      
       gg <- ggplot()
       
       if(nrow(plot.dt[model == 'ANC Site']) > 0){
@@ -649,8 +650,8 @@ plot_age_specific <- function(loc,
       if(nrow(plot.dt[model == 'Case Report']) > 0){
         gg <- gg + geom_point(data = plot.dt[model == 'Case Report'], aes(x = year, y = mean, shape = 'Case Report'), size = 0.75)
       }
-      gg <- gg + theme(axis.text = element_text(size = 16), axis.title = element_text(size = 18), legend.text = element_text(size = 16),
-                    legend.title = element_text(size = 18)) + ggtitle(paste0('Low prevalence state, testing likelihood'))
+      gg <- gg + theme(axis.text.y = element_text(size = 12), axis.text.x = element_text(angle = 45, size = 12, vjust = 0.8), axis.title = element_text(size = 18), legend.text = element_text(size = 16),
+                    legend.title = element_text(size = 18)) + ggtitle(paste0('High prevalence state, testing likelihood'))
       print(gg)
     }
     dev.off()
