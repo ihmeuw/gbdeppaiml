@@ -10,57 +10,61 @@ test.sub_prev_granular = NULL){
   #Do this for now as something is weird with the new PJNZ files - don't need subpop anyway
   #Eventually these hsould all be regenerated with subpopulations
 
-  if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))) {
+  
+  if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2020/', loc, '.rds'))) {
+    dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2020/', loc, '.rds'))
+    
+  }else if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))) {
     dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))
     
   } else if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2018/', loc, '.rds'))) {
-      dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2018/', loc, '.rds'))
-      
+    dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2018/', loc, '.rds'))
+    
   } else if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2015/', loc, '.rds'))){
-      dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2015/', loc, '.rds'))
-      
+    dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2015/', loc, '.rds'))
+    
   } else if(file.exists(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', loc, '.rds'))) {
-        dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', loc, '.rds'))
-        
+    dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', loc, '.rds'))
+    
   } else if(file.exists(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))) {
-        dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))
-      }
-
- 
-  if(lbd.anc){
-      replace <- as.data.table(readRDS(paste0('/share/hiv/data/PJNZ_prepped/lbd_anc/2019/', loc, '.rds')))
-
-      if(grepl("KEN",loc)){
-        replace <- replace[which(subpop == attr(dt,"eppd")$ancsitedat$subpop[1])]
-      }
-      
-      
-      if(grepl("SOM",loc)){
-        replace <- replace[subpop %in% "Remaining females" & type=="ancss"]
-      }
-      
-
-      if(!geoadjust){
-        replace[,offset := NULL]
-      }
-      replace[,'age' := as.numeric(replace[,age])]
-      replace[,'agspan' := as.numeric(replace[,agspan])]
-      replace[,'site' := as.character(replace[,site])]
-      replace[,'high_risk' := FALSE]
-      replace <- replace[type == 'ancss',]
-      if(!geoadjust){
-        replace[,adm0_mean:=NULL]
-        replace[,adm0_lower:=NULL]
-        replace[,adm0_upper:=NULL]
-        replace[,site_pred:=NULL]
- 
-      }
-
-      attr(dt, 'eppd')$ancsitedat <- replace
+    dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))
+  } 
   
-
+  
+  if(lbd.anc){
+    replace <- as.data.table(readRDS(paste0('/share/hiv/data/PJNZ_prepped/lbd_anc/2020/', loc, '.rds')))
+    
+    if(grepl("KEN",loc)){
+      replace <- replace[which(subpop == attr(dt,"eppd")$ancsitedat$subpop[1])]
+    }
+    
+    
+    if(grepl("SOM",loc)){
+      replace <- replace[subpop %in% "Remaining females" & type=="ancss"]
+    }
+    
+    
+    if(!geoadjust){
+      replace[,offset := NULL]
+    }
+    replace[,'age' := as.numeric(replace[,age])]
+    replace[,'agspan' := as.numeric(replace[,agspan])]
+    replace[,'site' := as.character(replace[,site])]
+    replace[,'high_risk' := FALSE]
+    # replace <- replace[type == 'ancss',]
+    if(!geoadjust){
+      replace[,adm0_mean:=NULL]
+      replace[,adm0_lower:=NULL]
+      replace[,adm0_upper:=NULL]
+      replace[,site_pred:=NULL]
+      
+    }
+    
+    attr(dt, 'eppd')$ancsitedat <- replace
+    
+    
   }
-
+  
 
  ## Substitute IHME data
   ## Population parameters
