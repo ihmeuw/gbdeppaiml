@@ -19,7 +19,7 @@ if(length(args) > 0) {
     compare.run <- NA
   }
 } else {
-  run.name <- "210415_zanfona"
+  run.name <- "200713_yuka_new_data"
   loc <- "AGO"
   draw.fill <- TRUE
   compare.run <- c('200713_yuka')
@@ -82,19 +82,19 @@ plot_15to49(loc,
             names = c('Current run', 'GBD20'),
             gbdyear = gbdyear,
             loc_name = loc.name)
-# 
-# 
-# # #Age-specific plots
+# # 
+# # 
+# # # #Age-specific plots
 # for(c.indicator in rev(c( 'Prevalence','Incidence','Deaths'))){
 #   dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/age_specific_plots/', c.indicator, '/'), recursive = TRUE, showWarnings = FALSE)
 # }
-# 
+#
 plot_age_specific(loc, run.name.new=run.name,
-                         compare.run = run.names.comp, gbdyear = gbd_year_new, c.metric = 'Count')
+                         compare.run = NULL, gbdyear = gbd_year_new, c.metric = 'Rate')
 
 # # ## Birth prevalence
 dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/paeds_plots/'), showWarnings = F)
-run.names.comp = NULL
+#run.names.comp = NULL
 loc_temp <- unlist(strsplit(loc,split =  '_'))[[1]]
 plot_birthprev(loc = loc,run.name.new =  run.name,
                gbdyear = gbd_year_new,

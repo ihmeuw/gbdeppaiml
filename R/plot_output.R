@@ -150,7 +150,6 @@ plot_15to49 <- function(loc="IND_4873",
                         loc_name = NULL){
   x <- data.table(cbind(name = names, run_name = run.vec))
   meas.list <- c('Incidence', 'Prevalence', 'Deaths', 'ART')
-  meas.list = 'Prevalence'
 
   
   if(is.null(loc_name)){
@@ -277,27 +276,27 @@ plot_15to49 <- function(loc="IND_4873",
   
   
   color.list <- c('blue', 'red', 'green','purple','orange','black', 'darkgreen', 'red')
-  names(color.list) <- c(unique(plot.dt$model)[1:2], '', 'Spectrum', 'EPP', 'rlogistic', 'Probit', 'Binomial')
+  names(color.list) <- c(unique(plot.dt$model)[1:2], 'GBD20', 'Current run', 'EPP', 'rlogistic', 'Probit', 'Binomial')
   plot.dt[,model := factor(model)]
   
-  dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', base.run, '/15to49_plots/'), recursive = TRUE)
-  pdf(paste0('/ihme/hiv/epp_output/', gbdyear, '/', base.run, '/15to49_plots/', loc, '.pdf'), width = 10, height = 6)
+  dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', base.run, '/15to49_plot/'), recursive = TRUE)
+  pdf(paste0('/ihme/hiv/epp_output/', gbdyear, '/', base.run, '/15to49_plot/', loc, '.pdf'), width = 10, height = 6)
   
   gg <- ggplot()
 
   # gg <- gg + geom_ribbon(data = plot.dt[type == 'line'], aes(year, ymin = lower, ymax = upper, fill = model), alpha = 0.2)
   
-  gg <- gg + geom_line(data = plot.dt[type == 'line' & indicator == 'Prevalence'], aes(x = year, y = mean, color = model), size = 1.5, alpha = 0.8) +
-   # facet_wrap(~indicator, scales = 'free') +
+  gg <- gg + geom_line(data = plot.dt[type == 'line'], aes(x = year, y = mean, color = model),size = 1 , alpha = 0.8) +
+   facet_wrap(~indicator, scales = 'free') +
 
     theme_bw() +
     scale_fill_manual(values=color.list) + scale_colour_manual(values=color.list)  +
-    xlab("Year") + ylab("Mean") #+ ggtitle(paste0(loc.table[ihme_loc_id == loc, plot_name], ' EPPASM Results'))
+    xlab("Year") + ylab("Mean") + ggtitle(paste0(loc.table[ihme_loc_id == loc, plot_name], ' EPPASM Results'))
   if(nrow(plot.dt[model == 'ANC Site']) > 0){
     if(nrow(plot.dt[type == 'ancss']) > 0){
-      gg <- gg + geom_point(data = plot.dt[type == 'ancss'], aes(x = year, y = mean, shape = 'ANC-SS'), alpha = 1)
+      gg <- gg + geom_point(data = plot.dt[type == 'ancss'], aes(x = year, y = mean, shape = 'ANC-SS'), alpha = 0.2)
     }else{
-      gg <- gg + geom_point(data = plot.dt[model == 'ANC Site'], aes(x = year, y = mean, shape = 'ANC Site'), alpha = 1)
+      gg <- gg + geom_point(data = plot.dt[model == 'ANC Site'], aes(x = year, y = mean, shape = 'ANC Site'), alpha = 0.2)
     }
     if(nrow(plot.dt[type == 'ancrt']) > 0){
       gg <- gg + geom_point(data = plot.dt[type == 'ancrt'], aes(x = year, y = mean, shape = 'ANC-RT'), alpha = 0.2)
@@ -316,7 +315,7 @@ plot_15to49 <- function(loc="IND_4873",
   }
   
   gg <- gg + theme(axis.text = element_text(size = 16), axis.title = element_text(size = 18), legend.text = element_text(size = 16),
-                   legend.title = element_text(size = 18)) + ggtitle(paste0('High prevalence state, testing likelihood'))
+                   legend.title = element_text(size = 18))# + ggtitle(paste0('High prevalence state, testing likelihood'))
   
   print(gg)
   dev.off()
@@ -501,7 +500,7 @@ plot_age_specific <- function(loc,
   }else{
     compare = F
   }
-  
+  compare =T
   ###load in fit_data
   age.map.old <- fread(paste0('/ihme/hiv/epp_input/gbd19/', '190630_rhino2', "/age_map.csv"))
   if(loc %in% loc.table[grepl("IND",ihme_loc_id) & epp != 1,ihme_loc_id]){
@@ -541,7 +540,7 @@ plot_age_specific <- function(loc,
       }
       data <- rbind(data, rate.dt, use.names = T)
     }
-    
+
     if('Deaths' %in% data$indicator){
       ## TODO could add CI of STGPR
       stgpr <- fread('/ihme/hiv/st_gpr/spectrum_gpr_results.csv')
@@ -560,7 +559,7 @@ plot_age_specific <- function(loc,
       stgpr[, age_group_id := NULL]
       data <- rbind(data, stgpr, use.names = T)
     }
-    
+
     ## Comparison run, changing to unraked results, 03/04/2020
     # if(file.exists(paste0('/snfs1/WORK/04_epi/01_database/02_data/hiv/spectrum/summary/190630_rhino_combined/locations/', loc, '_spectrum_prep.csv'))){
     #   compare.dt.19 <- fread(paste0('/snfs1/WORK/04_epi/01_database/02_data/hiv/spectrum/summary/190630_rhino_combined/locations/', loc, '_spectrum_prep.csv'))
@@ -570,9 +569,9 @@ plot_age_specific <- function(loc,
     #   compare.dt.19[sex_id == 2, sex := 'female']
     #   compare.dt.19[sex_id == 3, sex := 'both']
     #   compare.dt.19[age_group_id == 24, age := '15 to 49']
-    #   compare.dt.19 <- compare.dt.19[,.(age, sex, type = 'line', year = year_id, 
+    #   compare.dt.19 <- compare.dt.19[,.(age, sex, type = 'line', year = year_id,
     #                                     indicator = measure, model = 'GBD2019', mean, lower, upper)]
-    # 
+    #
     # }else{
     #   compare.dt.19 <- NULL
     # }
@@ -633,7 +632,7 @@ plot_age_specific <- function(loc,
         gg <- gg + geom_point(data = plot.dt[model == 'ANC Site'], aes(x = year, y = mean, shape = 'ANC Site'), alpha = 0.2)
       }
       
-      gg <- gg + geom_line(data = plot.dt[type == 'line'], aes(x = year, y = mean, color = model), size = 1.5, alpha = 0.8) +
+      gg <- gg + geom_line(data = plot.dt[type == 'line'], aes(x = year, y = mean, color = model), alpha = 0.8) +
         # geom_ribbon(data = plot.dt[type == 'line'], aes(x = year, ymin = lower, ymax = upper,  fill = model), alpha = 0.2) +
         facet_wrap(~age, scales = 'free_y') +
         theme_bw() +
@@ -651,7 +650,8 @@ plot_age_specific <- function(loc,
         gg <- gg + geom_point(data = plot.dt[model == 'Case Report'], aes(x = year, y = mean, shape = 'Case Report'), size = 0.75)
       }
       gg <- gg + theme(axis.text.y = element_text(size = 12), axis.text.x = element_text(angle = 45, size = 12, vjust = 0.8), axis.title = element_text(size = 18), legend.text = element_text(size = 16),
-                    legend.title = element_text(size = 18)) + ggtitle(paste0('High prevalence state, testing likelihood'))
+                    legend.title = element_text(size = 18)) + # + ggtitle(paste0('High prevalence state, testing likelihood'))
+         ggtitle(paste0(loc.table[ihme_loc_id == loc, plot_name],', ', c.sex ,' EPPASM Results'))
       print(gg)
     }
     dev.off()
@@ -683,12 +683,15 @@ plot_birthprev <- function(loc, gbdyear, run.name.new, compare.run){
   ###load in pmtct data
   pmtct <- list()
   find.files <- list()
-  for(c.year in c('covid','UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
-    find.files[[c.year]] <- file.exists( paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/PMTCT/', c.year,'/', loc, '_PMTCT_ART_cov.csv'))
+  c.year_current = paste0('/GBD21/PMTCT/',c('UNAIDS_2020','UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520'))
+  c.year_previous = paste0('/GBD20/PMTCT/',c('UNAIDS_2020','UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520'))
+  
+  for(c.year in c(c.year_current, c.year_previous)){
+    find.files[[c.year]] <- file.exists( paste0('/ihme/hiv/data/UNAIDS_extrapolated/', c.year,'/', loc, '_PMTCT_ART_cov.csv'))
   }
   find.files <- data.table(names = names(find.files), exists = unlist(find.files))
   for(year.x in find.files[exists == 'TRUE', names]){
-    dt <- paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/PMTCT/', year.x,'/', loc, '_PMTCT_ART_cov.csv') %>% fread
+    dt <- paste0('/ihme/hiv/data/UNAIDS_extrapolated/', year.x,'/', loc, '_PMTCT_ART_cov.csv') %>% fread
     dt <- melt(dt, id.vars= 'year')
     dt[,model:= year.x]
     pmtct <- rbind(dt, pmtct)

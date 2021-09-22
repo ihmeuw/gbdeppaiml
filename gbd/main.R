@@ -11,7 +11,7 @@
 ## Some arguments are likely to stay constant across runs, others we're more likely to test different options.
 ## The arguments that are more likely to vary are pulled from the eppasm run table
 ##
-
+rm(list =ls())
 ## Used in basically every script
 Sys.umask(mode = "0002")
 windows <- Sys.info()[1][["sysname"]]=="Windows"
@@ -24,8 +24,8 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
   array.job = TRUE
-  run.name <- "soc_dets_run_sens"
-  loc <- 'AGO'
+  run.name <- "200713_yuka_new_data"
+  loc <- 'RWA'
   stop.year <- 2019
   j <- 1
   paediatric <- FALSE
@@ -50,7 +50,7 @@ setwd(gbdeppaiml_dir)
 devtools::load_all()
 
 gbdyear <- 'gbd20'
-stop.year = 2019
+stop.year = 2022
 
 run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
 in_run_table = F
@@ -88,21 +88,21 @@ ped_toggle = TRUE
 paediatric = TRUE
 
 # Array job ---------------------------------------
-if(array.job){
-  array.dt <- fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
-  task_id <- as.integer(Sys.getenv("SGE_TASK_ID"))
-  file_name <- array.dt[task_id,loc_scalar]
-  combo_num <- array.dt[task_id,combo]
-  loc <- array.dt[task_id,ihme_loc_id]
-  # pred.mat <- readRDS(paste0('/ihme/hiv/epp_input/gbd20/', run.name, '/pred_mat_country_spec.RDS'))
-  # pred.mat[,year_id := year_var]
-  # foi_scalar <- unique(pred.mat[ihme_loc_id == loc & combo == combo_num])[,.(year_id, scalar)]
-  foi_scalar <- array.dt[combo == combo_num,.(year_id, scale_foi)]
-  setnames(foi_scalar, 'scale_foi', 'scalar')
-}else{
+# if(array.job){
+#   array.dt <- fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
+#   task_id <- as.integer(Sys.getenv("SGE_TASK_ID"))
+#   file_name <- array.dt[task_id,loc_scalar]
+#   combo_num <- array.dt[task_id,combo]
+#   loc <- array.dt[task_id,ihme_loc_id]
+#   # pred.mat <- readRDS(paste0('/ihme/hiv/epp_input/gbd20/', run.name, '/pred_mat_country_spec.RDS'))
+#   # pred.mat[,year_id := year_var]
+#   # foi_scalar <- unique(pred.mat[ihme_loc_id == loc & combo == combo_num])[,.(year_id, scalar)]
+#   foi_scalar <- array.dt[combo == combo_num,.(year_id, scale_foi)]
+#   setnames(foi_scalar, 'scale_foi', 'scalar')
+# }else{
   file_name <- loc
-  foi_scalar = 1
-}
+  pred = 1
+# }
 out.dir <- paste0('/ihme/hiv/epp_output/',gbdyear,'/', run.name, "/", file_name)
 
 source('/ihme/homes/mwalte10/gbdeppaiml/gbd/data_prep.R')
@@ -122,7 +122,7 @@ print(paste0(loc, ' geoadjust set to ', geoadjust))
 
 # LBD Adjustments
 ##### Location that don't undergo LBD adjustment, set to TRUE as a default above
-if(!loc %in% unlist(strsplit(list.files('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/2019/'), '.rds')) | loc %in% c('ZAF', 'PNG') | grepl('IND', loc)){
+if(!loc %in% unlist(strsplit(list.files('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/2020/'), '.rds')) | loc %in% c('ZAF', 'PNG') | grepl('IND', loc)){
   lbd.anc <- FALSE
 }
 if(grepl('ancrt', run.name)){
@@ -145,7 +145,7 @@ dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
                        anc.prior.sub = TRUE, lbd.anc = lbd.anc,
                        geoadjust = geoadjust, use_2019 = TRUE,
                        test.sub_prev_granular = test,
-                       anc.rt = TRUE
+                       anc.rt = FALSE
                        # anc.backcast,
                        )
 ###Switched to a binomial model, so we can now handle observations of zero
@@ -196,7 +196,7 @@ zero_prev_locs <- unique(zero_prev_locs[prev == 0.0005 & use == TRUE,iso3])
 # attr(dt,"eppd")$ancsitedat <- as.data.frame(attr(dt,"eppd")$ancsitedat)
 
 fit <- eppasm::fitmod(dt, eppmod = ifelse(grepl('IND', loc),'rlogistic',epp.mod), 
-                      B0 = 1e5, B = 1e3, number_k = 500, 
+                      B0 = 1e3, B = 1e3, number_k = 100, 
                       ageprev = ifelse(loc %in% zero_prev_locs,'binom','probit'))
 
 dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/fitmod/'))
@@ -212,7 +212,7 @@ data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/
 ## data period. The `extend_projection()` function extends the random walk for r(t)
 ## through the end of the projection period.
 
-if(epp.mod == 'rhybrid'){
+if(epp.mod == 'rhybrid' & !grepl('IND', loc)){
   fit <- extend_projection(fit, proj_years = stop.year - start.year + 1)
 }
 

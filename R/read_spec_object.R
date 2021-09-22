@@ -51,7 +51,10 @@ test.sub_prev_granular = NULL){
     replace[,'agspan' := as.numeric(replace[,agspan])]
     replace[,'site' := as.character(replace[,site])]
     replace[,'high_risk' := FALSE]
-    # replace <- replace[type == 'ancss',]
+    if(!anc.rt){
+      replace <- replace[type == 'ancss',]
+      
+    }
     if(!geoadjust){
       replace[,adm0_mean:=NULL]
       replace[,adm0_lower:=NULL]

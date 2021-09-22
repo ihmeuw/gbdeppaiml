@@ -70,6 +70,9 @@ modify_dt <- function(dt, run_name){
   # Remove duplicates from ancsitedat -------------------------------------------
   ###########################################################################
   ancsitedat <- data.table(attr(dt,'eppd')$ancsitedat)
+  if(any(colnames(ancsitedat) == 'year_id')){
+    setnames(ancsitedat, 'year_id', 'year')
+  }
   if('subpop' %in% colnames(ancsitedat)){
     if(nrow(unique(ancsitedat[,.(site, subpop, year, used, prev, n, type, agegr, age,agspan)])) != nrow(ancsitedat) ){
       ancsitedat <- ancsitedat[!duplicated(ancsitedat[,.(site, subpop, year, used, prev, n, type, agegr, age,agspan)]),]

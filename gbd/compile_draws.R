@@ -25,9 +25,9 @@ user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
-  array.job = TRUE
-  run.name <- "soc_dets_run_sens"
-  loc <- 'AGO_1'
+  array.job = F
+  run.name <- "200713_yuka"
+  loc <- 'AGO'
   draw.fill <- TRUE
   paediatric <- TRUE
   n = 1000
@@ -60,12 +60,12 @@ if(!array.job & length(args) > 0){
 }
 
 # Array job ---------------------------------------
-if(array.job){
-  array.dt <- fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
-  array.dt <- unique(array.dt[,(loc_scalar)])
-  task_id <- as.integer(Sys.getenv("SGE_TASK_ID"))
-  loc <- array.dt[task_id]
-}
+# if(array.job){
+#   array.dt <- fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
+#   array.dt <- unique(array.dt[,(loc_scalar)])
+#   task_id <- as.integer(Sys.getenv("SGE_TASK_ID"))
+#   loc <- array.dt[task_id]
+# }
 
 
 ## Functions
