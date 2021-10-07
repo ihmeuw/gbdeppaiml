@@ -277,7 +277,7 @@ plot_15to49 <- function(loc="IND_4873",
   
   
   color.list <- c('blue', 'red', 'green','purple','orange','black', 'darkgreen', 'red')
-  names(color.list) <- c(unique(plot.dt$model)[1:2], '', 'Spectrum', 'EPP', 'rlogistic', 'Probit', 'Binomial')
+  names(color.list) <- c(unique(plot.dt$model)[1:2], 'Current run', 'GBD20', 'EPP', 'rlogistic', 'Probit', 'Binomial')
   plot.dt[,model := factor(model)]
   
   dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', base.run, '/15to49_plots/'), recursive = TRUE)
@@ -299,9 +299,9 @@ plot_15to49 <- function(loc="IND_4873",
     }else{
       gg <- gg + geom_point(data = plot.dt[model == 'ANC Site'], aes(x = year, y = mean, shape = 'ANC Site'), alpha = 1)
     }
-    if(nrow(plot.dt[type == 'ancrt']) > 0){
-      gg <- gg + geom_point(data = plot.dt[type == 'ancrt'], aes(x = year, y = mean, shape = 'ANC-RT'), alpha = 0.2)
-    }
+    # if(nrow(plot.dt[type == 'ancrt']) > 0){
+    #   gg <- gg + geom_point(data = plot.dt[type == 'ancrt'], aes(x = year, y = mean, shape = 'ANC-RT'), alpha = 0.2)
+    # }
   }
   if(nrow(plot.dt[model == 'Household Survey']) > 0){
     gg <- gg + geom_point(data = plot.dt[model == 'Household Survey'], aes(x = year, y = mean, shape = 'Household Survey'),size=3)

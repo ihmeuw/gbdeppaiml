@@ -71,6 +71,7 @@ modify_dt <- function(dt, run_name){
   ###########################################################################
   ancsitedat <- data.table(attr(dt,'eppd')$ancsitedat)
   if('subpop' %in% colnames(ancsitedat)){
+    if(any(colnames(ancsitedat) == 'year_id')){setnames(ancsitedat, 'year_id', 'year')}
     if(nrow(unique(ancsitedat[,.(site, subpop, year, used, prev, n, type, agegr, age,agspan)])) != nrow(ancsitedat) ){
       ancsitedat <- ancsitedat[!duplicated(ancsitedat[,.(site, subpop, year, used, prev, n, type, agegr, age,agspan)]),]
       attr(dt, 'eppd')$ancsitedat <- data.frame(ancsitedat)
