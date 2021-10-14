@@ -496,11 +496,11 @@ plot_age_specific <- function(loc,
   final_runs <- data.table('gbd_year' = c('gbd20',gbdyear, rep(gbdyear, length(compare.run))), 
                            'run' = c('200713_yuka', run.name.new, compare.run),
                            'run_name' = c('Final GBD20', 'Current Run', compare.run))
-  if(!is.null(compare.run)){
-    compare = T
-  }else{
-    compare = F
-  }
+  # if(!is.null(compare.run)){
+     compare = T
+  # }else{
+  #   compare = F
+  # }
   
   ###load in fit_data
   age.map.old <- fread(paste0('/ihme/hiv/epp_input/gbd19/', '190630_rhino2', "/age_map.csv"))
@@ -633,7 +633,7 @@ plot_age_specific <- function(loc,
         gg <- gg + geom_point(data = plot.dt[model == 'ANC Site'], aes(x = year, y = mean, shape = 'ANC Site'), alpha = 0.2)
       }
       
-      gg <- gg + geom_line(data = plot.dt[type == 'line'], aes(x = year, y = mean, color = model), size = 1.5, alpha = 0.8) +
+      gg <- gg + geom_line(data = plot.dt[type == 'line'], aes(x = year, y = mean, color = model), alpha = 0.8) +
         # geom_ribbon(data = plot.dt[type == 'line'], aes(x = year, ymin = lower, ymax = upper,  fill = model), alpha = 0.2) +
         facet_wrap(~age, scales = 'free_y') +
         theme_bw() +
@@ -651,7 +651,7 @@ plot_age_specific <- function(loc,
         gg <- gg + geom_point(data = plot.dt[model == 'Case Report'], aes(x = year, y = mean, shape = 'Case Report'), size = 0.75)
       }
       gg <- gg + theme(axis.text.y = element_text(size = 12), axis.text.x = element_text(angle = 45, size = 12, vjust = 0.8), axis.title = element_text(size = 18), legend.text = element_text(size = 16),
-                    legend.title = element_text(size = 18)) + ggtitle(paste0('High prevalence state, testing likelihood'))
+                    legend.title = element_text(size = 18)) + ggtitle(paste0(loc.table[ihme_loc_id == loc, plot_name], ' ', c.indicator, ', ', c.sex))
       print(gg)
     }
     dev.off()
