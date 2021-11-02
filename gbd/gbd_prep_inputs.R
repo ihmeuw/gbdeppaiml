@@ -14,7 +14,7 @@ if(length(args) > 0) {
 	run.group2 <- args[3]
 	decomp.step <- args[4]
 } else {
-	run.name <- "200713_yuka"
+	run.name <- "200713_yuka_newASFR"
 	proj.end <- 2022
 	run.group2 <- FALSE
 	decomp.step <- "iterative"

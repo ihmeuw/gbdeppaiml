@@ -27,7 +27,7 @@ devtools::load_all()
 date <- substr(gsub("-","",Sys.Date()),3,8)
 
 ## Arguments
-run.name <- "210415_zanfona"
+
 run.name <- "2021_runtime_test"
 compare.run <- c("200713_yuka")
 
@@ -36,7 +36,7 @@ if(file.exists(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
   n.draws = nrow(fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv')))
   array.job = T
 }else{
-  n.draws = 1000
+  n.draws = 100
   array.job = F
 }
 run.group2 <- FALSE
@@ -85,6 +85,8 @@ loc.list <- epp.list
 loc.list <- c(loc.list, 'MRT', 'STP', 'COM')
 loc.list <- loc.list[grepl("IND", loc.list)]
 # loc.list <- setdiff(loc.list, 'RWA')
+loc.list =  c(loc.list[grepl('ZAF', loc.list)], 'DJI', 'RWA', 'CPV', 'SSD')
+
 
 # Array job EPP-ASM ---------------------------------------
 if(array.job){
@@ -121,7 +123,7 @@ system(draw.string)
 if(run_eppasm & !array.job){
 for(loc in loc.list) {    
   ## Run EPPASM
-    epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive=True -q all.q -P ", cluster.project, " ",
+    epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive=True -q long.q -P ", cluster.project, " ",
                          "-e /share/temp/sgeoutput/", user, "/errors ",
                          "-o /share/temp/sgeoutput/", user, "/output ",
                          "-N ", loc,"_",run.name, "_eppasm ",
@@ -134,8 +136,8 @@ for(loc in loc.list) {
                          '-s ',
                          code.dir, "gbd/main.R ",
                          run.name, " ", array.job," ", loc, " ", proj.end, " ", paediatric)
-  #  print(epp.string)
-  # system(epp.string)
+   print(epp.string)
+  system(epp.string)
 
   
       #Draw compilation
@@ -168,7 +170,7 @@ for(loc in loc.list) {
       print(summary.string)
       system(summary.string)
 
-      plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q all.q -P ", cluster.project, " ",
+      plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q long.q -P ", cluster.project, " ",
                             "-e /share/temp/sgeoutput/", user, "/errors ",
                             "-o /share/temp/sgeoutput/", user, "/output ",
                             "-N ", loc, "_plot_eppasm ",
@@ -180,8 +182,8 @@ for(loc in loc.list) {
                             code.dir, "gbd/main_plot_output.R ",
                             loc, " ", run.name, ' ', compare.run)
      
-      # print(plot.string)
-      # system(plot.string)
+      print(plot.string)
+      system(plot.string)
 
 }
 }

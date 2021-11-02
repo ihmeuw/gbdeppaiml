@@ -19,8 +19,8 @@ if(length(args) > 0) {
     compare.run <- NA
   }
 } else {
-  run.name <- "210415_zanfona"
-  loc <- "AGO"
+  run.name <- '200713_yuka_new_ASFR'
+  loc <- "SSD"
   draw.fill <- TRUE
   compare.run <- c('200713_yuka')
   test <-  NULL

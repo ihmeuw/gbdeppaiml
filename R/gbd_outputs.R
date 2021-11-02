@@ -55,11 +55,7 @@ gbd_sim_mod <-  function(fit, rwproj=fit$fp$eppmod == "rspline",VERSION = 'C'){
     fp.draw <- fp.list[[rand.draw]]
     #fp.draw = fit$param
     ##pull in new rvec
-    {
-      print('Pulling in a different RVEC')
-       new_rvec = pred
-       fp.draw$rvec[(length(fp.draw$rvec) - length(new_rvec) + 1):length(fp.draw$rvec)] <- new_rvec * fp.draw$rvec[(length(fp.draw$rvec) - length(new_rvec) + 1):length(fp.draw$rvec)]
-    }
+
   }else{
     fp.draw <- fit$fp
     theta <- fit$resample[rand.draw,]

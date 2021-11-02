@@ -1,5 +1,5 @@
 ## Script description ---------------------------
-## Script name: 00_prep_inputs_proper.R
+## Script name: 00_prep_inputs.R
 ## Purpose of script: Prepare inputs for EPP-ASM locations pulling the most recent populations and such
 ##
 ## Author: Maggie Walters
@@ -25,15 +25,16 @@ devtools::load_all()
 
 # Arguments ---------------------------------------
 gbdyear = 'gbd20'
-run.name = 'soc_dets_run_sens'
-old_run.name = '210205_socialdets'
+run.name = '200713_yuka_newASFR'
+old_run.name = '200713_yuka'
 spec.name = '200713_yuka'
 code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
 loc.table <- get_locations(hiv_metadata = T)
 loc.list <-  c(loc.table[epp == 1, ihme_loc_id], 'MRT', 'STP', 'COM')
-loc.list = 'AGO'
+loc.list =  c(loc.list[grepl('ZAF', loc.list)], 'DJI', 'RWA', 'CPV', 'SSD')
 
 # Toggles ---------------------------------------
+##make copy inputs and new inputs opposite
 new_inputs = F
 copy_inputs = T
 plot_ART = F
@@ -68,6 +69,7 @@ if(copy_inputs){
   for(row in 1:nrow(copy_dt)){
     mk_copy(copy_dt = copy_dt[row,], loc.list = loc.list)
   }
+  
   file.copy(from = paste0('/ihme/hiv/epp_input/', gbdyear, '/', from, '/location_table.csv'), 
             to  = paste0('/ihme/hiv/epp_input/', gbdyear, '/', to, '/location_table.csv'), overwrite = T)
   file.copy(from = paste0('/ihme/hiv/epp_input/', gbdyear, '/', from, '/age_map.csv'), 

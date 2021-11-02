@@ -11,10 +11,7 @@ test.sub_prev_granular = NULL){
   #Eventually these hsould all be regenerated with subpopulations
 
   
-  if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2020/', loc, '.rds'))) {
-    dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2020/', loc, '.rds'))
-    
-  }else if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))) {
+if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))) {
     dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))
     
   } else if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2018/', loc, '.rds'))) {
@@ -32,7 +29,7 @@ test.sub_prev_granular = NULL){
   
   
   if(lbd.anc){
-    replace <- as.data.table(readRDS(paste0('/share/hiv/data/PJNZ_prepped/lbd_anc/2020/', loc, '.rds')))
+    replace <- as.data.table(readRDS(paste0('/share/hiv/data/PJNZ_prepped/lbd_anc/2019/', loc, '.rds')))
     
     if(grepl("KEN",loc)){
       replace <- replace[which(subpop == attr(dt,"eppd")$ancsitedat$subpop[1])]
