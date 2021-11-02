@@ -28,7 +28,7 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 
 ## Arguments
 run.name <- "210415_zanfona"
-run.name <- "200713_yuka"
+run.name <- "2021_runtime_test"
 compare.run <- c("200713_yuka")
 
 proj.end <- 2022
@@ -51,7 +51,7 @@ testing = FALSE
 test = NULL
 run_eppasm = T
 gbdyear = 'gbd20'
-code.dir = '/homes/mwalte10/gbdeppaiml/'
+code.dir = paste0('/homes/', user, '/gbdeppaiml/')
 
 ### Paths
 input.dir <- paste0("/ihme/hiv/epp_input/", gbdyear, '/', run.name, "/")
@@ -83,6 +83,7 @@ loc.table <- data.table(get_locations(hiv_metadata = T))
 epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
 loc.list <- epp.list
 loc.list <- c(loc.list, 'MRT', 'STP', 'COM')
+loc.list <- loc.list[grepl("IND", loc.list)]
 # loc.list <- setdiff(loc.list, 'RWA')
 
 # Array job EPP-ASM ---------------------------------------

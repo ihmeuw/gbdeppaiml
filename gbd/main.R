@@ -23,10 +23,10 @@ user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
-  array.job = TRUE
-  run.name <- "soc_dets_run_sens"
-  loc <- 'AGO'
-  stop.year <- 2019
+  array.job = FALSE
+  run.name <- "2021_runtime_test"
+  loc <- 'IND_4841'
+  stop.year <- 2022
   j <- 1
   paediatric <- FALSE
 }else{
@@ -50,7 +50,7 @@ setwd(gbdeppaiml_dir)
 devtools::load_all()
 
 gbdyear <- 'gbd20'
-stop.year = 2019
+
 
 run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
 in_run_table = F
