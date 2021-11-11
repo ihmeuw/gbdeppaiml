@@ -27,7 +27,7 @@ devtools::load_all()
 date <- substr(gsub("-","",Sys.Date()),3,8)
 
 ## Arguments
-run.name <- "200713_yuka_new_ASFR"
+run.name <- "200713_yuka_newUNAIDS"
 compare.run <- c("200713_yuka")
 
 proj.end <- 2022
@@ -35,7 +35,7 @@ if(file.exists(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
   n.draws = nrow(fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv')))
   array.job = T
 }else{
-  n.draws = 100
+  n.draws = 50
   array.job = F
 }
 run.group2 <- FALSE
@@ -49,7 +49,6 @@ redo_offsets <- F
 testing = FALSE
 test = NULL
 run_eppasm = T
-gbdyear = 'gbd20'
 code.dir = '/homes/mwalte10/gbdeppaiml/'
 
 ### Paths
@@ -83,8 +82,7 @@ epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
 loc.list <- epp.list
 loc.list <- c(loc.list, 'MRT', 'STP', 'COM')
 # loc.list <- setdiff(loc.list, 'RWA')
-loc.list =  c(loc.list[grepl('ZAF', loc.list)], 'DJI', 'RWA', 'CPV', 'SSD')
-
+loc.list = setdiff(loc.list, 'KEN_35639')
 
 # Array job EPP-ASM ---------------------------------------
 if(array.job){
@@ -118,10 +116,13 @@ system(draw.string)
 
 # EPP-ASM ---------------------------------------
 # loc.list <- c(loc.list[grepl('IND', loc.list)], 'DOM', 'GAB', 'GHA', 'GIN', 'GMB', 'GNB', 'GBQ', 'HTI', 'NGA_25349', 'PNG', 'UGA')
+loc.list = list.files('/ihme/hiv/data/PJNZ_prepped/2021')
+loc.list <- unlist(lapply(loc.list, gsub, pattern = '.rds', replacement = ''))
+loc.list <- intersect(loc.list, epp.list)
 if(run_eppasm & !array.job){
-for(loc in loc.list) {    
-  ## Run EPPASM
-    epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive=True -q long.q -P ", cluster.project, " ",
+for(loc in loc.list[grepl('_',loc.list)]) {    
+  # Run EPPASM
+    epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive=True -q all.q -P ", cluster.project, " ",
                          "-e /share/temp/sgeoutput/", user, "/errors ",
                          "-o /share/temp/sgeoutput/", user, "/output ",
                          "-N ", loc,"_",run.name, "_eppasm ",
@@ -152,7 +153,7 @@ for(loc in loc.list) {
                             run.name, " ", array.job, ' ', loc,  ' TRUE ', paediatric)
       print(draw.string)
       system(draw.string)
-      
+      # 
       summary.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
                             "-e /share/temp/sgeoutput/", user, "/errors ",
                             "-o /share/temp/sgeoutput/", user, "/output ",
@@ -189,6 +190,7 @@ for(loc in loc.list) {
 
 #Make sure all locations are done
 check_loc_results(loc.list,paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/compiled/'),prefix="",postfix=".csv")
+check_loc_results(epp.list,paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/compiled/'),prefix="",postfix=".csv")
 
 # Compile plots ---------------------------------------
 plot.holds <- paste(paste0(loc.list, '_plot_eppasm'), collapse = ",")

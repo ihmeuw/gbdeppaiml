@@ -1044,7 +1044,7 @@ geo_adj <- function(loc, dt, i, uncertainty) {
     
     ##Bring in the matched data - reading in as CSV rather then fread because the latter seems to add quotations when there are escape characters, which messes up the matching
     # Read in LBD matched data ---------------------------------------
-    anc.dt.all <- read.csv(paste0('/ihme/hiv/data/PJNZ_prepped/lbd_anc/2019/', loc, '_ANC_matched.csv'))  
+    anc.dt.all <- read.csv(paste0('/ihme/hiv/data/PJNZ_prepped/lbd_anc/2021/', loc, '_ANC_matched.csv'))  
     if(grepl("KEN",loc)){
       anc.dt.all <- anc.dt.all[which(anc.dt.all$subpop == attr(dt,"eppd")$ancsitedat$subpop[1]),]
     }
@@ -1104,12 +1104,15 @@ geo_adj <- function(loc, dt, i, uncertainty) {
           anc.dt[,offset := 0]
         }
   
-
+        if(grepl('ETH', loc)){
+          site.dat[,high_risk := FALSE]
+        }
         if(loc == 'ZWE' | loc == 'MOZ' | loc == 'BEN' | loc == 'ETH_44859' | loc == "KEN_35626" | loc == 'LSO' | loc == 'MWI' |
            loc == 'NAM' | loc == 'NGA_25332' | loc == 'SOM' | loc == 'SWZ' | loc == 'TZA' | loc == 'ZMB' | grepl('KEN', loc) | grepl('ETH', loc)){
           anc.dt[,high_risk := FALSE]
           anc.dt[,high_risk := unique(site.dat[,high_risk])]
         }
+   
         if(!'high_risk' %in% colnames(site.dat)){
           site.dat[subpop %in% c('Urban', 'Rural'), high_risk := FALSE]
           site.dat[,high_risk := as.logical(high_risk)]

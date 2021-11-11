@@ -18,17 +18,16 @@ windows <- Sys.info()[1][["sysname"]]=="Windows"
 root <- ifelse(windows,"J:/","/home/j/")
 user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 
-source(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/gbd/00_req_packages.R"))
 
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) != 0){
   run.name <- args[1]
 }else{
-  run.name <- '200316_windchime'
+  run.name <- '200713_yuka_newUNAIDS'
 }
 
-code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/hiv_gbd2019/")
+code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/hiv_gbd/")
 input_table <- fread(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), '/gbdeppaiml/lbd_anc_align/inputs.csv'))
 c.args <- input_table[run_name==run.name]
 run_name <- run.name
@@ -58,7 +57,6 @@ measures <- "mean"
 agg_method = "pop_weight"
 shapefile_field <- "GAUL_CODE"
 
-library("slackr",lib.loc =paste0("/homes/", user,"/rlibs/"))
 library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
 loc.table <- get_locations(hiv_metadata = T)
 
@@ -139,7 +137,7 @@ if(rd != '/share/geospatial/mbg/hiv/hiv_test/output/2019_02_26_30_11_35/'){
     }
     if(!is.null(dim(agg_covs))){
       # write.csv(agg_covs,paste0(out_dir_areal,loc,".csv"),row.names = FALSE)
-      write.csv(agg_covs,paste0('/homes/mwalte10/hiv_gbd2019/lbd_anc_align/areal_sites/',loc,".csv"),row.names = FALSE)
+      write.csv(agg_covs,paste0('/homes/mwalte10/hiv_gbd/lbd_anc_align/areal_sites/',loc,".csv"),row.names = FALSE)
       
     }
     
@@ -149,13 +147,15 @@ if(rd != '/share/geospatial/mbg/hiv/hiv_test/output/2019_02_26_30_11_35/'){
 
 loc.table <- data.table(get_locations(hiv_metadata = T))
 ### Code
-epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
-for(loc in loc.list){
+epp.list <- sort(loc.table[epp == 1 & grepl('1', group) & parent_id != 163 , ihme_loc_id])
+loc.list = epp.list
+for(loc in loc.list[-1]){
 gen.pop.dict <- c("General Population", "General population", "GP", 
                   "GENERAL POPULATION", "GEN. POPL.", "General population(Low Risk)", 'Pop restante',
                   "Remaining Pop", "population feminine restante","Pop féminine restante","Rift Valley", 
                   "Western","Eastern","Central","Coast","Nyanza","Nairobi",
                   "Female remaining pop", 'Urbain')
+if(!file.exists(paste0(anc_no_offset, loc, '.rds'))){next}
 
 if(grepl("ZAF",loc) | grepl("IND",loc)){
   dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))
@@ -226,8 +226,7 @@ if(loc == 'MDG'){
   sites <- gsub(' ', '',sites)
   lbd.anc$site <- sites
   all.dat$site <- gsub(' ', '',all.dat$site)
-  site.dat.li
-  
+
 }
 if(loc == 'UGA'){
   sites <- gsub("\\(%)", '', as.character(lbd.anc$site))

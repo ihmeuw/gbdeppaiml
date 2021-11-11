@@ -27,7 +27,7 @@ print(args)
 if(length(args) == 0){
   array.job = TRUE
   run.name <- "200713_yuka"
-  loc <- 'SSD'
+  loc <- 'KEN_35656'
   draw.fill <- TRUE
   paediatric <- TRUE
   n = 1000

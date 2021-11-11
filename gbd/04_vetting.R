@@ -28,12 +28,12 @@ devtools::load_all()
 new_run  = '210415_zanfona' ; new.run = new_run
 old_run = '200713_yuka' ; old.run = old_run
 epp.locs <- (loc.table[epp == 1, ihme_loc_id])
-compare.inputs = F
-compare.results = T
+compare.inputs = T
+compare.results = F
 
 if(compare.inputs){
-  compare_demo_inputs = T
-  unaids_inputs = F
+  compare_demo_inputs = F
+  unaids_inputs = T
   compare_dt_obj = F
 }
 if(compare.results){

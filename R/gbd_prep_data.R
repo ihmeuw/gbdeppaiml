@@ -7,17 +7,12 @@ find_pjnz <- function(loc){
   } else {
     temp.loc <- loc
   } 
-  
+  loc.table = readRDS('/ihme/hiv/epp_input/gbd20/loc_table.RDS')
+  loc.table[grepl('ZAF', ihme_loc_id), unaids_2021 := 1]
+  loc.table[grepl('ZAF', ihme_loc_id), unaids_recent := 2021]
   loc.name <- loc.table[ihme_loc_id == temp.loc, location_name]
   
   unaids.year <- loc.table[ihme_loc_id == temp.loc, unaids_recent]
-  if(gbdyear == 'gbd21'){
-    unaids_2020 <- strsplit(list.dirs('/snfs1/DATA/UNAIDS_ESTIMATES/2020/'), split = '//')
-    unaids_2020 <- sapply(unaids_2020[2:length(unaids_2020)], '[[', 2)
-    if(loc %in% unaids_2020){
-      unaids.year = 2020
-    }
-  }
 
 
   #Subnational files are stored in national folders
@@ -27,11 +22,11 @@ find_pjnz <- function(loc){
   
   if(temp.loc == 'NAM'){unaids.year = 2017}
   ## TODO: What is wrong with the 2018 ZAF file?
-  if(grepl('ZAF', loc)){unaids.year = 2017}
+  #if(grepl('ZAF', loc)){unaids.year = 2017}
   ##make exception for india
   if(grepl('IND', loc)){dir <-paste0("/ihme/limited_use/LIMITED_USE/PROJECT_FOLDERS/UNAIDS_ESTIMATES/2013/IND")}else{
   
-  if(unaids.year %in% 2016:2020) {
+  if(unaids.year %in% 2016:2021) {
     dir <- paste0("/home/j/DATA/UNAIDS_ESTIMATES/", unaids.year, "/", temp.loc, '/')
   } else {
     dir <- paste0("/ihme/limited_use/LIMITED_USE/PROJECT_FOLDERS/UNAIDS_ESTIMATES/", unaids.year, "/", temp.loc, "/")        
@@ -39,6 +34,11 @@ find_pjnz <- function(loc){
     }
   if(file.exists(dir)) {
     pjnz.list <- list.files(dir, pattern = "PJNZ", full.names = T)
+    if(length(pjnz.list) == 0){
+      pjnz.list <- list.files(dir, pattern = "pjnz", full.names = T)
+      
+    }
+    
     pjn.list <- list.files(dir, pattern = "PJN", full.names = T)
     
     file.list <- grep(temp.loc, pjnz.list, value = T)

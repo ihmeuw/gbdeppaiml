@@ -32,7 +32,7 @@ loc.table <- get_locations(hiv_metadata = TRUE)
 libs <- c("data.table", "openxlsx", "raster", "foreign", "rgdal", "geosphere", "fossil", "dplyr", "rgeos", "car","plyr", 'sf')
 sapply(libs, require, character.only = T)
 
-run.name <- '200316_windchime'
+run.name <- '200713_yuka_newUNAIDS'
 input_table <- fread(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), '/gbdeppaiml/lbd_anc_align/inputs.csv'))
 c.args <- input_table[run_name==run.name]
 run_name <- run.name
@@ -93,18 +93,29 @@ loc.list <- epp.list
 #################
 #We don't align LBD sites for ZAF, ETH, or PNG. See GBD20 documentation for more info
 loc.list <- loc.list[!grepl('ZAF', loc.list)]
-loc.list <- loc.list[!grepl('ETH', loc.list)]
+# loc.list <- loc.list[!grepl('ETH', loc.list)]
 loc.list <- loc.list[-which(loc.list == 'PNG')]
+loc.list <- loc.list[grepl('ETH', loc.list)]
 
-
-use_2019 <- T
+use_2021 <- T
+use_2020 <- F
+use_2019 <- F
 use_2018 <- F
 use_subpop <- F
 use_prepped <- F
 additional <- additional[Prev < 1,]
 diff_vec = list()
 for (countries in loc.list) {
-
+  if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2021/', countries, '.rds')) & !grepl('ETH', countries)){
+    df.2021 <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2021/', countries, '.rds'))
+    df.2021 <- attr(df.2021, 'eppd')$ancsitedat
+    
+  }
+  if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2020/', countries, '.rds')) & !grepl('ETH', countries)){
+    df.2020 <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2020/', countries, '.rds'))
+    df.2020 <- attr(df.2020, 'eppd')$ancsitedat
+    
+  }
   if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', countries, '.rds')) & !grepl('ETH', countries)){
     df.2019 <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2019/', countries, '.rds'))
     df.2019 <- attr(df.2019, 'eppd')$ancsitedat
@@ -133,6 +144,12 @@ for (countries in loc.list) {
   if(countries == 'SWZ'){
     df <- data.table(df.2018)
   }else{
+    if(!exists("df.2021") | !use_2021){
+      df.2021 <- NULL
+    }
+    if(!exists("df.2020") | !use_2020){
+      df.2020 <- NULL
+    }
     if(!exists("df.2019") | !use_2019){
       df.2019 <- NULL
     }
@@ -146,7 +163,7 @@ for (countries in loc.list) {
       df.prepped <- NULL
     }
     
-    df <- rbind(df.2019, df.2018, df.subpop, df.prepped)
+    df <- rbind(df.2021, df.2020, df.2019, df.2018, df.subpop, df.prepped)
     if(countries == 'ETH_44859'){
       df <- df.subpop
     }
@@ -337,14 +354,14 @@ for (countries in loc.list) {
      countries == 'MRT' | countries == 'NER' | countries == 'SDN' |
      countries == 'SEN'){
     anc_pre <- nrow(all)
-    all <- subset(all, !(country == "CPV" & !(subpop %in% c("Pop f,minine restante","Pop feminina restante"))))
-    all <- subset(all, !(country == "MAR" & !(subpop %in% c("Femmes"))))
-    all <- subset(all, !(country == "MDG" & !(subpop %in% c("population feminine restante"))))
-    all <- subset(all, !(country == "MRT" & !(subpop %in% c("Pop féminine restante"))))
-    all <- subset(all, !(country == "NER" & !(subpop %in% c("Pop féminine restante"))))
-    all <- subset(all, !(country == "SDN" & !(subpop %in% c("Female remaining pop"))))
+    all <- subset(all, !(subpop %in% c("Pop f,minine restante","Pop feminina restante")))
+    all <- subset(all,  !(subpop %in% c("Femmes")))
+    all <- subset(all, !(subpop %in% c("population feminine restante")))
+    all <- subset(all,  !(subpop %in% c("Pop féminine restante")))
+    all <- subset(all, !(subpop %in% c("Pop féminine restante")))
+    all <- subset(all, !(subpop %in% c("Female remaining pop")))
     #all <- subset(all, !(country == "STP" & !(subpop %in% c("Pop Fem_restante"))))
-    all <- subset(all, !(country == "SEN" & !(subpop %in% c("Pop féminine restante"))))
+    all <- subset(all,!(subpop %in% c("Pop féminine restante")))
     anc_post <- nrow(all)
     diff_8 <- anc_pre - anc_post
   }else{diff_8 <- 0}
@@ -452,7 +469,7 @@ for (countries in loc.list) {
   anc_point_dat[, offset := NA]
   anc_site_dat.colnames <- c('site', 'year', 'used', 'prev','n' ,'subpop','type' ,'agegr' ,'age','agspan','offset', 'country', 'ihme_loc_id')
   anc_point_new.dat <- anc_point_dat[,anc_site_dat.colnames, with = FALSE]
-  # saveRDS(anc_point_new.dat, file = paste0(anc_no_offset,countries, '.rds'))
+  saveRDS(anc_point_new.dat, file = paste0(anc_no_offset,countries, '.rds'))
   diff_11 <- 0
   }else{
 
@@ -480,7 +497,7 @@ for (countries in loc.list) {
         final_file <- subset(anc_point_new.dat, ihme_loc_id == unique(anc_point_new.dat$ihme_loc_id)[k])
         anc_site_dat.colnames <- c('site', 'year', 'used', 'prev','n' ,'subpop','type' ,'agegr' ,'age','agspan','offset', 'country')
         final_file <- final_file[,anc_site_dat.colnames, with = FALSE]
-      #  saveRDS(final_file, file = paste0(anc_no_offset, unique(anc_point_new.dat$ihme_loc_id)[k], '.rds'))
+      saveRDS(final_file, file = paste0(anc_no_offset, unique(anc_point_new.dat$ihme_loc_id)[k], '.rds'))
         assign(paste0('diff_11_', k), nrow(final_file))
       
       }

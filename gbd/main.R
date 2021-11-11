@@ -24,11 +24,11 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
   array.job = TRUE
-  run.name <- "200713_yuka_newASFR"
-  loc <- 'CPV'
+  run.name <- "200713_yuka_newUNAIDS"
+  loc <- "KEN_35617"
   stop.year <- 2022
   j <- 1
-  paediatric <- TRUE
+  paediatric <- FALSE
 }else{
   run.name <- args[1]
   array.job <- as.logical(args[2])
@@ -107,7 +107,7 @@ print(paste0(loc, ' geoadjust set to ', geoadjust))
 
 # LBD Adjustments
 ##### Location that don't undergo LBD adjustment, set to TRUE as a default above
-if(!loc %in% unlist(strsplit(list.files('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/2019/'), '.rds')) | loc %in% c('ZAF', 'PNG') | grepl('IND', loc)){
+if(!loc %in% unlist(strsplit(list.files('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/2021/'), '.rds')) | loc %in% c('ZAF', 'PNG') | grepl('IND', loc) | grepl('ETH', loc)){
   lbd.anc <- FALSE
 }
 if(grepl('ancrt', run.name)){
@@ -128,7 +128,7 @@ if(loc %in% c("MAR","MRT","COM")){
 ##attr(dt, 'specfp')
 dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
                        pop.sub, anc.sub,  prev.sub = prev_sub, art.sub = TRUE,
-                       sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = TRUE,
+                       sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = paediatric,
                        anc.prior.sub = TRUE, lbd.anc = lbd.anc,
                        geoadjust = geoadjust, use_2019 = TRUE,
                        test.sub_prev_granular = test,

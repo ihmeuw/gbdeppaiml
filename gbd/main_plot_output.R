@@ -19,8 +19,8 @@ if(length(args) > 0) {
     compare.run <- NA
   }
 } else {
-  run.name <- '200713_yuka_new_ASFR'
-  loc <- "SSD"
+  run.name <- '200713_yuka_newUNAIDS'
+  loc <- "AGO"
   draw.fill <- TRUE
   compare.run <- c('200713_yuka')
   test <-  NULL
@@ -79,7 +79,7 @@ run.names.comp <- compare.run
 plot_15to49(loc,
             run.vec = c(paste0(gbdyear, '/', run.name), paste0(gbdyear, '/', compare.run)),
             base.run = paste0(run.name),
-            names = c('Current run', 'GBD20'),
+            names = c('current run', 'GBD20'),
             gbdyear = gbdyear,
             loc_name = loc.name)
 # 

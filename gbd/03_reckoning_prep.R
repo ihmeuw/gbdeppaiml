@@ -36,8 +36,10 @@ cluster.project = 'proj_hiv'
 ## Aggregate to higher levels for EPP-ASM child locs - not India because it goes through Spectrum
 ## Prepare for post-reckoning steps
 loc.list <- loc.table[epp == 1, ihme_loc_id]
+loc.list <- loc.list[grepl('KEN', loc.list)]
 eppasm_parents <-  c("KEN","ZAF","ETH","KEN_44793" ,"KEN_44794","KEN_44795", "KEN_44796" ,"KEN_44797", "KEN_44798","KEN_44799", "KEN_44800","NGA")
 all_loc_list <- c(loc.list,eppasm_parents, 'MRT', 'COM', 'STP')
+all_loc_list <- all_loc_list[grepl('KEN', all_loc_list)]
 # redo <- readRDS('/ihme/homes/mwalte10/redo.RDS')
 # all_loc_list <- intersect(all_loc_list, redo)
 ## Aggregation and reckoning prep for higher levels

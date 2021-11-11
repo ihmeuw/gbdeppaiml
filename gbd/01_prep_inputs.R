@@ -25,23 +25,22 @@ devtools::load_all()
 
 # Arguments ---------------------------------------
 gbdyear = 'gbd20'
-run.name = '200713_yuka_newASFR'
+run.name = '200713_yuka_newUNAIDS'
 old_run.name = '200713_yuka'
 spec.name = '200713_yuka'
 code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
 loc.table <- get_locations(hiv_metadata = T)
 loc.list <-  c(loc.table[epp == 1, ihme_loc_id], 'MRT', 'STP', 'COM')
-loc.list =  c(loc.list[grepl('ZAF', loc.list)], 'DJI', 'RWA', 'CPV', 'SSD')
 
 # Toggles ---------------------------------------
 ##make copy inputs and new inputs opposite
-new_inputs = F
-copy_inputs = T
+new_inputs = T
+copy_inputs = F
 plot_ART = F
 eppasm_inputs = F
 prev_surveys = F
 art_proportions = F
-redo_offsets = F
+redo_offsets = T
 
 
 # Copy Inputs ---------------------------------------
