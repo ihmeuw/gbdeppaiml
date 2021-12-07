@@ -11,7 +11,7 @@ library(data.table)
 
 ## Arguments
 cluster.project <- "proj_hiv"
-unaids_year <- 2020
+unaids_year <- 2019
 
 ### Functions
 library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
@@ -19,14 +19,14 @@ loc.table <- data.table(get_locations(hiv_metadata = T))
 
 #Alternate metadata until 2019 becomes available
 loc.table <- "/ihme/mortality/shared/hiv_model_strategy_2020.csv"
-all_locs = loc.table[unaids_2019==1 & grepl("1",group) & epp==1,ihme_loc_id]
+all_locs = loc.table[unaids_2019==1,ihme_loc_id]
 
 
 ### Tables
 loc.table <- data.table(get_locations(hiv_metadata = T))
 
 ### Code
-epp.list <- sort(loc.table[epp == 1, ihme_loc_id])
+epp.list <- sort(loc.table[spectrum == 1, ihme_loc_id])
 loc.list <- epp.list
 dir.create(paste0('/ihme/hiv/data/PJNZ_prepped/', unaids_year, '/'))
 

@@ -15,8 +15,8 @@ if(length(args) > 0) {
   loc <- args[1]
   unaids_year <- args[2]
 } else {
-  loc <- "BWA"
-  unaids_year <- 2020
+  loc <- "AUS"
+  unaids_year <- 2019
 
 
 }

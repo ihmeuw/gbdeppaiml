@@ -282,7 +282,8 @@ convert_paed_cd4 <- function(dt, agegr){
   return(dt)
 }
 
-sub.paeds <- function(dt, loc, k, start.year = 1970, stop.year = stop.year){
+sub.paeds <- function(dt, loc, k, start.year = 1970, stop.year = stop.year, run_name){
+  run.name = run_name
   
     fp_root <- fp_root
     artdist <- fread(artdist)
@@ -301,6 +302,7 @@ sub.paeds <- function(dt, loc, k, start.year = 1970, stop.year = stop.year){
 
   
   dir <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/')
+  print(dir)
   years <- start.year:stop.year
   pop <- fread(paste0(dir, 'population_single_age/', loc, '.csv'))
   setnames(pop, old = 'year_id', new= 'year')

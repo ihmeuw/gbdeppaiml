@@ -3,9 +3,10 @@
 read_spec_object <- function(loc, j, start.year = 1970, stop.year, trans.params.sub = TRUE, 
                              pop.sub = TRUE,  prev.sub = TRUE, art.sub = TRUE, sexincrr.sub = TRUE, 
                              popadjust = TRUE, age.prev = FALSE, paediatric, anc.rt = FALSE, geoadjust=TRUE,
-anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE,
+anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE, run_name, 
 test.sub_prev_granular = NULL){
-
+  run.name = run_name
+print(run.name)
 
   #Do this for now as something is weird with the new PJNZ files - don't need subpop anyway
   #Eventually these hsould all be regenerated with subpopulations
@@ -82,7 +83,7 @@ if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))) {
   ## Pediatric inputs
   if(paediatric){
     print('Preparing paediatric module inputs')
-    dt <- sub.paeds(dt, loc, j, start.year = 1970, stop.year = stop.year)
+    dt <- sub.paeds(dt, loc, j, start.year = 1970, stop.year = stop.year, run_name)
   }
   ## Transition parameters
   if(trans.params.sub) {
@@ -192,19 +193,19 @@ if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))) {
     
   }else{
     ## Group 2 inputs
-    print('Appending vital registration death data')
-    dt <- append.vr(dt, loc, run.name)
-    attr(dt, 'specfp')$group <- '2'
-    attr(dt, 'specfp')$mortadjust = 'simple'
-    print('Appending case notification data')
-    dt <- append.diagn(dt, loc, run.name)
-    attr(dt, 'specfp')$incid_func <- NULL
-    attr(dt, 'specfp')$incidinput <- NULL
-    attr(dt, 'specfp')$eppmod <- 'rlogistic'
-    attr(dt, 'specfp')$ss$time_epi_start <- 1970
-    
-    print('Appending CIBA age/sex incrr priors')
-    dt <- append.ciba.incrr(dt, loc, run.name)
+    # print('Appending vital registration death data')
+    # dt <- append.vr(dt, loc, run.name)
+    # attr(dt, 'specfp')$group <- '2'
+    # attr(dt, 'specfp')$mortadjust = 'simple'
+    # print('Appending case notification data')
+    # dt <- append.diagn(dt, loc, run.name)
+    # attr(dt, 'specfp')$incid_func <- NULL
+    # attr(dt, 'specfp')$incidinput <- NULL
+    # attr(dt, 'specfp')$eppmod <- 'rlogistic'
+    # attr(dt, 'specfp')$ss$time_epi_start <- 1970
+    # 
+    # print('Appending CIBA age/sex incrr priors')
+    # dt <- append.ciba.incrr(dt, loc, run.name)
     
   }
   ## Append fertility rate ratios for countries in SSA

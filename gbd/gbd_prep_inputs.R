@@ -14,28 +14,35 @@ if(length(args) > 0) {
 	run.group2 <- args[3]
 	decomp.step <- args[4]
 } else {
-	run.name <- "200713_yuka_newASFR"
+	run.name <- "dev_step4a"
 	proj.end <- 2022
-	run.group2 <- FALSE
+	run.group2 <- TRUE
 	decomp.step <- "iterative"
 }
 
 input.table <- fread(paste0('/share/hiv/epp_input/gbd20/input_ids.csv'))
-c.args <- input.table[run_name==run.name]
+if(!run.name %in% input.table$run_name){
+  c.args <- input.table[run_name=='200713_yuka']
+  
+}else{
+  c.args <- input.table[run_name==run.name]
+  
+}
 ASFR <- c.args[['asfr']]
 population <- c.args[['population']]
+population <- 291
 population_sa <- c.args[['population_sa']]
 migration <- c.args[['migration']]
 mlt <- c.args[['mlt']]
 birth <- c.args[['births']]
 
 
-gbdyear <- 'gbd20'
+gbdyear <- 'gbd21'
 out.dir <- paste0('/ihme/hiv/epp_input/', gbdyear, '/', run.name, "/")
 dir.create(out.dir, recursive = TRUE, showWarnings = TRUE)
 
 ## Functions
-library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
+library(mortdb, lib.loc = "/mnt/team/mortality/pub/shared/r")
 source( "/ihme/cc_resources/libraries/current/r/get_population.R")
 source('/ihme/cc_resources/libraries/current/r/get_covariate_estimates.R')
 source('/ihme/cc_resources/libraries/current/r/get_cod_data.R')
@@ -51,6 +58,7 @@ source( "/ihme/cc_resources/libraries/current/r/get_ids.R")
 if(run.group2){
   ## Prep inputs for all estimation locations
   epp.locs <- loc.table[spectrum == 1, location_id]
+  epp.locs <- loc.table[ihme_loc_id == 'PRK', location_id]
   
 }else{
   ## Prep inputs for standard group 1 epp locations
@@ -64,7 +72,7 @@ parent.locs.epp <- loc.table[spec_agg==1 & location_id %in% id.parents.level.up,
 parent.locs <- unique(c(id.parents,parent.locs.epp))
 parent.locs <- loc.table[location_id %in% parent.locs,location_id]
 run_id_current <- get_proc_version(model_name = 'Population', run_id = 'best', model_type = 'estimate')
-
+parent.locs = NULL
 ## Population
 #####NEED POPULATION UPDATE
 
@@ -105,6 +113,7 @@ dir.create(paste0(out.dir, '/population_single_age'), showWarnings = F)
 invisible(lapply(c(epp.locs, parent.locs), function(c.location_id) {
   out.pop <- copy(pop.all[location_id == c.location_id])
   c.iso <- loc.table[location_id == c.location_id, ihme_loc_id]
+  dir.create(paste0(out.dir, '/population_single_age/'), recursive = T)
   write.csv(out.pop, paste0(out.dir, '/population_single_age/', c.iso, ".csv"), row.names = F)
 }))
 
@@ -164,6 +173,8 @@ dir.create(paste0(out.dir, '/population'), showWarnings = F)
 invisible(lapply(c(epp.locs, parent.locs), function(c.location_id) {
   out.pop <- copy(pop[location_id == c.location_id])
   c.iso <- loc.table[location_id == c.location_id, ihme_loc_id]
+  dir.create(paste0(out.dir, '/population/'), recursive = T)
+  
   write.csv(out.pop, paste0(out.dir, '/population/', c.iso, ".csv"), row.names = F)
 }))
 
@@ -187,6 +198,7 @@ pop.splits <- pop.splits[,.(age_group_id, location_id, year_id, sex_id, populati
 dir.create(paste0(out.dir, '/population_splits'), showWarnings = F)
 invisible(lapply(c(epp.locs,id.parents), function(c.location_id) {
   c.iso <- loc.table[location_id == c.location_id, ihme_loc_id]
+  dir.create(paste0(out.dir, '/population_splits/'), recursive = T)
   write.csv(pop.splits[location_id == c.location_id], paste0(out.dir, '/population_splits/', c.iso, ".csv"), row.names = F)
 }))
 
@@ -201,7 +213,7 @@ invisible(lapply(india.locs, function(c.location_id) {
 
 ## Migration
 ##got 226 from Spencer on 8/6/2020
-mig <- fread(paste0('/ihme/fertilitypop/population/popReconstruct/226/upload/net_migration_single_year.csv'))[measure_id==19]
+mig <- fread(paste0('/mnt/team/fertilitypop/pub/population/popReconstruct/291/upload/net_migration_single_year.csv'))[measure_id==19]
 #fread(paste0('/ihme/fertilitypop/gbd_2017/population/modeling/popReconstruct/v96/best/net_migrants.csv'))
 # mig<- get_mort_outputs(model_name = 'migration single year',model_type = 'estimate', run_id = migration, location_id = epp.locs,
 #                              age_group_ids = c(28, 238,21 ,50:127))[measure_id == 19]
@@ -244,6 +256,8 @@ invisible(lapply(epp.locs, function(c.location_id){
     }
   }
   mig.loc[, c('parent', 'child', 'prop', 'ihme_loc_id') := NULL]
+  dir.create(paste0(out.dir, '/migration/'), recursive = T)
+  
   write.csv(mig.loc, paste0(out.dir, '/migration/', c.iso, '.csv'), row.names = F)
 }))
 
@@ -264,6 +278,8 @@ setnames(asfr, c('mean_value', 'year_id'), c('value', 'year'))
 dir.create(paste0(out.dir, '/ASFR'))
 invisible(lapply(epp.locs, function(c.location_id){
   c.iso <- loc.table[location_id == c.location_id, ihme_loc_id]
+  dir.create(paste0(out.dir, '/ASFR/'), recursive = T)
+  
   write.csv(asfr[location_id == c.location_id, list(value, age, year)], paste0(out.dir, '/ASFR/', c.iso, '.csv'), row.names = F)
 }))
 
@@ -291,6 +307,8 @@ births <- unique(births[,.(age_group_id, location_id, year_id, sex_id, populatio
     out.births <- copy(births[location_id == c.location_id])
     c.iso <- loc.table[location_id == c.location_id, ihme_loc_id]
     births.dt <- out.births[,.(population = sum(population)), by = c('age_group_id', 'location_id', 'year_id', 'run_id')]
+    dir.create(paste0(out.dir, '/births/'), recursive = T)
+    
     write.csv(births.dt, paste0(out.dir, '/births/', c.iso, ".csv"), row.names = F)
     out.births[,sex := ifelse(sex_id == 1, 'male', 'female')]
     out.births[,sex_id := NULL]
@@ -298,6 +316,8 @@ births <- unique(births[,.(age_group_id, location_id, year_id, sex_id, populatio
     srb.dt[, male_srb := male/(female + male)]
     srb.dt[, female_srb := female/(female + male)]
     srb.dt[,c('female', 'male') := NULL]
+    dir.create(paste0(out.dir, '/SRB/'), recursive = T)
+    
     write.csv(srb.dt, paste0(out.dir, '/SRB/', c.iso, ".csv"), row.names = F)
   }))
 
