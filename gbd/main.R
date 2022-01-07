@@ -210,7 +210,7 @@ if(max(fit$fp$pmtct_dropout$year) < stop.year & ped_toggle){
 }
 
 
-
+debug(calc_infections_eppspectrum )v
 draw <- j
 result <- gbd_sim_mod(fit, VERSION = "R")
 # dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/'), recursive = T)
