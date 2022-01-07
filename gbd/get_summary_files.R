@@ -30,8 +30,8 @@ if(length(args) > 0) {
   run.name = args[1]
   loc = args[2]
 } else {
-  run.name = '200713_yuka'
-  loc = 'SSD'
+  run.name = 'dev_step4a'
+  loc = 'FRA'
 
 }
 

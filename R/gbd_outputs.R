@@ -317,6 +317,7 @@ split_u1.new_ages <- function(dt, loc, run.name, gbdyear="gbd20", test_run = NUL
   u1.pop[,sex := ifelse(sex_id == 1, 'male', 'female')]
   u1.pop <- u1.pop[,list(sex,year,age_group_id,pop_total,pop_prop,pop_prop_death, pop_death_pop)]
   
+  ##breaks here
   spec_u1 <- merge(dt,u1.pop,by=c("year","sex"), allow.cartesian=T)
   # Split all variables that can be split by population without age restrictions for 1-4 age cat
   pop_weight_all <- function(x) return(x*spec_u1[['pop_prop']])
@@ -338,7 +339,7 @@ split_u1.new_ages <- function(dt, loc, run.name, gbdyear="gbd20", test_run = NUL
   ## pull in incidence proportions from eppasm
 
     if(!file.exists(paste0('/share/hiv/epp_output/gbd20/200713_yuka/compiled/', loc, '.csv'))){
-      split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/200505_xylo/compiled/', loc_name, '_under1_splits.csv'))
+      split.dt <- fread(paste0('/share/hiv/epp_output/', 'gbd20', '/dev_step4a/compiled/', loc_name, '_under1_splits.csv'))
       
     }else{
       if(grepl('_', loc_name)){

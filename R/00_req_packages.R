@@ -14,7 +14,7 @@
 ## Notes:
 ##loading in the hiv functions requires some specification of loc, gbdyear, and run.name
 gbdyear = 'gbd20'
-run.name <- "210415_zanfona"
+#run.name <- "210415_zanfona"
 ##
 ## ---------------------------
 
@@ -22,10 +22,6 @@ run.name <- "210415_zanfona"
 windows <- Sys.info()[1][["sysname"]]=="Windows"
 user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 root <- ifelse(windows,"J:/","/home/j/")
-# gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
-eppasm_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/")
-hiv_gbd2019_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/hiv_gbd2019/")
-
 ## ---------------------------
 ##Frequently used packages
 library(data.table); library(mvtnorm); library(survey); library(ggplot2); library(plyr); library(dplyr); library(assertable); library(parallel)

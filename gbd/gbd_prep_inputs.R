@@ -37,7 +37,7 @@ mlt <- c.args[['mlt']]
 birth <- c.args[['births']]
 
 
-gbdyear <- 'gbd21'
+gbdyear <- 'gbd20'
 out.dir <- paste0('/ihme/hiv/epp_input/', gbdyear, '/', run.name, "/")
 dir.create(out.dir, recursive = TRUE, showWarnings = TRUE)
 
@@ -59,6 +59,7 @@ if(run.group2){
   ## Prep inputs for all estimation locations
   epp.locs <- loc.table[spectrum == 1, location_id]
   epp.locs <- loc.table[ihme_loc_id == 'PRK', location_id]
+  epp.locs <- loc.table[ unaids_recent != 2013 & spectrum == 1 & epp != 1 & group != '1A' & group != '1B',location_id] %>% unique
   
 }else{
   ## Prep inputs for standard group 1 epp locations
@@ -84,7 +85,7 @@ parent.locs = NULL
 pop.all <-  get_mort_outputs(
   "population single year", "estimate",
   gbd_year = 2020,
-  run_id = population_sa,
+  #run_id = population_sa,
   age_group_id = c(28, 238,21 ,50:127),
   location_id = c(epp.locs, parent.locs), year_id = seq(1970, proj.end), sex_id = 1:2)
 pop.all <- pop.all[,.(age_group_id, location_id, year_id, sex_id, population, run_id)]
@@ -184,9 +185,9 @@ pop.splits <-  get_mort_outputs(
   run_id = population_sa,
   age_group_id = c(2,3,30,31,32,34,235,238,388,389),
   location_id = c(epp.locs, parent.locs), year_id = seq(1970, proj.end), sex_id = 1:2)
-# pop.splits <-  get_population(age_group_id =  c(2,3,30,31,32,34,235,238,388,389),
-#                                               location_id = c(epp.locs, parent.locs), year_id = seq(1970, proj.end), sex_id = 1:2, 
-#                                 gbd_round_id = 7, decomp_step = 'iterative')
+pop.splits <-  get_population(age_group_id =  c(2,3,30,31,32,34,235,238,388,389),
+                                              location_id = c(epp.locs, parent.locs), year_id = seq(1970, proj.end), sex_id = 1:2,
+                                gbd_round_id = 7, decomp_step = 'iterative')
 pop.splits <- pop.splits[,.(age_group_id, location_id, year_id, sex_id, population, run_id)]
 
 

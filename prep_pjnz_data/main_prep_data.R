@@ -15,8 +15,8 @@ if(length(args) > 0) {
   loc <- args[1]
   unaids_year <- args[2]
 } else {
-  loc <- "AUS"
-  unaids_year <- 2019
+  loc <- "BRA"
+  unaids_year <- 2015
 
 
 }
@@ -29,15 +29,23 @@ devtools::load_all()
 
 ### Tables
 loc.table <- data.table(get_locations(hiv_metadata = T))
-loc.list <- loc.table[,ihme_loc_id] %>% unique
+loc.list <- loc.table[ unaids_recent != 2013 & spectrum == 1 & epp != 1 & group != '1A' & group != '1B',ihme_loc_id] %>% unique
 
 unaids_2020 <- strsplit(list.dirs('/snfs1/DATA/UNAIDS_ESTIMATES/2020/'), split = '//')
 unaids_2020 <- sapply(unaids_2020[2:length(unaids_2020)], '[[', 2)
 
+loc.list <- setdiff(loc.list, c('CHL', 'BHS', 'BRB', 'TTO', 'COL', 'CRI',
+                                'NIC', 'VEN', 'BHR', 'JOR', 'KWT', 'OMN',
+                                'SYR', 'BGD', 'BTN', 'STP', 'MEX_4657'))
+loc.list <- c('CHL', 'BHS', 'BRB', 'TTO', 'COL', 'CRI',
+              'NIC', 'VEN', 'BHR', 'JOR', 'KWT', 'OMN',
+              'SYR', 'BGD', 'BTN', 'STP', 'MEX_4657')
 
 ##MAR IS NOT WORKING
-for(loc in loc.list){
+# for(loc in loc.list[(which(loc.list == 'MRT')+1):length(loc.list)]){
+for(loc in loc.list[1:length(loc.list)]){
 unaids_year <- loc.table[ihme_loc_id==loc, unaids_recent]
+if(is.na(unaids_year)){next}
 dir.create(paste0("/share/hiv/data/PJNZ_prepped/",unaids_year,"/"),recursive = TRUE, showWarnings = FALSE)
 
 

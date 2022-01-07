@@ -35,10 +35,10 @@ loc.list =  c(loc.list[grepl('ZAF', loc.list)], 'DJI', 'RWA', 'CPV', 'SSD')
 
 # Toggles ---------------------------------------
 ##make copy inputs and new inputs opposite
-new_inputs = F
-copy_inputs = T
+new_inputs = T
+copy_inputs = F
 plot_ART = F
-eppasm_inputs = F
+eppasm_inputs = T
 prev_surveys = F
 art_proportions = F
 redo_offsets = F

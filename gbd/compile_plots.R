@@ -15,7 +15,7 @@ if(length(args) > 0) {
   run.name <- args[1]
   gbdyear <- args[2]
 } else {
-  run.name <- '201209_socialdets'
+  run.name <- 'dev_step4a'
   gbdyear <- 'gbd20'
 }
 

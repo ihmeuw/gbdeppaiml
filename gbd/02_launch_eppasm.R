@@ -27,7 +27,7 @@ devtools::load_all()
 date <- substr(gsub("-","",Sys.Date()),3,8)
 
 ## Arguments
-run.name <- "200713_yuka_new_ASFR"
+run.name <- "dev_step4a"
 compare.run <- c("200713_yuka")
 
 proj.end <- 2022
@@ -35,7 +35,7 @@ if(file.exists(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
   n.draws = nrow(fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv')))
   array.job = T
 }else{
-  n.draws = 100
+  n.draws = 10
   array.job = F
 }
 run.group2 <- FALSE
@@ -82,9 +82,10 @@ loc.table <- data.table(get_locations(hiv_metadata = T))
 epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
 loc.list <- epp.list
 loc.list <- c(loc.list, 'MRT', 'STP', 'COM')
+loc.list <- loc.table[epp!=1 & level == 3,ihme_loc_id]
 # loc.list <- setdiff(loc.list, 'RWA')
-loc.list =  c(loc.list[grepl('ZAF', loc.list)], 'DJI', 'RWA', 'CPV', 'SSD')
-
+#loc.list =  c(loc.list[grepl('ZAF', loc.list)], 'DJI', 'RWA', 'CPV', 'SSD')
+#loc.list <- loc.table[ unaids_recent != 2013 & spectrum == 1 & epp != 1 & group != '1A' & group != '1B',ihme_loc_id] %>% unique
 
 # Array job EPP-ASM ---------------------------------------
 if(array.job){
@@ -121,7 +122,7 @@ system(draw.string)
 if(run_eppasm & !array.job){
 for(loc in loc.list) {    
   ## Run EPPASM
-    epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive=True -q long.q -P ", cluster.project, " ",
+    epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive=True -q all.q -P ", cluster.project, " ",
                          "-e /share/temp/sgeoutput/", user, "/errors ",
                          "-o /share/temp/sgeoutput/", user, "/output ",
                          "-N ", loc,"_",run.name, "_eppasm ",
@@ -134,8 +135,8 @@ for(loc in loc.list) {
                          '-s ',
                          code.dir, "gbd/main.R ",
                          run.name, " ", array.job," ", loc, " ", proj.end, " ", paediatric)
-   print(epp.string)
-  system(epp.string)
+  #  print(epp.string)
+  # system(epp.string)
 
   
       #Draw compilation
@@ -150,8 +151,8 @@ for(loc in loc.list) {
                             '-s ',
                             code.dir, "gbd/compile_draws.R ",
                             run.name, " ", array.job, ' ', loc,  ' TRUE ', paediatric)
-      print(draw.string)
-      system(draw.string)
+      # print(draw.string)
+      # system(draw.string)
       
       summary.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
                             "-e /share/temp/sgeoutput/", user, "/errors ",
@@ -165,8 +166,8 @@ for(loc in loc.list) {
                             code.dir, "gbd/get_summary_files.R ",
                             run.name, ' ', loc)
 
-      print(summary.string)
-      system(summary.string)
+      # print(summary.string)
+      # system(summary.string)
 
       plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q long.q -P ", cluster.project, " ",
                             "-e /share/temp/sgeoutput/", user, "/errors ",

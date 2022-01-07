@@ -25,9 +25,9 @@ user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
-  array.job = TRUE
+  array.job = FALSE
   run.name <- "200713_yuka"
-  loc <- 'SSD'
+  loc <- 'PNG'
   draw.fill <- TRUE
   paediatric <- TRUE
   n = 1000

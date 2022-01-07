@@ -19,8 +19,8 @@ if(length(args) > 0) {
     compare.run <- NA
   }
 } else {
-  run.name <- '200713_yuka_new_ASFR'
-  loc <- "SSD"
+  run.name <- 'dev_step4a'
+  loc <- "CYP"
   draw.fill <- TRUE
   compare.run <- c('200713_yuka')
   test <-  NULL
@@ -77,9 +77,10 @@ run.names.comp <- compare.run
 # ## 15-49 plots
 # dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/15to49_plots/'), recursive = TRUE, showWarnings = FALSE)
 plot_15to49(loc,
-            run.vec = c(paste0(gbdyear, '/', run.name), paste0(gbdyear, '/', compare.run)),
+            run.vec = c(paste0(gbdyear, '/', run.name)),
+         #   run.vec = c(paste0(gbdyear, '/', run.name), paste0(gbdyear, '/', compare.run)),
             base.run = paste0(run.name),
-            names = c('Current run', 'GBD20'),
+            names = c('Current run'),
             gbdyear = gbdyear,
             loc_name = loc.name)
 # 
@@ -89,17 +90,17 @@ plot_15to49(loc,
 #   dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/age_specific_plots/', c.indicator, '/'), recursive = TRUE, showWarnings = FALSE)
 # }
 # 
-plot_age_specific(loc, run.name.new=run.name,
-                         compare.run = run.names.comp, gbdyear = gbd_year_new, c.metric = 'Count')
+# plot_age_specific(loc, run.name.new=run.name,
+#                          compare.run = run.names.comp, gbdyear = gbd_year_new, c.metric = 'Count')
 
 # # ## Birth prevalence
-dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/paeds_plots/'), showWarnings = F)
-run.names.comp = NULL
-loc_temp <- unlist(strsplit(loc,split =  '_'))[[1]]
-plot_birthprev(loc = loc,run.name.new =  run.name,
-               gbdyear = gbd_year_new,
-               compare.run= run.names.comp)
-
+# dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/paeds_plots/'), showWarnings = F)
+# run.names.comp = NULL
+# loc_temp <- unlist(strsplit(loc,split =  '_'))[[1]]
+# plot_birthprev(loc = loc,run.name.new =  run.name,
+#                gbdyear = gbd_year_new,
+#                compare.run= run.names.comp)
+# 
 
 
 

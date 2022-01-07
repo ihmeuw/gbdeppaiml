@@ -26,9 +26,9 @@ print(args)
 if(length(args) == 0){
   array.job = TRUE
   run.name <- "dev_step4a"
-  loc <- 'FRA'
+  loc <- 'CYP'
   stop.year <- 2022
-  j <- 1
+  j <- 8
   paediatric <- TRUE
 }else{
   run.name <- args[1]
@@ -72,6 +72,7 @@ epp.mod <- c.args[['epp_mod']]
 geoadjust <- c.args[['anc_sub']]
 no_anc <- c.args[['no_anc']]
 start.year <- c.args[['start.year']]
+#start.year = 2003
 trans.params.sub <- c.args[['trans.params.sub']]
 pop.sub <- c.args[['pop.sub']]
 art.sub <- c.args[['art.sub']]
@@ -125,138 +126,104 @@ if(loc %in% c("MAR","MRT","COM")){
 
 
 # Prepare the dt object ---------------------------------------
-##attr(dt, 'eppd')
-##attr(dt, 'specfp')
-dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
-                       pop.sub, anc.sub,  prev.sub = prev_sub, art.sub = TRUE,
-                       sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = TRUE,
-                       anc.prior.sub = TRUE, lbd.anc = lbd.anc,
-                       geoadjust = geoadjust, use_2019 = TRUE,
-                       test.sub_prev_granular = test,
-                       anc.rt = FALSE, run_name = run.name
-                       # anc.backcast,
-                       )
-
-###Replacement of a few priors
-attr(dt, 'specfp')$art_alloc_mxweight <- 0.5
-sub.anc.prior <- function(dt,loc){
-  if(loc %in%  c("SDN","SSD","SOM","GNB","MDG","PNG", "COM")){
-    ancbias.pr.mean <<- 0.15
-    ancbias.pr.sd <<- 0.001
-  }else if(loc %in% "MRT"){
-    ancbias.pr.mean <<- 0.15
-    ancbias.pr.sd <<- 0.001
-  } else {
-    ancbias.pr.mean <<- 0.15
-    ancbias.pr.sd <<- 1
+if(!file.exists(paste0('/ihme/hiv/epp_output/gbd20/',run.name, '/dt_objects/', loc, '_dt.RDS'))){
+  dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
+                         pop.sub, anc.sub,  prev.sub = prev_sub, art.sub = TRUE,
+                         sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = TRUE,
+                         anc.prior.sub = TRUE, lbd.anc = lbd.anc,
+                         geoadjust = geoadjust, use_2019 = TRUE,
+                         test.sub_prev_granular = test,
+                         anc.rt = FALSE, run_name = run.name
+                         # anc.backcast,
+  )
+  
+  ###Replacement of a few priors
+  attr(dt, 'specfp')$art_alloc_mxweight <- 0.5
+  sub.anc.prior <- function(dt,loc){
+    if(loc %in%  c("SDN","SSD","SOM","GNB","MDG","PNG", "COM")){
+      ancbias.pr.mean <<- 0.15
+      ancbias.pr.sd <<- 0.001
+    }else if(loc %in% "MRT"){
+      ancbias.pr.mean <<- 0.15
+      ancbias.pr.sd <<- 0.001
+    } else {
+      ancbias.pr.mean <<- 0.15
+      ancbias.pr.sd <<- 1
+    }
+    return(dt)
   }
-  return(dt)
+  dt <- sub.anc.prior(dt, loc)
+  
+  ###Get the locations that should be run with the binomial likelihood
+  zero_prev_locs <- fread("/ihme/hiv/epp_input/gbd20/prev_surveys.csv")
+  zero_prev_locs <- unique(zero_prev_locs[prev == 0.0005 & use == TRUE,iso3])
+  attr(dt, 'eppd')$ancsitedat <- data.frame(attr(dt, 'eppd')$ancsitedat)
+  
+  
+  dt <- group_2_dt_mods(loc, dt)
+}else{
+ dt <- readRDS(paste0('/ihme/hiv/epp_output/gbd20/',run.name, '/dt_objects/', loc, '_dt.RDS'))
 }
-dt <- sub.anc.prior(dt, loc)
-
-###Get the locations that should be run with the binomial likelihood
-# zero_prev_locs <- fread(prev_surveys)
-zero_prev_locs <- fread("/ihme/hiv/epp_input/gbd20/prev_surveys.csv")
-zero_prev_locs <- unique(zero_prev_locs[prev == 0.0005 & use == TRUE,iso3])
-attr(dt, 'eppd')$ancsitedat <- data.frame(attr(dt, 'eppd')$ancsitedat)
-
-
 draw <- j
-##need to make this fp$incidpopage == 0L the incidence rate
-incid <- fread('/ihme/hiv/spectrum_input/200713_yuka/incidence/FRA.csv')
+#need to make this fp$incidpopage == 0L the incidence rate
+incid <- fread(paste0('/ihme/hiv/spectrum_input/200713_yuka/incidence/', loc, '.csv'))
 attr(dt, 'specfp')$incidpopage <- as.integer(0)
-attr(dt, 'specfp')$incidinput <- incid[,3]
-
-##not sure what this is doing
-inputIncSexRatio = fread('/home/j/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/AIM_assumptions//sex_age_pattern/FtoM_inc_ratio_epidemic_specific.csv')
-# We need to adjust the sex ratio of incidence in order to get the sex ratio of
-# deaths to line up with the ratio in the VR data.
-inputSexRatioAdj = fread("/home/j/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/AIM_assumptions//sex_age_pattern/post_1995_sex_ratios.csv")
-# isoIndex = inputSexRatioAdj[iso3 == loc,]
-# sexRatioVR = float([row for row in inputSexRatioAdj[1:] if row[isoIndex] == parent][0][1])
-# sexRatioAdj = sexRatioVR / .42
-inputIncSexRatio <- inputIncSexRatio[epidemic_class == 'CON',]
-inputIncSexRatio[,year := 1990:2020]
-inputIncSexRatio <- inputIncSexRatio$FtoM_inc_ratio
-attr(dt, 'specfp')$incrr_sex <- c(rep(inputIncSexRatio[1], length(seq(1970,1989))), inputIncSexRatio, rep(inputIncSexRatio[length(inputIncSexRatio)], length(seq(2020,2025))))
-
-age_ratio <- fread("/home/j/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/AIM_assumptions/sex_age_pattern/age_IRRs/Feb17/GEN_IRR.csv")
-age_ratio[,mean := (upper - lower )/ 2]
-age_ratio <- age_ratio[,.(age, sex, mean)]
-age_ratio_year <- list()
-for(i in 1970:2025){
-  age_ratio_year <- rbind(age_ratio_year, age_ratio[,year:= i])
+col <- draw + 2
+incid <- data.frame(incid)
+if(loc == 'FRA'){
+  incid <-  incid[,col] / 1000
+  
+}else{
+  incid <-  incid[,col] / 100
+  
 }
-age_ratio <- age_ratio_year
-age_map_dt <- data.table(age_year = c(15:80))
-age_map_dt[,age := unlist(lapply(seq(15,75, by = 5), rep, times = 5))]
-age_map_dt[age_year == 80, age := 75]
-age_ratio <- merge(age_map_dt, age_ratio, by = 'age', allow.cartesian = T)
-#age_ratio <- dcast(age_ratio, age + age_year + sex ~ year, value.var = 'mean')
-keeper <- array(0, dim = c(66,2,56))
-for(i in c(1970:2025)){
-target <- age_ratio[year == i,.(sex, mean)]
-target <- cbind(target[sex == 1,mean], target[sex == 2,mean])
- keeper[,,i - 1969] <- target
+# incid[1:which(seq(1970,2025) == 1978)] <- 0
+attr(dt, 'specfp')$incidinput <- incid
+
+###try converting ART to number, causing simmod to break
+{
+  if(all(attr(dt, 'specfp')$art15plus_isperc)){
+    art = attr(dt, 'specfp')$art15plus_num
+    prev <- fread(paste0('/ihme/hiv/spectrum_prepped/aggregates/200713_yuka/',loc ,'.csv'))
+    prev <- prev[age_group_id %in% c(8:20,30,31,32,235), .(year_id, sex_id, run_num, pop_hiv)]
+    prev[,pop_hiv := sum(pop_hiv), by = c('year_id', 'run_num', 'sex_id')]
+    prev <- unique(prev)
+    prev[,pop_hiv := mean(pop_hiv), by = c('year_id',  'sex_id')]
+    prev[,run_num := NULL]
+    last <- prev[year_id == 2022,]
+    replace <- list()
+    for(i in c(2023:2025)){
+      x <- copy(last)
+      x[,year_id := i]
+      replace <- rbind(replace, x)
+    }
+    prev <- rbind(prev, replace)
+    prev <- unique(prev)
+    art[1,] <- (art[1,] / 100) * prev[sex_id == 1,pop_hiv]
+    art[2,] <- (art[2,] / 100) * prev[sex_id == 2,pop_hiv]
+    attr(dt, 'specfp')$art15plus_num <- art
+    attr(dt, 'specfp')$art15plus_isperc <- !attr(dt, 'specfp')$art15plus_isperc
+  }
+
 }
-target <- readRDS('/ihme/hiv/epp_output/gbd20/200713_yuka/dt_objects/AGO_dt.RDS')
-target <- attr(target, 'specfp')
-attributes(keeper) <- attributes(target$incrr_age)
 
-attr(dt, 'specfp')$incrr_age <- keeper
-
-simmod.specfp(attr(dt, 'specfp'), VERSION = 'R')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-result <- gbd_sim_mod(dt, VERSION = "R")
-# dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/'), recursive = T)
-# saveRDS(result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/', draw, '.RDS'))
+###########################################
+#Results
+##########################################
+result = simmod.specfp(attr(dt, 'specfp'), VERSION = 'R')
 dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', file_name, '/'), recursive = T)
 saveRDS(result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', file_name, '/', draw, '.RDS'))
-#
-# #results
-# ##track the output of the prev and inc through get_gbd_outputs
+
 output.dt <- get_gbd_outputs(result, attr(dt, 'specfp'), paediatric = paediatric)
 output.dt[,run_num := j]
 out.dir <- paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/', file_name, '/')
 dir.create(out.dir, showWarnings = FALSE)
 write.csv(output.dt, paste0(out.dir, '/', j, '.csv'), row.names = F)
 
-# ## under-1 splits
 if(paediatric){
   split.dt <- get_under1_splits(result, attr(dt, 'specfp'))
   split.dt[,run_num := j]
   write.csv(split.dt, paste0(out.dir, '/under_1_splits_', j, '.csv' ), row.names = F)
 }
-## Write out theta for plotting posterior
-param <- data.table(theta = attr(result, 'theta'))
-write.csv(param, paste0(out.dir,'/theta_', j, '.csv'), row.names = F)
-if(plot.draw){
-  plot_15to49_draw(loc, output.dt, attr(dt, 'eppd'), run.name)
-}
-params <- fnCreateParam(theta = unlist(param), fp = fit$fp)
-saveRDS(params, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', file_name, '.RDS'))
-
-
-data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc,'.csv')
-save_data(loc, attr(dt, 'eppd'), run.name)
 
 
