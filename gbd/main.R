@@ -24,8 +24,8 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
   array.job = TRUE
-  run.name <- "200713_yuka_newASFR"
-  loc <- 'CPV'
+  run.name <- "200713_yuka"
+  loc <- 'BWA'
   stop.year <- 2022
   j <- 1
   paediatric <- TRUE
@@ -210,7 +210,6 @@ if(max(fit$fp$pmtct_dropout$year) < stop.year & ped_toggle){
 }
 
 
-debug(calc_infections_eppspectrum )v
 draw <- j
 result <- gbd_sim_mod(fit, VERSION = "R")
 # dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/'), recursive = T)
