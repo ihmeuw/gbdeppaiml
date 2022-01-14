@@ -26,10 +26,10 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
   array.job = FALSE
-  run.name <- "200713_yuka"
-  loc <- 'PNG'
+  run.name <- "dev_step4a"
+  loc <- 'CYP'
   draw.fill <- TRUE
-  paediatric <- TRUE
+  paediatric <- F
   n = 1000
 }else{
   run.name <- args[1]
@@ -115,11 +115,18 @@ print('loc.table loaded')
     ## this could probably be tidied up
     draw.list <- draw.list[grepl('.csv', draw.list) & !grepl('theta_', draw.list) & !grepl('under_', draw.list)]
     draw.list <- draw.list[gsub('.csv', '', draw.list) %in% 1:1000]
-    
-    
+
     dt <- lapply(draw.list, function(draw){
       print(draw)
       draw.dt <- fread(paste0(draw.path, '/', draw))
+      draw.dt[pop_lt200 < 0, pop_lt200 := 0]
+      draw.dt[pop_art < 0, pop_art := 0]
+      draw.dt[hiv_deaths < 0, hiv_deaths := 0]
+      draw.dt[hiv_births < 0, hiv_births := 0]
+      draw.dt[pop_gt350 < 0, pop_gt350 := 0]
+      draw.dt[pop_200to350 < 0, pop_200to350 := 0]
+      
+      
     })
     ##Sometimes there are negative values, need to replace
     

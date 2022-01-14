@@ -28,7 +28,7 @@ if(length(args) == 0){
   run.name <- "dev_step4a"
   loc <- 'CYP'
   stop.year <- 2022
-  j <- 8
+  j <- 1
   paediatric <- TRUE
 }else{
   run.name <- args[1]
@@ -166,6 +166,9 @@ if(!file.exists(paste0('/ihme/hiv/epp_output/gbd20/',run.name, '/dt_objects/', l
 }
 draw <- j
 #need to make this fp$incidpopage == 0L the incidence rate
+compare.dt.run <- fread(paste0('/ihme/hiv/spectrum_draws/200713_yuka/compiled/stage_1/summary/', loc, '_all_age.csv'))
+incid_new <- compare.dt.run[variable == 'inc_rate',value]# * 100
+
 incid <- fread(paste0('/ihme/hiv/spectrum_input/200713_yuka/incidence/', loc, '.csv'))
 attr(dt, 'specfp')$incidpopage <- as.integer(0)
 col <- draw + 2
@@ -178,7 +181,7 @@ if(loc == 'FRA'){
   
 }
 # incid[1:which(seq(1970,2025) == 1978)] <- 0
-attr(dt, 'specfp')$incidinput <- incid
+attr(dt, 'specfp')$incidinput <- incid_new
 
 ###try converting ART to number, causing simmod to break
 {
