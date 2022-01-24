@@ -20,7 +20,7 @@ if(length(args) > 0) {
   }
 } else {
   run.name <- 'dev_step4a'
-  loc <- "CYP"
+  loc <- "BLR"
   draw.fill <- TRUE
   compare.run <- c('200713_yuka')
   test <-  NULL

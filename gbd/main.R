@@ -26,7 +26,7 @@ print(args)
 if(length(args) == 0){
   array.job = TRUE
   run.name <- "dev_step4a"
-  loc <- 'CYP'
+  loc <- 'BLR'
   stop.year <- 2022
   j <- 1
   paediatric <- TRUE
@@ -204,8 +204,8 @@ attr(dt, 'specfp')$incidinput <- incid_new# / 10
     prev <- unique(prev)
     male_art = ((art[1,] / 100) * prev[sex_id == 1,pop_hiv])[1:ncol(art)]
     female_art = ((art[2,] / 100) * prev[sex_id == 2,pop_hiv])[1:ncol(art)]
-    male_art[male_art > 100] <- 100
-    female_art[female_art > 100] <- 100
+    #male_art[male_art > 100] <- 100
+    #female_art[female_art > 100] <- 100
     art[1,] <- male_art
     art[2,] <- female_art
     attr(dt, 'specfp')$art15plus_num <- art
