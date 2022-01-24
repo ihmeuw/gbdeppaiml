@@ -135,8 +135,8 @@ for(loc in loc.list) {
                          '-s ',
                          code.dir, "gbd/main.R ",
                          run.name, " ", array.job," ", loc, " ", proj.end, " ", paediatric)
-   print(epp.string)
-  system(epp.string)
+  #  print(epp.string)
+  # system(epp.string)
 
   
       #Draw compilation
@@ -181,8 +181,8 @@ for(loc in loc.list) {
                             code.dir, "gbd/main_plot_output.R ",
                             loc, " ", run.name, ' ', compare.run)
      
-      # print(plot.string)
-      # system(plot.string)
+      print(plot.string)
+      system(plot.string)
 
 }
 }

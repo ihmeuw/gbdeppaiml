@@ -29,17 +29,16 @@ devtools::load_all()
 
 ### Tables
 loc.table <- data.table(get_locations(hiv_metadata = T))
-loc.list <- loc.table[ unaids_recent != 2013 & spectrum == 1 & epp != 1 & group != '1A' & group != '1B',ihme_loc_id] %>% unique
+
+##get the subnats to have unaids_recent
+
+
+loc.list <- loc.table[unaids_recent != 2013 & spectrum == 1 & epp != 1 & group != '1A' & group != '1B',ihme_loc_id] %>% unique
 
 unaids_2020 <- strsplit(list.dirs('/snfs1/DATA/UNAIDS_ESTIMATES/2020/'), split = '//')
 unaids_2020 <- sapply(unaids_2020[2:length(unaids_2020)], '[[', 2)
 
-loc.list <- setdiff(loc.list, c('CHL', 'BHS', 'BRB', 'TTO', 'COL', 'CRI',
-                                'NIC', 'VEN', 'BHR', 'JOR', 'KWT', 'OMN',
-                                'SYR', 'BGD', 'BTN', 'STP', 'MEX_4657'))
-loc.list <- c('CHL', 'BHS', 'BRB', 'TTO', 'COL', 'CRI',
-              'NIC', 'VEN', 'BHR', 'JOR', 'KWT', 'OMN',
-              'SYR', 'BGD', 'BTN', 'STP', 'MEX_4657')
+
 
 ##MAR IS NOT WORKING
 # for(loc in loc.list[(which(loc.list == 'MRT')+1):length(loc.list)]){

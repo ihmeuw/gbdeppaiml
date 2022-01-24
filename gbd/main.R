@@ -181,11 +181,11 @@ if(loc == 'FRA'){
   
 }
 # incid[1:which(seq(1970,2025) == 1978)] <- 0
-attr(dt, 'specfp')$incidinput <- incid_new
+attr(dt, 'specfp')$incidinput <- incid_new# / 10
 
 ###try converting ART to number, causing simmod to break
 {
-  if(all(attr(dt, 'specfp')$art15plus_isperc)){
+  if(any(attr(dt, 'specfp')$art15plus_isperc)){
     art = attr(dt, 'specfp')$art15plus_num
     prev <- fread(paste0('/ihme/hiv/spectrum_prepped/aggregates/200713_yuka/',loc ,'.csv'))
     prev <- prev[age_group_id %in% c(8:20,30,31,32,235), .(year_id, sex_id, run_num, pop_hiv)]
@@ -202,8 +202,12 @@ attr(dt, 'specfp')$incidinput <- incid_new
     }
     prev <- rbind(prev, replace)
     prev <- unique(prev)
-    art[1,] <- (art[1,] / 100) * prev[sex_id == 1,pop_hiv]
-    art[2,] <- (art[2,] / 100) * prev[sex_id == 2,pop_hiv]
+    male_art = ((art[1,] / 100) * prev[sex_id == 1,pop_hiv])[1:ncol(art)]
+    female_art = ((art[2,] / 100) * prev[sex_id == 2,pop_hiv])[1:ncol(art)]
+    male_art[male_art > 100] <- 100
+    female_art[female_art > 100] <- 100
+    art[1,] <- male_art
+    art[2,] <- female_art
     attr(dt, 'specfp')$art15plus_num <- art
     attr(dt, 'specfp')$art15plus_isperc <- !attr(dt, 'specfp')$art15plus_isperc
   }

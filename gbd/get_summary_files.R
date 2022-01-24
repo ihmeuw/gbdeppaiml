@@ -31,7 +31,7 @@ if(length(args) > 0) {
   loc = args[2]
 } else {
   run.name = 'dev_step4a'
-  loc = 'FRA'
+  loc = 'CYP'
 
 }
 
