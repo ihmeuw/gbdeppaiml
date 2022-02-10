@@ -167,7 +167,7 @@ plot_15to49 <- function(loc="IND_4873",
       compare.dt <- fread(paste0('/ihme/hiv/epp_output/', run, '/summary_files/', loc_name, '.csv'))
     }
     run <- x[run_name == run, name]
-    compare.dt <- compare.dt[age_group_id == 24 & sex == 'both' & measure %in% meas.list & metric == "Count",.(type = 'line', year, indicator = measure, model = run, mean, lower, upper)]
+    compare.dt <- compare.dt[age_group_id == 24 & sex == 'both' & measure %in% meas.list & metric == "Rate",.(type = 'line', year, indicator = measure, model = run, mean, lower, upper)]
     dt <- rbind(compare.dt, dt) 
   }
   compare.dt <- dt
@@ -231,22 +231,23 @@ plot_15to49 <- function(loc="IND_4873",
   }
  
   # UNAIDS data, this needs to be reextracted  ---------------------------------------
-  compare.dt.unaids <- fread('/share/hiv/data/UNAIDS_extract/UNAIDS_results_2019.csv')
-  compare.dt.unaids <- compare.dt.unaids[age_group_id == 24 & sex_id == 3 & measure %in% meas.list &
-                                           metric == 'Rate' & ihme_loc_id==loc_name]
-  compare.dt.unaids <- compare.dt.unaids[,.(type = 'line', year = year_id, indicator = measure, model = "UNAIDS",
-                                            mean, lower, upper)]
-  
+  # compare.dt.unaids <- fread('/share/hiv/data/UNAIDS_extract/UNAIDS_results_2019.csv')
+  # compare.dt.unaids <- compare.dt.unaids[age_group_id == 24 & sex_id == 3 & measure %in% meas.list &
+  #                                          metric == 'Rate' & ihme_loc_id==loc_name]
+  # compare.dt.unaids <- compare.dt.unaids[,.(type = 'line', year = year_id, indicator = measure, model = "UNAIDS",
+  #                                           mean, lower, upper)]
+  # 
   
   # If switching models ---------------------------------------
   if(!loc_name %in% loc.table[epp == 1, ihme_loc_id]){
-   # compare.dt.s1 <- compare_spec.func(run_vec = c('200713_yuka'), stage = 'stage_1')
-    # compare.dt.input.inc <- fread(paste0('/ihme/hiv/spectrum_input/200713_yuka/incidence/', loc, '.csv'))
-    # compare.dt.input.inc <- melt(compare.dt.input.inc, id.vars = c('iso3', 'year'))
-    # compare.dt.input.inc[,mean := mean(value) / 100, by = 'year']
-    # compare.dt.input.inc <- unique(compare.dt.input.inc[,.(year, mean)])
-    # compare.dt.input.inc[,indicator := 'Incidence'] ; compare.dt.input.inc[,model := 'Input Inc'] ; compare.dt.input.inc[,type := 'line']
-    compare.dt.input.inc = NULL ; compare.dt.s1 = NULL
+   compare.dt.s1 <- compare_spec.func(run_vec = c('200713_yuka'), stage = 'stage_1')
+   compare.dt.input.inc <- fread(paste0('/ihme/hiv/spectrum_input/200713_yuka/incidence/', loc, '.csv'))
+   compare.dt.input.inc <- melt(compare.dt.input.inc, id.vars = c('iso3', 'year'))
+   compare.dt.input.inc[,mean := mean(value) / 100, by = 'year']
+   compare.dt.input.inc <- unique(compare.dt.input.inc[,.(year, mean)])
+   compare.dt.input.inc[,indicator := 'Incidence'] ; compare.dt.input.inc[,model := 'Input Inc'] ; compare.dt.input.inc[,type := 'line']
+    compare.dt.input.inc = NULL ; 
+    #compare.dt.s1 = NULL
     compare_epp = NULL
   }else{
     compare.dt.s2 = NULL

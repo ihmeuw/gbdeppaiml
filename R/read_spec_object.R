@@ -11,7 +11,6 @@ print(run.name)
   #Do this for now as something is weird with the new PJNZ files - don't need subpop anyway
   #Eventually these hsould all be regenerated with subpopulations
 
-  
 if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))) {
     dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))
     
@@ -20,6 +19,9 @@ if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))) {
     
   } else if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2015/', loc, '.rds'))){
     dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2015/', loc, '.rds'))
+    
+  } else if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2013/', loc, '.rds'))){
+    dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2013/', loc, '.rds'))
     
   } else if(file.exists(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', loc, '.rds'))) {
     dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', loc, '.rds'))

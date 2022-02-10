@@ -60,7 +60,7 @@ if(run.group2){
   epp.locs <- loc.table[spectrum == 1, location_id]
   epp.locs <- loc.table[ihme_loc_id == 'PRK', location_id]
   epp.locs <- loc.table[ unaids_recent != 2013 & spectrum == 1 & epp != 1 & group != '1A' & group != '1B',location_id] %>% unique
-  
+  epp.locs = loc.table[ihme_loc_id == 'BRA',location_id]
 }else{
   ## Prep inputs for standard group 1 epp locations
   epp.locs <- c(loc.table[epp == 1, location_id],loc.table[ihme_loc_id %in% c("STP","MAR","MRT","COM", 'IND_44583'), location_id])

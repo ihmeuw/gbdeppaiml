@@ -26,7 +26,7 @@ print(args)
 if(length(args) == 0){
   array.job = TRUE
   run.name <- "dev_step4a"
-  loc <- 'BLR'
+  loc <- 'BRA'
   stop.year <- 2022
   j <- 1
   paediatric <- TRUE
