@@ -7,6 +7,8 @@ This repository contains the steps to prep a new GBD year run, run group 1 count
 ## Run patterns
 This repository is divided into ordinal scripts that complete the aforementioned modelling processes. These are as follows:
 
+[00_launch_prepdata.R](https://github.com/ihmeuw/gbdeppaiml/blob/main/gbd/00_launch_prepdata.R): Needs to be run once each time we get new PJNZ files. This script is SUPER finnicky, but it preps the PJNZ files needed for the rest of the pipeline. 
+
 [01_prep_inputs.R](https://github.com/ihmeuw/gbdeppaiml/blob/main/gbd/01_prep_inputs.R): Prepares the appropriate inputs for a new EPPASM run. Can be done for a subset of countries if a partial run is being done, and can just copy inputs from the most recent EPPASM run if new inputs don't need to be pulled. If new inputs are being pulled. This will launch a series of scripts outlined below:
 	
 * [gbd_prep_inputs.R](https://github.com/ihmeuw/gbdeppaiml/blob/main/gbd/gbd_prep_inputs.R) and [gbd_prep_ind_inputs.R](https://github.com/ihmeuw/gbdeppaiml/blob/main/gbd/gbd_prep_ind_inputs.R): Pulls in new demographics inputs (ASFR, population, migration, MLT, and births) and outputs them in /ihme/hiv/epp_input/[GBDYEAR]/[RUNNAME]/. Relies on /ihme/hiv/epp_input/[GBDYEAR]/input_ids.csv to know which version of demographics to pull. This table needs to be updated manually with information on the most up to date run_ids from the demographics team. Generally, its best to ask in the demographics slack channel to ensure that these are correct. 
