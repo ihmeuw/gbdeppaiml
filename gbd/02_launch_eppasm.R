@@ -35,7 +35,7 @@ if(file.exists(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
   n.draws = nrow(fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv')))
   array.job = T
 }else{
-  n.draws = 10
+  n.draws = 1000
   array.job = F
 }
 run.group2 <- FALSE
@@ -82,7 +82,7 @@ loc.table <- data.table(get_locations(hiv_metadata = T))
 epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
 loc.list <- epp.list
 loc.list <- c(loc.list, 'MRT', 'STP', 'COM')
-loc.list <- loc.table[epp!=1 & level == 3,ihme_loc_id]
+#loc.list <- loc.table[epp!=1 & level == 3,ihme_loc_id]
 # loc.list <- setdiff(loc.list, 'RWA')
 #loc.list =  c(loc.list[grepl('ZAF', loc.list)], 'DJI', 'RWA', 'CPV', 'SSD')
 #loc.list <- loc.table[ unaids_recent != 2013 & spectrum == 1 & epp != 1 & group != '1A' & group != '1B',ihme_loc_id] %>% unique
@@ -135,8 +135,8 @@ for(loc in loc.list) {
                          '-s ',
                          code.dir, "gbd/main.R ",
                          run.name, " ", array.job," ", loc, " ", proj.end, " ", paediatric)
-  #  print(epp.string)
-  # system(epp.string)
+   print(epp.string)
+  system(epp.string)
 
   
       #Draw compilation
@@ -166,8 +166,8 @@ for(loc in loc.list) {
                             code.dir, "gbd/get_summary_files.R ",
                             run.name, ' ', loc)
 
-       print(summary.string)
-       system(summary.string)
+       # print(summary.string)
+       # system(summary.string)
 
       plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q long.q -P ", cluster.project, " ",
                             "-e /share/temp/sgeoutput/", user, "/errors ",
@@ -181,8 +181,8 @@ for(loc in loc.list) {
                             code.dir, "gbd/main_plot_output.R ",
                             loc, " ", run.name, ' ', compare.run)
      
-      print(plot.string)
-      system(plot.string)
+      # print(plot.string)
+      # system(plot.string)
 
 }
 }

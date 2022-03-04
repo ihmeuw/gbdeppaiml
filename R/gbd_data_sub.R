@@ -856,6 +856,8 @@ sub.prev.granular <- function(dt, loc, test.sub_prev_granular){
 sub.off.art <- function(dt, loc, k) {
   # Off-ART Mortality
   mortnoart <- fread(paste0(aim.dir, "transition_parameters/HIVmort_noART/current_draws_combined/",loc,"_mortality_par_draws.csv"))
+ # mortnoart <- fread(paste0("/ihme/hiv/spectrum_input/200713_yuka/noARTmortality/BRA_4750.csv"))
+  
   mortnoart <- mortnoart[draw==k,]
   mortnoart[age == '45-100', age := '45+']
   mortnoart[age == '15-25', age := '15-24']
@@ -874,6 +876,8 @@ sub.off.art <- function(dt, loc, k) {
   mortnoart <- mortnoart[cd4=="50to99CD4", cat := 6] 
   mortnoart <- mortnoart[cd4=="LT50CD4", cat := 7] 
   mortnoart[,risk:=-1*log(1-prob)]
+ # mortnoart[,risk:=prob]
+  
   mortnoart <- mortnoart[,.(age,risk,cat)]
   age.list <- c('15-24', '15-24', '15-24', '25-34', '25-34', '35-44', '35-44', '45+', '45+')
   age.index <- list(a = '15-24', b = '15-24', c = '15-24', d = '25-34', e = '25-34', f = '35-44', g = '35-44', h = '45+', i = '45+')
@@ -1001,6 +1005,8 @@ mortart <- fread(mortart)
 
 sub.cd4.prog <- function(dt, loc, k){
   progdata <- fread(paste0(aim.dir, "transition_parameters/DurationCD4cats/current_draws_combined/", loc, "_progression_par_draws.csv"))
+  #inputProgressionParameters = fread("/ihme/hiv/spectrum_input/200713_yuka/averageCD4duration/BRA_4750.csv")
+  
   progdata <- progdata[order(age,cd4,draw)]
   progdata_read <- progdata[,c("age","cd4","draw","prog"), with=F]
   progdata_read <- progdata_read[,lambda:=1/prog]
@@ -1020,7 +1026,7 @@ sub.cd4.prog <- function(dt, loc, k){
   progdata <- progdata[cd4=="100to199CD4", cat := 5]
   progdata <- progdata[cd4=="50to99CD4", cat := 6] 
   progdata[,risk:=-1*log(1-prob)]
-  
+ # progdata[,risk := prog]
   age.index <- list(a = '15-24', b = '15-24', c = '15-24', d = '25-34', e = '25-34', f = '35-44', g = '35-44', h = '45+', i = '45+')
   replace <- array(0, c(6, length(age.list), 2))
   dimnames(replace) <- list(cd4stage = paste0(1:6), agecat = age.list, sex = c('Male', 'Female'))
@@ -1392,6 +1398,7 @@ geo_adj_old <- function(loc, dt, i, uncertainty) {
     
     #years <- epp.input$epp.art$year
     years <- as.integer(attr(attr(dt,"specfp")$art15plus_isperc,"dimnames")$year)
+    years <- c(1970:2022)
     
     if(max(years) > max(art.dt$year)) {
       max.dt <- copy(art.dt[year == max(year)])
@@ -1404,12 +1411,12 @@ geo_adj_old <- function(loc, dt, i, uncertainty) {
     }
     
     art.dt <- unique(art.dt)
-    attr(dt,"specfp")$art15plus_isperc[attr(attr(dt,"specfp")$art15plus_isperc,"dimnames")$sex=="Male"] <- art.dt[year %in% years & sex == 1, type]
-    attr(dt,"specfp")$art15plus_isperc[attr(attr(dt,"specfp")$art15plus_isperc,"dimnames")$sex=="Female"] <- art.dt[year %in% years & sex == 2, type]
+    attr(dt,"specfp")$art15plus_isperc[attr(attr(dt,"specfp")$art15plus_isperc,"dimnames")[[1]]=="Male"] <- art.dt[year %in% years & sex == 1, type]
+    attr(dt,"specfp")$art15plus_isperc[attr(attr(dt,"specfp")$art15plus_isperc,"dimnames")[[1]]=="Female"] <- art.dt[year %in% years & sex == 2, type]
     
     art.dt[, ART_cov_val := ifelse(ART_cov_pct > 0, ART_cov_pct, ART_cov_num)]
-    attr(dt,"specfp")$art15plus_num[attr(attr(dt,"specfp")$art15plus_num,"dimnames")$sex=="Male"] <- art.dt[year %in% years & sex == 1, ART_cov_val]
-    attr(dt,"specfp")$art15plus_num[attr(attr(dt,"specfp")$art15plus_num,"dimnames")$sex=="Female"] <- art.dt[year %in% years & sex == 2, ART_cov_val]
+    attr(dt,"specfp")$art15plus_num[attr(attr(dt,"specfp")$art15plus_num,"dimnames")[[1]]=="Male"] <- art.dt[year %in% years & sex == 1, ART_cov_val]
+    attr(dt,"specfp")$art15plus_num[attr(attr(dt,"specfp")$art15plus_num,"dimnames")[[1]]=="Female"] <- art.dt[year %in% years & sex == 2, ART_cov_val]
     
     return(dt)
   }

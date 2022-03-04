@@ -27,9 +27,9 @@ print(args)
 if(length(args) == 0){
   array.job = FALSE
   run.name <- "dev_step4a"
-  loc <- 'CYP'
+  loc <- 'BRA'
   draw.fill <- TRUE
-  paediatric <- F
+  paediatric <- T
   n = 1000
 }else{
   run.name <- args[1]

@@ -54,8 +54,8 @@ all_loc_list <- c(loc.list,eppasm_parents, 'MRT', 'COM', 'STP')
                             '-s ',
                             code.dir, "gbd/aggregate.R ",
                             loc, " ", run.name, " ", spec.name," ",2)
-      print(prep.string)
-      system(prep.string)
+      # print(prep.string)
+      # system(prep.string)
     }
     
     

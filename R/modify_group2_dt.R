@@ -57,6 +57,15 @@ group_2_dt_mods <- function(loc, dt){
   attributes(keeper) <- attributes(target$incrr_age)
 
   attr(dt, 'specfp')$incrr_age <- keeper
+  if(dim(attr(dt, 'specfp')$artmx_timerr)[2] < attr(dt, 'specfp')$SIM_YEARS){
+    diff <- dim(attr(dt, 'specfp')$artmx_timerr)[2] - attr(dt, 'specfp')$SIM_YEARS
+    while(diff != 0){
+      attr(dt, 'specfp')$artmx_timerr <-  abind::abind(attr(dt, 'specfp')$artmx_timerr, attr(dt, 'specfp')$artmx_timerr[,ncol(attr(dt, 'specfp')$artmx_timerr) ])
+      diff <- dim(attr(dt, 'specfp')$artmx_timerr)[2] - attr(dt, 'specfp')$SIM_YEARS
+      
+    }
+  }
+  attr(dt, 'specfp')$incidpopage = 0L
   dir.create(paste0('/ihme/hiv/epp_output/gbd20/',run.name, '/dt_objects/'), recursive = T)
   saveRDS(dt, paste0('/ihme/hiv/epp_output/gbd20/',run.name, '/dt_objects/', loc, '_dt.RDS'))
   return(dt)

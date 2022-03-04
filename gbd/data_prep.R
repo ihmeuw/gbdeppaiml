@@ -30,10 +30,57 @@ dir.table[,'on.art' := as.logical(on.art)]
 input_root <- paste0('/ihme/hiv/epp_input/', gbdyear, '/',run.name, '/')
 
 loc.table <- get_locations(hiv_metadata = TRUE)
-if(grepl('IND', loc)){
+if(grepl('IND', loc) | grepl('BRA', loc)){
   temp.loc <- loc.table[parent_id == loc.table[ihme_loc_id == loc, location_id], ihme_loc_id][1]
 }else{
   temp.loc <- loc
+}
+
+if(temp.loc != loc){
+  ##aggregate ART
+  child.locs <- loc.table[parent_id  == loc.table[ihme_loc_id == loc, location_id], ihme_loc_id]
+  art_agg <- rbindlist(lapply(paste0('/ihme/hiv/spectrum_input/200713_yuka/childARTcoverage/', child.locs, '.csv'), fread))
+  art_agg <- art_agg[,.(ART_cov_num = sum(ART_cov_num), ART_cov_pct = ART_cov_pct, Cotrim_cov_num = sum(Cotrim_cov_num), Cotrim_cov_pct = Cotrim_cov_pct), by = 'year']
+  art_agg <- unique(art_agg)
+  write.csv(art_agg, paste0('/ihme/hiv/spectrum_input/200713_yuka/childARTcoverage/', loc, '.csv'), row.names = F)
+  #note that this only works for counts, i checked that this works for brazil but haven't checked for other places
+  art_agg <- rbindlist(lapply(paste0('/ihme/hiv/spectrum_input/200713_yuka/PMTCT/', child.locs, '.csv'), fread))
+  art_agg <- melt(art_agg, id.vars = 'year')
+  art_agg <- art_agg[,.(value = sum(value)), by = c('year', 'variable')]
+  art_agg <- unique(art_agg)
+  art_agg <- data.table(dcast(art_agg, year ~ variable, value.var = 'value'))
+  write.csv(art_agg, paste0('/ihme/hiv/spectrum_input/200713_yuka/PMTCT/', loc, '.csv'), row.names = F)
+  ##adult ART (note that this is currently messy bc I am just averaging the means!)
+  # child.locs <- loc.table[parent_id  == loc.table[ihme_loc_id == loc, location_id], ihme_loc_id]
+  # art_agg <- rbindlist(lapply(paste0('/ihme/hiv/spectrum_input/200713_yuka/adultARTcoverage//', child.locs, '.csv'), fread))
+  # ##bind on populations based on the number of rows
+  # art_agg[,ihme_loc_id := unlist(lapply(child.locs, rep, times = 106))]
+  # pop_1549 <- get_population(age_group_id = 24, location_id = loc.table[ihme_loc_id %in% child.locs, location_id], sex_id = c(1,2), year_id = c(1970:2022), gbd_round_id = 7, decomp_step = 'iterative')
+  # pop_1549 <- merge(pop_1549, loc.table[,.(location_id, ihme_loc_id)])
+  # art_agg <- merge(art_agg, pop_1549[,.(year_id, sex_id, ihme_loc_id, population)], by.x = c('year', 'sex', 'ihme_loc_id'), by.y = c('year_id', 'sex_id', 'ihme_loc_id'))
+  # art_agg <- art_agg[,.(ART_cov_num = sum(ART_cov_num), ART_cov_pct = (ART_cov_pct / 100) * population, pop_agg = sum(population), ART_cov_pct_total = ART_cov_pct_total), by = c('year', 'sex')]
+  # art_agg <- art_agg[,.(ART_cov_num = sum(ART_cov_num), ART_cov_pct = sum(ART_cov_pct) , pop_agg,  ART_cov_pct_total = ART_cov_pct_total), by = c('year', 'sex')]
+  # art_agg <- art_agg[,.(ART_cov_num = sum(ART_cov_num), ART_cov_pct = ART_cov_pct / pop_agg, ART_cov_pct_total = ART_cov_pct_total), by = c('year', 'sex')]
+  # art_agg <- unique(art_agg[,ART_cov_pct := ART_cov_pct  * 100])
+  # art_agg <- unique(art_agg)
+  
+  child.locs <- loc.table[parent_id  == loc.table[ihme_loc_id == loc, location_id], ihme_loc_id]
+  art_agg <- rbindlist(lapply(paste0('/ihme/hiv/spectrum_input/200713_yuka/adultARTcoverage//', child.locs, '.csv'), fread))
+  ##bind on populations based on the number of rows
+  art_agg[,ihme_loc_id := unlist(lapply(child.locs, rep, times = 106))]
+  pop_1549 <- get_population(age_group_id = 24, location_id = loc.table[ihme_loc_id %in% child.locs, location_id], sex_id = c(1,2), year_id = c(1970:2022), gbd_round_id = 7, decomp_step = 'iterative')
+  pop_1549 <- merge(pop_1549, loc.table[,.(location_id, ihme_loc_id)])
+  art_agg <- merge(art_agg, pop_1549[,.(year_id, sex_id, ihme_loc_id, population)], by.x = c('year', 'sex', 'ihme_loc_id'), by.y = c('year_id', 'sex_id', 'ihme_loc_id'))
+  art_agg <- art_agg[,.(ART_cov_num = sum(ART_cov_num), ART_cov_pct = (ART_cov_pct / 100) * population, pop_agg = sum(population), ART_cov_pct_total = ART_cov_pct_total), by = c('year')]
+  art_agg <- art_agg[,.(ART_cov_num = sum(ART_cov_num), ART_cov_pct = sum(ART_cov_pct) , pop_agg,  ART_cov_pct_total = ART_cov_pct_total), by = c('year')]
+  art_agg <- art_agg[,.(ART_cov_num = sum(ART_cov_num), ART_cov_pct = ART_cov_pct / pop_agg, ART_cov_pct_total = ART_cov_pct_total), by = c('year')]
+  art_agg <- unique(art_agg[,ART_cov_pct := ART_cov_pct  * 100])
+  art_agg <- unique(art_agg)
+  male <- copy(art_agg)[,sex := 1]
+  female <- copy(art_agg)[,sex := 2]
+  
+  art_agg <- rbind(male, female)
+  write.csv(art_agg, paste0('/ihme/hiv/spectrum_input/200713_yuka/adultARTcoverage//', loc, '.csv'), row.names = F)
 }
 
 
