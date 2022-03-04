@@ -88,38 +88,7 @@ loc.list <- loc.list[grepl("IND", loc.list)]
 loc.list =  c(loc.list[grepl('ZAF', loc.list)], 'DJI', 'RWA', 'CPV', 'SSD')
 
 
-# Array job EPP-ASM ---------------------------------------
-if(array.job){
-  epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive=True -q all.q -P ", cluster.project, " ",
-                     "-e /share/temp/sgeoutput/", user, "/errors ",
-                     "-o /share/temp/sgeoutput/", user, "/output ",
-                     "-N ", "eppasm_", run.name, ' ',
-                     "-tc 1000 ",
-                     "-t 1:", n.draws, " ",
-                     "-hold_jid eppasm_prep_inputs_", run.name," ",
-                     code.dir, "gbd/singR_shell.sh ",
-                     code.dir, "gbd/main.R ",
-                     run.name, " ", array.job)
-print(epp.string)
-system(epp.string)
-
-#Draw compilation
-draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q long.q -P ", cluster.project, " ",
-                      "-e /share/temp/sgeoutput/", user, "/errors ",
-                      "-o /share/temp/sgeoutput/", user, "/output ",
-                      "-N ", "save_draws_", run.name, ' ',
-                      "-hold_jid ",    "eppasm_", run.name, ' ',
-                      "-tc 100 ",
-                      "-t 1:", n.draws, " ",
-                      code.dir, "gbd/singR_shell.sh ",
-                      code.dir, "gbd/compile_draws.R ",
-                      run.name, " ", array.job, ' TRUE ', paediatric)
-print(draw.string)
-system(draw.string)
-}
-
 # EPP-ASM ---------------------------------------
-# loc.list <- c(loc.list[grepl('IND', loc.list)], 'DOM', 'GAB', 'GHA', 'GIN', 'GMB', 'GNB', 'GBQ', 'HTI', 'NGA_25349', 'PNG', 'UGA')
 if(run_eppasm & !array.job){
 for(loc in loc.list) {    
   ## Run EPPASM
