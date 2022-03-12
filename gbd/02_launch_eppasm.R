@@ -30,7 +30,7 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 run.name <- "dev_step4a"
 compare.run <- c("200713_yuka")
 
-proj.end <- 2022
+proj.end <- 2020
 if(file.exists(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))){
   n.draws = nrow(fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv')))
   array.job = T
@@ -85,8 +85,9 @@ loc.list <- c(loc.list, 'MRT', 'STP', 'COM')
 #loc.list <- loc.table[epp!=1 & level == 3,ihme_loc_id]
 # loc.list <- setdiff(loc.list, 'RWA')
 #loc.list =  c(loc.list[grepl('ZAF', loc.list)], 'DJI', 'RWA', 'CPV', 'SSD')
-#loc.list <- loc.table[ unaids_recent != 2013 & spectrum == 1 & epp != 1 & group != '1A' & group != '1B',ihme_loc_id] %>% unique
-
+loc.list <- loc.table[ unaids_recent != 2013 & spectrum == 1 & epp != 1 & group != '1A' & group != '1B',ihme_loc_id] %>% unique
+loc.list <- c(loc.list, 'BRA')
+array.job = F
 # Array job EPP-ASM ---------------------------------------
 if(array.job){
   epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive=True -q all.q -P ", cluster.project, " ",
@@ -118,7 +119,6 @@ system(draw.string)
 }
 
 # EPP-ASM ---------------------------------------
-# loc.list <- c(loc.list[grepl('IND', loc.list)], 'DOM', 'GAB', 'GHA', 'GIN', 'GMB', 'GNB', 'GBQ', 'HTI', 'NGA_25349', 'PNG', 'UGA')
 if(run_eppasm & !array.job){
 for(loc in loc.list) {    
   ## Run EPPASM
@@ -151,8 +151,9 @@ for(loc in loc.list) {
                             '-s ',
                             code.dir, "gbd/compile_draws.R ",
                             run.name, " ", array.job, ' ', loc,  ' TRUE ', paediatric)
-      # print(draw.string)
-      # system(draw.string)
+
+      print(draw.string)
+      system(draw.string)
       
       summary.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
                             "-e /share/temp/sgeoutput/", user, "/errors ",

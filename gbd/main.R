@@ -27,7 +27,7 @@ if(length(args) == 0){
   array.job = TRUE
   run.name <- "dev_step4a"
   loc <- 'BRA'
-  stop.year <- 2022
+  stop.year <- 2020
   j <- 1
   paediatric <- TRUE
 }else{
@@ -163,10 +163,10 @@ if(loc %in% c("MAR","MRT","COM")){
 
 draw <- j
 #need to make this fp$incidpopage == 0L the incidence rate
-if(temp.loc != loc){
-  # child.locs <- loc.table[parent_id  == loc.table[ihme_loc_id == loc, location_id], ihme_loc_id]
-  art_agg <- fread('/ihme/hiv/spectrum_prepped/summary/200713_yuka/locations/BRA_spectrum_prep.csv')
+  child.locs <- loc.table[parent_id  == loc.table[ihme_loc_id == loc, location_id], ihme_loc_id]
+  art_agg <- fread(paste0('/ihme/hiv/spectrum_prepped/summary/200713_yuka/locations/', loc, '_spectrum_prep.csv'))
   incid_new <- art_agg[measure=='Incidence' & metric == 'Rate' & sex_id == 3 & age_group_id == 24, mean]
+  if(length(child.locs) == 0){child.locs = loc}
   compare.dt.run <- (paste0('/ihme/hiv/spectrum_draws/200713_yuka/compiled/stage_1/summary/', child.locs, '_all_age.csv'))
   compare.dt.run <- rbindlist(lapply(compare.dt.run, fread))
   pop_1549 <- get_population(age_group_id = 24, location_id = loc.table[ihme_loc_id %in% child.locs, location_id], sex_id = c(3), year_id = c(1970:2022), gbd_round_id = 7, decomp_step = 'iterative')
@@ -175,13 +175,13 @@ if(temp.loc != loc){
   compare.dt.run <- compare.dt.run[,.(value = value * population, pop_agg = sum(population)), by = c('year',  'variable')]
   compare.dt.run <- unique(compare.dt.run[,.(value = sum(value), pop_agg), by = c('year',  'variable')])
   compare.dt.run[,value := value / pop_agg]
-  compare.dt.run[,ihme_loc_id := 'BRA']
+  compare.dt.run[,ihme_loc_id := loc]
   compare.dt.run <- unique(compare.dt.run)
 
   incid_new <- compare.dt.run[variable == 'inc_rate',value]# * 100
   
   
-  spec <- fread(paste0('/ihme/hiv/spectrum_draws/200713_yuka/compiled/stage_1/BRA_ART_data.csv'))
+  spec <- fread(paste0('/ihme/hiv/spectrum_draws/200713_yuka/compiled/stage_1/', loc,'_ART_data.csv'))
   spec <- spec[age %in% c(15:49),.(hiv_deaths = sum(hiv_deaths), new_hiv = sum(new_hiv), prev = sum(pop_lt200 + pop_200to350 + pop_gt350 + pop_art), art = sum(pop_art), pop = sum(pop_lt200 + pop_200to350 + pop_gt350 + pop_art + pop_neg)), by = c('run_num', 'year')]
   spec <- spec[,.(hiv_deaths = mean(hiv_deaths), new_hiv = mean(new_hiv), prev = mean(prev), art = mean(art), pop = mean(pop)), by = c('year')]
   spec[,art := art / prev]
@@ -193,22 +193,7 @@ if(temp.loc != loc){
   incid_new <- spec[variable == 'new_hiv', value]
   
   
-}else{
-  compare.dt.run <- fread(paste0('/ihme/hiv/spectrum_draws/200713_yuka/compiled/stage_1/summary/', loc, '_all_age.csv'))
-  incid_new <- compare.dt.run[variable == 'inc_rate',value]# * 100
-  incid <- fread(paste0('/ihme/hiv/spectrum_input/200713_yuka/incidence/', loc, '.csv'))
-  attr(dt, 'specfp')$incidpopage <- as.integer(0)
-  col <- draw + 2
-  incid <- data.frame(incid)
-  if(loc == 'FRA'){
-    incid <-  incid[,col] / 1000
-    
-  }else{
-    incid <-  incid[,col] / 100
-    
-  }
-  
-}
+
 
 # incid[1:which(seq(1970,2025) == 1978)] <- 0
 attr(dt, 'specfp')$incidinput <- incid_new# / 10
@@ -242,9 +227,16 @@ attr(dt, 'specfp')$incidinput <- incid_new# / 10
   #   attr(dt, 'specfp')$art15plus_isperc <- !attr(dt, 'specfp')$art15plus_isperc
   # }
   
-  spec <- fread(paste0('/ihme/hiv/spectrum_prepped/summary/200713_yuka/locations/BRA_spectrum_prep.csv'))[age_group_id == 22 & sex_id == 3 & measure == 'ART' & metric == 'Rate',]
+  spec <- fread(paste0('/ihme/hiv/spectrum_prepped/summary/200713_yuka/locations/', loc, '_spectrum_prep.csv'))[age_group_id == 22 & sex_id == 3 & measure == 'ART' & metric == 'Rate',]
   attr(dt,"specfp")$art15plus_num[attr(attr(dt,"specfp")$art15plus_num,"dimnames")[[1]]=="Male"] <-  spec[,mean]
   attr(dt,"specfp")$art15plus_num[attr(attr(dt,"specfp")$art15plus_num,"dimnames")[[1]]=="Female"] <-  spec[,mean]
+  
+  ###testing turning off ART:
+  # attr(dt,"specfp")$art15plus_num[attr(attr(dt,"specfp")$art15plus_num,"dimnames")[[1]]=="Male"] <-  rep(1, 53)
+  # attr(dt,"specfp")$art15plus_num[attr(attr(dt,"specfp")$art15plus_num,"dimnames")[[1]]=="Female"] <-  rep(1, 53)
+  # 
+  
+  
   attr(dt,"specfp")$art15plus_isperc[attr(attr(dt,"specfp")$art15plus_isperc,"dimnames")[[1]]=="Male"] <-  rep(TRUE, 53)
   attr(dt,"specfp")$art15plus_isperc[attr(attr(dt,"specfp")$art15plus_isperc,"dimnames")[[1]]=="Female"] <-  rep(TRUE, 53)
   
@@ -261,6 +253,7 @@ attr(dt, 'specfp')$med_cd4init_input <- c(attr(dt, 'specfp')$med_cd4init_input[!
 ##we are missing population after year 51, but I think this should get us out to 2020 which is sufficient for this
 attr(dt, 'specfp')$SIM_YEARS = 51
 attr(dt, 'specfp')$incidpopage = 0L
+#saveRDS(attr(dt, 'specfp'), '/ihme/homes/mwalte10/hiv_projects/maggie_thesis/fp_obj.RDS')
 result = simmod.specfp(attr(dt, 'specfp'), VERSION = 'R')
 dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', file_name, '/'), recursive = T)
 saveRDS(result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', file_name, '/', draw, '.RDS'))

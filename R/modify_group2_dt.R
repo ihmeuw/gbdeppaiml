@@ -34,7 +34,12 @@ group_2_dt_mods <- function(loc, dt){
   attr(dt, 'specfp')$incrr_sex <- c(rep(inputIncSexRatio[1], length(seq(1970,1989))), inputIncSexRatio, rep(inputIncSexRatio[length(inputIncSexRatio)], length(seq(2020,2025))))
 
   age_ratio <- fread("/home/j/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/AIM_assumptions/sex_age_pattern/age_IRRs/Feb17/GEN_IRR.csv")
-  age_ratio[,mean := (upper - lower )/ 2]
+  age_ratio[,se := (upper - lower) / 3.92]
+  age_ratio[,mean := ((upper - lower )/ 2) + lower]
+  for(row in 1:nrow(age_ratio)){
+    x <- rnorm(1, age_ratio[row,mean], age_ratio[row,se])
+    age_ratio[row,mean := x]
+  }
   age_ratio <- age_ratio[,.(age, sex, mean)]
   age_ratio_year <- list()
   for(i in 1970:2025){
