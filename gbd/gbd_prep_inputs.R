@@ -13,11 +13,13 @@ if(length(args) > 0) {
 	proj.end <- args[2]
 	run.group2 <- args[3]
 	decomp.step <- args[4]
+	gbdyear = args[5]
 } else {
 	run.name <- "dev_step4a"
 	proj.end <- 2022
 	run.group2 <- TRUE
 	decomp.step <- "iterative"
+	gbd_year = 'gbd20'
 }
 
 input.table <- fread(paste0('/share/hiv/epp_input/gbd20/input_ids.csv'))
@@ -37,12 +39,11 @@ mlt <- c.args[['mlt']]
 birth <- c.args[['births']]
 
 
-gbdyear <- 'gbd20'
 out.dir <- paste0('/ihme/hiv/epp_input/', gbdyear, '/', run.name, "/")
 dir.create(out.dir, recursive = TRUE, showWarnings = TRUE)
 
 ## Functions
-library(mortdb, lib.loc = "/mnt/team/mortality/pub/shared/r")
+library('mortdb',lib.loc = '/mnt/team/mortality/pub/shared/r/4')
 source( "/ihme/cc_resources/libraries/current/r/get_population.R")
 source('/ihme/cc_resources/libraries/current/r/get_covariate_estimates.R')
 source('/ihme/cc_resources/libraries/current/r/get_cod_data.R')
@@ -214,7 +215,7 @@ invisible(lapply(india.locs, function(c.location_id) {
 
 ## Migration
 ##got 226 from Spencer on 8/6/2020
-mig <- fread(paste0('/mnt/team/fertilitypop/pub/population/popReconstruct/291/upload/net_migration_single_year.csv'))[measure_id==19]
+mig <- fread(paste0('/mnt/team/fertilitypop/pub/population/popReconstruct/294/upload/net_migration_single_year.csv'))[measure_id==19]
 #fread(paste0('/ihme/fertilitypop/gbd_2017/population/modeling/popReconstruct/v96/best/net_migrants.csv'))
 # mig<- get_mort_outputs(model_name = 'migration single year',model_type = 'estimate', run_id = migration, location_id = epp.locs,
 #                              age_group_ids = c(28, 238,21 ,50:127))[measure_id == 19]

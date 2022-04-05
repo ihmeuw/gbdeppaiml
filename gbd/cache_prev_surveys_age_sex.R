@@ -8,18 +8,26 @@ code.dir <- paste0(ifelse(windows, "H:", paste0("/homes/", user)), "/HIV/")
 ## Packages
 library(data.table); library(survey); library(assertable)
 
+args <- commandArgs(trailingOnly = TRUE)
+if(length(args) > 0) {
+  gbdyear <- args[1]
+} else {
+  gbdyear = 'gbd20'
+}
+
+
 
 ### Paths
 ##out.dir <- paste0("/ihme/hiv/epp_output/gbd19/", run.name, "/")
-out.dir <- paste0("/ihme/hiv/epp_input/gbd20/")
+out.dir <- paste0("/ihme/hiv/epp_input/", gbdyear, '/')
 dir.create(out.dir, showWarnings = F)
-out.path <- paste0("/ihme/hiv/epp_input/gbd20/prev_surveys_ind.csv")
+out.path <- paste0("/ihme/hiv/epp_input/", gbdyear, "/prev_surveys_ind.csv")
 
 ### Change this to the newest extraction sheet
 supp.survey.path <- paste0("/ihme/hiv/data/prevalence_surveys/avinav_GBD2019_prevalence_surveys_decomp4_FORUSE.csv")
 
 ### Functions
-library(mortdb, lib = "/share/mortality/shared/r")
+library('mortdb',lib.loc = '/mnt/team/mortality/pub/shared/r/4')
 
 ### Tables
 loc.table <- data.table(get_locations(hiv_metadata = T))
@@ -294,5 +302,5 @@ out.dt = rbind(out.dt,save_all)
 #out.dt[grepl("IND_",iso3) & age_year=="15-49", use := TRUE]
 out.dt[prev == 0.000 & use==TRUE, prev := 0.0005]
 
-write.csv(out.dt[,.(year,iso3,age_year,sex_id,prev,se,n,nid_loc_year, use)],"/ihme/hiv/epp_input/gbd20/prev_surveys_ind.csv",row.names = FALSE)
+write.csv(out.dt[,.(year,iso3,age_year,sex_id,prev,se,n,nid_loc_year, use)],paste0("/ihme/hiv/epp_input/", gbdyear, "/prev_surveys_ind.csv"),row.names = FALSE)
 

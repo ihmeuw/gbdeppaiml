@@ -1,5 +1,7 @@
 library(sf)
-h_root = '/homes/mwalte10/'
+user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
+
+h_root = paste0('/homes/', user)
 lib.loc <- paste0(h_root,"R/",R.Version(),"/",R.Version(),".",R.Version())
 dir.create(lib.loc,recursive=T, showWarnings = F)
 .libPaths(c(lib.loc,.libPaths()))
@@ -25,4 +27,4 @@ crs(anc_dat) <- "+proj=longlat +datum=WGS84 +no_defs"
 results <- point.in.poly(anc_dat, sf)
 
 lat_long_table <- cbind(as.character(attr(results, 'data')$ihme_lc_id), coordinates(anc_dat))
-write.csv(lat_long_table, file =  '/homes/mwalte10/lat_long_codetable.csv', row.names = F)
+write.csv(lat_long_table, file =  paste0('/homes/', user, '/lat_long_codetable.csv'), row.names = F)

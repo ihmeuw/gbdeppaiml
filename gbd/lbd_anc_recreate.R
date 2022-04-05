@@ -72,7 +72,6 @@ additional <- read.csv(add_info)
 ## Merge Geography codebook and UNAIDS data -----------------------------------------------------------------------------------------------
 geocodebook <- read.csv(geo_codebook, stringsAsFactors = FALSE)
 #anc_snap.R is from: https://stash.ihme.washington.edu/projects/GEOSP/repos/lbd_hiv/browse/data/anc/3_post_processing/anc_snap.r
-source('/homes/mwalte10/gbdeppaiml/lbd_anc_align/anc_snap.R')
 geocodebook <- snap_codebook(geocodebook)
 
 ##added trim/whitespace code 

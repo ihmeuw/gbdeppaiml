@@ -120,7 +120,6 @@ ind.prepare.epp.fit <- function(filepath, proj.end=2016.5, anc.sub = T, sub.art.
 ####  Function to read prevalence data used in EPP fitting (from .xml)  ####
 ############################################################################
 
-library(XML)
 
 ind.read.epp.data <- function(epp.xml){
   obj <- xmlTreeParse(epp.xml)
