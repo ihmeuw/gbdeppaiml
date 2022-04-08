@@ -8,7 +8,7 @@
 ##
 ## Notes:
 ##   
-##test
+##
 
 ## Used in basically every script
 Sys.umask(mode = "0002")
@@ -21,28 +21,35 @@ devtools::load_all()
 gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
 setwd(gbdeppaiml_dir)
 devtools::load_all()
+source(paste0('/ihme/homes/', user, '/rt-shared-functions/cluster_functions.R'))
+
 
 
 # Arguments ---------------------------------------
-gbdyear = 'gbd20'
-run.name = '200713_yuka_newASFR'
+gbdyear = 'gbdTEST'
+run.name = '220329_maggie'
 old_run.name = '200713_yuka'
 spec.name = '200713_yuka'
 code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
 loc.table <- get_locations(hiv_metadata = T)
 loc.list <-  c(loc.table[epp == 1, ihme_loc_id], 'MRT', 'STP', 'COM')
-loc.list =  c(loc.list[grepl('ZAF', loc.list)], 'DJI', 'RWA', 'CPV', 'SSD')
 
 # Toggles ---------------------------------------
 ##make copy inputs and new inputs opposite
-new_inputs = F
-copy_inputs = T
+new_inputs = T
+copy_inputs = F
 plot_ART = F
-eppasm_inputs = F
+eppasm_inputs = T
 prev_surveys = F
 art_proportions = F
 redo_offsets = F
 
+# Args for sbatches ---------------------------------------
+run.table <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/eppasm_run_table.csv'))
+run.table <- run.table[run_name == run.name,]
+proj.end = run.table[,proj.end]
+decomp.step = run.table[,decomp_step]
+run.group2 = F
 
 # Copy Inputs ---------------------------------------
 if(copy_inputs){
@@ -85,15 +92,9 @@ if(new_inputs){
   # Compare ART inputs ---------------------------------------
   if(plot_ART){
     for(loc in loc.list) { 
-      art.string <- paste0("qsub -l m_mem_free=1G -l fthread=1 -l h_rt=00:30:00 -l archive -q all.q -P ", cluster.project, " ",
-                           "-e /share/temp/sgeoutput/", user, "/errors ",
-                           "-o /share/temp/sgeoutput/", user, "/output ",
-                           "-N ", loc, "_plot_art ",
-                           code.dir, "gbd/singR_shell.sh ",
-                           paste0(paste0("/ihme/homes/", user), "/hiv_gbd2019/01_prep/plot_ART.R "),
-                           "2019 ", loc, " ", "2017", " ",run.name)
-      print(art.string )
-      system(art.string )
+      submit_job(script = paste0(paste0("/ihme/homes/", user), "/hiv_gbd/01_prep/plot_ART.R"), queue = 'all.q', memory = '1G', threads = 1, time = '00:30:00',
+                 name = paste0(loc, '_plot_art'),
+                 archive = F, args = c(2019, loc, 2017, run.name))
     }
     
     plot.dir <- paste0("/ihme/hiv/epp_input/", gbdyear, '/', run.name,"/art_plots/")
@@ -108,59 +109,69 @@ if(new_inputs){
   
   # Pull new inputs and prep for EPP-ASM ---------------------------------------
   if(eppasm_inputs) {
-    prep.job <- paste0("qsub -l m_mem_free=10G -l fthread=1 -l h_rt=00:30:00 -q all.q -N eppasm_prep_inputs_", run.name," -P ",cluster.project," ",
-                       "-e /share/temp/sgeoutput/", user, "/errors ",
-                       "-o /share/temp/sgeoutput/", user, "/output ",
-                       code.dir, "gbd/singR_shell.sh ",
-                       code.dir, "gbd/gbd_prep_inputs.R"," ",run.name," ",proj.end, " ", run.group2, " ", decomp.step)
-    print(prep.job)
-    system(prep.job)
+    submit_job(script = paste0(code.dir, "gbd/gbd_prep_inputs.R"), queue = 'all.q', memory = '10G', threads = 1, time = '00:30:00',
+               name = 'prep_gbd_inputs',
+               archive = F, args = c(run.name, proj.end, run.group2, decomp.step, gbdyear))
+    ##check that the necessary files exists
+    dirs = c('SRB', 'births', 'ASFR', 'migration', 'population_splits', 'population', 'population_single_age')
+    dirs = paste0('/ihme/hiv/epp_input/', gbdyear, '/', run.name, '/', dirs)
+    lapply(dirs, dir.exists)
+
+    submit_job(script = paste0(code.dir, "gbd/gbd_prep_ind_inputs.R"), queue = 'all.q', memory = '10G', threads = 1, time = '00:30:00',
+               name = 'prep_gbd_inputs_ind',
+               archive = F, args = c(run.name, proj.end, run.group2))
     
-    prep.job <- paste0("qsub -l m_mem_free=10G -l fthread=1 -l h_rt=00:30:00 -q all.q -N eppasm_prep_inputs_", run.name," -P ",cluster.project," ",
-                       "-e /share/temp/sgeoutput/", user, "/errors ",
-                       "-o /share/temp/sgeoutput/", user, "/output ",
-                       code.dir, "gbd/singR_shell.sh ",
-                       code.dir, "gbd/gbd_prep_ind_inputs.R"," ",run.name," ",proj.end, " ", run.group2)
-    print(prep.job)
-    system(prep.job)
+    lapply(dirs, check_files, filenames = paste0(loc.table[epp == 1, ihme_loc_id], '.csv'))
+    
   }
   
   # Prepare prevalence surveys ---------------------------------------
   if(prev_surveys){
-    prev.job <- paste0("qsub -l m_mem_free=4G -l fthread=1 -l h_rt=00:10:00 -q all.q -N prev_cache_", run.name," -P ",cluster.project," ",
-                       "-e /share/temp/sgeoutput/", user, "/errors ",
-                       "-o /share/temp/sgeoutput/", user, "/output ",
-                       code.dir, "gbd/singR_shell.sh ",
-                       code.dir, "gbd/cache_prev_surveys_age_sex.R"," ",run.name)
-    print(prev.job)
-    system(prev.job)
+    submit_job(script = paste0(code.dir, "gbd/cache_prev_surveys_age_sex.R"), queue = 'all.q', memory = '4G', threads = 1, time = '00:10:00',
+               name = 'prep_prev_surveys',
+               archive = F, args = c(gbdyear))
+    file.exists(paste0('/ihme/hiv/epp_input/', gbdyear, '/prev_surveys_ind.csv'))
   }
   
   
   # Prepare ART proportions for India and Kenya ---------------------------------------
   if(art_proportions){
-    prop.job <- paste0("qsub -l m_mem_free=2G -l fthread=1 -l h_rt=00:20:00 -q all.q -P ", cluster.project," -N eppasm_art_prop_", run.name," -hold_jid eppasm_prev_cache_", run.name, " ", 
-                       "-e /share/temp/sgeoutput/", user, "/errors ",
-                       "-o /share/temp/sgeoutput/", user, "/output ",
-                       "-hold_jid eppasm_prep_inputs_", run.name,',eppasm_prev_cache_', run.name,' ',
-                       code.dir, "gbd/singR_shell.sh ", 
-                       code.dir, "gbd/prep_art_props.R ", run.name)
-    print(prop.job)
-    system(prop.job)
+    submit_job(script = paste0(code.dir, "gbd/prep_art_props.R"), queue = 'all.q', memory = '2G', threads = 1, time = '00:20:00',
+               name = 'prep_art_props',
+               archive = F, args = c(run.name, gbdyear))
+    file.exists(paste0('/ihme/hiv/epp_input/', gbdyear, '/', run.name, '/art_prop.csv'))
+
   }
   
   # Prepare offsets for ART data ---------------------------------------
   if(redo_offsets){
-    redo_offsets.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive=True -q all.q -P ", cluster.project, " ",
-                                  "-e /share/homes/", user, "/errors ",
-                                  "-o /share/temp/sgeoutput/", user, "/output ",
-                                  "-N ",  "redo_offsets ",
-                                  code.dir, "gbd/singR_shell.sh ",
-                                  code.dir, "lbd_anc_align/00_launch_lbd_process.R ",
-                                  ##191224_trumpet is a placeholder for the old run
-                                  run.name, '191224_trumpet')
-    print(redo_offsets.string)
-    system(redo_offsets.string)
+    input_table <- fread(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), '/gbdeppaiml/gbd/inputs.csv'))
+    
+    ##This only needs to be rerun if any of the file paths in the input file have changed. Note that between runs the anc_no_offset WILL change
+    rerun_conditions <- c(input_table[run.name == run.name.old, lbd_anc_data] != input_table[run.name == run.name.old, lbd_anc_data],
+                          input_table[run.name == run.name.old, geo_codebook] != input_table[run.name == run.name.old, geo_codebook],
+                          input_table[run.name == run.name.old, sf_dir] != input_table[run.name == run.name.old, sf_dir],
+                          input_table[run.name == run.name.old, rd] != input_table[run.name == run.name.old, rd],
+                          input_table[run.name == run.name.old, lbd_anc_mean_est] != input_table[run.name == run.name.old, lbd_anc_mean_est])
+    
+    
+    # Run scripts ---------------------------------------
+    if(any(rerun_conditions == TRUE)){
+      submit_job(script = paste0(code.dir, "gbd/lat_long.R"), queue = 'all.q', memory = '30G', threads = 1, time = '01:00:00',
+                 name = 'lat_long',
+                 archive = F)
+      
+      
+      submit_job(script = paste0(code.dir, "gbd/lbd_anc_recreate.R"), queue = 'all.q', memory = '30G', threads = 1, time = '01:00:00',
+                 name = 'lbd_processing',
+                 archive = F)
+      
+      
+      submit_job(script = paste0(code.dir, "offsets/create_offsets.R"), queue = 'all.q', memory = '30G', threads = 1, time = '01:00:00',
+                 name = 'create_offsets',
+                 archive = F)
+    }
+    
   }
   
 }
