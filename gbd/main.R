@@ -13,6 +13,7 @@
 ##
 
 ## Used in basically every script
+rm(list = ls())
 Sys.umask(mode = "0002")
 windows <- Sys.info()[1][["sysname"]]=="Windows"
 root <- ifelse(windows,"J:/","/home/j/")
@@ -23,29 +24,18 @@ user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
-<<<<<<< HEAD
-  array.job = TRUE
-  run.name <- "200713_yuka"
-  loc <- 'BWA'
-=======
-  array.job = FALSE
-  run.name <- "2021_runtime_test"
-  loc <- 'IND_4841'
->>>>>>> 5b9f09bcdd0e95495929655f9245e0cd89ebafab
+  run.name <- "220329_maggie"
+  loc <- 'AGO'
   stop.year <- 2022
   j <- 1
   paediatric <- TRUE
 }else{
   run.name <- args[1]
-  array.job <- as.logical(args[2])
   j <- as.integer(Sys.getenv("SGE_TASK_ID"))
+  loc <- args[2]
+  stop.year <- as.integer(args[3])
+  paediatric <- as.logical(args[4])
   
-}
-
-if(!array.job & length(args) > 0){
-  loc <- args[3]
-  stop.year <- as.integer(args[4])
-  paediatric <- as.logical(args[5])
 }
 
 eppasm_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/")
@@ -55,7 +45,7 @@ gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/
 setwd(gbdeppaiml_dir)
 devtools::load_all()
 
-gbdyear <- 'gbd20'
+gbdyear <- 'gbdTEST'
 
 run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
 in_run_table = F
@@ -95,7 +85,7 @@ paediatric = TRUE
 file_name = loc
 out.dir <- paste0('/ihme/hiv/epp_output/',gbdyear,'/', run.name, "/", file_name)
 
-source('/ihme/homes/mwalte10/gbdeppaiml/gbd/data_prep.R')
+source(paste0('/ihme/homes/', user, '/gbdeppaiml/gbd/data_prep.R'))
 # Location specific toggles ---------------------------------------
 # ANC data bias adjustment
 ##### These locations do not have information from LBD team estimates
@@ -188,7 +178,7 @@ attr(dt, 'eppd')$ancsitedat <- data.frame(attr(dt, 'eppd')$ancsitedat)
 # attr(dt,"eppd")$ancsitedat <- as.data.frame(attr(dt,"eppd")$ancsitedat)
 
 fit <- eppasm::fitmod(dt, eppmod = ifelse(grepl('IND', loc),'rlogistic',epp.mod), 
-                      B0 = 1e5, B = 1e3, number_k = 500, 
+                      B0 = 1e3, B = 1e3, number_k = 5, 
                       ageprev = ifelse(loc %in% zero_prev_locs,'binom','probit'))
 
 dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/fitmod/'))
@@ -217,8 +207,6 @@ if(max(fit$fp$pmtct_dropout$year) < stop.year & ped_toggle){
 
 draw <- j
 result <- gbd_sim_mod(fit, VERSION = "R")
-# dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/'), recursive = T)
-# saveRDS(result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', loc, '/', draw, '.RDS'))
 dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', file_name, '/'), recursive = T)
 saveRDS(result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', file_name, '/', draw, '.RDS'))
 #

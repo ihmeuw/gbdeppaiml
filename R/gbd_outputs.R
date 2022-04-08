@@ -54,7 +54,6 @@ gbd_sim_mod <-  function(fit, rwproj=fit$fp$eppmod == "rspline",VERSION = 'C'){
     #fp.list <-  update(fit$fp, list=fit$param, keep.attr = FALSE)
     fp.draw <- fp.list[[rand.draw]]
     #fp.draw = fit$param
-    ##pull in new rvec
 
   }else{
     fp.draw <- fit$fp

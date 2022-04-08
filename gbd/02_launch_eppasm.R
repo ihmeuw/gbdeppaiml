@@ -92,6 +92,11 @@ loc.list =  c(loc.list[grepl('ZAF', loc.list)], 'DJI', 'RWA', 'CPV', 'SSD')
 if(run_eppasm & !array.job){
 for(loc in loc.list) {    
   ## Run EPPASM
+  submit_array_job(script = paste0(code.dir, 'gbd/main.R'), n_jobs = n.draws,
+             queue = 'long.q', memory = '7G', threads = 1, time = "24:00:00", name = paste0(loc, '_', run.name, '_eppasm'),
+             archive = T, args = c(run.name, loc, proj.end, paediatric))
+  
+  
     epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive=True -q long.q -P ", cluster.project, " ",
                          "-e /share/temp/sgeoutput/", user, "/errors ",
                          "-o /share/temp/sgeoutput/", user, "/output ",
