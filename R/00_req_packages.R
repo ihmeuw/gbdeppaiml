@@ -29,7 +29,7 @@ hiv_gbd2019_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "
 ## ---------------------------
 ##Frequently used packages
 library(data.table); library(mvtnorm); library(survey); library(ggplot2); library(plyr); library(dplyr); library(assertable); library(parallel)
-library(mortdb, lib = "/mnt/team/mortality/pub/shared/r")
+library(mortdb, lib = "/mnt/team/mortality/pub/shared/r/4")
 
 
 ## load in ihme functions

@@ -50,10 +50,8 @@ gbd_sim_mod <-  function(fit, rwproj=fit$fp$eppmod == "rspline",VERSION = 'C'){
       fit$param <- lapply(fit$param, function(par){par$rvec <- epp:::sim_rvec_rwproj(par$rvec, firstidx, lastidx, dt); par})
     }
     fit$fp$incrr_age <- fit$fp$incrr_age[,,1:fit$fp$SIM_YEARS]
-    fp.list <- lapply(fit$param, function(par) update(fit$fp, list=par, keep.attr = FALSE))
-    #fp.list <-  update(fit$fp, list=fit$param, keep.attr = FALSE)
-    fp.draw <- fp.list[[rand.draw]]
-    #fp.draw = fit$param
+    fp.draw =  append(fit$fp, fit$param[[rand.draw]])
+
 
   }else{
     fp.draw <- fit$fp
@@ -76,7 +74,7 @@ gbd_sim_mod <-  function(fit, rwproj=fit$fp$eppmod == "rspline",VERSION = 'C'){
     
   }
   # fp.draw$rvec <- pred_foi
-  mod <- simmod((fp.draw), VERSION = VERSION)
+  mod <- simmod.specfp((fp.draw), VERSION = VERSION)
   attr(mod, 'theta') <- fit$resample[rand.draw,]
   
   return(mod)

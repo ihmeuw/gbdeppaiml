@@ -25,9 +25,9 @@ user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
-  array.job = TRUE
-  run.name <- "200713_yuka"
-  loc <- 'SSD'
+  array.job = FALSE
+  run.name <- "210415_zanfona"
+  loc <- 'SDN'
   draw.fill <- TRUE
   paediatric <- TRUE
   n = 1000
@@ -43,12 +43,12 @@ if(length(args) == 0){
 gbdyear <- 'gbd20'
 stop.year = 2022
 test = NULL
-# loc = 'AGO'
-n = 1000
-#library(data.table); library(mvtnorm); library(survey); library(ggplot2); library(plyr); library(dplyr); library(assertable); library(parallel)
+loc = 'AGO'
+library(data.table); library(mvtnorm); library(survey); library(ggplot2); library(plyr); library(dplyr); library(assertable); library(parallel)
 gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
 eppasm_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/")
-hiv_gbd2019_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/hiv_gbd/")
+hiv_gbd2019_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/hiv_gbd2019/")
+library(mortdb, lib = "/share/mortality/shared/r/")
 
 setwd(eppasm_dir)
 devtools::load_all()
@@ -60,12 +60,11 @@ if(!array.job & length(args) > 0){
 }
 
 # Array job ---------------------------------------
-# if(array.job){
-#   array.dt <- fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
-#   array.dt <- unique(array.dt[,(loc_scalar)])
-#   task_id <- as.integer(Sys.getenv("SGE_TASK_ID"))
-#   loc <- array.dt[task_id]
-# }
+if(array.job){
+  array.dt <- fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
+  task_id <- as.integer(Sys.getenv("SGE_TASK_ID"))
+  loc <- array.dt[task_id,loc_scalar]
+}
 
 
 ## Functions
@@ -109,18 +108,19 @@ print('loc.table loaded')
       
     }
     draw.list <- list.files(draw.path)
-
+  
+    
     print('draw.list exists')
     ## subset out additional outputs (theta, under-1 splits)
     ## this could probably be tidied up
     draw.list <- draw.list[grepl('.csv', draw.list) & !grepl('theta_', draw.list) & !grepl('under_', draw.list)]
-    draw.list <- draw.list[gsub('.csv', '', draw.list) %in% 1:1000]
-    
+    draw.list <- draw.list[gsub('.csv', '', draw.list) %in% 1:n]
     
     dt <- lapply(draw.list, function(draw){
       print(draw)
       draw.dt <- fread(paste0(draw.path, '/', draw))
     })
+    
     ##Sometimes there are negative values, need to replace
     
     dt.check <- lapply(dt,function(draw.dt)
