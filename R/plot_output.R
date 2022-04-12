@@ -150,7 +150,6 @@ plot_15to49 <- function(loc="IND_4873",
                         loc_name = NULL){
   x <- data.table(cbind(name = names, run_name = run.vec))
   meas.list <- c('Incidence', 'Prevalence', 'Deaths', 'ART')
-  meas.list = 'Prevalence'
 
   
   if(is.null(loc_name)){
@@ -171,7 +170,12 @@ plot_15to49 <- function(loc="IND_4873",
   compare.dt <- dt
   
   # Load in data ---------------------------------------
-  data <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/', base.run, '/fit_data/', loc_name, '.csv'))
+  if(file.exists(paste0('/share/hiv/epp_input/', gbdyear, '/', base.run, '/fit_data/', loc_name, '.csv'))){
+    data <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/', base.run, '/fit_data/', loc_name, '.csv'))
+  }else{
+    data <- fread(paste0('/share/hiv/epp_input/gbd20/200713_yuka/fit_data/', loc_name, '.csv'))
+    
+  }
   data <- data[metric == 'Rate']
   data[, c('age_group_id', 'metric', 'ihme_loc_id') := NULL]
   
@@ -222,7 +226,7 @@ plot_15to49 <- function(loc="IND_4873",
     data <- data.agg[model != "ANC Site"]
   }
   data <- rbind(data, anc, fill = T)
-  data[,indicator := 'Prevalence']
+  #data[,indicator := 'Prevalence']
   
   
   # UNAIDS data, this needs to be reextracted  ---------------------------------------
@@ -287,8 +291,8 @@ plot_15to49 <- function(loc="IND_4873",
 
   # gg <- gg + geom_ribbon(data = plot.dt[type == 'line'], aes(year, ymin = lower, ymax = upper, fill = model), alpha = 0.2)
   
-  gg <- gg + geom_line(data = plot.dt[type == 'line' & indicator == 'Prevalence'], aes(x = year, y = mean, color = model), size = 1.5, alpha = 0.8) +
-   # facet_wrap(~indicator, scales = 'free') +
+  gg <- gg + geom_line(data = plot.dt[type == 'line'], aes(x = year, y = mean, color = model), size = 1.5, alpha = 0.8) +
+   facet_wrap(~indicator, scales = 'free') +
 
     theme_bw() +
     scale_fill_manual(values=color.list) + scale_colour_manual(values=color.list)  +
@@ -316,7 +320,7 @@ plot_15to49 <- function(loc="IND_4873",
   }
   
   gg <- gg + theme(axis.text = element_text(size = 16), axis.title = element_text(size = 18), legend.text = element_text(size = 16),
-                   legend.title = element_text(size = 18)) + ggtitle(paste0('High prevalence state, testing likelihood'))
+                   legend.title = element_text(size = 18)) + ggtitle(paste0(loc.table[ihme_loc_id == loc, plot_name]))
   
   print(gg)
   dev.off()

@@ -13,6 +13,7 @@
 ## ---------------------------
 
 ## Used in basically every script
+rm(list = ls())
 Sys.umask(mode = "0002")
 windows <- Sys.info()[1][["sysname"]]=="Windows"
 root <- ifelse(windows,"J:/","/home/j/")
@@ -30,10 +31,11 @@ if(length(args) > 0) {
   run.name = args[1]
   loc = args[2]
 } else {
-  run.name = '200713_yuka'
-  loc = 'SSD'
+  run.name <- "220329_maggie"
+  loc = 'AGO'
 
 }
+library(mortdb, lib ="/mnt/team/mortality/pub/shared/r/4")
 
 loc.table <- get_locations(gbd_year = 2020, hiv_metadata = T)
 
@@ -44,5 +46,5 @@ if(file.exists(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
   locs <- loc.table[epp == 1, ihme_loc_id]
 }
 
-get_summary(loc,  run.name = run.name, gbdyear = 'gbd20',
+get_summary(loc,  run.name = run.name, gbdyear = 'gbdTEST',
             paediatric = T, old.splits = F)

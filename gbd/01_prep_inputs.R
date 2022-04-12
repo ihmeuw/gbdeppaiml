@@ -38,7 +38,6 @@ loc.list <-  c(loc.table[epp == 1, ihme_loc_id], 'MRT', 'STP', 'COM')
 ##make copy inputs and new inputs opposite
 new_inputs = T
 copy_inputs = F
-plot_ART = F
 eppasm_inputs = T
 prev_surveys = F
 art_proportions = F
@@ -89,23 +88,6 @@ if(copy_inputs){
 
 # Proper Inputs ---------------------------------------
 if(new_inputs){
-  # Compare ART inputs ---------------------------------------
-  if(plot_ART){
-    for(loc in loc.list) { 
-      submit_job(script = paste0(paste0("/ihme/homes/", user), "/hiv_gbd/01_prep/plot_ART.R"), queue = 'all.q', memory = '1G', threads = 1, time = '00:30:00',
-                 name = paste0(loc, '_plot_art'),
-                 archive = F, args = c(2019, loc, 2017, run.name))
-    }
-    
-    plot.dir <- paste0("/ihme/hiv/epp_input/", gbdyear, '/', run.name,"/art_plots/")
-    setwd(plot.dir)
-    system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=art_plots.pdf -f *"))
-    # Move to parent directory
-    system(paste0("mv ", plot.dir, "/art_plots.pdf ",input.dir,"/"))
-    # Delete location specific plots
-    system(paste0("rm -r -f ", plot.dir, "/"))
-    
-  }
   
   # Pull new inputs and prep for EPP-ASM ---------------------------------------
   if(eppasm_inputs) {
@@ -117,10 +99,6 @@ if(new_inputs){
     dirs = paste0('/ihme/hiv/epp_input/', gbdyear, '/', run.name, '/', dirs)
     lapply(dirs, dir.exists)
 
-    submit_job(script = paste0(code.dir, "gbd/gbd_prep_ind_inputs.R"), queue = 'all.q', memory = '10G', threads = 1, time = '00:30:00',
-               name = 'prep_gbd_inputs_ind',
-               archive = F, args = c(run.name, proj.end, run.group2))
-    
     lapply(dirs, check_files, filenames = paste0(loc.table[epp == 1, ihme_loc_id], '.csv'))
     
   }

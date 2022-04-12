@@ -19,14 +19,14 @@ if(length(args) > 0) {
     compare.run <- NA
   }
 } else {
-  run.name <- '200713_yuka_new_ASFR'
-  loc <- "SSD"
+  run.name <- "220329_maggie"
+  loc = 'AGO'
   draw.fill <- TRUE
   compare.run <- c('200713_yuka')
   test <-  NULL
 }
 
-gbd_year_new <- "gbd20"
+gbd_year_new <- "gbdTEST"
 if( '190630_rhino2' %in% compare.run){
   gbd_year_old <- "gbd19"
   
@@ -34,7 +34,7 @@ if( '190630_rhino2' %in% compare.run){
   gbd_year_old <- "gbd20"
   
 }
-gbdyear <- 'gbd20'
+gbdyear <- 'gbdTEST'
 
 # array.dt <- fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
 # loc.name <- unique(array.dt[loc_scalar == loc, ihme_loc_id])
@@ -75,9 +75,10 @@ if(loc %in% c('STP', 'COM', 'MAR')){
 }
 run.names.comp <- compare.run
 # ## 15-49 plots
-# dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/15to49_plots/'), recursive = TRUE, showWarnings = FALSE)
+dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/15to49_plots/'), recursive = TRUE, showWarnings = FALSE)
 plot_15to49(loc,
-            run.vec = c(paste0(gbdyear, '/', run.name), paste0(gbdyear, '/', compare.run)),
+          #  run.vec = c(paste0(gbdyear, '/', run.name), paste0(gbdyear, '/', compare.run)),
+            run.vec = c(paste0(gbdyear, '/', run.name), 'gbd20/200713_yuka'),
             base.run = paste0(run.name),
             names = c('Current run', 'GBD20'),
             gbdyear = gbdyear,

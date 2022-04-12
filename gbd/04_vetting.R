@@ -218,6 +218,26 @@ if(compare_dt_obj){
   lapply(epp.locs, dt_obj_compare, new.run = new_run, old.run = old_run)
 }
 
+if(compare_art){
+  # Compare ART inputs ---------------------------------------
+  if(plot_ART){
+    for(loc in loc.list) { 
+      submit_job(script = paste0(paste0("/ihme/homes/", user), "/hiv_gbd/01_prep/plot_ART.R"), queue = 'all.q', memory = '1G', threads = 1, time = '00:30:00',
+                 name = paste0(loc, '_plot_art'),
+                 archive = F, args = c(2019, loc, 2017, run.name))
+    }
+    
+    plot.dir <- paste0("/ihme/hiv/epp_input/", gbdyear, '/', run.name,"/art_plots/")
+    setwd(plot.dir)
+    system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=art_plots.pdf -f *"))
+    # Move to parent directory
+    system(paste0("mv ", plot.dir, "/art_plots.pdf ",input.dir,"/"))
+    # Delete location specific plots
+    system(paste0("rm -r -f ", plot.dir, "/"))
+    
+  }
+}
+
 # Compare covariates ---------------------------------------
 if(compare_covariates){
   run.name_base = "210415_zanfona"

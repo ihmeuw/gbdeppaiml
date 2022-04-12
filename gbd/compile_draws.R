@@ -13,6 +13,7 @@
 ##
 
 ## Used in basically every script
+rm(list = ls())
 Sys.umask(mode = "0002")
 windows <- Sys.info()[1][["sysname"]]=="Windows"
 root <- ifelse(windows,"J:/","/home/j/")
@@ -26,9 +27,9 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
   array.job = FALSE
-  run.name <- "210415_zanfona"
-  loc <- 'SDN'
-  draw.fill <- TRUE
+  run.name <- "220329_maggie"
+  loc <- 'AGO'
+  draw.fill <- T
   paediatric <- TRUE
   n = 1000
 }else{
@@ -39,16 +40,12 @@ if(length(args) == 0){
 
 }
 
-
-gbdyear <- 'gbd20'
-stop.year = 2022
 test = NULL
-loc = 'AGO'
+
 library(data.table); library(mvtnorm); library(survey); library(ggplot2); library(plyr); library(dplyr); library(assertable); library(parallel)
 gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
 eppasm_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/")
-hiv_gbd2019_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/hiv_gbd2019/")
-library(mortdb, lib = "/share/mortality/shared/r/")
+library(mortdb, lib ="/mnt/team/mortality/pub/shared/r/4")
 
 setwd(eppasm_dir)
 devtools::load_all()

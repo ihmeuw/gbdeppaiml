@@ -181,12 +181,10 @@ fit <- eppasm::fitmod(dt, eppmod = ifelse(grepl('IND', loc),'rlogistic',epp.mod)
                       B0 = 1e3, B = 1e3, number_k = 5, 
                       ageprev = ifelse(loc %in% zero_prev_locs,'binom','probit'))
 
-dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/fitmod/'))
-saveRDS(fit, file = paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/fitmod/', loc, '_', j, '.RDS'))
+dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fitmod/'))
+saveRDS(fit, file = paste0('/ihme/hiv/epp_output/' , gbdyear, '/', run.name, '/fitmod/', loc, '_', j, '.RDS'))
 
 
-dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/inc_rate/'))
-dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/prev_rate/'))
 data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc,'.csv')
 
 
@@ -214,7 +212,7 @@ saveRDS(result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/',
 # ##track the output of the prev and inc through get_gbd_outputs
 output.dt <- get_gbd_outputs(result, attr(dt, 'specfp'), paediatric = paediatric)
 output.dt[,run_num := j]
-out.dir <- paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/', file_name, '/')
+out.dir <- paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/', file_name, '/')
 dir.create(out.dir, showWarnings = FALSE)
 write.csv(output.dt, paste0(out.dir, '/', j, '.csv'), row.names = F)
 
@@ -233,7 +231,7 @@ if(plot.draw){
 params <- fnCreateParam(theta = unlist(param), fp = fit$fp)
 saveRDS(params, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', file_name, '.RDS'))
 
-
+dir.create(paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/'))
 data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc,'.csv')
 save_data(loc, attr(dt, 'eppd'), run.name)
 

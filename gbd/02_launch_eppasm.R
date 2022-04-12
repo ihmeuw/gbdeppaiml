@@ -25,12 +25,12 @@ gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/
 setwd(gbdeppaiml_dir)
 devtools::load_all()
 date <- substr(gsub("-","",Sys.Date()),3,8)
+source(paste0('/ihme/homes/', user, '/rt-shared-functions/cluster_functions.R'))
+
 
 ## Arguments
-
 run.name <- "2021_runtime_test"
 compare.run <- c("200713_yuka")
-
 proj.end <- 2022
 if(file.exists(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))){
   n.draws = nrow(fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv')))
@@ -45,12 +45,11 @@ cluster.project <- "proj_hiv"
 plot_ART <- FALSE
 reckon_prep <- FALSE
 decomp.step <- "iterative"
-gbdyear <- "gbd20"
+gbdyear <- "gbdTEST"
 redo_offsets <- F
 testing = FALSE
 test = NULL
 run_eppasm = T
-gbdyear = 'gbd20'
 code.dir = paste0('/homes/', user, '/gbdeppaiml/')
 
 ### Paths
@@ -74,7 +73,7 @@ run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
 
 ### Functions
 source(paste0(root,"/Project/Mortality/shared/functions/check_loc_results.r"))
-library(mortdb, lib = "/ihme/mortality/shared/r")
+library(mortdb, lib ="/mnt/team/mortality/pub/shared/r/4")
 
 ### Tables
 loc.table <- data.table(get_locations(hiv_metadata = T))
@@ -82,11 +81,8 @@ loc.table <- data.table(get_locations(hiv_metadata = T))
 ### Code
 epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
 loc.list <- epp.list
+##standard loc list
 loc.list <- c(loc.list, 'MRT', 'STP', 'COM')
-loc.list <- loc.list[grepl("IND", loc.list)]
-# loc.list <- setdiff(loc.list, 'RWA')
-loc.list =  c(loc.list[grepl('ZAF', loc.list)], 'DJI', 'RWA', 'CPV', 'SSD')
-
 
 # EPP-ASM ---------------------------------------
 if(run_eppasm & !array.job){
@@ -95,76 +91,34 @@ for(loc in loc.list) {
   submit_array_job(script = paste0(code.dir, 'gbd/main.R'), n_jobs = n.draws,
              queue = 'long.q', memory = '7G', threads = 1, time = "24:00:00", name = paste0(loc, '_', run.name, '_eppasm'),
              archive = T, args = c(run.name, loc, proj.end, paediatric))
-  
-  
-    epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive=True -q long.q -P ", cluster.project, " ",
-                         "-e /share/temp/sgeoutput/", user, "/errors ",
-                         "-o /share/temp/sgeoutput/", user, "/output ",
-                         "-N ", loc,"_",run.name, "_eppasm ",
-                         "-tc 1000 ",
-                         "-t 1:", n.draws, " ",
-                         "-hold_jid eppasm_prep_inputs_", run.name," ",
-                         '/ihme/singularity-images/rstudio/shells/execR.sh -i ',
-                         '/ihme/singularity-images/hiv/hiv_11.img ',
-                         # code.dir, "gbd/singR_shell.sh ",
-                         '-s ',
-                         code.dir, "gbd/main.R ",
-                         run.name, " ", array.job," ", loc, " ", proj.end, " ", paediatric)
-   print(epp.string)
-  system(epp.string)
-
+  #Make sure all locations are done
+  dirs = paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/', loc.list)
+  lapply(dirs, dir.exists)
   
       #Draw compilation
-      draw.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
-                            "-e /share/temp/sgeoutput/", user, "/errors ",
-                            "-o /share/temp/sgeoutput/", user, "/output ",
-                            "-N ", loc,"_",run.name, "_save_draws ",
-                            "-hold_jid ", loc,"_",run.name, "_eppasm ",
-                            '/ihme/singularity-images/rstudio/shells/execR.sh -i ',
-                            '/ihme/singularity-images/hiv/hiv_11.img ',
-                            # code.dir, "gbd/singR_shell.sh ",
-                            '-s ',
-                            code.dir, "gbd/compile_draws.R ",
-                            run.name, " ", array.job, ' ', loc,  ' TRUE ', paediatric)
-      print(draw.string)
-      system(draw.string)
+   submit_job(script = paste0(code.dir, 'gbd/compile_draws.R'),
+                   queue = 'long.q', memory = '30G', threads = 1, time = "01:00:00", name = paste0(loc, '_', run.name, '_compile'),
+                   archive = T, args = c(run.name,  array.job,  loc,  'TRUE', paediatric))
+   #Make sure all locations are done
+   check_files(paste0(loc.list, '.csv'),paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/compiled/'))
+   
       
-      summary.string <- paste0("qsub -l m_mem_free=30G -l fthread=1 -l h_rt=01:00:00 -q all.q -P ", cluster.project, " ",
-                            "-e /share/temp/sgeoutput/", user, "/errors ",
-                            "-o /share/temp/sgeoutput/", user, "/output ",
-                            "-N ", loc,"_",run.name, "_summary ",
-                            "-hold_jid ", loc,"_",run.name, "_save_draws ",
-                            '/ihme/singularity-images/rstudio/shells/execR.sh -i ',
-                            '/ihme/singularity-images/hiv/hiv_11.img ',
-                            # code.dir, "gbd/singR_shell.sh ",
-                            '-s ',
-                            code.dir, "gbd/get_summary_files.R ",
-                            run.name, ' ', loc)
+   submit_job(script = paste0(code.dir, 'gbd/get_summary_files.R'),
+              queue = 'all.q', memory = '30G', threads = 1, time = "01:00:00", name = paste0(loc, '_', run.name, '_summary'),
+              archive = T, args = c(run.name,   loc))
+   #Make sure all locations are done
+   check_loc_results(paste0(loc.list, '.csv'),paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/summary_files/'))
+   
+   
+   submit_job(script = paste0(code.dir, 'gbd/main_plot_output.R'),
+              queue = 'all.q', memory = '20G', threads = 1, time = "00:15:00", name = paste0(loc, '_', run.name, '_plot'),
+              archive = T, args = c(loc, run.name, compare.run))
 
-      print(summary.string)
-      system(summary.string)
-
-      plot.string <- paste0("qsub -l m_mem_free=20G -l fthread=1 -l h_rt=00:15:00 -l archive -q long.q -P ", cluster.project, " ",
-                            "-e /share/temp/sgeoutput/", user, "/errors ",
-                            "-o /share/temp/sgeoutput/", user, "/output ",
-                            "-N ", loc, "_plot_eppasm ",
-                            "-hold_jid ", loc,"_",run.name, "_summary ",
-                            '/ihme/singularity-images/rstudio/shells/execR.sh -i ',
-                            '/ihme/singularity-images/hiv/hiv_11.img ',
-                            # code.dir, "gbd/singR_shell.sh ",
-                            '-s ',
-                            code.dir, "gbd/main_plot_output.R ",
-                            loc, " ", run.name, ' ', compare.run)
-     
-      print(plot.string)
-      system(plot.string)
 
 }
 }
 
 
-#Make sure all locations are done
-check_loc_results(loc.list,paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/compiled/'),prefix="",postfix=".csv")
 
 # Compile plots ---------------------------------------
 plot.holds <- paste(paste0(loc.list, '_plot_eppasm'), collapse = ",")
