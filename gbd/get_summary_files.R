@@ -18,6 +18,17 @@ Sys.umask(mode = "0002")
 windows <- Sys.info()[1][["sysname"]]=="Windows"
 root <- ifelse(windows,"J:/","/home/j/")
 user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
+h_root = '/homes/mwalte10/'
+lib.loc <- paste0(h_root,"R/",R.Version(),"/",R.Version(),".",R.Version())
+.libPaths(c(lib.loc,.libPaths()))
+packages <- c('fastmatch')
+for(p in packages){
+if(p %in% rownames(installed.packages())==FALSE){
+install.packages(p)
+}
+library(p, character.only = T)
+}
+library(vctrs, lib.loc="/ihme/singularity-images/rstudio/lib/4.1.3.4")
 eppasm_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/")
 setwd(eppasm_dir)
 devtools::load_all()
@@ -31,8 +42,8 @@ if(length(args) > 0) {
   run.name = args[1]
   loc = args[2]
 } else {
-  run.name <- "220329_maggie"
-  loc = 'AGO'
+  run.name = '220329_maggie'
+  loc <- 'AGO'
 
 }
 library(mortdb, lib ="/mnt/team/mortality/pub/shared/r/4")
@@ -45,6 +56,5 @@ if(file.exists(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
 }else{
   locs <- loc.table[epp == 1, ihme_loc_id]
 }
-
-get_summary(loc,  run.name = run.name, gbdyear = 'gbdTEST',
-            paediatric = T, old.splits = F)
+get_summary(loc,  run.name = run.name, gbdyear = 'gbd20',
+            paediatric = F, old.splits = F)

@@ -19,14 +19,14 @@ if(length(args) > 0) {
     compare.run <- NA
   }
 } else {
-  run.name <- "220329_maggie"
-  loc = 'AGO'
+  run.name = '220329_maggie'
+  loc <- 'AGO'
   draw.fill <- TRUE
   compare.run <- c('200713_yuka')
   test <-  NULL
 }
 
-gbd_year_new <- "gbdTEST"
+gbd_year_new <- "gbd20"
 if( '190630_rhino2' %in% compare.run){
   gbd_year_old <- "gbd19"
   
@@ -34,13 +34,22 @@ if( '190630_rhino2' %in% compare.run){
   gbd_year_old <- "gbd20"
   
 }
-gbdyear <- 'gbdTEST'
+gbdyear <- 'gbd20'
 
 # array.dt <- fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
 # loc.name <- unique(array.dt[loc_scalar == loc, ihme_loc_id])
 loc.name = loc
 
-
+h_root = '/homes/mwalte10/'
+lib.loc <- paste0(h_root,"R/",R.Version(),"/",R.Version(),".",R.Version())
+.libPaths(c(lib.loc,.libPaths()))
+packages <- c('fastmatch')
+for(p in packages){
+  if(p %in% rownames(installed.packages())==FALSE){
+    install.packages(p)
+  }
+  library(p, character.only = T)
+}
 ### Functions
 setwd(paste0(ifelse(windows, "H:", paste0("/homes/", user)), "/eppasm/"))
 devtools::load_all()
@@ -74,15 +83,18 @@ if(loc %in% c('STP', 'COM', 'MAR')){
   compare.run = NA
 }
 run.names.comp <- compare.run
+#run_vec <- paste0('gbd20/zaf_test_', seq(0.05,0.95, by = 0.05))
 # ## 15-49 plots
 dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/15to49_plots/'), recursive = TRUE, showWarnings = FALSE)
-plot_15to49(loc,
-          #  run.vec = c(paste0(gbdyear, '/', run.name), paste0(gbdyear, '/', compare.run)),
-            run.vec = c(paste0(gbdyear, '/', run.name), 'gbd20/200713_yuka'),
-            base.run = paste0(run.name),
-            names = c('Current run', 'GBD20'),
-            gbdyear = gbdyear,
-            loc_name = loc.name)
+  plot_15to49(loc,
+              # run.vec = run_vec,
+              run.vec = c(paste0(gbdyear, '/', run.name), 'gbd20/200713_yuka'),
+              base.run = paste0(run.name),
+              names = c('Modified run', 'GBD20'),
+              gbdyear = gbdyear,
+              loc_name = loc.name)
+
+
 # 
 # 
 # # #Age-specific plots
@@ -91,7 +103,7 @@ plot_15to49(loc,
 # }
 # 
 plot_age_specific(loc, run.name.new=run.name,
-                         compare.run = run.names.comp, gbdyear = gbd_year_new, c.metric = 'Count')
+                         compare.run = run.names.comp, gbdyear = gbd_year_new, c.metric = 'Rate')
 
 # # ## Birth prevalence
 dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/paeds_plots/'), showWarnings = F)

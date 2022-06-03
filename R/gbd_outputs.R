@@ -50,7 +50,11 @@ gbd_sim_mod <-  function(fit, rwproj=fit$fp$eppmod == "rspline",VERSION = 'C'){
       fit$param <- lapply(fit$param, function(par){par$rvec <- epp:::sim_rvec_rwproj(par$rvec, firstidx, lastidx, dt); par})
     }
     fit$fp$incrr_age <- fit$fp$incrr_age[,,1:fit$fp$SIM_YEARS]
-    fp.draw =  append(fit$fp, fit$param[[rand.draw]])
+   # fp.draw =  append(fit$fp, fit$param[[rand.draw]])
+    ## fp.draw =  append(fit$fp, fit$param[[rand.draw]])
+    fp.draw <- fit$fp
+    fp.draw[names(fit$param[[rand.draw]])] <- fit$param[[rand.draw]]
+    
 
 
   }else{
@@ -300,8 +304,9 @@ split_u1.new_ages <- function(dt, loc, run.name, gbdyear="gbd20", test_run = NUL
     loc_name = loc_name
   }
   #change to the new population splits folder
-  pop <- data.table(fread(paste0('/ihme/hiv/epp_input/',gbdyear,"/" ,run.name, "/population_splits/", loc_name, '.csv')))
-
+  pop <- data.table(fread(paste0('/ihme/hiv/epp_input/gbd20/200713_yuka//population_splits/', loc_name, '.csv')))
+  #pop <- data.table(fread(paste0('/ihme/hiv/epp_input/',gbdyear,"/" ,run.name, "/population_splits/", loc_name, '.csv')))
+  
   u1.pop <- pop[age_group_id %in% c(2,3,388,389)]
   u1.pop[,pop_total := sum(population), by = c('sex_id', 'year_id')]
   u1.pop[,pop_prop := population/sum(population), by = c('sex_id', 'year_id')]
@@ -443,7 +448,7 @@ get_summary <- function(loc, run.name, paediatric = FALSE, old.splits, gbdyear){
     age.map <- fread(paste0('/ihme/hiv/epp_input/gbd19', '/', run.name, "/age_map.csv"))
     
   }else{
-    age.map <- fread(paste0('/ihme/hiv/epp_input/', gbdyear, '/', run.name, "/age_map.csv"))
+    age.map <- fread(paste0('/ihme/hiv/epp_input/gbd20/', '200713_yuka', "/age_map.csv"))
     age.map[age_group_id == 388, age_group_name_short := 'x_388']
     age.map[age_group_id == 389, age_group_name_short := 'x_389']
   }

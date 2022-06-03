@@ -26,18 +26,20 @@ source(paste0('/ihme/homes/', user, '/rt-shared-functions/cluster_functions.R'))
 
 
 # Arguments ---------------------------------------
-gbdyear = 'gbdTEST'
-run.name = '220329_maggie'
+gbdyear = 'gbd20'
+run.name = 'zaf_sub_old_cd4'
 old_run.name = '200713_yuka'
 spec.name = '200713_yuka'
 code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
 loc.table <- get_locations(hiv_metadata = T)
 loc.list <-  c(loc.table[epp == 1, ihme_loc_id], 'MRT', 'STP', 'COM')
-
+loc.list <- loc.list[grepl('ZAF', loc.list)]
+loc.list <- c('LSO', 'MOZ', 'SWZ')
+#loc.list <- 'BEN'
 # Toggles ---------------------------------------
 ##make copy inputs and new inputs opposite
 new_inputs = T
-copy_inputs = F
+copy_inputs = T
 eppasm_inputs = T
 prev_surveys = F
 art_proportions = F
@@ -52,36 +54,39 @@ run.group2 = F
 
 # Copy Inputs ---------------------------------------
 if(copy_inputs){
-  from = old_run.name
-  to = run.name
-  dir.create(paste0('/ihme/hiv/epp_input/', gbdyear, '/', to, '/'), recursive = T, showWarnings = T)
-  dirs <- list.dirs(paste0('/ihme/hiv/epp_input/gbd20/', from, '/'))
-  file_paths <- lapply(dirs, list.files, full.names = T)
-  file_paths.list <- list()
-  for(loc in loc.list){
-    file_paths.x <- unlist(file_paths)[grep(loc, unlist(file_paths))]
-    file_paths.list <- c(file_paths.list, file_paths.x)
-  }
-  new_dirs <- unlist(lapply(dirs, gsub, pattern = from, replacement = to))
-  copy_dt <- data.table(copy_from = dirs, copy_to = new_dirs)
-  mk_copy <- function(copy_dt, loc.list = c('AGO', 'BDI', 'BEN', 'CAF')){
-    dir.create(copy_dt[,copy_to])
+  for(run.name in paste0('zaf_test_pct_', seq(0.05,0.95, by = 0.05))){
+    from = old_run.name
+    to = run.name
+    dir.create(paste0('/ihme/hiv/epp_input/', gbdyear, '/', to, '/'), recursive = T, showWarnings = T)
+    dirs <- list.dirs(paste0('/ihme/hiv/epp_input/gbd20/', from, '/'))
+    file_paths <- lapply(dirs, list.files, full.names = T)
+    file_paths.list <- list()
     for(loc in loc.list){
-      file.copy(from = paste0(copy_dt[,copy_from],'/', loc, '.csv'),
-                to = paste0(copy_dt[,copy_to], '/',loc, '.csv'), overwrite = T)
+      file_paths.x <- unlist(file_paths)[grep(loc, unlist(file_paths))]
+      file_paths.list <- c(file_paths.list, file_paths.x)
+    }
+    new_dirs <- unlist(lapply(dirs, gsub, pattern = from, replacement = to))
+    copy_dt <- data.table(copy_from = dirs, copy_to = new_dirs)
+    mk_copy <- function(copy_dt, loc.list = c('AGO', 'BDI', 'BEN', 'CAF')){
+      dir.create(copy_dt[,copy_to])
+      for(loc in loc.list){
+        file.copy(from = paste0(copy_dt[,copy_from],'/', loc, '.csv'),
+                  to = paste0(copy_dt[,copy_to], '/',loc, '.csv'), overwrite = T)
+      }
+      
+    }
+    for(row in 1:nrow(copy_dt)){
+      mk_copy(copy_dt = copy_dt[row,], loc.list = loc.list)
     }
     
+    file.copy(from = paste0('/ihme/hiv/epp_input/', gbdyear, '/', from, '/location_table.csv'), 
+              to  = paste0('/ihme/hiv/epp_input/', gbdyear, '/', to, '/location_table.csv'), overwrite = T)
+    file.copy(from = paste0('/ihme/hiv/epp_input/', gbdyear, '/', from, '/age_map.csv'), 
+              to  = paste0('/ihme/hiv/epp_input/', gbdyear, '/', to, '/age_map.csv'), overwrite = T)
+    file.copy(from = paste0('/ihme/hiv/epp_input/', gbdyear, '/', from, '/param_map.csv'), 
+              to  = paste0('/ihme/hiv/epp_input/', gbdyear, '/', to, '/param_map.csv'), overwrite = T)
   }
-  for(row in 1:nrow(copy_dt)){
-    mk_copy(copy_dt = copy_dt[row,], loc.list = loc.list)
-  }
-  
-  file.copy(from = paste0('/ihme/hiv/epp_input/', gbdyear, '/', from, '/location_table.csv'), 
-            to  = paste0('/ihme/hiv/epp_input/', gbdyear, '/', to, '/location_table.csv'), overwrite = T)
-  file.copy(from = paste0('/ihme/hiv/epp_input/', gbdyear, '/', from, '/age_map.csv'), 
-            to  = paste0('/ihme/hiv/epp_input/', gbdyear, '/', to, '/age_map.csv'), overwrite = T)
-  file.copy(from = paste0('/ihme/hiv/epp_input/', gbdyear, '/', from, '/param_map.csv'), 
-            to  = paste0('/ihme/hiv/epp_input/', gbdyear, '/', to, '/param_map.csv'), overwrite = T)
+
   
 }
 

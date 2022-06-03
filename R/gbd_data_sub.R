@@ -586,6 +586,7 @@ sub.pop.params.specfp <- function(fp, loc, k){
   surv[,variable := NULL]
   surv[sex == 'male', sex := 'Male']
   surv[sex == 'female', sex := 'Female']
+  print(surv)
   surv <- data.table::dcast(surv, year + age ~ sex)
   surv = extend.years(surv, years)
   surv <- surv[age %in% 15:80]
@@ -1369,7 +1370,7 @@ geo_adj_old <- function(loc, dt, i, uncertainty) {
 
   
   
-  sub.art <- function(dt, loc, use.recent.unaids = FALSE) {
+  sub.art <- function(dt, loc, use.recent.unaids = FALSE, pct = F) {
     # if(grepl("KEN", loc) & loc.table[ihme_loc_id == loc, level] == 5) {
     #   temp.loc <- loc.table[location_id == loc.table[ihme_loc_id == loc, parent_id], ihme_loc_id]
     # } else {
@@ -1379,10 +1380,33 @@ geo_adj_old <- function(loc, dt, i, uncertainty) {
 
     art.dt <- fread(art.dt)
     
+    if(pct){
       if(grepl("ZAF",temp.loc) ){
         print("Using Tembisa for ZAF")
         art.dt = fread(tem_art)
+        # if(loc == 'ZAF_488'){
+        #   art.dt[,ART_cov_pct := 0]
+        # 
+        # }else{
+        art.dt[,ART_cov_num := 0]
+        
+        # }
       }
+      
+    }else{
+      if(grepl("ZAF",temp.loc) ){
+        print("Using Tembisa for ZAF")
+        art.dt = fread(tem_art)
+        # if(loc == 'ZAF_488'){
+        #   art.dt[,ART_cov_pct := 0]
+        # 
+        # }else{
+        art.dt[,ART_cov_pct := 0]
+        
+        # }
+      }
+      
+    }
 
     art.dt[is.na(art.dt)] <- 0
     ##Need this to be logical later
@@ -1390,6 +1414,7 @@ geo_adj_old <- function(loc, dt, i, uncertainty) {
     
     #years <- epp.input$epp.art$year
     years <- as.integer(attr(attr(dt,"specfp")$art15plus_isperc,"dimnames")$year)
+    years <- c(1970:stop.year)
     
     if(max(years) > max(art.dt$year)) {
       max.dt <- copy(art.dt[year == max(year)])
@@ -1402,12 +1427,34 @@ geo_adj_old <- function(loc, dt, i, uncertainty) {
     }
     
     art.dt <- unique(art.dt)
-    attr(dt,"specfp")$art15plus_isperc[attr(attr(dt,"specfp")$art15plus_isperc,"dimnames")$sex=="Male"] <- art.dt[year %in% years & sex == 1, type]
-    attr(dt,"specfp")$art15plus_isperc[attr(attr(dt,"specfp")$art15plus_isperc,"dimnames")$sex=="Female"] <- art.dt[year %in% years & sex == 2, type]
+    if(grepl('ZAF', temp.loc)){
+      if(dim( attr(dt, 'specfp')$art15plus_isperc)[2] < attr(dt, 'specfp')$SIM_YEARS){
+        diff <- dim( attr(dt, 'specfp')$art15plus_isperc)[2] - attr(dt, 'specfp')$SIM_YEARS
+        while(diff != 0){
+          attr(dt, 'specfp')$art15plus_isperc <-  abind::abind( attr(dt, 'specfp')$art15plus_isperc,  attr(dt, 'specfp')$art15plus_isperc[,ncol( attr(dt, 'specfp')$art15plus_isperc)])
+          diff <- dim( attr(dt, 'specfp')$art15plus_isperc)[2] - attr(dt, 'specfp')$SIM_YEARS
+          
+        }
+      }
+      if(dim( attr(dt, 'specfp')$art15plus_num)[2] < attr(dt, 'specfp')$SIM_YEARS){
+        diff <- dim( attr(dt, 'specfp')$art15plus_num)[2] - attr(dt, 'specfp')$SIM_YEARS
+        while(diff != 0){
+          attr(dt, 'specfp')$art15plus_num <-  abind::abind( attr(dt, 'specfp')$art15plus_num,  attr(dt, 'specfp')$art15plus_num[,ncol( attr(dt, 'specfp')$art15plus_num) - 1])
+          diff <- dim( attr(dt, 'specfp')$art15plus_num)[2] - attr(dt, 'specfp')$SIM_YEARS
+          
+        }
+      }
+    }
+    attr(dt,"specfp")$art15plus_isperc <- attr(dt,"specfp")$art15plus_isperc[,1:length(years)]
+    attr(dt,"specfp")$art15plus_num <- attr(dt,"specfp")$art15plus_num[,1:length(years)]
+    
+    
+    attr(dt,"specfp")$art15plus_isperc[1,] <- art.dt[year %in% years & sex == 1, type]
+    attr(dt,"specfp")$art15plus_isperc[2,] <- art.dt[year %in% years & sex == 2, type]
     
     art.dt[, ART_cov_val := ifelse(ART_cov_pct > 0, ART_cov_pct, ART_cov_num)]
-    attr(dt,"specfp")$art15plus_num[attr(attr(dt,"specfp")$art15plus_num,"dimnames")$sex=="Male"] <- art.dt[year %in% years & sex == 1, ART_cov_val]
-    attr(dt,"specfp")$art15plus_num[attr(attr(dt,"specfp")$art15plus_num,"dimnames")$sex=="Female"] <- art.dt[year %in% years & sex == 2, ART_cov_val]
+    attr(dt,"specfp")$art15plus_num[1,] <- art.dt[year %in% years & sex == 1, ART_cov_val]
+    attr(dt,"specfp")$art15plus_num[2,] <- art.dt[year %in% years & sex == 2, ART_cov_val]
     
     return(dt)
   }

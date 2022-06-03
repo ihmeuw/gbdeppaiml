@@ -27,10 +27,10 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
   array.job = FALSE
-  run.name <- "220329_maggie"
+  run.name = '220329_maggie'
   loc <- 'AGO'
-  draw.fill <- T
-  paediatric <- TRUE
+  draw.fill <- F
+  paediatric <- T
   n = 1000
 }else{
   run.name <- args[1]
@@ -41,16 +41,30 @@ if(length(args) == 0){
 }
 
 test = NULL
+gbdyear = 'gbd20'
+h_root = '/homes/mwalte10/'
+lib.loc <- paste0(h_root,"R/",R.Version(),"/",R.Version(),".",R.Version())
+.libPaths(c(lib.loc,.libPaths()))
+packages <- c('fastmatch')
+for(p in packages){
+  if(p %in% rownames(installed.packages())==FALSE){
+    install.packages(p)
+  }
+  library(p, character.only = T)
+}
 
-library(data.table); library(mvtnorm); library(survey); library(ggplot2); library(plyr); library(dplyr); library(assertable); library(parallel)
+#library(data.table); library(mvtnorm); library(survey); library(ggplot2); library(plyr); library(dplyr); library(assertable); 
+library(parallel)
+library(data.table)
 gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
 eppasm_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/")
 library(mortdb, lib ="/mnt/team/mortality/pub/shared/r/4")
+library(assertable)
 
-setwd(eppasm_dir)
-devtools::load_all()
-setwd(gbdeppaiml_dir)
-devtools::load_all()
+# setwd(eppasm_dir)
+# devtools::load_all()
+# setwd(gbdeppaiml_dir)
+# devtools::load_all()
 if(!array.job & length(args) > 0){
   loc <- args[3]
   n = 1000
@@ -111,21 +125,24 @@ print('loc.table loaded')
     ## subset out additional outputs (theta, under-1 splits)
     ## this could probably be tidied up
     draw.list <- draw.list[grepl('.csv', draw.list) & !grepl('theta_', draw.list) & !grepl('under_', draw.list)]
-    draw.list <- draw.list[gsub('.csv', '', draw.list) %in% 1:n]
+   # draw.list <- draw.list[gsub('.csv', '', draw.list) %in% 1:1000]
     
     dt <- lapply(draw.list, function(draw){
       print(draw)
       draw.dt <- fread(paste0(draw.path, '/', draw))
     })
-    
+    dt <- rbindlist(dt)
+    dt <- melt(dt, id.vars = c('age', 'sex', 'year', 'run_num'))
+    dt[value <0, value := 0]
+    dt <- dcast(dt, age + sex + year + run_num  ~ variable, value.var = 'value')
     ##Sometimes there are negative values, need to replace
     
-    dt.check <- lapply(dt,function(draw.dt)
-      try(assert_values(draw.dt,colnames(draw.dt),test="gte",0))
-    )
-    
-    dt.check <- unlist(lapply(dt.check,function(check) !class(check)=="try-error"))
-    dt <- rbindlist(dt[dt.check])
+    # dt.check <- lapply(dt,function(draw.dt)
+    #   try(assert_values(draw.dt,colnames(draw.dt),test="gte",0))
+    # )
+    # 
+    # dt.check <- unlist(lapply(dt.check,function(check) !class(check)=="try-error"))
+    # dt <- rbindlist(dt[dt.check])
     print('negative values replaced if necessary')
     
     if(draw.fill){

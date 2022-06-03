@@ -27,9 +27,9 @@ if(length(args) > 0) {
   ncores <- args[4]
   
 } else {
-  parent <- "ETH"
-  run.name <- "200713_yuka"
-  spec.run.name <-"200713_yuka"
+  parent <- "ZAF"
+  run.name = 'zaf_full_run_0.05'
+  spec.run.name <-"200713_yuka_ZAFtest_num"
   ncores <- 2
 }
 
@@ -42,7 +42,7 @@ in.dir <- paste0("/ihme/hiv/epp_output/gbd20/", run.name, "/compiled/")
 single.age.dir <- paste0('/ihme/hiv/spectrum_draws/', spec.run.name,'/detailed_deaths/')
 
 ### Functions
-library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
+library(mortdb, lib ="/mnt/team/mortality/pub/shared/r/4")
 source(paste0(root, "Project/Mortality/shared/functions/get_age_map.r"))
 source( "/ihme/cc_resources/libraries/current/r/get_population.R")
 

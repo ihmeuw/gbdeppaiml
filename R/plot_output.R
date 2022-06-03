@@ -158,6 +158,7 @@ plot_15to49 <- function(loc="IND_4873",
   # Load in all runs ---------------------------------------
   dt <- c()
   for(run in x[,run_name]){
+    if(!file.exists(paste0('/ihme/hiv/epp_output/', run, '/summary_files/', loc, '.csv'))){next}
     if(file.exists(paste0('/ihme/hiv/epp_output/', run, '/summary_files/', loc, '.csv'))){
       compare.dt <- fread(paste0('/ihme/hiv/epp_output/', run, '/summary_files/', loc, '.csv'))
     }else{
@@ -206,7 +207,7 @@ plot_15to49 <- function(loc="IND_4873",
     age_agg_pop[,age := '15-49']
     aggre_pop <- rbind(aggre_pop, unique(age_agg_pop))
     setnames(aggre_pop, 'total', 'pop')
-    
+    data[,age := as.character(age)]
     pop.dt <- aggre_pop
     data.pre.agg <- data[age %in%   c('15-49', '15-64') & model == 'Household Survey']
     data.pre.agg[,pop := NA]
@@ -237,6 +238,7 @@ plot_15to49 <- function(loc="IND_4873",
                                             mean, lower, upper)]
   
   
+  
   # If switching models ---------------------------------------
   if(!loc_name %in% loc.table[epp == 1, ihme_loc_id] | grepl('IND', loc)){
     compare.dt.s2 <- compare_spec.func(run_vec = c('190630_rhino_combined'), stage = 'stage_2')
@@ -246,7 +248,11 @@ plot_15to49 <- function(loc="IND_4873",
     compare_epp <- NULL
   }
   
-  plot.dt <- rbind(data,compare.dt, compare.dt.s2, compare_epp,use.names = T, fill = T)
+  if(is.character(compare.dt.unaids$mean)){
+    plot.dt <- rbind(data,compare.dt, compare.dt.s2, compare_epp, use.names = T, fill = T)
+  }else{
+    plot.dt <- rbind(data,compare.dt, compare.dt.s2, compare_epp, compare.dt.unaids,use.names = T, fill = T)
+  }
   
   plot.dt[,model := factor(model)]
   
@@ -280,22 +286,24 @@ plot_15to49 <- function(loc="IND_4873",
   plot.dt <- rbind( plot.dt, fill = T)
   
   
-  color.list <- c('blue', 'red', 'green','purple','orange','black', 'darkgreen', 'red')
-  names(color.list) <- c(unique(plot.dt$model)[1:2], 'Current run', 'GBD20', 'EPP', 'rlogistic', 'Probit', 'Binomial')
+  # color.list <- c('blue', 'red', 'green','purple','orange','black', 'darkgreen', 'red')
+  # names(color.list) <- nmaes
+  # color.list <- color.list[1:length(names)]
+  
   plot.dt[,model := factor(model)]
   
-  dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', base.run, '/15to49_plots/'), recursive = TRUE)
+  #dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', base.run, '/15to49_plots/'), recursive = TRUE)
   pdf(paste0('/ihme/hiv/epp_output/', gbdyear, '/', base.run, '/15to49_plots/', loc, '.pdf'), width = 10, height = 6)
   
   gg <- ggplot()
 
-  # gg <- gg + geom_ribbon(data = plot.dt[type == 'line'], aes(year, ymin = lower, ymax = upper, fill = model), alpha = 0.2)
+  gg <- gg + geom_ribbon(data = plot.dt[type == 'line'], aes(year, ymin = lower, ymax = upper, fill = model), alpha = 0.2)
   
-  gg <- gg + geom_line(data = plot.dt[type == 'line'], aes(x = year, y = mean, color = model), size = 1.5, alpha = 0.8) +
+  gg <- gg + geom_line(data = plot.dt[type == 'line'], aes(x = year, y = mean, color = model), alpha = 0.8) +
    facet_wrap(~indicator, scales = 'free') +
 
     theme_bw() +
-    scale_fill_manual(values=color.list) + scale_colour_manual(values=color.list)  +
+  #  scale_fill_manual(values=color.list) + scale_colour_manual(values=color.list)  +
     xlab("Year") + ylab("Mean") #+ ggtitle(paste0(loc.table[ihme_loc_id == loc, plot_name], ' EPPASM Results'))
   if(nrow(plot.dt[model == 'ANC Site']) > 0){
     if(nrow(plot.dt[type == 'ancss']) > 0){
@@ -314,7 +322,7 @@ plot_15to49 <- function(loc="IND_4873",
   if(nrow(plot.dt[model == 'HH Survey Agg']) > 0){
     gg <- gg + geom_point(data = plot.dt[model == 'HH Survey Agg'], aes(x = year, y = mean, shape = 'HH Survey Old'),size=3)
   }
-  
+
   if(nrow(plot.dt[model == 'VR']) > 0){
     gg <- gg + geom_point(data = plot.dt[model == 'VR'], aes(x = year, y = mean, shape = 'VR'), size = 0.75)
   }
@@ -499,7 +507,8 @@ plot_age_specific <- function(loc,
   #                          'run_name' = c('Final GBD19', 'Final GBD20', 'Current Run', compare.run))
   final_runs <- data.table('gbd_year' = c('gbd20',gbdyear, rep(gbdyear, length(compare.run))), 
                            'run' = c('200713_yuka', run.name.new, compare.run),
-                           'run_name' = c('Final GBD20', 'Current Run', compare.run))
+                           'run_name' = c('Old UNAIDS', 'New UNAIDS', compare.run))
+  final_runs <- final_runs[1:2,]
   # if(!is.null(compare.run)){
      compare = T
   # }else{
@@ -616,9 +625,8 @@ plot_age_specific <- function(loc,
   both.dt <- rbind(data,  compare.dt, unaids.dt,use.names = T)
   both.dt[,model := factor(model)]
   both.dt[age == '15-49', age := '15 to 49']
-  color.list <- c('green','purple','red','black', 'red')
-  color.list <- color.list[1:length(unique(both.dt$model))]
-  names(color.list) <- unique(both.dt$model)
+  color.list <- c('blue', 'red')
+  names(color.list) <- c('New UNAIDS', 'Old UNAIDS')
   both.dt[,age := factor(age, levels=c('enn', 'lnn', 'x_388', 'x_389', 'pnn', '1', paste0( seq(5, 80, 5)), 'All', '15 to 49'))]
   both.dt <- both.dt[!age %in% c('x_388', 'x_389'),]
 

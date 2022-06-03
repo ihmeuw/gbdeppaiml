@@ -95,6 +95,11 @@ modify_dt <- function(dt, run_name){
     print(paste0(loc, ' some high prevalences were removed'))
     
   }
+  # if(loc == 'MOZ'){
+  #   art <- attr(dt, 'specfp')$art15plus_num
+  #   art <- melt(art)
+  #   prev <- 
+  # }
   if(grepl('ETH', loc)){
     attr(dt, 'eppd')$hhs <-  subset(attr(dt, 'eppd')$hhs, year != '2018')
     print(paste0(loc, ' removed 2018 survey'))
@@ -397,7 +402,7 @@ modify_dt <- function(dt, run_name){
   
   attr(dt, 'eppd')$ancsitedat = unique(attr(dt, 'eppd')$ancsitedat)
   ## TODO - fix se = 0 data points in ZAF
-  # attr(dt, 'eppd')$hhs <- attr(dt, 'eppd')$hhs[!attr(dt, 'eppd')$hhs$se == 0,]
+  attr(dt, 'eppd')$hhs <- attr(dt, 'eppd')$hhs[!attr(dt, 'eppd')$hhs$se == 0,]
 
   
   attr(dt, 'specfp')$relinfectART <- 0.3

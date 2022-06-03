@@ -24,24 +24,41 @@ user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
-  run.name <- "220329_maggie"
+  run.name = '220329_maggie'
   loc <- 'AGO'
   stop.year <- 2022
   j <- 1
   paediatric <- TRUE
 }else{
   run.name <- args[1]
-  j <- as.integer(Sys.getenv("SGE_TASK_ID"))
+  j <- as.integer(Sys.getenv("SLURM_ARRAY_TASK_ID"))
   loc <- args[2]
   stop.year <- as.integer(args[3])
   paediatric <- as.logical(args[4])
   
 }
 
+print(paste0('J is ', j))
+
+h_root = '/homes/mwalte10/'
+lib.loc <- paste0(h_root,"R/",R.Version(),"/",R.Version(),".",R.Version())
+.libPaths(c(lib.loc,.libPaths()))
+packages <- c('fastmatch')
+for(p in packages){
+if(p %in% rownames(installed.packages())==FALSE){
+install.packages(p)
+}
+library(p, character.only = T)
+}
+
+anclik_dir <- paste0(ifelse(windows, 'H:', paste0("/ihme/homes/", user)), "/anclik/")
+setwd(anclik_dir)
+devtools::load_all()
 eppasm_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/")
 setwd(eppasm_dir)
 devtools::load_all()
 gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
+library(vctrs, lib.loc="/ihme/singularity-images/rstudio/lib/4.1.3.4")
 setwd(gbdeppaiml_dir)
 devtools::load_all()
 
@@ -135,7 +152,6 @@ mod <- data.table(attr(dt, 'eppd')$hhs)[prev == 0.0005,se := 0]
 mod[prev == 0.0005, prev := 0]
 attr(dt, 'eppd')$hhs <- data.frame(mod)
 
-
 ###Extends inputs to the projection year as well as does some site specific changes. This should probably be examined by cycle
 dt <- modify_dt(dt, run_name = run.name)
 # if(loc == 'CAF'){
@@ -175,7 +191,11 @@ zero_prev_locs <- unique(zero_prev_locs[prev == 0.0005 & use == TRUE,iso3])
 attr(dt, 'eppd')$ancsitedat <- data.frame(attr(dt, 'eppd')$ancsitedat)
 # Fit model ---------------------------------------
 # dt <- readRDS(paste0('/ihme/hiv/epp_output/gbd20/200713_yuka/dt_objects/',loc,'_dt.RDS'))
-# attr(dt,"eppd")$ancsitedat <- as.data.frame(attr(dt,"eppd")$ancsitedat)
+attr(dt,"eppd")$ancsitedat <- as.data.frame(attr(dt,"eppd")$ancsitedat)
+if(grepl('ZAF', loc)){
+  attr(dt, 'specfp')$scale_cd4_mort <- as.integer(1)
+  attr(dt, 'specfp')$art_mort <- attr(dt, 'specfp')$art_mort  * 0.15
+}
 
 fit <- eppasm::fitmod(dt, eppmod = ifelse(grepl('IND', loc),'rlogistic',epp.mod), 
                       B0 = 1e3, B = 1e3, number_k = 5, 
@@ -183,7 +203,7 @@ fit <- eppasm::fitmod(dt, eppmod = ifelse(grepl('IND', loc),'rlogistic',epp.mod)
 
 dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fitmod/'))
 saveRDS(fit, file = paste0('/ihme/hiv/epp_output/' , gbdyear, '/', run.name, '/fitmod/', loc, '_', j, '.RDS'))
-
+#fit <- readRDS('/ihme/hiv/epp_output/gbd20/200713_yuka/fitmod/')
 
 data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc,'.csv')
 

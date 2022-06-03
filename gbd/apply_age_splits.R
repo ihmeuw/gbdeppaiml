@@ -14,15 +14,15 @@ if(length(args) > 0) {
 } else {
 
   loc <- "AGO"
-   run.name <- "200713_yuka"
-
-  spec.name <- "200713_yuka"
+  run.name = "220329_maggie"
+  spec.name = "200505_xylo"
 
 }
-fill.draw <- T
+fill.draw <- F
 fill.na <- T
-gbdyear <- 'gbd20'
+gbdyear <- 'gbdTEST'
 ### Paths
+library(vctrs, lib.loc="/ihme/singularity-images/rstudio/lib/4.1.3.4")
 eppasm_dir <- paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/')
 out_dir <- paste0("/ihme/hiv/spectrum_prepped/art_draws/",spec.name)
 dir.create(out_dir, recursive = T, showWarnings = F)
@@ -33,7 +33,7 @@ dir.create(out_dir_birth, recursive = T, showWarnings = F)
 
 
 ### Functions
-# library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
+library(mortdb, lib ="/mnt/team/mortality/pub/shared/r/4")
 source( "/ihme/cc_resources/libraries/current/r/get_population.R")
 setwd(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/"))
 devtools::load_all()
@@ -51,7 +51,7 @@ if(!run.name %in% unique(ids$run_name)){
 }
 
 
-if(run.name == '200505_xylo' | run.name == '200713_yuka' | run.name == '200713_yuka_ETH_test' | run.name == '200713_yuka_ETH_test_rlog' |  run.name == '200713_yuka_ETH_test_rspline'){
+if(run.name == '200505_xylo' | run.name == '200713_yuka' | run.name == '200713_yuka_ETH_test' | run.name == '200713_yuka_ETH_test_rlog' |  run.name == '200713_yuka_ETH_test_rspline' | run.name == 'zaf_full_run_0.15'){
   age_map <- data.table(fread(paste0('/ihme/hiv/epp_input/', gbdyear, '/', '200316_windchime', "/age_map.csv")))
   
 }else{
@@ -172,7 +172,11 @@ spec_o80 <- data.table(spec_draw[age_group_id==21,])
 spec_o80[, age_group_id := NULL]
 
 # Get raw proportions for splitting populations and other general ones
-pop <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/population_splits/', loc, '.csv'))
+if(run.name == "zaf_full_run_0.15"){
+  pop <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/200713_yuka/population_splits/', loc, '.csv'))
+}else{
+  pop <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/population_splits/', loc, '.csv'))
+}
 o80_pop <- pop[age_group_id %in% c(30:32, 235),]
 o80_pop[,pop_total:=sum(population), by=list(sex_id,year_id)]
 o80_pop[,pop_prop:=population/pop_total, by=list(sex_id,year_id)]
