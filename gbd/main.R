@@ -40,15 +40,16 @@ if(length(args) == 0){
 
 print(paste0('J is ', j))
 
+
 h_root = '/homes/mwalte10/'
 lib.loc <- paste0(h_root,"R/",R.Version(),"/",R.Version(),".",R.Version())
 .libPaths(c(lib.loc,.libPaths()))
-packages <- c('fastmatch')
+packages <- c('fastmatch', 'pkgbuild')
 for(p in packages){
-if(p %in% rownames(installed.packages())==FALSE){
-install.packages(p)
-}
-library(p, character.only = T)
+  if(p %in% rownames(installed.packages())==FALSE){
+    install.packages(p)
+  }
+  library(p, character.only = T)
 }
 
 anclik_dir <- paste0(ifelse(windows, 'H:', paste0("/ihme/homes/", user)), "/anclik/")
@@ -56,11 +57,12 @@ setwd(anclik_dir)
 devtools::load_all()
 eppasm_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/")
 setwd(eppasm_dir)
+pkgbuild::compile_dll(eppasm_dir, debug = FALSE)
 devtools::load_all()
 gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
-library(vctrs, lib.loc="/ihme/singularity-images/rstudio/lib/4.1.3.4")
 setwd(gbdeppaiml_dir)
 devtools::load_all()
+
 
 gbdyear <- 'gbdTEST'
 
