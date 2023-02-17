@@ -22,7 +22,7 @@ if(file.exists(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
   n.draws = nrow(fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv')))
   array.job = T
 }else{
-  n.draws = 50
+  n.draws = 10
   array.job = F
 }
 run.group2 <- FALSE
@@ -32,7 +32,6 @@ plot_ART <- FALSE
 reckon_prep <- FALSE
 decomp.step <- "iterative"
 gbdyear <- "gbd20"
-redo_offsets <- F
 testing = FALSE
 test = NULL
 run_eppasm = T
@@ -46,19 +45,11 @@ dir.table <- fread(paste0('/share/hiv/epp_input/gbd20//dir_table_log_gbd20.csv')
 
 run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
 
-# if(!run.name %in% unique(run.table$run_name)){
-#   stop("Add run comment and new run to run tracker")
-#   # new_run = copy(run.table)[run_name == "200713_yuka"]
-#   # new_run[,run_name := run.name]
-#   # new_run[,comments := "Testing swap SWZ pop structure for LSO"]
-#   # run.table = rbind(run.table,new_run)
-#   # fwrite(run.table,paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'),row.names = FALSE)
-# }
-
-
 ### Functions
+source(paste0('/ihme/homes/', user, '/rt-shared-functions/cluster_functions.R'))
 source(paste0(root,"/Project/Mortality/shared/functions/check_loc_results.r"))
-library(mortdb, lib = "/ihme/mortality/shared/r")
+library(mortdb, lib = "/ihme/mortality/share/r/4")
+library(mortdb, lib = "/mnt/team/mortality/pub/shared/r/4")
 
 ### Tables
 loc.table <- data.table(get_locations(hiv_metadata = T))
@@ -67,30 +58,6 @@ loc.table <- data.table(get_locations(hiv_metadata = T))
 epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
 loc.list <- epp.list
 
-
-#Make comparison ART plots
-if(plot_ART){
-for(loc in loc.list) { 
-  art.string <- paste0("qsub -l m_mem_free=1G -l fthread=1 -l h_rt=00:30:00 -l archive -q all.q -P ", cluster.project, " ",
-                       "-e /share/temp/sgeoutput/", user, "/errors ",
-                       "-o /share/temp/sgeoutput/", user, "/output ",
-                       "-N ", loc, "_plot_art ",
-                       code.dir, "gbd/singR_shell.sh ",
-             paste0(paste0("/ihme/homes/", user), "/hiv_gbd2019/01_prep/plot_ART.R "),
-                       "2019 ", loc, " ", "2017", " ",run.name)
-  print(art.string )
-  system(art.string )
-}
-
-plot.dir <- paste0("/ihme/hiv/epp_input/gbd19/",run.name,"/art_plots/")
-setwd(plot.dir)
-system(paste0("/usr/bin/ghostscript -dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=art_plots.pdf -f *"))
-# Move to parent directory
-system(paste0("mv ", plot.dir, "/art_plots.pdf ",input.dir,"/"))
-# Delete location specific plots
-system(paste0("rm -r -f ", plot.dir, "/"))
-
-}
 
 # Cache inputs
 if(!file.exists(paste0(input.dir, "population/"))) {
@@ -103,45 +70,6 @@ if(!file.exists(paste0(input.dir, "population/"))) {
   system(prep.job)
 }
 
-# Cache prevalence surveys  - THIS PART OF THE PIPELINE NEEDS IMPROVING
-# if(!file.exists(paste0(input.dir, 'prev_surveys.csv'))){
-#   prev.job <- paste0("qsub -l m_mem_free=4G -l fthread=1 -l h_rt=00:10:00 -q all.q -N prev_cache_", run.name," -P ",cluster.project," ",
-#                      "-e /share/temp/sgeoutput/", user, "/errors ",
-#                      "-o /share/temp/sgeoutput/", user, "/output ",
-#                      code.dir, "gbd/singR_shell.sh ", 
-#                      code.dir, "gbd/cache_prev_surveys_age_sex.R"," ",run.name)
-#   print(prev.job)
-#   system(prev.job)
-# }
-
-
-# Prepare ART proportions
-if(!file.exists(paste0(input.dir, 'art_prop.csv'))){
-  prop.job <- paste0("qsub -l m_mem_free=2G -l fthread=1 -l h_rt=00:20:00 -q all.q -P ", cluster.project," -N eppasm_art_prop_", run.name," -hold_jid eppasm_prev_cache_", run.name, " ", 
-                     "-e /share/temp/sgeoutput/", user, "/errors ",
-                     "-o /share/temp/sgeoutput/", user, "/output ",
-                     "-hold_jid eppasm_prep_inputs_", run.name,',eppasm_prev_cache_', run.name,' ',
-                     code.dir, "gbd/singR_shell.sh ", 
-                     code.dir, "gbd/prep_art_props.R ", run.name)
-  print(prop.job)
-  system(prop.job)
-}
-
-
-if(redo_offsets){
-  redo_offsets.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive=True -q all.q -P ", cluster.project, " ",
-                       "-e /share/homes/", user, "/errors ",
-                       "-o /share/temp/sgeoutput/", user, "/output ",
-                       "-N ",  "redo_offsets ",
-                       code.dir, "gbd/singR_shell.sh ",
-                       code.dir, "lbd_anc_align/launch_lbd_process.R ",
-                       ##191224_trumpet is a placeholder for the old run
-                       run.name, '191224_trumpet')
-  print(redo_offsets.string)
-  system(redo_offsets.string)
-}
-
-
 if(array.job){
   epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive=True -q all.q -P ", cluster.project, " ",
                      "-e /share/temp/sgeoutput/", user, "/errors ",
@@ -151,32 +79,50 @@ if(array.job){
                      "-t 1:", n.draws, " ",
                      "-hold_jid eppasm_prep_inputs_", run.name," ",
                      code.dir, "gbd/singR_shell.sh ",
-                     code.dir, "gbd/main.R ",
+                     code.dir, "gbd/main_forecasting.R ",
                      run.name, " ", array.job)
 print(epp.string)
 system(epp.string)
 }
 
+x = list.files('/mnt/share/hiv/epp_output/gbd20/220926_albatross')
+x = x[!x %in% c('fit', 'dt_objects')]
+library(assertable)
+prob.locs = c('TZA', 'COD', 'DOM', "ETH_44857", "ETH_44862", 'LBR', 'LSO', "NGA_25320", "NGA_25322", "NGA_25326", "NGA_25328",
+              "NGA_25332", "NGA_25338", "NGA_25340", "NGA_25342","NGA_25350","NGA_25352", "PNG","SEN",
+              "SLE","SWZ","UGA","ZAF_482", "ZAF_483")
+x = x[!x %in% prob.locs & !grepl('KEN', x) & !grepl('ZAF', x)]
+for (loc in x){
+  print(loc)
+  dt = fread(paste0('/mnt/share/hiv/epp_output/gbd20/220926_albatross/', loc, '/1.csv'))
+  id.cols = c('age', 'sex', 'year', 'run_num')
+  val.check = colnames(dt)
+  val.check = val.check[!val.check %in% id.cols]
+  assert_values(dt, val.check, 'gte', 0)
+  
+}
 
 if(run_eppasm & !array.job){
 for(loc in loc.list) {    ## Run EPPASM
+    submit_array_job(script = paste0(code.dir, 'gbd/main_forecasting.R'), n_jobs = n.draws,
+                     queue = 'all.q', memory = '7G', threads = 1, time = "1:00:00",  name = paste0(loc, '_', run.name, '_eppasm'),
+                     archive = F, args = c(run.name, loc, proj.end, paediatric, TRUE))
+}
 
-
-
-    epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive=True -q all.q -P ", cluster.project, " ",
-                         "-e /share/temp/sgeoutput/", user, "/errors ",
-                         "-o /share/temp/sgeoutput/", user, "/output ",
-                         "-N ", loc,"_",run.name, "_eppasm ",
-                         "-tc 100 ",
-                         "-t 1:", n.draws, " ",
-                         "-hold_jid eppasm_prep_inputs_", run.name," ",
-                         code.dir, "gbd/singR_shell.sh ",
-                         code.dir, "gbd/main.R ",
-                         run.name, " ", array.job," ", loc, " ", proj.end, " ", paediatric)
-                         
-  
-                      
-   #  print(epp.string)
+  #   epp.string <- paste0("qsub -l m_mem_free=7G -l fthread=1 -l h_rt=24:00:00 -l archive=True -q all.q -P ", cluster.project, " ",
+  #                        "-e /share/temp/sgeoutput/", user, "/errors ",
+  #                        "-o /share/temp/sgeoutput/", user, "/output ",
+  #                        "-N ", loc,"_",run.name, "_eppasm ",
+  #                        "-tc 100 ",
+  #                        "-t 1:", n.draws, " ",
+  #                        "-hold_jid eppasm_prep_inputs_", run.name," ",
+  #                        code.dir, "gbd/singR_shell.sh ",
+  #                        code.dir, "gbd/main_forecasting.R ",
+  #                        run.name, " ", array.job," ", loc, " ", proj.end, " ", paediatric)
+  #                        
+  # 
+  #                     
+  # print(epp.string)
   # system(epp.string)
 
      

@@ -14,7 +14,7 @@
 ## Notes:
 ##loading in the hiv functions requires some specification of loc, gbdyear, and run.name
 gbdyear = 'gbd20'
-run.name <- "210415_zanfona"
+# run.name <- "210415_zanfona"
 ##
 ## ---------------------------
 

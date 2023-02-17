@@ -180,9 +180,7 @@ modify_dt <- function(dt, run_name){
 # Extend inputs to stop.year ----------------------------------------------
 ###########################################################################
   if(max(attr(dt, 'specfp')$pmtct_dropout$year) < stop.year & ped_toggle){
-    add_on.year <- seq(max(attr(dt, 'specfp')$pmtct_dropout$year) + 1 , stop.year)
-    add_on.dropouts <- attr(dt, 'specfp')$pmtct_dropout[attr(dt, 'specfp')$pmtct_dropout$year == max(attr(dt, 'specfp')$pmtct_dropout$year), 2:ncol(attr(dt, 'specfp')$pmtct_dropout)]
-    attr(dt, 'specfp')$pmtct_dropout <- rbind(attr(dt, 'specfp')$pmtct_dropout, c(year = unlist(add_on.year), add_on.dropouts))
+    attr(dt, 'specfp')$pmtct_dropout <- extend.years(attr(dt, 'specfp')$pmtct_dropout, 1970:stop.year)
   }
   if(length(unique(attr(dt, 'specfp')$pmtct_dropout$year)) < attr(dt, 'specfp')$SIM_YEARS & ped_toggle){
     missing_years <- setdiff(seq(start.year, stop.year), attr(dt, 'specfp')$pmtct_dropout$year)

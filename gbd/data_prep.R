@@ -11,7 +11,7 @@ c.args <- run.table[run_name==run.name,]
 dir.table <- fread(paste0('/share/homes/',user,'/dir_table_log_gbd20.csv'))
 dir.table <- dir.table[ref == min(ref),] ##Changed from max which had ASFR/births set to F, might have been old
 if(grepl('test', loc)){
-  loc <- 'IND_4856'
+  loc <- 'BWA'
 }
 
 

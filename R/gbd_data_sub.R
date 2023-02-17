@@ -304,7 +304,7 @@ sub.paeds <- function(dt, loc, k, start.year = 1970, stop.year = stop.year){
   years <- start.year:stop.year
   pop <- fread(paste0(dir, 'population_single_age/', loc, '.csv'))
   setnames(pop, old = 'year_id', new= 'year')
-  #pop <- extend.years(pop, years)
+  pop <- extend.years(pop, years)
   pop[age_group_id == 28, age := 0]
   pop[age_group_id == 238, age:= 1]
   pop[age_group_id == 21, age := 80]
@@ -550,8 +550,8 @@ sub.paeds <- function(dt, loc, k, start.year = 1970, stop.year = stop.year){
   return(dt)
 }
 
-sub.pop.params.specfp <- function(fp, loc, k){
-  #population_single_age <- paste0('/share/hiv/epp_input/', gbdyear ,'/', run.name, '/population_single_age/',loc,".csv")
+sub.pop.params.specfp <- function(fp, loc, k, run.name){
+  population_single_age <- paste0('/share/hiv/epp_input/', gbdyear ,'/', run.name, '/population_single_age/',loc,".csv")
 
   
   ## Population
@@ -586,6 +586,7 @@ sub.pop.params.specfp <- function(fp, loc, k){
   surv[,variable := NULL]
   surv[sex == 'male', sex := 'Male']
   surv[sex == 'female', sex := 'Female']
+  surv[value >= 1, value := 0.999]
   print(surv)
   surv <- data.table::dcast(surv, year + age ~ sex)
   surv = extend.years(surv, years)
@@ -1407,14 +1408,16 @@ geo_adj_old <- function(loc, dt, i, uncertainty) {
       }
       
     }
-
     art.dt[is.na(art.dt)] <- 0
     ##Need this to be logical later
     art.dt[, type := ifelse(ART_cov_pct > 0, TRUE, FALSE)]	
     
     #years <- epp.input$epp.art$year
-    years <- as.integer(attr(attr(dt,"specfp")$art15plus_isperc,"dimnames")$year)
-    years <- c(1970:stop.year)
+    if(max(as.integer(attr(attr(dt,"specfp")$art15plus_isperc,"dimnames")$year)) < stop.year){
+      years <- as.integer(attr(attr(dt,"specfp")$art15plus_isperc,"dimnames")$year)
+    }else{
+      years <- c(1970:stop.year)
+    }
     
     if(max(years) > max(art.dt$year)) {
       max.dt <- copy(art.dt[year == max(year)])

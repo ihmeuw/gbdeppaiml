@@ -1,6 +1,6 @@
 ## Reads in prepped .rds object and subs in indicated GBD parameters
 ## Output object is read to run through fitmod()
-read_spec_object <- function(loc, j, start.year = 1970, stop.year, trans.params.sub = TRUE, 
+read_spec_object <- function(loc, j, start.year = 1970, stop.year, run.name, trans.params.sub = TRUE, 
                              pop.sub = TRUE,  prev.sub = TRUE, art.sub = TRUE, sexincrr.sub = TRUE, 
                              popadjust = TRUE, age.prev = FALSE, paediatric, anc.rt = FALSE, geoadjust=TRUE,
 anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE,
@@ -88,7 +88,7 @@ if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))) {
       attr(dt, 'specfp')$ss$time_epi_start <- 1985
     }
     
-      specfp <- sub.pop.params.specfp(attr(dt, 'specfp'), loc, j)
+      specfp <- sub.pop.params.specfp(attr(dt, 'specfp'), loc, j, run.name)
       specfp <- update_spectrum_fixpar(specfp, proj_start = start.year, proj_end = stop.year,time_epi_start = specfp$ss$time_epi_start, popadjust=popadjust)
       attr(dt, 'specfp') <- specfp
     }
@@ -100,7 +100,7 @@ if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))) {
   ## Transition parameters
   if(trans.params.sub) {
     print('Substituting transition parameters')
-    #dt <- sub.off.art(dt, loc, j)
+    dt <- sub.off.art(dt, loc, j)
     dt <- sub.on.art(dt, loc, j)
     dt <- sub.cd4.prog(dt, loc, j)
   }
