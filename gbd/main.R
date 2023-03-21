@@ -40,6 +40,7 @@ if(length(args) == 0){
 
 print(paste0('J is ', j))
 
+# FIXME 2023 Mar 21 15:00:05 - this is all centered around Maggie's home folder?
 
 h_root = '/homes/mwalte10/'
 lib.loc <- paste0(h_root,"R/",R.Version(),"/",R.Version(),".",R.Version())
