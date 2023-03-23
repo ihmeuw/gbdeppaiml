@@ -16,7 +16,7 @@ unaids_year <- 2020
 RECONNECT <- T
 .reconnect_version <- "2023_03_21.01" # output directory version to reconnect to
 
-# Roots
+# Roots -------------------------------------------------
 root <- "/home/j/"
 user <- Sys.getenv("USER")
 code_root <- file.path("/mnt/share/homes", user, "gbdeppaiml")
@@ -24,7 +24,7 @@ code_dir <-file.path("/mnt/share/homes", user, "gbdeppaiml/prep_pjnz_data/")
 # FIXME - setting to scratch output for now
 .output_root <- file.path("/mnt/share/homes", user, "scratch/hiv/data/PJNZ_prepped")
 
-## Packages
+# Packages --------------------------------------
 library(data.table)
 library(glue)
 # to assist with versioning
@@ -34,6 +34,13 @@ library("SamsElves", lib.loc = "/mnt/share/code/hiv_tb_selectid/r_packages")
 ### Functions
 library(mortdb, lib = "/mnt/team/mortality/pub/shared/r/4") # 2023 Mar 21 11:49:52 - I think this is the right one - unsure - who owns this?
 # library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r") # 2023 Mar 21 11:14:49 - wrong version/folder
+
+# library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r") # 2023 Mar 21 11:14:49 - another copy with wrong version/folder
+# setwd(file.path("/ihme/homes", user, "eppasm"))
+# devtools::load_all(path = file.path("/ihme/homes", user, "eppasm"))
+library(eppasm, lib.loc = "/snfs1/Project/GBD_HIV/packages_r") # 2023 Mar 23 10:57:13 - replaced per Meixin
+setwd(code_dir) # 2023 Mar 21 11:52:31 - fails - folder does not exist
+devtools::load_all()
 
 # Metadata 1 -----------------------------------------------------------------
 # Build shell now, append actual run parameters later
@@ -47,7 +54,7 @@ if(RECONNECT) {
   .output_path <- ihme.covid::get_output_dir(.output_root, date = "today")
 }
 
-### Tables
+# Location table ----------------------------------------------
 loc_table <- data.table(get_locations(hiv_metadata = T))
 loc_list <- unique(loc_table$ihme_loc_id)
 
@@ -67,18 +74,11 @@ loc_list <- unique(loc_table$ihme_loc_id)
 # dir.create(paste0('/ihme/hiv/data/PJNZ_prepped/', unaids_year, '/')) # 2023 Mar 21 11:18:29 - now handled with .output_path above
 
 ## Launch prepare locations file
-### Functions
-
-# library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r") # 2023 Mar 21 11:14:49 - another copy with wrong version/folder
-# setwd(file.path("/ihme/homes", user, "eppasm"))
-# devtools::load_all(path = file.path("/ihme/homes", user, "eppasm"))
-library(eppasm, lib.loc = "/snfs1/Project/GBD_HIV/packages_r") # 2023 Mar 23 10:57:13 - replaced per Meixin
-setwd(code_dir) # 2023 Mar 21 11:52:31 - fails - folder does not exist
-devtools::load_all()
 
 # unaids_2020 <- strsplit(list.dirs('/snfs1/DATA/UNAIDS_ESTIMATES/2020/'), split = '//') # 2023 Mar 21 11:40:29 - this is never used
 # unaids_2020 <- sapply(unaids_2020[2:length(unaids_2020)], '[[', 2) # FIXME - never use `sapply` in a pipeline - inconsistent output by definition
 
+# Loader & prepare -------------------------
 
 for(loc in loc_list){
   # loc <- loc_list[[1]]
