@@ -26,11 +26,19 @@ code_dir <-file.path("/mnt/share/homes", user, "gbdeppaiml/prep_pjnz_data/")
 
 ## Packages
 library(data.table)
+library(glue)
 # to assist with versioning
 loadNamespace('ihme.covid', "/ihme/covid-19/.r-packages/current")
+# for metadata
+library("SamsElves", lib.loc = "/mnt/share/code/hiv_tb_selectid/r_packages")
 ### Functions
-# library(mortdb, lib = "/mnt/team/mortality/pub/shared/r/4") # 2023 Mar 21 11:49:52 - I think this is the right one - unsure - who owns this?
-library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r") # 2023 Mar 21 11:14:49 - wrong version/folder
+library(mortdb, lib = "/mnt/team/mortality/pub/shared/r/4") # 2023 Mar 21 11:49:52 - I think this is the right one - unsure - who owns this?
+# library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r") # 2023 Mar 21 11:14:49 - wrong version/folder
+
+# Metadata 1 -----------------------------------------------------------------
+# Build shell now, append actual run parameters later
+metadata_shell <- build_metadata_shell(code_root = code_root)
+.start_time <- proc.time()
 
 # Define output folder structure
 if(RECONNECT) {
@@ -63,8 +71,9 @@ loc_list <- unique(loc_table$ihme_loc_id)
 
 # library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r") # 2023 Mar 21 11:14:49 - another copy with wrong version/folder
 # setwd(file.path("/ihme/homes", user, "eppasm"))
-devtools::load_all(path = file.path("/ihme/homes", user, "eppasm"))
-# setwd(code_dir) # 2023 Mar 21 11:52:31 - fails - folder does not exist
+# devtools::load_all(path = file.path("/ihme/homes", user, "eppasm"))
+library(eppasm, lib.loc = "/snfs1/Project/GBD_HIV/packages_r") # 2023 Mar 23 10:57:13 - replaced per Meixin
+setwd(code_dir) # 2023 Mar 21 11:52:31 - fails - folder does not exist
 devtools::load_all()
 
 # unaids_2020 <- strsplit(list.dirs('/snfs1/DATA/UNAIDS_ESTIMATES/2020/'), split = '//') # 2023 Mar 21 11:40:29 - this is never used
@@ -102,6 +111,27 @@ for(loc in loc_list){
   saveRDS(val, file.path(.output_path_year, file_name))
   
 }
+
+# Metadata 2 -----------------------------------------------------------------
+
+.stop_time <- proc.time()
+.run_time <- .stop_time - .start_time
+.run_time <- paste(round(.run_time[["elapsed"]] / 60, 2), "min")
+metadata_additions <- list(
+  RECONNECT = RECONNECT,
+  output_path    = .output_path,
+  stop_time      = as.character(Sys.time()),
+  run_time       = .run_time,
+  unaids_year = unaids_year,
+  loc_table = loc_table,
+  loc_list = loc_list
+)
+
+# save to disk
+metadata <- list()
+metadata[["gbdeppaiml_launch_prepdata.R"]] <- append(x = metadata_shell, values = metadata_additions)
+yaml::write_yaml(metadata, file.path(.output_path, "metadata.yaml"))
+msg_prt(glue("ART data snapshot output to {.output_path}"))
 
 # 2023 Mar 21 11:56:19 - is this a check step?
 # cal = readRDS(paste0("/share/hiv/data/PJNZ_EPPASM_prepped/", loc, '.rds'))
