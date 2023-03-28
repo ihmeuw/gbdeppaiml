@@ -11,13 +11,14 @@
 ##
 
 ## Used in basically every script
+rm(list=ls(all.names = T))
 Sys.umask(mode = "0002")
 windows <- Sys.info()[1][["sysname"]]=="Windows"
 root <- ifelse(windows,"J:/","/home/j/")
 user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 eppasm_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/")
-setwd(eppasm_dir)
-devtools::load_all()
+# setwd(eppasm_dir)
+devtools::load_all(eppasm_dir)
 gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
 setwd(gbdeppaiml_dir)
 devtools::load_all()
