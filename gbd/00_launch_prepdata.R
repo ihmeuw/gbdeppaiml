@@ -48,7 +48,8 @@ library(eppasm, lib.loc = "/snfs1/Project/GBD_HIV/packages_r") # 2023 Mar 23 10:
 # devtools::load_all()
 source(file.path(code_root, "R/prep_pjnz_data.R")) # 2023 Mar 23 15:01:38 - pjnz loader funcs
 source(file.path(code_root, "R/gbd_prep_data.R")) # 2023 Mar 23 15:01:38 - pjnz loader funcs
-source(file.path(code_root, "R/ind_data_prep.R")) # 2023 Mar 23 15:01:38 - why do we need india related functions for China (my test run location) - may be issue with one file, resolve by wrapping with tryCatch()?
+source(file.path(code_root, "R/ind_data_prep.R")) # 2023 Mar 23 15:01:38 - pjnz loader funcs 
+# 2023 Mar 23 15:46:21 - China failure - may be issue with one file, resolve by wrapping with tryCatch()?
 
 ## Arguments
 # cluster_project <- "proj_hiv" # 2023 Mar 21 11:13:57 - unused
