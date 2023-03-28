@@ -54,7 +54,7 @@ source(file.path(code_root, "R/ind_data_prep.R")) # 2023 Mar 23 15:01:38 - pjnz 
 ## Arguments
 # cluster_project <- "proj_hiv" # 2023 Mar 21 11:13:57 - unused
 unaids_year <- 2020 
-gbdyear <- 2020 # 2023 Mar 23 15:08:03 - required by 
+gbdyear <- 2020 # 2023 Mar 23 15:08:03 - required by loader functions, somehow
 
 # Metadata 1 -----------------------------------------------------------------
 # Build shell now, append actual run parameters later
@@ -88,7 +88,7 @@ loc_vec <- unique(loc.table$ihme_loc_id)
 # Loader & prepare -------------------------
 
 for(loc in loc_vec){
-  (loc <- loc_vec[6])
+  # (loc <- loc_vec[7])
   unaids_year <- loc.table[ihme_loc_id==loc, unaids_recent] # 2023 Mar 23 15:20:12 - some cells are NA - where do files go then?
   .output_path_year <- file.path(.output_path, unaids_year)
   
