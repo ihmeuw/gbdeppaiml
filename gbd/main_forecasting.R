@@ -17,11 +17,14 @@ user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
-  run.name = '221223_bittern'
-  loc <- 'BWA'
+  run.name = '230222_dove'
+  loc <- "BWA"
   stop.year <- 2050
   j <- 1
   paediatric <- TRUE
+  c.scenario = 'reference'
+  transition.year = 2021
+  gbd.run.name = '200713_yuka'
 }else{
   run.name <- args[1]
   j <- as.integer(Sys.getenv("SLURM_ARRAY_TASK_ID"))
@@ -29,9 +32,11 @@ if(length(args) == 0){
   loc <- args[2]
   stop.year <- as.integer(args[3])
   paediatric <- as.logical(args[4])
+  c.scenario <- args[5]
+  transition.year <- as.integer(args[6])
+  gbd.run.name <- args[7]
   
 }
-
 print(paste0('J is ', j))
 
 
@@ -66,7 +71,7 @@ gbdyear <- 'gbd20'
 
 run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
 #use the GBD20 final run toggles
-c.args <- run.table[run_name=='200713_yuka']
+c.args <- run.table[run_name==gbd.run.name]
 
 ## Many of these toggles aren't used for forecasting since we aren't fitting to data
 ## However, keeping in the code for now in order to use existing EPP-ASM data prep fxns
@@ -100,66 +105,42 @@ file_name = loc
 out.dir <- paste0('/ihme/hiv/epp_output/',gbdyear,'/', run.name, "/", file_name)
 
 source(paste0('/ihme/homes/', user, '/gbdeppaiml/gbd/data_prep.R'))
-# Location specific toggles ---------------------------------------
-# ANC data bias adjustment
-##### These locations do not have information from LBD team estimates
-##### ZAF ANC data are considered nationally representative so no GeoADjust - this could be challenged in the future
-no_geo_adj <-  c(loc.table[epp ==1 & grepl("IND",ihme_loc_id),ihme_loc_id],
-                 "PNG","HTI","DOM", 'CPV', loc.table[epp ==1 & grepl("ZAF",ihme_loc_id),ihme_loc_id], 
-                 'STP', 'KEN_35626', 'MRT', 'COM')
-if(geoadjust & !loc %in% no_geo_adj | loc %in% c('ZWE', 'MWI')){
-  geoadjust  <- TRUE
-} else {
-  geoadjust  <- FALSE
-}
-print(paste0(loc, ' geoadjust set to ', geoadjust))
 
-# LBD Adjustments
-##### Location that don't undergo LBD adjustment, set to TRUE as a default above
-if(!loc %in% unlist(strsplit(list.files('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/lbd_anc/2019/'), '.rds')) | loc %in% c('ZAF', 'PNG') | grepl('IND', loc)){
-  lbd.anc <- FALSE
-}
-if(grepl('ancrt', run.name)){
-  lbd.anc = F
-}
+geoadjust  <- FALSE
+lbd.anc <- FALSE
 
-print(paste0(loc, ' lbd.anc set to ', lbd.anc))
-
-
-# No Sex incrr substitution
-if(loc %in% c("MAR","MRT","COM")){
-  sexincrr.sub <- FALSE
-}
-## forecasting temp duct tape
-
-
-## run multiple draws 
 # Prepare the dt object ---------------------------------------
-if(stop.year > 2022){
-  art = paste0('/share/hiv/spectrum_input/20220621_reference/childARTcoverage/', loc, '.csv')
-  pmtct = paste0('/share/hiv/spectrum_input/20220621_reference/PMTCT/', loc, '.csv')
-  
-}
 dt <- read_spec_object(loc, j, start.year, stop.year, run.name = run.name, trans.params.sub,
                        pop.sub, anc.sub,  prev.sub = prev_sub, art.sub = TRUE,
                        sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = TRUE,
                        anc.prior.sub = FALSE, lbd.anc = lbd.anc,
                        geoadjust = geoadjust, use_2019 = TRUE,
                        test.sub_prev_granular = test,
-                       anc.rt = FALSE
+                       anc.rt = FALSE, fit.model = FALSE
                        # anc.backcast,
 )
 ###Extends inputs to the projection year as well as does some site specific changes. This should probably be examined by cycle
 dt <- modify_dt(dt, run_name = run.name)
-## temp forecasting duct tape
-## child ART was projected incorrectly in BWA
-if(stop.year > 2022){
-  dt <- forecast.sub(loc, start.year, stop.year, j, dt, sub.art.forecast = T)
-  new.artrr <- matrix(1, 3, dim(attr(dt,'specfp')$artmx_timerr)[2])
-  attr(dt, 'specfp')$artmx_timerr <- new.artrr
+attr(dt, 'specfp')$group <- loc.table[ihme_loc_id == loc, group]
+## temp fix to get MMR and KHM to run
+if(loc %in% c('KHM', 'MMR')){
+  attr(dt, 'specfp')$group <- '2'
 }
-attr(dt, 'specfp')$art15plus_num <- attr(dt, 'specfp')$art15plus_num[,1:52]
-attr(dt, 'specfp')$art15plus_isperc <- attr(dt, 'specfp')$art15plus_isperc[,1:52]
+
+## Sub ART forecast - Set to TRUE for previous ART forecasting methods (age/sex/CD4-specific coverage)
+## Set to FALSE for new art initiation method
+sub.art.forecast = ifelse(grepl('2', attr(dt, 'specfp')$group), T, F)
+attr(dt, 'specfp')$art_pred = sub.art.forecast
+## Transmission rate projection - has been tested for group 1A
+## Set to FALSE for direct incidence input (same method as Spectrum)
+trans.rate.pred <- ifelse(attr(dt, 'specfp')$group == '1A', T, F)
+
+## Substitute forecasting inputs (incidence/transmission rate, adult and child ART, PMTCT)
+dt <- forecast.sub(loc, start.year, stop.year, j, dt, run.name, c.scenario, gbd.run.name, sub.art.forecast = sub.art.forecast, trans.rate.pred = trans.rate.pred)
+
+# Set on-ART mortality adjustment to 1 (no adjustment)
+new.artrr <- matrix(1, 3, dim(attr(dt,'specfp')$artmx_timerr)[2])
+attr(dt, 'specfp')$artmx_timerr <- new.artrr
 
 pred.result = simmod.specfp((attr(dt, 'specfp')), VERSION = 'R')
 output.dt <- get_gbd_outputs(pred.result, attr(dt, 'specfp'), paediatric = paediatric)
@@ -173,8 +154,9 @@ saveRDS(pred.result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/f
 
 artinit = get_artinit(pred.result)
 artinit[, draw := j]
-dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/artinit/', loc, '/'), showWarnings = FALSE)
-write.csv(artinit, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/artinit/', loc,'/', j, '.csv'))
+dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/artinit_onart/'), showWarnings = FALSE)
+dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/artinit_onart/', loc, '/'), showWarnings = FALSE)
+write.csv(artinit, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/artinit_onart/', loc,'/', j, '.csv'))
 #
 # ## under-1 splits
 if(paediatric){

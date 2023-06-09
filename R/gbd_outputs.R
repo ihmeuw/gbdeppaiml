@@ -542,19 +542,3 @@ save_data <- function(loc, eppd, run.name){
   write.csv(output, data.path, row.names = F)
   return(output)
 }
-
-get_artinit <- function(mod){
-  artinit = attr(mod, 'artinit')
-  dimnames(artinit) = list(sex = c('male', 'female'), year = start.year:stop.year, ii = 1:10)
-  artinit = data.table(as.data.frame.table(artinit))
-  setnames(artinit, 'Freq', 'art_init')
-  artinit = artinit[,.(art_init = mean(art_init)), by = c('sex', 'year')]
-  artinit[,year := as.numeric(as.character(year))]
-  artinit[,sex := as.character(sex)]
-  # off.art.prev = output.dt
-  # off.art.prev[,off_art_prev := pop_gt350 + pop_200to350 + pop_lt200 + pop_art]
-  # off.art.prev = off.art.prev[,.(off_art_prev = sum(off_art_prev)), by = c('sex', 'year')]
-  # artinit = merge(artinit, off.art.prev, by = c('year', 'sex'))
-  # artinit[,prop_init := art_init/off_art_prev]
-  return(artinit)
-}

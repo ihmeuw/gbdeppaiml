@@ -1412,7 +1412,7 @@ geo_adj_old <- function(loc, dt, i, uncertainty) {
     ##Need this to be logical later
     art.dt[, type := ifelse(ART_cov_pct > 0, TRUE, FALSE)]	
     
-    #years <- epp.input$epp.art$year
+    names(dimnames(attr(dt,"specfp")$art15plus_isperc)) = c('sex', 'year')
     if(max(as.integer(attr(attr(dt,"specfp")$art15plus_isperc,"dimnames")$year)) < stop.year){
       years <- as.integer(attr(attr(dt,"specfp")$art15plus_isperc,"dimnames")$year)
     }else{
@@ -1451,7 +1451,16 @@ geo_adj_old <- function(loc, dt, i, uncertainty) {
     attr(dt,"specfp")$art15plus_isperc <- attr(dt,"specfp")$art15plus_isperc[,1:length(years)]
     attr(dt,"specfp")$art15plus_num <- attr(dt,"specfp")$art15plus_num[,1:length(years)]
     
-    
+    if(min(art.dt$year) > min(as.integer(attr(attr(dt,"specfp")$art15plus_isperc,"dimnames")$year))){
+      idx = min(art.dt$year) - min(as.integer(attr(attr(dt,"specfp")$art15plus_isperc,"dimnames")$year))
+      while(idx > 0){
+        min.art = art.dt[year == min(art.dt$year)]
+        min.art[,year := year - 1]
+        art.dt = rbind(min.art, art.dt)
+        idx = min(art.dt$year) - min(as.integer(attr(attr(dt,"specfp")$art15plus_isperc,"dimnames")$year))
+        
+      }
+    }
     attr(dt,"specfp")$art15plus_isperc[1,] <- art.dt[year %in% years & sex == 1, type]
     attr(dt,"specfp")$art15plus_isperc[2,] <- art.dt[year %in% years & sex == 2, type]
     

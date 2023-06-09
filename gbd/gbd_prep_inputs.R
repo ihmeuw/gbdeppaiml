@@ -14,9 +14,9 @@ if(length(args) > 0) {
 	run.group2 <- args[3]
 	decomp.step <- args[4]
 } else {
-	run.name <- "200713_yuka_newASFR"
+	run.name <- "230222_dove"
 	proj.end <- 2022
-	run.group2 <- FALSE
+	run.group2 <- TRUE
 	decomp.step <- "iterative"
 }
 
@@ -35,7 +35,7 @@ out.dir <- paste0('/ihme/hiv/epp_input/', gbdyear, '/', run.name, "/")
 dir.create(out.dir, recursive = TRUE, showWarnings = TRUE)
 
 ## Functions
-library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
+library(mortdb, lib = "/mnt/team/mortality/pub/shared/r/4")
 source( "/ihme/cc_resources/libraries/current/r/get_population.R")
 source('/ihme/cc_resources/libraries/current/r/get_covariate_estimates.R')
 source('/ihme/cc_resources/libraries/current/r/get_cod_data.R')

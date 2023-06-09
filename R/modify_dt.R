@@ -69,20 +69,22 @@ modify_dt <- function(dt, run_name){
   ###########################################################################
   # Remove duplicates from ancsitedat -------------------------------------------
   ###########################################################################
-  ancsitedat <- data.table(attr(dt,'eppd')$ancsitedat)
-  if('subpop' %in% colnames(ancsitedat)){
-    if(any(colnames(ancsitedat) == 'year_id')){setnames(ancsitedat, 'year_id', 'year')}
-    if(nrow(unique(ancsitedat[,.(site, subpop, year, used, prev, n, type, agegr, age,agspan)])) != nrow(ancsitedat) ){
-      ancsitedat <- ancsitedat[!duplicated(ancsitedat[,.(site, subpop, year, used, prev, n, type, agegr, age,agspan)]),]
-      attr(dt, 'eppd')$ancsitedat <- data.frame(ancsitedat)
-      print('Removed duplicates from sitedat')
-    }
-    
-  }else{
-    if(nrow(unique(ancsitedat[,.(site,  year, used, prev, n, type, agegr, age,agspan)])) != nrow(ancsitedat) ){
-      ancsitedat <- ancsitedat[!duplicated(ancsitedat[,.(site,  year, used, prev, n, type, agegr, age,agspan)]),]
-      attr(dt, 'eppd')$ancsitedat <- data.frame(ancsitedat)
-      print('Removed duplicates from sitedat')
+  if(exists("eppd", where = dt)){
+    ancsitedat <- data.table(attr(dt,'eppd')$ancsitedat)
+    if('subpop' %in% colnames(ancsitedat)){
+      if(any(colnames(ancsitedat) == 'year_id')){setnames(ancsitedat, 'year_id', 'year')}
+      if(nrow(unique(ancsitedat[,.(site, subpop, year, used, prev, n, type, agegr, age,agspan)])) != nrow(ancsitedat) ){
+        ancsitedat <- ancsitedat[!duplicated(ancsitedat[,.(site, subpop, year, used, prev, n, type, agegr, age,agspan)]),]
+        attr(dt, 'eppd')$ancsitedat <- data.frame(ancsitedat)
+        print('Removed duplicates from sitedat')
+      }
+      
+    }else{
+      if(nrow(unique(ancsitedat[,.(site,  year, used, prev, n, type, agegr, age,agspan)])) != nrow(ancsitedat) ){
+        ancsitedat <- ancsitedat[!duplicated(ancsitedat[,.(site,  year, used, prev, n, type, agegr, age,agspan)]),]
+        attr(dt, 'eppd')$ancsitedat <- data.frame(ancsitedat)
+        print('Removed duplicates from sitedat')
+      }
     }
   }
 
@@ -232,6 +234,7 @@ modify_dt <- function(dt, run_name){
       
     }
   }
+  attr(dt, 'specfp')$art_dropout <- attr(dt, 'specfp')$art_dropout[!is.na(attr(dt, 'specfp')$art_dropout)]
   if(length( attr(dt, 'specfp')$art_dropout) < attr(dt, 'specfp')$SIM_YEARS){
     diff <- length( attr(dt, 'specfp')$art_dropout)- attr(dt, 'specfp')$SIM_YEARS
     while(diff != 0){
@@ -273,6 +276,7 @@ modify_dt <- function(dt, run_name){
       
     }
   }
+  attr(dt, 'specfp')$median_cd4init <- attr(dt, 'specfp')$median_cd4init[!is.na(attr(dt, 'specfp')$median_cd4init)]
   if(length( attr(dt, 'specfp')$median_cd4init) < attr(dt, 'specfp')$SIM_YEARS){
     diff <- length( attr(dt, 'specfp')$median_cd4init)- attr(dt, 'specfp')$SIM_YEARS
     while(diff != 0){
@@ -281,6 +285,7 @@ modify_dt <- function(dt, run_name){
       
     }
   }
+  attr(dt, 'specfp')$med_cd4init_input <- attr(dt, 'specfp')$med_cd4init_input[!is.na(attr(dt, 'specfp')$med_cd4init_input)]
   if(length( attr(dt, 'specfp')$med_cd4init_input) < attr(dt, 'specfp')$SIM_YEARS){
     diff <- length( attr(dt, 'specfp')$med_cd4init_input)- attr(dt, 'specfp')$SIM_YEARS
     while(diff != 0){
@@ -289,6 +294,7 @@ modify_dt <- function(dt, run_name){
       
     }
   }
+  attr(dt, 'specfp')$med_cd4init_cat <- attr(dt, 'specfp')$med_cd4init_cat[!is.na(attr(dt, 'specfp')$med_cd4init_cat)]
   if(length( attr(dt, 'specfp')$med_cd4init_cat) < attr(dt, 'specfp')$SIM_YEARS){
     diff <- length( attr(dt, 'specfp')$med_cd4init_cat)- attr(dt, 'specfp')$SIM_YEARS
     while(diff != 0){
@@ -314,7 +320,7 @@ modify_dt <- function(dt, run_name){
       
     }
   }
-  
+  attr(dt, 'specfp')$artcd4elig_idx <- attr(dt, 'specfp')$artcd4elig_idx[!is.na(attr(dt, 'specfp')$artcd4elig_idx)]
   if(length( attr(dt, 'specfp')$artcd4elig_idx) < attr(dt, 'specfp')$SIM_YEARS){
     diff <- length( attr(dt, 'specfp')$artcd4elig_idx)- attr(dt, 'specfp')$SIM_YEARS
     while(diff != 0){
@@ -332,12 +338,21 @@ modify_dt <- function(dt, run_name){
       
     }
   }
-  
   if(dim( attr(dt, 'specfp')$entrantartcov)[2] < attr(dt, 'specfp')$SIM_YEARS){
     diff <- dim( attr(dt, 'specfp')$entrantartcov)[2] - attr(dt, 'specfp')$SIM_YEARS
     while(diff != 0){
       attr(dt, 'specfp')$entrantartcov <-  abind::abind( attr(dt, 'specfp')$entrantartcov,  attr(dt, 'specfp')$entrantartcov[,ncol( attr(dt, 'specfp')$entrantartcov) - 1])
       diff <- dim( attr(dt, 'specfp')$entrantartcov)[2] - attr(dt, 'specfp')$SIM_YEARS
+      
+    }
+  }
+  
+  if(dim( attr(dt, 'specfp')$frr_cd4)[3] < attr(dt, 'specfp')$SIM_YEARS){
+    final.i <- dim( attr(dt, 'specfp')$frr_cd4)[3]
+    diff <- attr(dt, 'specfp')$SIM_YEARS - final.i
+    final.frr <-  attr(dt, 'specfp')$frr_cd4[,,final.i]
+    for(i in 1:diff){
+      attr(dt, 'specfp')$frr_cd4 <-  abind::abind( attr(dt, 'specfp')$frr_cd4, final.frr)
       
     }
   }

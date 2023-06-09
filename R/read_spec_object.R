@@ -1,10 +1,28 @@
 ## Reads in prepped .rds object and subs in indicated GBD parameters
 ## Output object is read to run through fitmod()
+find_pjnz_filepath <- function(loc){
+  if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))) {
+    return(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))
+  } else if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2018/', loc, '.rds'))) {
+    return(paste0('/share/hiv/data/PJNZ_prepped/2018/', loc, '.rds'))
+    
+  } else if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2015/', loc, '.rds'))){
+    return(paste0('/share/hiv/data/PJNZ_prepped/2015/', loc, '.rds'))
+    
+  } else if(file.exists(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', loc, '.rds'))) {
+    return(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', loc, '.rds'))
+    
+  } else if(file.exists(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))) {
+    return(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))
+  }
+  return("")
+}
+
 read_spec_object <- function(loc, j, start.year = 1970, stop.year, run.name, trans.params.sub = TRUE, 
                              pop.sub = TRUE,  prev.sub = TRUE, art.sub = TRUE, sexincrr.sub = TRUE, 
                              popadjust = TRUE, age.prev = FALSE, paediatric, anc.rt = FALSE, geoadjust=TRUE,
 anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE,
-test.sub_prev_granular = NULL){
+test.sub_prev_granular = NULL, fit.model = TRUE){
 
 
   #Do this for now as something is weird with the new PJNZ files - don't need subpop anyway
@@ -18,23 +36,15 @@ test.sub_prev_granular = NULL){
 #     dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2020/', loc, '.rds'))
 # 
 #     } else
-if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))) {
-    dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))
-    
-  } else if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2018/', loc, '.rds'))) {
-    dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2018/', loc, '.rds'))
-    
-  } else if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2015/', loc, '.rds'))){
-    dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2015/', loc, '.rds'))
-    
-  } else if(file.exists(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', loc, '.rds'))) {
-    dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped_subpop/', loc, '.rds'))
-    
-  } else if(file.exists(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))) {
-    dt <- readRDS(paste0('/share/hiv/data/PJNZ_EPPASM_prepped/', loc, '.rds'))
-  } 
+  pjnz.filepath <- find_pjnz_filepath(loc)
+  if(nchar(pjnz.filepath) == 0){
+    pjnz.filepath <- find_pjnz_filepath(substr(loc, 1, 3))
+  }
+  if(nchar(pjnz.filepath) == 0){
+    pjnz.filepath <- '/share/hiv/data/PJNZ_EPPASM_prepped/generic_group2.rds'
+  }
   
-  
+  dt <- readRDS(pjnz.filepath)
   if(lbd.anc){
     # if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/lbd_anc/2021/', loc, '.rds'))){
     #   replace <- as.data.table(readRDS(paste0('/share/hiv/data/PJNZ_prepped/lbd_anc/2021/', loc, '.rds')))
@@ -208,7 +218,36 @@ if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))) {
     attr(dt, 'specfp')$group <- '1'
     
   }else{
-    ## Group 2 inputs
+    ## Group 2 inputs 
+    # sex incrr methods carried over from spectrum
+    sex.incrr <- fread('/home/j/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/AIM_assumptions/sex_age_pattern/FtoM_inc_ratio_epidemic_specific.csv')
+    epi.type <- fread('/share/hiv/spectrum_input/epidemic_class/epi_class_2020.csv')[iso3 == loc, epi_class]
+    sex.incrr = sex.incrr[epidemic_class == epi.type]
+    incrr.adj <- fread('/home/j/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/AIM_assumptions/sex_age_pattern/post_1995_sex_ratios.csv')
+    if(substr(loc, 1, 3) %in% incrr.adj$iso3){
+      incrr.adj <- incrr.adj[iso3 == substr(loc, 1, 3), sex_ratio] / 0.42
+    }else{
+      incrr.adj <- 1
+    }
+    incsexratio = rep(incrr.adj * 0.24, length(start.year:stop.year))
+    epi.start = fread('/home/j/Project/Causes of Death/codem/models/A02/GBD 2013 HIV/Program_inputs/data/AIM_assumptions/classification/epi_start_yr/defaults/epi_start_year.csv')
+    if(substr(loc, 1, 3) %in% epi.start$iso3){
+      epi.start = epi.start[iso3 == substr(loc, 1, 3), as.integer(start_year)]
+    }else{
+      epi.start = 1984
+    }
+    for(y in epi.start:(stop.year)){
+      incsexratio[y - start.year + 1] = sex.incrr[year == min((y - epi.start) + 1, max(sex.incrr$year)), FtoM_inc_ratio] * incrr.adj
+    }
+    names(incsexratio) <- start.year:stop.year
+    attr(dt, 'specfp')$incrr_sex <- incsexratio
+    
+    # age incrr
+    age.incrr <- fread('/home/j/WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/AIM_assumptions/sex_age_pattern/age_IRRs/Feb17/GEN_IRR.csv')
+    
+    
+    ## if we're fitting the model
+    if(fit.model){
     print('Appending vital registration death data')
     dt <- append.vr(dt, loc, run.name)
     attr(dt, 'specfp')$group <- '2'
@@ -222,6 +261,7 @@ if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))) {
     
     print('Appending CIBA age/sex incrr priors')
     dt <- append.ciba.incrr(dt, loc, run.name)
+    }
     
   }
   ## Append fertility rate ratios for countries in SSA

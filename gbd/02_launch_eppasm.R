@@ -28,7 +28,7 @@ source(paste0('/ihme/homes/', user, '/rt-shared-functions/cluster_functions.R'))
 
 ## Arguments
 #run.name = '200713_yuka_newUNAIDS'
-run.name = '221223_bittern'
+run.name = '230222_dove'
 compare.run <- c("200713_yuka")
 proj.end <- 2050
 if(file.exists(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))){
@@ -78,29 +78,18 @@ library(mortdb, lib ="/mnt/team/mortality/pub/shared/r/4")
 loc.table <- data.table(get_locations(hiv_metadata = T))
 
 ### Code
-epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
+epp.list <- readRDS(paste0('/ihme/hiv/spectrum_input/20230202_forecasting/loc_list.RDS'))
+epp.list = loc.table[spectrum == 1, ihme_loc_id]
+x = list.files('/mnt/share/hiv/epp_output/gbd20/230222_dove')
+loc.list = epp.list[substr(epp.list, 1, 3) %in% c('ITA', 'PHL', 'PAK', 'POL')]
 loc.list <- epp.list
-loc.list = loc.list[grepl('IND', loc.list) | grepl('KEN', loc.list) | grepl('NGA', loc.list)]
 ##standard loc list
-loc.list <- c(loc.list, 'MRT', 'STP', 'COM')
-loc.list <- c( loc.list[grepl('ZAF', loc.list)], 'MOZ')
-# loc.list <- c('LSO', 'MOZ', 'SWZ')
-zaf_scalar <- fread('/ihme/homes/mwalte10/test_cd4_art_num.csv')
-run.list <- unique(zaf_scalar$run_name)
-run.list = c('zaf_full_run_0.15')
-loc.list = c('AGO', 'BEN', 'BFA', 'BWA', 'CAF', 'HTI', 'MOZ', 'ZWE', 'ZMB')
 fp.path = paste0('/mnt/share/homes/tahvif/', run.name)
-x = fread(paste0(fp.path, '/compiled_problem_draws_2.csv'))
-for(loc in unique(x$ihme_loc_id)) {  
-  prob.draws = x[ihme_loc_id == loc, run_num]
-  for(draw in prob.draws){
-  unlink(paste0('/mnt/share/hiv/epp_output/gbd20/221223_bittern/', loc, '/', draw, '.csv'))
-    
-  submit_job(script = paste0(code.dir, 'gbd/main_forecasting.R'),
-             queue = 'all.q', memory = '7G', threads = 1, time = "01:00:00", name = paste0(loc, '_', run.name, '_compile'),
-             archive = F, args = c(run.name, loc, proj.end, paediatric, draw))
-  }
-}
+c.scenario <- 'reference'
+  # submit_job(script = paste0(code.dir, 'gbd/main_forecasting.R'),
+  #            queue = 'all.q', memory = '7G', threads = 1, time = "01:00:00", name = paste0(loc, '_', run.name, '_compile'),
+  #            archive = F, args = c(run.name, loc, proj.end, paediatric, draw))
+
 
 # EPP-ASM ---------------------------------------
 if(run_eppasm & !array.job){
@@ -108,7 +97,7 @@ if(run_eppasm & !array.job){
   for(loc in loc.list) {  
       submit_array_job(script = paste0(code.dir, 'gbd/main_forecasting.R'), n_jobs = n.draws,
                        queue = 'all.q', memory = '7G', threads = 1, time = "24:00:00",  name = paste0(loc, '_', run.name, '_eppasm'),
-                       archive = F, args = c(run.name, loc, proj.end, paediatric, TRUE))
+                       archive = F, args = c(run.name, loc, proj.end, paediatric, TRUE, c.scenario))
   }
       # #Make sure all locations are done
       dirs = paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/', loc.list)
