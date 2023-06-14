@@ -28,7 +28,6 @@ if(length(args) == 0){
 }else{
   run.name <- args[1]
   j <- as.integer(Sys.getenv("SLURM_ARRAY_TASK_ID"))
-  # j = as.integer(args[5])
   loc <- args[2]
   stop.year <- as.integer(args[3])
   paediatric <- as.logical(args[4])

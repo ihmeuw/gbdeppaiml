@@ -18,8 +18,8 @@ if(length(args) > 0) {
   c.fbd_version <- args[1]
   c.gbd_version <- args[2]
   c.scenario <- args[3]
-  end_year <- args[4]
-  cores <- args[5]
+  end_year <- as.integer(args[4])
+  cores <- as.integer(args[5])
 } else {
 
   c.fbd_version <- "230222_dove"

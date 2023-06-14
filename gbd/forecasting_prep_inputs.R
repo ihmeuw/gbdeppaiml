@@ -24,24 +24,21 @@ run.list <- loc.table[spectrum == 1, ihme_loc_id]
 # hiv.table = fread('/mnt/share/hiv/location_table/latest/hiv_location_table.csv')
 
 args <- commandArgs(trailingOnly = TRUE)
-cyear <- as.integer(args[1])
-cores <- as.integer(args[2])
-max.year <- as.integer(args[3])
-last_gbd_run <- args[4]
-run.name <- args[5]
-extrapolate <- args[6]
-transition.year <- as.integer(args[7])
+run.name <- args[1]
+max.year <- as.integer(args[2])
+last_gbd_run <- args[3]
+transition.year <- as.integer(args[4])
+cores <- as.integer(args[5])
+
 print(cores)
 
 ### Arguments
 if (is.na(args[1])) {
-  cyear <- 2020
-  cores <- 40
+  run.name <- "230222_dove"
   max.year <- 2050
   last_gbd_run <- "200713_yuka"
-  run.name <- "230222_dove"
-  extrapolate = T
   transition.year <- 2021
+  cores <- 10
 }
 population <- T
 migration <- T
@@ -60,7 +57,7 @@ dir.create(plot.dir,recursive = TRUE)
 age.map <- get_age_map(gbd_year = 2019, type = "all")
 fp_map <- fread(paste0('/ihme/hiv/spectrum_input/20220418_forecasting/fp_map.csv'))
 
-loc.table <- data.table(get_locations(hiv_metadata = T, gbd_year = cyear))
+loc.table <- data.table(get_locations(hiv_metadata = T))
 ##need to aggregate all of the locations that we don't run individually
 agg.locs <- c(loc.table[spec_agg == 1 & grepl('KEN', ihme_loc_id), ihme_loc_id], 'IDN', 'IND_44538',  'ZAF', 'NGA', 'ETH', 'IND', 'USA', 'BRA', 'CHN')
 
