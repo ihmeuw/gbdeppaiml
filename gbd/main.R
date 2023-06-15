@@ -24,10 +24,10 @@ user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
-  run.name = '220329_maggie'
-  loc <- 'AGO'
+  run.name = '220407_Meixin'
+  loc <- 'SAU'
   stop.year <- 2022
-  j <- 1
+  j <- 5
   paediatric <- TRUE
 }else{
   run.name <- args[1]
@@ -41,9 +41,10 @@ if(length(args) == 0){
 print(paste0('J is ', j))
 
 
-h_root = '/homes/mwalte10/'
+h_root = paste0('/homes/', user,"/")
 lib.loc <- paste0(h_root,"R/",R.Version(),"/",R.Version(),".",R.Version())
-.libPaths(c(lib.loc,.libPaths()))
+#.libPaths(c(lib.loc,.libPaths()))
+.libPaths(c("/snfs1/Project/GBD_HIV/packages_r",.libPaths()))
 packages <- c('fastmatch', 'pkgbuild')
 for(p in packages){
   if(p %in% rownames(installed.packages())==FALSE){
@@ -52,17 +53,17 @@ for(p in packages){
   library(p, character.only = T)
 }
 
-anclik_dir <- paste0(ifelse(windows, 'H:', paste0("/ihme/homes/", user)), "/anclik/")
-setwd(anclik_dir)
-devtools::load_all()
-eppasm_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/")
-setwd(eppasm_dir)
-pkgbuild::compile_dll(eppasm_dir, debug = FALSE)
-devtools::load_all()
+# anclik_dir <- paste0(ifelse(windows, 'H:', paste0("/ihme/homes/", user)), "/anclik/")
+# setwd(anclik_dir)
+# devtools::load_all()
+# eppasm_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/")
+# setwd(eppasm_dir)
+# pkgbuild::compile_dll(eppasm_dir, debug = FALSE)
+# devtools::load_all()
 gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
 setwd(gbdeppaiml_dir)
 devtools::load_all()
-
+library(eppasm, lib.loc = "/snfs1/Project/GBD_HIV/packages_r")
 
 gbdyear <- 'gbdTEST'
 
@@ -200,7 +201,7 @@ if(grepl('ZAF', loc)){
 }
 
 fit <- eppasm::fitmod(dt, eppmod = ifelse(grepl('IND', loc),'rlogistic',epp.mod), 
-                      B0 = 1e3, B = 1e3, number_k = 5, 
+                      B0 = 1e5, B = 1e3, number_k = 3000, 
                       ageprev = ifelse(loc %in% zero_prev_locs,'binom','probit'))
 
 dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fitmod/'))

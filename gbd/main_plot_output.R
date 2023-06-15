@@ -15,6 +15,7 @@ if(length(args) > 0) {
   loc <- args[1]
   run.name <- args[2]
   compare.run <- args[3]
+  gbd_year_new <- args[4]
   if(compare.run == 'NA'){
     compare.run <- NA
   }
@@ -24,9 +25,10 @@ if(length(args) > 0) {
   draw.fill <- TRUE
   compare.run <- c('200713_yuka')
   test <-  NULL
+  gbd_year_new <- "gbdTEST"
 }
 
-gbd_year_new <- "gbd20"
+# gbd_year_new <- "gbd20"
 if( '190630_rhino2' %in% compare.run){
   gbd_year_old <- "gbd19"
   
@@ -88,10 +90,10 @@ run.names.comp <- compare.run
 dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/15to49_plots/'), recursive = TRUE, showWarnings = FALSE)
   plot_15to49(loc,
               # run.vec = run_vec,
-              run.vec = c(paste0(gbdyear, '/', run.name), 'gbd20/200713_yuka'),
+              run.vec = c(paste0(gbd_year_new, '/', run.name), 'gbd20/200713_yuka'),
               base.run = paste0(run.name),
               names = c('Modified run', 'GBD20'),
-              gbdyear = gbdyear,
+              gbdyear = gbd_year_new,
               loc_name = loc.name)
 
 

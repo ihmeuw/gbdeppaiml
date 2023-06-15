@@ -27,21 +27,23 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
   array.job = FALSE
-  run.name = '220329_maggie'
-  loc <- 'AGO'
-  draw.fill <- F
+  run.name = '220407_Meixin'
+  loc <- 'TZA'
+  draw.fill <- T
   paediatric <- T
+  gbdyear <- "gbdTEST"
   n = 1000
 }else{
   run.name <- args[1]
   array.job <- as.logical(args[2])
+  loc <- as.logical(args[3])
   draw.fill <- as.logical(args[4])
   paediatric <- as.logical(args[5])
-
+  gbdyear <- as.logical(args[6])
 }
 
 test = NULL
-gbdyear = 'gbd20'
+gbdyear = gbdyear
 h_root = '/homes/mwalte10/'
 lib.loc <- paste0(h_root,"R/",R.Version(),"/",R.Version(),".",R.Version())
 .libPaths(c(lib.loc,.libPaths()))
@@ -124,7 +126,7 @@ print('loc.table loaded')
     print('draw.list exists')
     ## subset out additional outputs (theta, under-1 splits)
     ## this could probably be tidied up
-    draw.list <- draw.list[grepl('.csv', draw.list) & !grepl('theta_', draw.list) & !grepl('under_', draw.list)]
+    draw.list <- draw.list[grepl('.csv', draw.list) & !grepl('theta_', draw.list) & !grepl('under_', draw.list) & !grepl('missing_', draw.list)]
    # draw.list <- draw.list[gsub('.csv', '', draw.list) %in% 1:1000]
     
     dt <- lapply(draw.list, function(draw){

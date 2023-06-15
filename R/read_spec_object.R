@@ -152,50 +152,51 @@ if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))) {
     
     if(anc.prior.sub){
       print("Substituting ANC bias prior")
-      dt <- gbdeppaiml::sub.anc.prior(dt,loc)
-
+      # dt <- gbdeppaiml::sub.anc.prior(dt,loc)
+      dt <- sub.anc.prior(dt,loc)
     }
     
     if(anc.prior.sub){
       print("Substituting ANC bias prior")
-      dt <- gbdeppaiml::sub.anc.prior(dt,loc)
+      #dt <- gbdeppaiml::sub.anc.prior(dt,loc)
+      dt <- sub.anc.prior(dt,loc)
     }
     
 
 
     ## Subsetting KEN counties from province, updated 5/5/2020
 
-    # if(grepl('KEN', loc)){
-    #   ken.anc.path <- paste0('/share/hiv/epp_input/gbd20/kenya_anc_map.csv')
-    #   ken.anc <- fread(ken.anc.path)
-    #   if(loc %in% ken.anc$ihme_loc_id){
-    #     county.sites <- ken.anc[ihme_loc_id == loc, site]
-    #     prov.sites <- unique(attr(dt, "eppd")$ancsitedat$site)
-    # 
-    # 
-    #     attr(dt, "eppd")$anc.used[] <- FALSE
-    #     
-    #     temp1 <- attr(dt, "eppd")$anc.prev[]
-    #     temp1 <- temp1[0,]
-    # 
-    #     temp2 <- attr(dt, "eppd")$anc.n[]
-    #     temp2 <- temp2[0,]
-    #  
-    #     for(site in unique(county.sites)){
-    #       attr(dt, "eppd")$anc.used[grepl(site,names(attr(dt, "eppd")$anc.used))] <- TRUE
-    #       keep_index <- which(grepl(site,rownames(attr(dt, "eppd")$anc.prev)))
-    #       temp1 <- rbind(temp1,attr(dt, "eppd")$anc.prev[keep_index,,drop =FALSE])
-    #       temp2 <- rbind(temp2,attr(dt, "eppd")$anc.n[keep_index,,drop =FALSE])
-    #       
-    #     }
-    #     
-    #     attr(dt, "eppd")$anc.prev <- temp1
-    #     attr(dt, "eppd")$anc.n <- temp2
-    #     attr(dt, "eppd")$anc.used <- attr(dt, "eppd")$anc.used[attr(dt, "eppd")$anc.used] 
-    #     attr(dt, 'eppd')$ancsitedat$used[!(attr(dt, 'eppd')$ancsitedat$site %in% county.sites | grepl(loc.table[ihme_loc_id == loc, location_name], attr(dt, 'eppd')$ancsitedat$site))] <- FALSE
-    #     attr(dt, 'eppd')$ancsitedat <- attr(dt, 'eppd')$ancsitedat[which(attr(dt, 'eppd')$ancsitedat$used==TRUE),]
-    #  }
-    # }
+    if(grepl('KEN', loc)){
+      ken.anc.path <- paste0('/share/hiv/epp_input/gbd20/kenya_anc_map.csv')
+      ken.anc <- fread(ken.anc.path)
+      if(loc %in% ken.anc$ihme_loc_id){
+        county.sites <- ken.anc[ihme_loc_id == loc, site]
+        prov.sites <- unique(attr(dt, "eppd")$ancsitedat$site)
+
+
+        attr(dt, "eppd")$anc.used[] <- FALSE
+
+        temp1 <- attr(dt, "eppd")$anc.prev[]
+        temp1 <- temp1[0,]
+
+        temp2 <- attr(dt, "eppd")$anc.n[]
+        temp2 <- temp2[0,]
+
+        for(site in unique(county.sites)){
+          attr(dt, "eppd")$anc.used[grepl(site,names(attr(dt, "eppd")$anc.used))] <- TRUE
+          keep_index <- which(grepl(site,rownames(attr(dt, "eppd")$anc.prev)))
+          temp1 <- rbind(temp1,attr(dt, "eppd")$anc.prev[keep_index,,drop =FALSE])
+          temp2 <- rbind(temp2,attr(dt, "eppd")$anc.n[keep_index,,drop =FALSE])
+
+        }
+
+        attr(dt, "eppd")$anc.prev <- temp1
+        attr(dt, "eppd")$anc.n <- temp2
+        attr(dt, "eppd")$anc.used <- attr(dt, "eppd")$anc.used[attr(dt, "eppd")$anc.used]
+        attr(dt, 'eppd')$ancsitedat$used[!(attr(dt, 'eppd')$ancsitedat$site %in% county.sites | grepl(loc.table[ihme_loc_id == loc, location_name], attr(dt, 'eppd')$ancsitedat$site))] <- FALSE
+        attr(dt, 'eppd')$ancsitedat <- attr(dt, 'eppd')$ancsitedat[which(attr(dt, 'eppd')$ancsitedat$used==TRUE),]
+     }
+    }
       
     # 
     if(!anc.rt){

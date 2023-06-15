@@ -41,10 +41,11 @@ args <- commandArgs(trailingOnly = TRUE)
 if(length(args) > 0) {
   run.name = args[1]
   loc = args[2]
+  gbdyear = args[3]
 } else {
   run.name = '220329_maggie'
   loc <- 'AGO'
-
+  gbdyear = "gbdTEST"
 }
 library(mortdb, lib ="/mnt/team/mortality/pub/shared/r/4")
 
@@ -56,5 +57,5 @@ if(file.exists(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
 }else{
   locs <- loc.table[epp == 1, ihme_loc_id]
 }
-get_summary(loc,  run.name = run.name, gbdyear = 'gbd20',
+get_summary(loc,  run.name = run.name, gbdyear = gbdyear,
             paediatric = F, old.splits = F)
