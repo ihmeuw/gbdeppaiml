@@ -66,8 +66,8 @@ for(loc in loc.list){
 }
 
 
-# write.csv(art.init,paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/artinit_onart/compiled_locations.csv'), row.names = F)
-art.init = fread(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/artinit_onart/compiled_locations.csv'))
+write.csv(art.init,paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/artinit_onart/compiled_locations.csv'), row.names = F)
+# art.init = fread(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/artinit_onart/compiled_locations.csv'))
 
 # Sum ART initiations over the year, find the mean # on ART over the year
 year.dt = art.init[,.(art_init = sum(art_init), on_art = mean(on_art)), by = c('year', 'sex', 'draw', 'ihme_loc_id', 'perc_switch')]

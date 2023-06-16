@@ -109,7 +109,7 @@ pop.all <-  get_mort_outputs(
   run_id = 271,
   age_group_id = c(28, 238,21 ,50:127),
   location_id = loc.table[ihme_loc_id %in% run.list, location_id], sex_id = 1:2)
-pop.all = pop.all[year_id >= 1970]
+pop.all = pop.all[year_id >= 1970 & year_id < transition.year]
 pop.all[,upload_population_single_year_estimate_id := NULL]
 setnames(gbd.pop.dt, 'mean', 'population')
 pop.all = rbind(pop.all, gbd.pop.dt[age_group_id == 21], use.names = T)

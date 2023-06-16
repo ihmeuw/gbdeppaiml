@@ -129,7 +129,8 @@ if(loc %in% c('KHM', 'MMR')){
 ## Sub ART forecast - Set to TRUE for previous ART forecasting methods (age/sex/CD4-specific coverage)
 ## Set to FALSE for new art initiation method
 sub.art.forecast = ifelse(grepl('2', attr(dt, 'specfp')$group), T, F)
-attr(dt, 'specfp')$art_pred = sub.art.forecast
+sub.art.forecast = T
+attr(dt, 'specfp')$art_pred_method = sub.art.forecast
 ## Transmission rate projection - has been tested for group 1A
 ## Set to FALSE for direct incidence input (same method as Spectrum)
 trans.rate.pred <- ifelse(attr(dt, 'specfp')$group == '1A', T, F)
