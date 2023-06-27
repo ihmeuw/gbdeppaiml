@@ -13,7 +13,7 @@ date <- substr(gsub("-","",Sys.Date()),3,8)
 library(data.table)
 
 ## Arguments
-run.name <- "220926_albatross"
+run.name <- "230620_falcon"
 gbd.run.name <- "200713_yuka"
 transition.year <- 2021
 proj.end <- 2050
@@ -44,7 +44,7 @@ loc.table <- data.table(get_locations(hiv_metadata = T))
 
 ### Code
 forecast.list <- readRDS(paste0('/ihme/hiv/spectrum_input/20230202_forecasting/loc_list.RDS'))
-loc.list = loc.table[spectrum == 1, ihme_loc_id]
+loc.list = loc.table[spectrum == 1 & !grepl('NOR_6', ihme_loc_id) & !(grepl('GBR', ihme_loc_id) & most_detailed == 0), ihme_loc_id]
 
 # Prep demographic inputs
 if(!file.exists(paste0(input.dir, "population/"))) {
@@ -63,7 +63,7 @@ if(!file.exists(paste0('/share/hiv/spectrum_input/', run.name, '_', c.scenario, 
                      "-e /share/temp/sgeoutput/", user, "/errors ",
                      "-o /share/temp/sgeoutput/", user, "/output ",
                      code.dir, "gbd/singR_shell.sh ",
-                     code.dir, "gbd/forecasting_prep_drivers.R"," ",run.name," ",gbd.run.name, " ",c.scenario, " ", proj.end, " ", 10)
+                     code.dir, "gbd/forecasting_prep_drivers.R"," ",run.name," ",gbd.run.name, " ",c.scenario, " ", proj.end, " ", 10, " ", n.draws, " ", transition.year)
   print(drivers.job)
   system(drivers.job)
 }

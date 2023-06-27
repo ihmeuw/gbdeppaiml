@@ -118,14 +118,14 @@ forecast.sub <- function(loc, start.year, stop.year, j, dt, run.name, c.scenario
   art.for<- art.for[CD4 == 0, cat := 7]
   art.for[sex == 'male', sex := 'Male']
   art.for[sex == 'female', sex := 'Female']
-  art.for = art.for[year >= 2018]
+  art.for = art.for[year >= transition.year - 1]
   ## Dimensions = CD4, age, sex, years
-  art.arr = array(0, c(7, 66, 2, length(2018:stop.year)))
-  dimnames(art.arr) <- list(cd4stage = paste0(1:7), age = paste0(15:80), sex = c('Male', 'Female'), year = paste0(2018:stop.year))
+  art.arr = array(0, c(7, 66, 2, length((transition.year - 1):(stop.year + 1))))
+  dimnames(art.arr) <- list(cd4stage = paste0(1:7), age = paste0(15:80), sex = c('Male', 'Female'), year = paste0((transition.year - 1):(stop.year + 1)))
   for(c.cd4 in paste0(1:7)){
     for(c.sex in c('Male', 'Female')){
       for(c.age in paste0(15:80)){
-        for(c.year in paste0(2018:stop.year)){
+        for(c.year in paste0((transition.year - 1):(stop.year + 1))){
           art.replace = art.for[cat == as.numeric(c.cd4) & age == as.numeric(c.age) & sex == c.sex & year == as.numeric(c.year)]
           art.arr[c.cd4, c.age, c.sex, c.year] = as.numeric(art.replace[, art_coverage])
         }

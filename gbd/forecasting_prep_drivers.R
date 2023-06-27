@@ -20,28 +20,21 @@ if(length(args) > 0) {
   c.scenario <- args[3]
   end_year <- as.integer(args[4])
   cores <- as.integer(args[5])
+  n.draws <- as.integer(args[6])
+  extension.year <- as.integer(args[7])
+  
+  
 } else {
-
-  c.fbd_version <- "230222_dove"
+  c.fbd_version <- "230620_falcon"
   c.gbd_version <- "200713_yuka"
   c.scenario <- 'reference'
   end_year <- 2050
-  cores <- 25
+  cores <- 40
+  n.draws <- 10
+  extension.year <- 2021
 }
 
 library('dplyr')
-# c.args <- read.csv(paste0(code.dir,"hiv_forecasting_inputs/run_versions_2020.csv"))
-# c.args <- data.table(c.args)
-# c.args <- c.args[fbd_version==c.fbd_version]
-# c.gbd_version <- c.args[["gbd_version"]]
-# c.gbd_input_version <- c.args[["gbd_input_version"]]
-# extension.year <- c.args[["extension_year"]]
-# c.draws <- c.args[["draws"]]
-# end_year <- as.numeric(end_year)
-# 
-# 
-# stage.list <- c("stage_1")
-# 
 ### Functions
 invisible(sapply(list.files("/share/cc_resources/libraries/current/r/", full.names = T), source))
 library(mortdb, lib = "/mnt/team/mortality/pub/shared/r/4")
@@ -53,7 +46,8 @@ scenario.dict <- scenario.dict[code != 2,]
 
 ### Tables
 loc.table <- data.table(get_locations(hiv_metadata = T, level = "all", gbd_year = 2020))
-loc.list <- readRDS(paste0('/ihme/hiv/spectrum_input/20230202_forecasting/loc_list.RDS'))
+# loc.list <- readRDS(paste0('/ihme/hiv/spectrum_input/20230202_forecasting/loc_list.RDS'))
+loc.list = loc.table[spectrum == 1 & !grepl('NOR_6', ihme_loc_id) & !(grepl('GBR', ihme_loc_id) & most_detailed == 0), ihme_loc_id]
 
 #######################################################################################
 ###Prep Data
@@ -61,10 +55,22 @@ loc.list <- readRDS(paste0('/ihme/hiv/spectrum_input/20230202_forecasting/loc_li
 ###Child ART
 proc_dat <- function(loc) {
   print(loc)
-for(loc in loc.list){
-  print(loc)
-  children = find.children(loc)
-  if(length(children) == 0){
+  dirs <- list(
+    paste0("/share/hiv/spectrum_draws/",c.gbd_version,"/compiled/stage_1/", loc, "_coverage.csv"),
+    paste0("/share/hiv/epp_output/gbd20/",c.gbd_version,"/compiled/", loc, "_coverage.csv")
+  )
+  find.path = F
+  for(path in dirs) {
+    if(file.exists(path)) {
+      print(path)
+      find.path = T
+      break
+    }
+  }
+  
+  if(!find.path){
+    children = find.children(loc)
+  }else{
     children = loc
   }
 
@@ -85,8 +91,6 @@ for(loc in loc.list){
         paste0("/share/hiv/epp_output/gbd20/",c.gbd_version,"/compiled/", iso, "_coverage.csv")
       )
     }
-
-
     for(path in dirs) {
       
       if(file.exists(path)) {
@@ -101,6 +105,8 @@ for(loc in loc.list){
     
     data <- fread(path) 
     data <- data.table(data)
+    ## some epp-asm coverage files have mixed up column names for some draws
+    data <- data[run_num %in% 1:1000 & year %in% 1970:extension.year]
     data[,eligible_pop := as.numeric(eligible_pop)]
     data <- data[,.(coverage=mean(coverage),
                     eligible_pop=mean(eligible_pop)),
@@ -120,9 +126,6 @@ for(loc in loc.list){
                            eligible_pop = sum(eligible_pop)), by = .(age,sex,year,type)]
   parent$ihme_loc_id <- loc
   print(which(loc == loc.list) / length(loc.list))
-  final = parent
-  spec = rbind(spec, final, use.names = T)
-}
   return(parent)
 }
 # spec.list <- data.table()
@@ -130,10 +133,9 @@ for(loc in loc.list){
 #   x <- proc_dat(loc)
 #   spec.list <- rbind(spec.list, x)
 # }
-spec.list <- mclapply(loc.list, proc_dat, mc.cores = 20)
-# spec.list <- spec.list[unlist(lapply(spec.list, is.data.table))]
-
+spec.list <- mclapply(loc.list, proc_dat, mc.cores = cores, mc.preschedule = F)
 spec <- rbindlist(spec.list)
+
 spec <- data.table(spec)
 spec <- spec[year > 1979]
 SAVE <- spec
@@ -245,7 +247,10 @@ SAVE_no_covid <- data
 data <- data[year_id == extension.year | year_id == roc_year]
 data[,n_years:=extension.year-roc_year]
 data[year_id == roc_year,year_id:=9999]
-data.w <- dcast.data.table(unique(data),ihme_loc_id+variable+n_years~year_id)
+## have to subset to unique locations because some locations have absent values in some years
+# data.unique = data[,.N, by = c('ihme_loc_id')]
+# data.unique = data.unique[N == 12]
+data.w <- dcast.data.table(data[ihme_loc_id %in% data.unique$ihme_loc_id],ihme_loc_id+variable+n_years~year_id)
 
 setnames(data.w,"9999","roc_year")
 setnames(data.w,paste0(extension.year),"extension_year")
@@ -272,7 +277,7 @@ write.csv(summ.rocs,paste0(jpath,"Project/forecasting/hiv/data/",c.fbd_version,"
 
 
 #Load Past Data
-data <- rbind(art.price,child.art,cotrim,pmtct.final, financ.data, ldi)
+data <- rbind(child.art,cotrim,pmtct.final)
 
 #make template, merge
 data <- data[order(variable,ihme_loc_id,year_id)]
@@ -305,60 +310,24 @@ make_pred <- function(c.draw,dt) {
   dt[,draw:=c.draw]
 }
 
-rm(list = c("merge.ldi", "spec.list", "spec"))
+rm(list = c("spec.list", "spec"))
 fit.data <- merge(data,summ.rocs,by=c("variable"),all=T)
 
-if(c.fbd_version == "20200805" | c.fbd_version == '20210129' | c.fbd_version == '20210429'){
-  
-  if (c.scenario %in% c("reference","covid_ref","no_covid")) {
-    setnames(fit.data,"p45","roc_low")  
-    setnames(fit.data,"p55","roc_up") 
-  }
-  
-  if (c.scenario %in% c("better","covid_better")) {
-    setnames(fit.data,"p80","roc_low")  
-    setnames(fit.data,"p90","roc_up")
-    fit.data[variable=="ART Price",roc_low:=p10]
-    fit.data[variable=="ART Price",roc_up:=p20]
-  }
-  if (c.scenario %in% c("worse","covid_worse")) {
-    setnames(fit.data,"p10","roc_low")  
-    setnames(fit.data,"p20","roc_up")
-    fit.data[variable=="ART Price",roc_low:=p80]
-    fit.data[variable=="ART Price",roc_up:=p90]
-  }  
-} else {
-  
-  if (c.scenario == "reference" ) {
-    setnames(fit.data,"p45","roc_low")  
-    setnames(fit.data,"p55","roc_up") 
-  }
-  
-  if (c.scenario %in% c("better")) {
-    setnames(fit.data,"p80","roc_low")  
-    setnames(fit.data,"p90","roc_up")
-    fit.data[variable=="ART Price",roc_low:=p10]
-    fit.data[variable=="ART Price",roc_up:=p20]
-  }
-  if (c.scenario %in% c("worse")) {
-    setnames(fit.data,"p10","roc_low")  
-    setnames(fit.data,"p20","roc_up")
-    fit.data[variable=="ART Price",roc_low:=p80]
-    fit.data[variable=="ART Price",roc_up:=p90]
-  }  
-  
+if (c.scenario == "reference" ) {
+  setnames(fit.data,"p45","roc_low")  
+  setnames(fit.data,"p55","roc_up") 
 }
+if (c.scenario %in% c("better")) {
+  setnames(fit.data,"p80","roc_low")  
+  setnames(fit.data,"p90","roc_up")
+}
+if (c.scenario %in% c("worse")) {
+  setnames(fit.data,"p10","roc_low")  
+  setnames(fit.data,"p20","roc_up")
+}  
 
-
-
-
-n.draws <- 50
 fit.data[,paste0('p', c('05', seq(10,95, 5))) := NULL]
-# ldi.data <- data[variable == 'LDI']
-# spend.data <- data[variable == "Spend"]
-# # fit.data <- fit.data[!variable %in% c('Spend', 'LDI')]
-# fit.data <- fit.data[!variable %in% c('LDI')]
-preds <- rbindlist(mclapply(1:n.draws,make_pred,dt=fit.data,mc.cores = 20, mc.preschedule = F))
+preds <- rbindlist(mclapply(1:n.draws,make_pred,dt=fit.data,mc.cores = cores, mc.preschedule = F))
 preds[,value := ifelse(is.na(value), pred, value)]
 preds[,value := ifelse(is.nan(pred), 0, value)]
 
@@ -366,12 +335,6 @@ pred.draws <-  preds[,.SD,.SDcols=c("ihme_loc_id","year_id","variable","pred","v
 
 
 pred.summ <- pred.draws[,.(pred_mean=mean(pred,na.rm=T)),by=.(ihme_loc_id,year_id,variable,roc_year)]
-# 
-# ldi.data[, pred_mean := value]
-# # spend.data[,pred_mean := value]
-#  pred.summ <- rbind(pred.summ, ldi.data, use.names = T)
-# pred.summ <- rbind(pred.summ, spend.data, use.names = T)
-
 
 #######################################################################################
 ###Save Files
@@ -410,7 +373,7 @@ mclapply(loc.list, function(c.iso) {
   assert_values(temp,names(temp), test = "not_nan")
   assert_values(temp,names(temp), test = "not_na")
   write.csv(temp, paste0('/share/hiv/spectrum_input/', c.fbd_version, '_', c.scenario, '/childARTcoverage/' ,c.iso,".csv"),row.names=F)
-}, mc.cores = cores)
+}, mc.cores = cores, mc.preschedule = F)
 
 # pred.summ <- read.csv(paste0(jpath,"Project/forecasting/hiv/data/",c.fbd_version,"/forecasted_inputs_", c.scenario, ".csv"))
 pred.summ <- data.table(pred.summ)
@@ -467,7 +430,7 @@ for(c.iso in loc.list){
   #Note that PMTCT was not updated between GBD 17 and GBD 19, hence pulling from this folder
   #Aggregate past PMTCTs created just for forecast
   if(file.exists(paste0("/share/hiv/spectrum_input/20200505_forecasting/PMTCT/",c.iso,".csv")) |
-     file.exists(paste0('/share/hiv/spectrum_input/190415_orca/PMTCT/', c.iso, '.csv'))){
+     file.exists(paste0('/share/hiv/spectrum_input/', c.gbd_version, '/PMTCT/', c.iso, '.csv'))){
     # if(!c.iso %in% run.locs){
     #   print("using aggregated inputs")
     #
@@ -478,8 +441,8 @@ for(c.iso in loc.list){
     #
     #
     # } else {
-      if(file.exists(paste0('/share/hiv/spectrum_input/190415_orca/PMTCT/', c.iso, '.csv'))){
-        loc.past <- fread(paste0('/share/hiv/spectrum_input/190415_orca/PMTCT/', c.iso, '.csv'))
+      if(file.exists(paste0('/share/hiv/spectrum_input/', c.gbd_version, '/PMTCT/', c.iso, '.csv'))){
+        loc.past <- fread(paste0('/share/hiv/spectrum_input/', c.gbd_version, '/PMTCT/', c.iso, '.csv'))
       }else{
         loc.past <- read.csv(paste0("/share/hiv/spectrum_input/20200505_forecasting/PMTCT/",c.iso,".csv"))
         loc.past <- data.table(loc.past)
@@ -488,7 +451,7 @@ for(c.iso in loc.list){
 
   }else{
     children.names <- find.children(c.iso)
-    children <- paste0('/ihme/hiv/spectrum_input/190415_orca/PMTCT/', children.names, '.csv')
+    children <- paste0('/ihme/hiv/spectrum_input/', c.gbd_version, '/PMTCT/', children.names, '.csv')
 
     loc.past <- list()
     for(file in children){

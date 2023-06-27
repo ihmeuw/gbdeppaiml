@@ -20,8 +20,8 @@ library(data.table); library(ggplot2); library(parallel); library(assertable)
 print('libs read in')
 ### Tables
 loc.table <- data.table(get_locations(hiv_metadata = T, level = "all", gbd_year = 2020))
-run.list <- loc.table[spectrum == 1, ihme_loc_id]
-# hiv.table = fread('/mnt/share/hiv/location_table/latest/hiv_location_table.csv')
+run.list <- loc.table[spectrum == 1 & !grepl('NOR_6', ihme_loc_id) & !(grepl('GBR', ihme_loc_id) & most_detailed == 0), ihme_loc_id]
+# forecast_loc_table <- get_location_metadata(location_set_id = 39, gbd_round_id = 7, decomp_step = 'iterative')
 
 args <- commandArgs(trailingOnly = TRUE)
 run.name <- args[1]
@@ -34,7 +34,7 @@ print(cores)
 
 ### Arguments
 if (is.na(args[1])) {
-  run.name <- "230222_dove"
+  run.name <- "230620_falcon"
   max.year <- 2050
   last_gbd_run <- "200713_yuka"
   transition.year <- 2021
@@ -47,29 +47,26 @@ births <- T
 static_inputs <- T
 gbdyear = 'gbd20'
 
-###This will get updated based on what demographics provides us
 invisible(sapply(list.files("/share/cc_resources/libraries/current/r/", full.names = T), source))
-in.path <- paste0("/ihme/forecasting/data/5/future/hiv/20190904_save_hiv_demographics/")
 out.dir <- paste0('/ihme/hiv/epp_input/', gbdyear, '/', run.name, "/")
-original.path <- paste0("/ihme/hiv/spectrum_input/20190826_forecasting/")
 plot.dir <- paste0("/share/hiv/spectrum_plots/",run.name,"_forecasting/inputs/")
 dir.create(plot.dir,recursive = TRUE)
 age.map <- get_age_map(gbd_year = 2019, type = "all")
+
+###This will get updated based on what demographics provides us
 fp_map <- fread(paste0('/ihme/hiv/spectrum_input/20220418_forecasting/fp_map.csv'))
 
-loc.table <- data.table(get_locations(hiv_metadata = T))
 ##need to aggregate all of the locations that we don't run individually
-agg.locs <- c(loc.table[spec_agg == 1 & grepl('KEN', ihme_loc_id), ihme_loc_id], 'IDN', 'IND_44538',  'ZAF', 'NGA', 'ETH', 'IND', 'USA', 'BRA', 'CHN')
+# agg.locs <- c(loc.table[spec_agg == 1 & grepl('KEN', ihme_loc_id), ihme_loc_id], 'IDN', 'IND_44538',  'ZAF', 'NGA', 'ETH', 'IND', 'USA', 'BRA', 'CHN')
 
 
-forecast_loc_table <- get_location_metadata(location_set_id = 39, gbd_round_id = 7, decomp_step = 'iterative')
 
 
 ####################
 ### POPULATIONS  ##
 ####################
-# We have all locations for forecasted 5-year-age-group population
-# Just need to make sure run_id is correct
+# 5-year-age-group population
+# Make sure run_id for GBD population corresponds with forecasted population
 pop <- fread(fp_map[run.name == run.name & var == 'population',fp])
 pop <- pop[year_id >= transition.year]
 pop[age_group_id %in% c(2,3,4,5), age_group_id := 1]
@@ -103,7 +100,9 @@ setnames(pop, c('year_id', 'sex_id', 'mean'), c('year', 'sex', 'value'))
 nat.pop.future = pop[location_id %in% unique(loc.table[level==3,location_id]) & year > max(nat.pop$year)]
 nat.pop = rbind(nat.pop, nat.pop.future)
 
-# get single year age pops to calculate age splits
+## Get single year age pops to calculate age splits
+## Forecasting doesn't currently generate single year age population in the future
+## So we take the age splits of the final GBD year of population and apply them to 5-year age groups in the future
 pop.all <-  get_mort_outputs(
   "population single year", "estimate",
   run_id = 271,
@@ -178,8 +177,8 @@ if(population){
 if(migration){
   ##Migration gets updated as per GBD
   ##from Tahiya via email, 119 is the best migration estimates, which I think follows from 35 of the terminator run, which is 271 of population estimates
-  # Many subnationals aren't present in forecasted migration - currently population splitting nationals
-  # Took the "no_mig" list from prep_inputs_forecasting.R in the hiv_forecasting_inputs repo, where we set migration to 0 in the future
+  # Missing subnationals - population splitting nationals
+  # "No_mig" list is same as prep_inputs_forecasting.R in the hiv_forecasting_inputs repo, where we set migration to 0 in the future
   gbd_mig <- fread(paste0("/mnt/team/fertilitypop/pub/population/popReconstruct/271/upload/net_migration_single_year.csv"))[year_id >= 1970]
   gbd_mig <- gbd_mig[year_id < transition.year]
   gbd_mig_copy = merge(gbd_mig,loc.table[,.(location_id,ihme_loc_id,parent_id)],by="location_id")
@@ -285,8 +284,7 @@ if(migration){
 ####################
 ###    ASFR     ####
 ####################  
-# ASFR forecasts are missing the same subnationals as migration forecasts
-# For missing subnats - currently using national ASFR forecasts multiplied by ratio of subnat:national in max year of subnat estimates
+# For missing subnats - using national ASFR forecasts multiplied by ratio of subnat:national in max year of subnat estimates
 # Same as what was done in prep_inputs_forecasting.R in hiv_forecasting_inputs repo
 if(asfr){
   dir.create(paste0(out.dir,'/ASFR/'), showWarnings = T, recursive=TRUE)
@@ -300,7 +298,7 @@ if(asfr){
                                      gbd_round_id=7, 
                                      decomp_step = "iterative")
   asfr_forecasts = asfr_forecasts[year_id >= transition.year]
-  asfr_gbd = asfr_gbd[year_id < transition.year]
+  asfr_gbd = asfr_gbd[year_id <= transition.year]
   asfr_gbd <- asfr_gbd[age_group_id %in% c(8:14) & sex_id == 2, 
                        list(year_id, age_group_id, value=mean_value, location_id)]
   
@@ -396,8 +394,8 @@ if(births){
   births = births[,population := sum(population), by = c('location_id', 'year_id', 'sex_id')]
   births[,age_group_id := 164]
   births <- unique(births[,.(age_group_id, location_id, year_id, sex_id, population, run_id)])
-  ext.births = births[year_id == max(births$year_id)]
-  ext.births = merge(ext.births, pop.all[age==0 & year_id == max(births$year_id), .(location_id, sex_id, age_0 = population)], by = c('location_id', 'sex_id'))
+  ext.births = births[year_id == max(pop.all$year_id)]
+  ext.births = merge(ext.births, pop.all[age==0 & year_id == max(year_id), .(location_id, sex_id, age_0 = population)], by = c('location_id', 'sex_id'))
   ext.births[,prop := population/age_0]
   for(loc in run.list){
     print(loc)
@@ -424,173 +422,173 @@ if(births){
 
 
 #HIV Inputs - these get held constant for extension years
-if(static_inputs){
-
-  lapply(lower.list, function(loc){
-    for(c.input in 
-        c(
-      'onARTmortality',
-                     'noARTmortality',
-                     'averageCD4duration',
-                     'TFRreduction',
-                     'percentBF',
-                     'childProgParam',
-                     'childMortNoART',
-                     'childMortOnART',
-                     'childARTDist',
-                     'childDistNewInf',
-                     'averageCD4duration',
-                     'prevalence', 
-                     'childARTDist',
-                     'childARTeligibility',
-                     'adultARTeligibility',
-                     'SRB',
-                     'PMTCTdropoutRates'
-                     )
-      )
-    {
-      print(loc)
-      print(c.input)
-      
-      if(!loc %in% run.locs){
-
-        sub_loc <- first(find.children(loc))
-        
-      } else {
-        sub_loc <- loc
-      }
-      
-      if(c.input == 'prevalence'){
-        dir.list <- list(paste0('/share/hiv/spectrum_input/', last_gbd_run,"/",c.input, '/', sub_loc, '.csv'),
-                         paste0('/share/hiv/epp_output/gbd20/', last_gbd_run,"/aggregated/",c.input, '/', sub_loc, '.csv'))
-        for(x in dir.list){
-          if(file.exists(x)){
-            input.dt <- fread(x)
-            break
-          }
-        }
-      }else{
-        if(file.exists(paste0('/share/hiv/spectrum_input/', last_gbd_run,"/",c.input, '/', sub_loc, '.csv'))){
-          input.dt <- fread(paste0('/share/hiv/spectrum_input/', last_gbd_run,"/",c.input, '/', sub_loc, '.csv'))
-        }else{
-          next
-        }
-      }
-
-      if("year" %in% colnames(input.dt)){
-          max.obs <- max(input.dt$year)
-          ext.years <- setdiff(max(unique(input.dt$year)):max.year,unique(input.dt$year))
-          
-          if(max.obs < max.year){
-            for(y in ext.years){
-              extend.dt <- input.dt[year==max.obs]
-              extend.dt <- extend.dt[,year:=y]
-              input.dt <- rbind(input.dt,extend.dt)
-            }
-          }
-          
-      }
-        #Exception for adult ART eligibility
-        if(c.input == "adultARTeligibility"){
-          input.dt <- unique(input.dt[year > max.obs,cd4_threshold := 999])
-        }
-        
-        dir.create(paste0(out_dir,'/', c.input, '_a/'),recursive = T)
-        write.csv(input.dt, paste0(out_dir,"/", c.input, '_a/', loc, '.csv'), row.names = F)
-      
-    }
-  })
-  dir.check <- paste0(out_dir, c('onARTmortality',
-                                   'noARTmortality',
-                                   'averageCD4duration',
-                                   'TFRreduction',
-                                   'percentBF',
-                                   'childProgParam',
-                                   'childMortNoART',
-                                   'childMortOnART',
-                                   'childARTDist',
-                                   'childDistNewInf',
-                                   'averageCD4duration',
-                                   'prevalence', 
-                                   'childARTDist',
-                                   'childARTeligibility',
-                                   'adultARTeligibility',
-                                   'SRB',
-                                   'PMTCTdropoutRates'), '_a')
-  
-  # for(dir in dir.check){
-  #   print(dir)
-  #   lapply(lower.list, check_loc_results, check_dir = dir,prefix="",postfix=".csv")
-  #         
-  # }
-
-
-  mclapply(lower.list, function(loc){
-    
-      for(c.input in c('adultARTcoverage')){
-        print(loc)
-        
-        epp = loc.table[ihme_loc_id==loc,epp]
-
-        model_version <- "200713_yuka"
-      
-        
-        if(loc %in% gsub(".csv","",list.files("/share/hiv/spectrum_prepped/aggregates/191206_inputs_testing"))){
-          model_version <- "191206_inputs_testing"
-        }
-        
-        if(epp==1 & 
-           loc %in% gsub("_Adult_ART_cov.csv","",
-           list.files(paste0("/home/j//WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/extrapolate_ART/PV_testing/UNAIDS_2019")))){
-          
-           input.dt <- fread(paste0("/home/j//WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/extrapolate_ART/PV_testing/UNAIDS_2019/",loc,"_Adult_ART_cov.csv"))
-           input.dt <- convert.art(out.dt = input.dt, loc = loc, c.fbd_version = NULL) ##Adds on cov_pct total column required by Spectrum
-           input.dt[,pop_start := NULL]
-             
-          } else if(file.exists(paste0('/share/hiv/spectrum_input/',model_version,'/',c.input, '/', loc, '.csv'))){
-            
-           input.dt <- fread(paste0('/share/hiv/spectrum_input/',model_version,'/',c.input, '/', loc, '.csv'))
-            
-          } else {
-            
-          input.dt <- 1
-        }
-        
-        if(!is.data.table(input.dt)){
-
-          input.dt <- fread(paste0('/share/hiv/spectrum_input/20200702_forecasting/',c.input,"/", loc, '.csv'))  ##These are aggregate inputs generated only for forecasting
-        }
-
-        print(model_version)
-        
-        max.obs <- max(input.dt$year)
-        ext.years <- setdiff(max(unique(input.dt$year)):max.year,unique(input.dt$year))
-        
-        if(max.obs < max.year){
-          for(y in ext.years){
-            extend.dt <- input.dt[year==max.obs]
-            extend.dt <- extend.dt[,year:=y]
-            input.dt <- rbind(input.dt,extend.dt)
-          }
-        }
-        
-        if("ART_cov_pct_total" %in% colnames(input.dt)){
-          
-          input.dt[ART_cov_pct_total >= 0, ART_cov_num := 0]
-          
-        }
-        
-          input.dt[ART_cov_pct >= 0, ART_cov_num := 0]
-        
-        dir.create(paste0(out_dir,'/', c.input, '_a/'),recursive = T)
-        write.csv(input.dt, paste0(out_dir,"/", c.input, '_a/', loc, '.csv'), row.names = F)
-        
-      }
-  },mc.cores = cores)
-   check_loc_results(lower.list,paste0(out_dir, '/adultARTcoverage_a/'),prefix="",postfix=".csv")
-  
-  
-  
-}
+# if(static_inputs){
+# 
+#   lapply(run.list, function(loc){
+#     for(c.input in 
+#         c(
+#       'onARTmortality',
+#                      'noARTmortality',
+#                      'averageCD4duration',
+#                      'TFRreduction',
+#                      'percentBF',
+#                      'childProgParam',
+#                      'childMortNoART',
+#                      'childMortOnART',
+#                      'childARTDist',
+#                      'childDistNewInf',
+#                      'averageCD4duration',
+#                      'prevalence', 
+#                      'childARTDist',
+#                      'childARTeligibility',
+#                      'adultARTeligibility',
+#                      'SRB',
+#                      'PMTCTdropoutRates'
+#                      )
+#       )
+#     {
+#       print(loc)
+#       print(c.input)
+#       
+#       if(!loc %in% run.locs){
+# 
+#         sub_loc <- first(find.children(loc))
+#         
+#       } else {
+#         sub_loc <- loc
+#       }
+#       
+#       if(c.input == 'prevalence'){
+#         dir.list <- list(paste0('/share/hiv/spectrum_input/', last_gbd_run,"/",c.input, '/', sub_loc, '.csv'),
+#                          paste0('/share/hiv/epp_output/gbd20/', last_gbd_run,"/aggregated/",c.input, '/', sub_loc, '.csv'))
+#         for(x in dir.list){
+#           if(file.exists(x)){
+#             input.dt <- fread(x)
+#             break
+#           }
+#         }
+#       }else{
+#         if(file.exists(paste0('/share/hiv/spectrum_input/', last_gbd_run,"/",c.input, '/', sub_loc, '.csv'))){
+#           input.dt <- fread(paste0('/share/hiv/spectrum_input/', last_gbd_run,"/",c.input, '/', sub_loc, '.csv'))
+#         }else{
+#           next
+#         }
+#       }
+# 
+#       if("year" %in% colnames(input.dt)){
+#           max.obs <- max(input.dt$year)
+#           ext.years <- setdiff(max(unique(input.dt$year)):max.year,unique(input.dt$year))
+#           
+#           if(max.obs < max.year){
+#             for(y in ext.years){
+#               extend.dt <- input.dt[year==max.obs]
+#               extend.dt <- extend.dt[,year:=y]
+#               input.dt <- rbind(input.dt,extend.dt)
+#             }
+#           }
+#           
+#       }
+#         #Exception for adult ART eligibility
+#         if(c.input == "adultARTeligibility"){
+#           input.dt <- unique(input.dt[year > max.obs,cd4_threshold := 999])
+#         }
+#         
+#         dir.create(paste0(out_dir,'/', c.input, '_a/'),recursive = T)
+#         write.csv(input.dt, paste0(out_dir,"/", c.input, '_a/', loc, '.csv'), row.names = F)
+#       
+#     }
+#   })
+#   dir.check <- paste0(out_dir, c('onARTmortality',
+#                                    'noARTmortality',
+#                                    'averageCD4duration',
+#                                    'TFRreduction',
+#                                    'percentBF',
+#                                    'childProgParam',
+#                                    'childMortNoART',
+#                                    'childMortOnART',
+#                                    'childARTDist',
+#                                    'childDistNewInf',
+#                                    'averageCD4duration',
+#                                    'prevalence', 
+#                                    'childARTDist',
+#                                    'childARTeligibility',
+#                                    'adultARTeligibility',
+#                                    'SRB',
+#                                    'PMTCTdropoutRates'), '_a')
+#   
+#   # for(dir in dir.check){
+#   #   print(dir)
+#   #   lapply(lower.list, check_loc_results, check_dir = dir,prefix="",postfix=".csv")
+#   #         
+#   # }
+# 
+# 
+#   mclapply(run.list, function(loc){
+#     
+#       for(c.input in c('adultARTcoverage')){
+#         print(loc)
+#         
+#         epp = loc.table[ihme_loc_id==loc,epp]
+# 
+#         model_version <- "200713_yuka"
+#       
+#         
+#         if(loc %in% gsub(".csv","",list.files("/share/hiv/spectrum_prepped/aggregates/191206_inputs_testing"))){
+#           model_version <- "191206_inputs_testing"
+#         }
+#         
+#         if(epp==1 & 
+#            loc %in% gsub("_Adult_ART_cov.csv","",
+#            list.files(paste0("/home/j//WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/extrapolate_ART/PV_testing/UNAIDS_2019")))){
+#           
+#            input.dt <- fread(paste0("/home/j//WORK/04_epi/01_database/02_data/hiv/04_models/gbd2015/02_inputs/extrapolate_ART/PV_testing/UNAIDS_2019/",loc,"_Adult_ART_cov.csv"))
+#            input.dt <- convert.art(out.dt = input.dt, loc = loc, c.fbd_version = NULL) ##Adds on cov_pct total column required by Spectrum
+#            input.dt[,pop_start := NULL]
+#              
+#           } else if(file.exists(paste0('/share/hiv/spectrum_input/',model_version,'/',c.input, '/', loc, '.csv'))){
+#             
+#            input.dt <- fread(paste0('/share/hiv/spectrum_input/',model_version,'/',c.input, '/', loc, '.csv'))
+#             
+#           } else {
+#             
+#           input.dt <- 1
+#         }
+#         
+#         if(!is.data.table(input.dt)){
+# 
+#           input.dt <- fread(paste0('/share/hiv/spectrum_input/20200702_forecasting/',c.input,"/", loc, '.csv'))  ##These are aggregate inputs generated only for forecasting
+#         }
+# 
+#         print(model_version)
+#         
+#         max.obs <- max(input.dt$year)
+#         ext.years <- setdiff(max(unique(input.dt$year)):max.year,unique(input.dt$year))
+#         
+#         if(max.obs < max.year){
+#           for(y in ext.years){
+#             extend.dt <- input.dt[year==max.obs]
+#             extend.dt <- extend.dt[,year:=y]
+#             input.dt <- rbind(input.dt,extend.dt)
+#           }
+#         }
+#         
+#         if("ART_cov_pct_total" %in% colnames(input.dt)){
+#           
+#           input.dt[ART_cov_pct_total >= 0, ART_cov_num := 0]
+#           
+#         }
+#         
+#           input.dt[ART_cov_pct >= 0, ART_cov_num := 0]
+#         
+#         dir.create(paste0(out_dir,'/', c.input, '_a/'),recursive = T)
+#         write.csv(input.dt, paste0(out_dir,"/", c.input, '_a/', loc, '.csv'), row.names = F)
+#         
+#       }
+#   },mc.cores = cores)
+#    check_loc_results(run.list,paste0(out_dir, '/adultARTcoverage_a/'),prefix="",postfix=".csv")
+#   
+#   
+#   
+# }
 
 

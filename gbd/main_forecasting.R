@@ -17,7 +17,7 @@ user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
-  run.name = '230222_dove'
+  run.name = '230620_falcon'
   loc <- "BWA"
   stop.year <- 2050
   j <- 1
@@ -129,7 +129,6 @@ if(loc %in% c('KHM', 'MMR')){
 ## Sub ART forecast - Set to TRUE for previous ART forecasting methods (age/sex/CD4-specific coverage)
 ## Set to FALSE for new art initiation method
 sub.art.forecast = ifelse(grepl('2', attr(dt, 'specfp')$group), T, F)
-sub.art.forecast = T
 attr(dt, 'specfp')$art_pred_method = sub.art.forecast
 ## Transmission rate projection - has been tested for group 1A
 ## Set to FALSE for direct incidence input (same method as Spectrum)
