@@ -142,3 +142,50 @@ write.csv(out.dt, out.path, row.names = F)
 
 
 ### End
+
+### fix missing sample size for RWA and STP
+prev_survey<- as.data.table(read.csv("/share/hiv/epp_input/gbd20/prev_surveys.csv"))
+prev_survey<- prev_survey[!(iso3=="RWA"&year== 2018 & !(is.na(n))&use=="TRUE"&sex_id %in% c(1,2))]
+View(prev_survey[iso3=="RWA"])
+prev_survey[iso3=="RWA"&sex_id==1&year==2018&age_year==15, n := 3071]
+prev_survey[iso3=="RWA"&sex_id==1&year==2018&age_year==20, n := 2217]
+prev_survey[iso3=="RWA"&sex_id==1&year==2018&age_year==25, n := 1869]
+prev_survey[iso3=="RWA"&sex_id==1&year==2018&age_year==30, n := 1777]
+prev_survey[iso3=="RWA"&sex_id==1&year==2018&age_year==35, n := 1567]
+prev_survey[iso3=="RWA"&sex_id==1&year==2018&age_year==40, n := 950]
+prev_survey[iso3=="RWA"&sex_id==1&year==2018&age_year==45, n := 716]
+prev_survey[iso3=="RWA"&sex_id==1&year==2018&age_year==50, n := 594]
+prev_survey[iso3=="RWA"&sex_id==1&year==2018&age_year==55, n := 516]
+prev_survey[iso3=="RWA"&sex_id==1&year==2018&age_year==60, n := 503]
+
+prev_survey[iso3=="RWA"&sex_id==2&year==2018&age_year==15, n := 3347]
+prev_survey[iso3=="RWA"&sex_id==2&year==2018&age_year==20, n := 2723]
+prev_survey[iso3=="RWA"&sex_id==2&year==2018&age_year==25, n := 2349]
+prev_survey[iso3=="RWA"&sex_id==2&year==2018&age_year==30, n := 2120]
+prev_survey[iso3=="RWA"&sex_id==2&year==2018&age_year==35, n := 1770]
+prev_survey[iso3=="RWA"&sex_id==2&year==2018&age_year==40, n := 1342]
+prev_survey[iso3=="RWA"&sex_id==2&year==2018&age_year==45, n := 963]
+prev_survey[iso3=="RWA"&sex_id==2&year==2018&age_year==50, n := 812]
+prev_survey[iso3=="RWA"&sex_id==2&year==2018&age_year==55, n := 728]
+prev_survey[iso3=="RWA"&sex_id==2&year==2018&age_year==60, n := 658]
+
+View(prev_survey[iso3=="STP"])
+prev_survey[iso3=="STP"&sex_id==1&year==2014&age_year==15, n := 577]
+prev_survey[iso3=="STP"&sex_id==1&year==2014&age_year==20, n := 356]
+prev_survey[iso3=="STP"&sex_id==1&year==2014&age_year==25, n := 342]
+prev_survey[iso3=="STP"&sex_id==1&year==2014&age_year==30, n := 327]
+prev_survey[iso3=="STP"&sex_id==1&year==2014&age_year==35, n := 271]
+prev_survey[iso3=="STP"&sex_id==1&year==2014&age_year==40, n := 170]
+prev_survey[iso3=="STP"&sex_id==1&year==2014&age_year==45, n := 158]
+
+prev_survey[iso3=="STP"&sex_id==2&year==2014&age_year==15, n := 595]
+prev_survey[iso3=="STP"&sex_id==2&year==2014&age_year==20, n := 408]
+prev_survey[iso3=="STP"&sex_id==2&year==2014&age_year==25, n := 422]
+prev_survey[iso3=="STP"&sex_id==2&year==2014&age_year==30, n := 379]
+prev_survey[iso3=="STP"&sex_id==2&year==2014&age_year==35, n := 296]
+prev_survey[iso3=="STP"&sex_id==2&year==2014&age_year==40, n := 247]
+prev_survey[iso3=="STP"&sex_id==2&year==2014&age_year==45, n := 171]
+
+prev_survey[iso3=="STP"&year==2014&age_year != "15-49",se := (prev*(1-prev)/n)^0.5]
+summary(prev_survey[iso3=="STP"])
+write.csv(prev_survey, "/share/hiv/epp_input/gbd20/prev_surveys.csv")

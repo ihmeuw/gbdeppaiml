@@ -11,7 +11,7 @@ library(data.table)
 
 ## Arguments
 cluster.project <- "proj_hiv"
-unaids_year <- 2020
+unaids_year <- 2019
 
 ### Functions
 library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")

@@ -27,8 +27,8 @@ source(paste0('/ihme/homes/', user, '/rt-shared-functions/cluster_functions.R'))
 
 # Arguments ---------------------------------------
 gbdyear = 'gbdTEST'
-run.name = "220329_maggie"
-spec.name = "200505_xylo"
+run.name = "220407_Meixin"
+spec.name = "220719_meixin"
 code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
 loc.table <- get_locations(hiv_metadata = T)
 cluster.project = 'proj_hiv'
@@ -51,8 +51,9 @@ all_loc_list <- c(all_loc_list, 'MOZ')
                  queue = 'all.q', memory = '100G', threads = 1, time = "02:15:00", name = paste0(loc, '_aggregate'),
                  archive = T, args = c(loc, run.name,  spec.name, 10))
     }
+  }
     
-    
+for(loc in loc.rerun){
     submit_job(script = paste0(code.dir, 'gbd/apply_age_splits.R'),
                queue = 'all.q', memory = '50G', threads = 1, time = "02:00:00", name = paste0(loc, '_age_splits'),
                archive = T, args = c(loc, run.name,  spec.name))

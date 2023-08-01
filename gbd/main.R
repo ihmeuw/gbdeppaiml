@@ -25,7 +25,7 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
   run.name = '220407_Meixin'
-  loc <- 'SAU'
+  loc <- 'STP'
   stop.year <- 2022
   j <- 5
   paediatric <- TRUE
@@ -153,6 +153,12 @@ dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
 ###Switched to a binomial model, so we can now handle observations of zero
 mod <- data.table(attr(dt, 'eppd')$hhs)[prev == 0.0005,se := 0]
 mod[prev == 0.0005, prev := 0]
+
+if(loc %in% c( "STP")){
+  cd4_mort <- readRDS("/homes/mzhang25/cd4_mort_STP.rds")
+  cd4_mort <- cd4_mort[, c(1,1,1,2,2,3,3,4,4),]
+  attr(dt, "specfp")$cd4_mort <- cd4_mort
+}
 attr(dt, 'eppd')$hhs <- data.frame(mod)
 
 ###Extends inputs to the projection year as well as does some site specific changes. This should probably be examined by cycle
@@ -200,13 +206,17 @@ if(grepl('ZAF', loc)){
   attr(dt, 'specfp')$art_mort <- attr(dt, 'specfp')$art_mort  * 0.15
 }
 
+if (loc =="MRT"){
+  attr(dt, "specfp")$ss$time_epi_start <- 1975
+}
+
 fit <- eppasm::fitmod(dt, eppmod = ifelse(grepl('IND', loc),'rlogistic',epp.mod), 
                       B0 = 1e5, B = 1e3, number_k = 3000, 
                       ageprev = ifelse(loc %in% zero_prev_locs,'binom','probit'))
 
 dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fitmod/'))
 saveRDS(fit, file = paste0('/ihme/hiv/epp_output/' , gbdyear, '/', run.name, '/fitmod/', loc, '_', j, '.RDS'))
-#fit <- readRDS('/ihme/hiv/epp_output/gbd20/200713_yuka/fitmod/')
+fit <- readRDS(paste0('/ihme/hiv/epp_output/',gbdyear,'/',run.name,'/fitmod/', loc, '_', j, '.RDS'))
 
 data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc,'.csv')
 
