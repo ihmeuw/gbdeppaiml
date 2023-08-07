@@ -13,11 +13,13 @@ if(length(args) > 0) {
 	proj.end <- args[2]
 	run.group2 <- args[3]
 	decomp.step <- args[4]
+	gbdyear <- args[5]
 } else {
 	run.name <- "200713_yuka_newASFR"
 	proj.end <- 2022
 	run.group2 <- FALSE
 	decomp.step <- "iterative"
+	gbdyear <- 'gbdTEST'
 }
 
 input.table <- fread(paste0('/share/hiv/epp_input/gbd20/input_ids.csv'))
@@ -30,7 +32,6 @@ mlt <- c.args[['mlt']]
 birth <- c.args[['births']]
 
 
-gbdyear <- 'gbd20'
 out.dir <- paste0('/ihme/hiv/epp_input/', gbdyear, '/', run.name, "/")
 dir.create(out.dir, recursive = TRUE, showWarnings = TRUE)
 
