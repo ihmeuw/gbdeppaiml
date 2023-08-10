@@ -26,20 +26,18 @@ source(paste0('/ihme/homes/', user, '/rt-shared-functions/cluster_functions.R'))
 
 
 # Arguments ---------------------------------------
-gbdyear = 'gbd20'
+gbdyear = 'gbdTEST'
 run.name = 'zaf_sub_old_cd4'
 old_run.name = '200713_yuka'
 spec.name = '200713_yuka'
 code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
 loc.table <- get_locations(hiv_metadata = T)
 loc.list <-  c(loc.table[epp == 1, ihme_loc_id], 'MRT', 'STP', 'COM')
-loc.list <- loc.list[grepl('ZAF', loc.list)]
-loc.list <- c('LSO', 'MOZ', 'SWZ')
-#loc.list <- 'BEN'
+
 # Toggles ---------------------------------------
 ##make copy inputs and new inputs opposite
 new_inputs = T
-copy_inputs = T
+copy_inputs = F
 eppasm_inputs = T
 prev_surveys = F
 art_proportions = F
