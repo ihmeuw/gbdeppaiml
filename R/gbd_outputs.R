@@ -297,7 +297,7 @@ split_u5_gbd2017 <- function(dt){
 }
 
 
-split_u1.new_ages <- function(dt, loc, run.name, gbdyear="gbd20", test_run = NULL, loc_name = loc, inherits = TRUE){
+split_u1.new_ages <- function(dt, loc, run.name, gbdyear=gbdyear, test_run = NULL, loc_name = loc, inherits = TRUE){
   if(!grepl('socialdets', run.name) & !grepl('tvfoi', run.name)){
     loc_name = loc
   }else{
