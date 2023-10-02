@@ -18,7 +18,7 @@ if(length(args) > 0) {
   spec.name = "220719_meixin"
 
 }
-fill.draw <- F
+fill.draw <- T
 fill.na <- T
 if(run.name == "220407_Meixin"){
   gbdyear <- 'gbdTEST'
@@ -89,7 +89,7 @@ loc_id <- locations[ihme_loc_id==loc,location_id]
 
 ## Bring in EPPASM Draws
 #dir.list <- c('/ihme/hiv/epp_output/gbd20/200713_yuka_ETH_test/', '/ihme/hiv/epp_output/gbd20/200713_yuka/', '/ihme/hiv/epp_output/gbd20/200505_xylo/')
-dir.list <- paste0('/ihme/hiv/epp_output/gbd20/',run.name, '/')
+dir.list <- paste0('/ihme/hiv/epp_output/',gbdyear,'/',run.name, '/')
 
 for(dir in dir.list){
   if(file.exists(paste0(dir, '/compiled/', loc, '.csv'))){
@@ -107,10 +107,24 @@ spec_draw[age >= 5,age_gbd :=  as.character(age - age%%5)]
 spec_draw[age %in% 1, age_gbd := "12-23 mo."]
 spec_draw[age %in% 2:4, age_gbd := "2-4"]
 spec_draw[age == 0, age_gbd := 0 ]
+spec_draw[, non_hiv_deaths := as.numeric(non_hiv_deaths)][, pop := as.numeric(pop)][, pop_neg := as.numeric(pop_neg)][,hiv_deaths:= as.numeric(hiv_deaths)]
+spec_draw[,new_hiv:= as.numeric(new_hiv)][,total_births:= as.numeric(total_births)][,hiv_births := as.numeric(hiv_births)][,birth_prev:=as.numeric(birth_prev)]
+spec_draw[, pop_art:= as.numeric(pop_art)][,pop_gt350:= as.numeric(pop_gt350)][,pop_200to350:= as.numeric(pop_200to350)][, pop_lt200:= as.numeric(pop_lt200)]
 spec_draw <- spec_draw[,.(pop = sum(pop), hiv_deaths = sum(hiv_deaths), non_hiv_deaths = sum(non_hiv_deaths), new_hiv = sum(new_hiv), pop_neg = sum(pop_neg),
                     total_births = sum(total_births), hiv_births = sum(hiv_births), birth_prev = sum(birth_prev),
-                    pop_art = sum(pop_art), pop_gt350 = sum(pop_gt350), pop_200to350 = sum(pop_200to350), pop_lt200 = sum(pop_lt200)), by = c('age_gbd', 'sex', 'year', 'run_num')]
+                    pop_art = sum(pop_art), pop_gt350 = sum(pop_gt350), pop_200to350 = sum(pop_200to350), pop_lt200 = sum(pop_lt200)), 
+                    by = c('age_gbd', 'sex', 'year', 'run_num')]
 setnames(spec_draw, 'age_gbd', 'age')
+
+## identify unreasonable draws in NGA
+if(loc %like% "NGA"){
+  draws.list <- unique(spec_draw[pop > 100*quantile(pop, probs = 0.75), run_num])
+  draws.list <- unique(c(unique(spec_draw[hiv_deaths > 100*quantile(hiv_deaths, probs = 0.75), run_num]), draws.list))
+  draws.list <- unique(c(unique(spec_draw[non_hiv_deaths > 100*quantile(non_hiv_deaths, probs = 0.75), run_num]), draws.list))
+  draws.list <- unique(c(unique(spec_draw[new_hiv > 100*quantile(new_hiv, probs = 0.75), run_num]), draws.list))
+  draws.list <- unique(c(unique(spec_draw[pop_neg > 100*quantile(pop_neg, probs = 0.75), run_num]), draws.list))
+  spec_draw <- spec_draw[!(run_num %in% draws.list)]
+  }
 
 # Fill in missing draws
 if(fill.draw) {
@@ -123,6 +137,26 @@ if(fill.draw) {
     spec_draw <- rbind(spec_draw, replace.dt)
   }
 }
+# fill in missing data
+id.vars = list(year = c(1970:2022), sex = c("female","male"), age = c("0","12-23 mo.","2-4", "5", "10", "15","20","25", "30", "35", "40", "45", "50", "55", "60", "65", "70", "75", "80"), run_num = c(1:1000))
+missing = assertable::assert_ids(spec_draw, id_vars = id.vars, warn_only = T)
+if(class(missing)[1] != "character"){
+  if(fill.draw) {
+    need.draws <- unique(missing$run_num)
+    have.draws <- setdiff(1:1000, need.draws)
+    for(draw in need.draws) {
+      replace.draw <- sample(have.draws, 1)
+      replace.dt <- spec_draw[run_num == replace.draw]
+      spec_draw <- spec_draw[run_num!=draw]
+      replace.dt[, run_num := draw]
+      spec_draw <- rbind(spec_draw, replace.dt)
+    }
+  }
+}
+
+id.vars = list(year = c(1970:2022), sex = c("female","male"), age = c("0","12-23 mo.","2-4", "5", "10", "15","20","25", "30", "35", "40", "45", "50", "55", "60", "65", "70", "75", "80"), run_num = c(1:1000))
+missing = assertable::assert_ids(spec_draw, id_vars = id.vars, warn_only = F)
+
 
 # Fill in NA's
 na.present <- any(is.na(spec_draw))
@@ -161,13 +195,34 @@ birth_dt <- rbind(birth_dt, birth_dt.female)
 ## Scale to GBD pop
 birth_dt <- merge(birth_dt, birth_pop[,.(year, gbd_pop, sex_id)], by = c('year', 'sex_id'))
 birth_dt[, birth_prev_count := birth_prev_rate * gbd_pop]
+
+## test missing data
+id.vars = list(year = c(1970:2022), sex_id = c(1,2), age_group_id = 164, run_num = c(1:1000))
+missing = assertable::assert_ids(birth_dt, id_vars = id.vars, warn_only = F)
+
+## save birth prevalence
 write.csv(birth_dt[,.(year, sex_id, run_num, age_group_id, birth_prev_rate, birth_prev_count)], paste0(out_dir_birth, loc, '.csv'), row.names = F)
 spec_draw[,birth_prev := NULL]
 
 ## split under 1 age group
-output.u1 <- split_u1.new_ages(spec_draw[age == 0], loc, run.name = run.name)
+output.u1 <- split_u1.new_ages(spec_draw[age == 0], loc, run.name = run.name, gbdyear = gbdyear)
 output.u1[age=="x_388", age := "1-5 mo."]
 output.u1[age=="x_389", age := "6-11 mo."]
+id.vars = list(year = c(1970:2022), sex = c("female","male"), age = c("enn","6-11 mo.","lnn","1-5 mo."), run_num = c(1:1000))
+missing = assertable::assert_ids(output.u1, id_vars = id.vars, warn_only = T)
+if(class(missing)[1] != "character"){
+  if(fill.draw) {
+    need.draws <- unique(missing$run_num)
+    for(draw in need.draws) {
+      replace.draw <- sample(have.draws, 1)
+      replace.dt <- output.u1[run_num == replace.draw]
+      output.u1 <- output.u1[run_num!=draw]
+      replace.dt[, run_num := draw]
+      output.u1 <- rbind(output.u1, replace.dt)
+    }
+  }
+}
+
 spec_draw <- spec_draw[age != 0]
 spec_draw <- rbind(spec_draw, output.u1[,pop_death_pop := NULL], use.names = T)    
 
@@ -282,11 +337,17 @@ print(head(spec_combined))
 assert_values(spec_combined, names(spec_combined), "gte", 0)
 assert_values(spec_combined, colnames(spec_combined), "not_na")
 
-# write.csv(spec_combined[,list(sex_id,year_id,age_group_id,run_num,hiv_deaths,non_hiv_deaths, non_hiv_deaths_prop)],paste0(out_dir_death,"/",loc,"_ART_deaths.csv"),row.names=F)
+## test missing data
+id.vars = list(year_id = c(1970:2022), sex_id = c(1,2), age_group_id = c(2,3,6:20, 30:32, 34, 235, 238, 388, 389), run_num = c(1:1000))
+missing = assertable::assert_ids(spec_combined, id_vars = id.vars, warn_only = F)
+
+## save birth prevalence
+write.csv(spec_combined[,list(sex_id,year_id,age_group_id,run_num,hiv_deaths,non_hiv_deaths, non_hiv_deaths_prop)],paste0(out_dir_death,"/",loc,"_ART_deaths.csv"),row.names=F)
 
 # # Rescramble draws to match Reckoning output before outputting non-fatal results (can't do it to the fatal that feeds into the Reckoning because we want to preserve within-draw correlation between them)
 # spec_combined <- merge(spec_combined,draw_map,by="run_num")
 
-# write.csv(spec_combined[,list(sex_id,year_id,run_num,hiv_deaths, non_hiv_deaths, new_hiv,hiv_births,suscept_pop,total_births,pop_neg,pop_lt200,pop_200to350,pop_gt350,pop_art,age_group_id)],paste0(out_dir,"/",loc,"_ART_data.csv"),row.names=F)
+## save birth prevalence
+write.csv(spec_combined[,list(sex_id,year_id,run_num,hiv_deaths, non_hiv_deaths, new_hiv,hiv_births,suscept_pop,total_births,pop_neg,pop_lt200,pop_200to350,pop_gt350,pop_art,age_group_id)],paste0(out_dir,"/",loc,"_ART_data.csv"),row.names=F)
 
 

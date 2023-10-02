@@ -42,7 +42,7 @@ out.dir <- paste0('/ihme/hiv/epp_input/', gbdyear, '/', run.name, "/")
 dir.create(out.dir, recursive = TRUE, showWarnings = TRUE)
 
 ## Functions
-library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
+library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r/4")
 source( "/ihme/cc_resources/libraries/current/r/get_population.R")
 source('/ihme/cc_resources/libraries/current/r/get_covariate_estimates.R')
 source('/ihme/cc_resources/libraries/current/r/get_cod_data.R')
@@ -71,7 +71,7 @@ parent.locs.epp <- loc.table[spec_agg==1 & location_id %in% id.parents.level.up,
 parent.locs <- unique(c(id.parents,parent.locs.epp))
 parent.locs <- loc.table[location_id %in% parent.locs,location_id]
 run_id_current <- get_proc_version(model_name = 'Population', run_id = 'best', model_type = 'estimate')
-parent.locs = NULL
+#parent.locs = NULL
 ## Population
 #####NEED POPULATION UPDATE
 
@@ -164,7 +164,7 @@ pop <-  get_mort_outputs(
   gbd_year = 2020,
   #run_id = population,
   age_group_id =c(8:20),
-  location_id = c(epp.locs), year_id = seq(1970, proj.end), sex_id = 1:2)
+  location_id = c(epp.locs, parent.locs), year_id = seq(1970, proj.end), sex_id = 1:2)
 setnames(pop, 'mean', 'population')
 pop <- pop[,.(age_group_id, location_id, year_id, sex_id, population, run_id)]
 
@@ -213,7 +213,7 @@ invisible(lapply(india.locs, function(c.location_id) {
 
 ## Migration
 ##got 226 from Spencer on 8/6/2020
-mig <- fread(paste0('/mnt/team/fertilitypop/pub/population/popReconstruct/294/upload/net_migration_single_year.csv'))[measure_id==55]
+mig <- fread(paste0('/mnt/team/fertilitypop/pub/population/popReconstruct/294/upload/net_migration_single_year.csv'))[measure_id==19]
 #fread(paste0('/ihme/fertilitypop/gbd_2017/population/modeling/popReconstruct/v96/best/net_migrants.csv'))
 # mig<- get_mort_outputs(model_name = 'migration',
 #                        model_type = 'estimate', 

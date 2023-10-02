@@ -24,8 +24,8 @@ user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
-  run.name = '220407_Meixin'
-  loc <- 'STP'
+  run.name = '230809_meixin'
+  loc <- 'ZAF_482'
   stop.year <- 2022
   j <- 5
   paediatric <- TRUE
@@ -35,7 +35,6 @@ if(length(args) == 0){
   loc <- args[2]
   stop.year <- as.integer(args[3])
   paediatric <- as.logical(args[4])
-  
 }
 
 print(paste0('J is ', j))
@@ -211,7 +210,7 @@ if (loc =="MRT"){
 }
 
 fit <- eppasm::fitmod(dt, eppmod = ifelse(grepl('IND', loc),'rlogistic',epp.mod), 
-                      B0 = 1e5, B = 1e3, number_k = 3000, 
+                      B0 = 1e3, B = 1e3, number_k = 5, 
                       ageprev = ifelse(loc %in% zero_prev_locs,'binom','probit'))
 
 dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fitmod/'))

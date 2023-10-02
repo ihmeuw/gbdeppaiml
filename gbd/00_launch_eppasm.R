@@ -59,7 +59,7 @@ run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
 
 ### Functions
 source(paste0(root,"/Project/Mortality/shared/functions/check_loc_results.r"))
-library(mortdb, lib = "/ihme/mortality/shared/r")
+library(mortdb, lib = "/ihme/mortality/shared/r/4")
 
 ### Tables
 loc.table <- data.table(get_locations(hiv_metadata = T))

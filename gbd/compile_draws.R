@@ -32,18 +32,20 @@ if(length(args) == 0){
   draw.fill <- T
   paediatric <- T
   gbdyear <- "gbdTEST"
-  n = 1000
+  n = 5
 }else{
   run.name <- args[1]
   array.job <- as.logical(args[2])
-  loc <- as.logical(args[3])
+  loc <- args[3]
   draw.fill <- as.logical(args[4])
   paediatric <- as.logical(args[5])
-  gbdyear <- as.logical(args[6])
+  gbdyear <- args[6]
 }
 
 test = NULL
-gbdyear = gbdyear
+# gbdyear = gbdyear
+print(gbdyear)
+print(loc)
 h_root = '/homes/mwalte10/'
 lib.loc <- paste0(h_root,"R/",R.Version(),"/",R.Version(),".",R.Version())
 .libPaths(c(lib.loc,.libPaths()))
@@ -69,7 +71,7 @@ library(assertable)
 # devtools::load_all()
 if(!array.job & length(args) > 0){
   loc <- args[3]
-  n = 1000
+  n = 5
 }
 
 # Array job ---------------------------------------
@@ -120,14 +122,16 @@ print('loc.table loaded')
       draw.path <- paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, "/", loc)
       
     }
+print(draw.path)
     draw.list <- list.files(draw.path)
   
     
     print('draw.list exists')
     ## subset out additional outputs (theta, under-1 splits)
     ## this could probably be tidied up
-    draw.list <- draw.list[grepl('.csv', draw.list) & !grepl('theta_', draw.list) & !grepl('under_', draw.list) & !grepl('missing_', draw.list)]
-   # draw.list <- draw.list[gsub('.csv', '', draw.list) %in% 1:1000]
+    # draw.list <- draw.list[grepl('.csv', draw.list) & !grepl('theta_', draw.list) & !grepl('under_', draw.list) & !grepl('missing_', draw.list)]
+    draw.list <- draw.list[gsub('.csv', '', draw.list) %in% 1:1000]
+    print(draw.list)
     
     dt <- lapply(draw.list, function(draw){
       print(draw)
@@ -135,7 +139,9 @@ print('loc.table loaded')
     })
     dt <- rbindlist(dt)
     dt <- melt(dt, id.vars = c('age', 'sex', 'year', 'run_num'))
+    print(colnames(dt))
     dt[value <0, value := 0]
+    print('negative values replaced if necessary')
     dt <- dcast(dt, age + sex + year + run_num  ~ variable, value.var = 'value')
     ##Sometimes there are negative values, need to replace
     

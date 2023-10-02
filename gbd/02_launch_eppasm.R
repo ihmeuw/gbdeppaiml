@@ -35,7 +35,7 @@ if(file.exists(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
   n.draws = nrow(fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv')))
   array.job = T
 }else{
-  n.draws = 1000
+  n.draws = 5
   array.job = F
 }
 run.group2 <- FALSE
@@ -101,16 +101,19 @@ if(run_eppasm & !array.job){
       lapply(dirs, dir.exists)
 
           #Draw compilation
+    for(loc in loc.list) {
       submit_job(script = paste0(code.dir, 'gbd/compile_draws.R'),
                       queue = 'all.q', memory = '30G', threads = 1, time = "01:00:00", name = paste0(loc, '_', run.name, '_compile'),
                       archive = F, args = c(run.name,  array.job,  loc,  'TRUE', paediatric, gbdyear))
+    }
       # Make sure all locations are done
        check_files(paste0(loc.list, '.csv'),paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/compiled/'))
 
-
+    for(loc in loc.list) {
       submit_job(script = paste0(code.dir, 'gbd/get_summary_files.R'),
                  queue = 'all.q', memory = '5G', threads = 1, time = "01:00:00", name = paste0(loc, '_', run.name, '_summary'),
                  archive = F, args = c(run.name,   loc, gbdyear))
+    }
       #  #Make sure all locations are done
        check_loc_results(paste0(loc.list, '.csv'),paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/summary_files/'))
 
