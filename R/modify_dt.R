@@ -60,7 +60,7 @@ check_inputs <- function(dt_obj){
 
 
 
-modify_dt <- function(dt, run_name){
+modify_dt <- function(dt, run_name, gbdyear=gbdyear){
 
   inputs <- check_inputs(dt)
   if(!is.null(inputs)){
@@ -114,6 +114,9 @@ modify_dt <- function(dt, run_name){
   if(loc == 'IND_4842'){
     sub_in <- readRDS('/ihme/hiv/epp_output/gbd20/200213_violin/dt_objects/IND_4862_dt.RDS')
     sub_in <- attr(sub_in, 'specfp')$paedsurv_artcd4dist
+    paedsurv_artcd4dist <- sub_in[,,,53]
+    paedsurv_artcd4dist <- replicate(55-53, paedsurv_artcd4dist)
+    sub_in <- abind(sub_in, paedsurv_artcd4dist, along = 4)
     attr(dt, 'specfp')$paedsurv_artcd4dist <- sub_in
     print(paste0(loc, ' subbed in dt object from violin run'))
     
@@ -197,7 +200,7 @@ modify_dt <- function(dt, run_name){
     extend_back <- data.table(extend_back)
     extend_back[,year := missing_years]
     new <- rbind(attr(dt, 'specfp')$pmtct_dropout, extend_back)
-    new <- new[order(year),]
+    new <- new[order(new$year),]
     new <- as.data.frame(new)
     attr(dt, 'specfp')$pmtct_dropout <- new
   }

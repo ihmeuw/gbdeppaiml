@@ -16,19 +16,18 @@ if(length(args) > 0) {
 	gbdyear <- args[5]
 } else {
 	run.name <- "230809_meixin"
-	proj.end <- 2022
+	proj.end <- 2024
 	run.group2 <- FALSE
 	decomp.step <- "iterative"
-	gbdyear <- 'gbdTEST'
+	gbdyear <- 'gbd22'
 }
 
-input.table <- fread(paste0('/share/hiv/epp_input/gbd20/input_ids.csv'))
+input.table <- fread(paste0('/share/hiv/epp_input/gbd22/input_ids.csv'))
 if(!run.name %in% input.table$run_name){
   c.args <- input.table[run_name=='200713_yuka']
   
 }else{
   c.args <- input.table[run_name==run.name]
-  
 }
 ASFR <- c.args[['asfr']]
 population <- c.args[['population']]
@@ -46,6 +45,7 @@ library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r/4")
 source( "/ihme/cc_resources/libraries/current/r/get_population.R")
 source('/ihme/cc_resources/libraries/current/r/get_covariate_estimates.R')
 source('/ihme/cc_resources/libraries/current/r/get_cod_data.R')
+source("/ihme/cc_resources/libraries/current/r/get_ids.R")
 
 ## Locations
 loc.table <- get_locations(hiv_metadata = TRUE)
@@ -82,7 +82,7 @@ run_id_current <- get_proc_version(model_name = 'Population', run_id = 'best', m
 # pop.all <- rbind(pop.all, pop.all.238)
 pop.all <-  get_mort_outputs(
   "population single year", "estimate",
-  gbd_year = 2020,
+  gbd_year = 2021,
   #run_id = population_sa,
   age_group_id = c(28, 238,21 ,50:127),
   location_id = c(epp.locs, parent.locs), year_id = seq(1970, proj.end), sex_id = 1:2)
@@ -182,7 +182,7 @@ invisible(lapply(c(epp.locs, parent.locs), function(c.location_id) {
 pop.splits <-  get_mort_outputs(
   "population single year", "estimate",
   gbd_year = 2020,
-  #run_id = population_sa,
+  # run_id = population_sa,
   age_group_id = c(2,3,30,31,32,34,235,238,388,389),
   location_id = c(epp.locs, parent.locs), year_id = seq(1970, proj.end), sex_id = 1:2)
 # pop.splits <-  get_population(age_group_id =  c(2,3,30,31,32,34,235,238,388,389),
@@ -213,7 +213,7 @@ invisible(lapply(india.locs, function(c.location_id) {
 
 ## Migration
 ##got 226 from Spencer on 8/6/2020
-mig <- fread(paste0('/mnt/team/fertilitypop/pub/population/popReconstruct/294/upload/net_migration_single_year.csv'))[measure_id==19]
+mig <- fread(paste0('/mnt/team/fertilitypop/pub/population/popReconstruct/264/upload/net_migration_single_year.csv'))[measure_id==19]
 #fread(paste0('/ihme/fertilitypop/gbd_2017/population/modeling/popReconstruct/v96/best/net_migrants.csv'))
 # mig<- get_mort_outputs(model_name = 'migration',
 #                        model_type = 'estimate', 

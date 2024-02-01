@@ -3,7 +3,7 @@
 read_spec_object <- function(loc, j, start.year = 1970, stop.year, trans.params.sub = TRUE, 
                              pop.sub = TRUE,  prev.sub = TRUE, art.sub = TRUE, sexincrr.sub = TRUE, 
                              popadjust = TRUE, age.prev = FALSE, paediatric, anc.rt = FALSE, geoadjust=TRUE,
-anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE,
+anc.prior.sub = TRUE, lbd.anc = FALSE, use_2019 = TRUE,gbdyear =gbdyear, run.name = run.name,
 test.sub_prev_granular = NULL){
 
 
@@ -18,7 +18,10 @@ test.sub_prev_granular = NULL){
 #     dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2020/', loc, '.rds'))
 # 
 #     } else
-if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))) {
+  if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2022/', loc, '.rds'))) {
+    dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2022/', loc, '.rds'))
+    
+  } else if (file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))) {
     dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))
     
   } else if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2018/', loc, '.rds'))) {
@@ -95,7 +98,7 @@ if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))) {
   ## Pediatric inputs
   if(paediatric){
     print('Preparing paediatric module inputs')
-    dt <- sub.paeds(dt, loc, j, start.year = 1970, stop.year = stop.year)
+    dt <- sub.paeds(dt, loc, j, start.year = 1970, stop.year = stop.year, gbdyear = gbdyear, run.name = run.name)
   }
   ## Transition parameters
   if(trans.params.sub) {

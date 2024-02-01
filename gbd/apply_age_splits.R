@@ -13,9 +13,9 @@ if(length(args) > 0) {
   spec.name <- args[3]
 } else {
 
-  loc <- "NGA_25340"
-  run.name = "220407_Meixin"
-  spec.name = "220719_meixin"
+  loc <- "AGO"
+  run.name = "230809_meixin"
+  spec.name = "230809_meixin"
 
 }
 fill.draw <- T
@@ -23,7 +23,7 @@ fill.na <- T
 if(run.name == "220407_Meixin"){
   gbdyear <- 'gbdTEST'
 } else{
-  gbdyear <- 'gbd20'
+  gbdyear <- 'gbd22'
 }
 
 ### Paths
@@ -56,13 +56,13 @@ if(!run.name %in% unique(ids$run_name)){
 }
 
 
-if(run.name == '200505_xylo' | run.name == '200713_yuka' | run.name == '200713_yuka_ETH_test' | run.name == '200713_yuka_ETH_test_rlog' |  run.name == '200713_yuka_ETH_test_rspline' | run.name == 'zaf_full_run_0.15'){
-  age_map <- data.table(fread(paste0('/ihme/hiv/epp_input/', gbdyear, '/', '200316_windchime', "/age_map.csv")))
+# if(run.name == '200505_xylo' | run.name == '200713_yuka' | run.name == '200713_yuka_ETH_test' | run.name == '200713_yuka_ETH_test_rlog' |  run.name == '200713_yuka_ETH_test_rspline' | run.name == 'zaf_full_run_0.15'){
+  age_map <- data.table(fread(paste0('/ihme/hiv/epp_input/gbd20/', '200316_windchime', "/age_map.csv")))
   
-}else{
-  age_map <- data.table(fread(paste0('/ihme/hiv/epp_input/', gbdyear, '/', run.name, "/age_map.csv")))
-  
-}
+# }else{
+#   age_map <- data.table(fread(paste0('/ihme/hiv/epp_input/', gbdyear, '/', run.name, "/age_map.csv")))
+#   
+# }
 age_map <- age_map[(age_group_id %in% c(2, 34, 49, 388, 238, 389,3, seq(6,21))) ,list(age_group_id,age=age_group_name_short)]
 age_map[age == "12-23 mo.",age_group_id := 238]
 
@@ -138,7 +138,7 @@ if(fill.draw) {
   }
 }
 # fill in missing data
-id.vars = list(year = c(1970:2022), sex = c("female","male"), age = c("0","12-23 mo.","2-4", "5", "10", "15","20","25", "30", "35", "40", "45", "50", "55", "60", "65", "70", "75", "80"), run_num = c(1:1000))
+id.vars = list(year = c(1970:2024), sex = c("female","male"), age = c("0","12-23 mo.","2-4", "5", "10", "15","20","25", "30", "35", "40", "45", "50", "55", "60", "65", "70", "75", "80"), run_num = c(1:1000))
 missing = assertable::assert_ids(spec_draw, id_vars = id.vars, warn_only = T)
 if(class(missing)[1] != "character"){
   if(fill.draw) {
@@ -154,7 +154,7 @@ if(class(missing)[1] != "character"){
   }
 }
 
-id.vars = list(year = c(1970:2022), sex = c("female","male"), age = c("0","12-23 mo.","2-4", "5", "10", "15","20","25", "30", "35", "40", "45", "50", "55", "60", "65", "70", "75", "80"), run_num = c(1:1000))
+id.vars = list(year = c(1970:2024), sex = c("female","male"), age = c("0","12-23 mo.","2-4", "5", "10", "15","20","25", "30", "35", "40", "45", "50", "55", "60", "65", "70", "75", "80"), run_num = c(1:1000))
 missing = assertable::assert_ids(spec_draw, id_vars = id.vars, warn_only = F)
 
 
@@ -173,11 +173,17 @@ if(fill.na & na.present) {
 ## Calculate birth prevalence rate
 birth_pop <-  get_mort_outputs(
   "birth", "estimate",
-  gbd_year = 2020,
+  gbd_year = 2021,
   run_id = ids[run_name == run.name, births],
   ##all ages 10-54
   age_group_id = 169,
   location_id = loc_id, year_id = seq(1970, 2022), sex_id = 1:2)
+birth_pop.2023 <- birth_pop[year_id==2022]
+birth_pop.2023[, year_id:= 2023]
+birth_pop <- rbind(birth_pop, birth_pop.2023)
+birth_pop.2023[, year_id:= 2024]
+birth_pop <- rbind(birth_pop, birth_pop.2023)
+
 setnames(birth_pop, 'mean', 'population')
 birth_pop[,population := sum(population), by = c('location_id', 'year_id', 'sex_id')]
 birth_pop[,age_group_id := 164]
@@ -197,7 +203,7 @@ birth_dt <- merge(birth_dt, birth_pop[,.(year, gbd_pop, sex_id)], by = c('year',
 birth_dt[, birth_prev_count := birth_prev_rate * gbd_pop]
 
 ## test missing data
-id.vars = list(year = c(1970:2022), sex_id = c(1,2), age_group_id = 164, run_num = c(1:1000))
+id.vars = list(year = c(1970:2024), sex_id = c(1,2), age_group_id = 164, run_num = c(1:1000))
 missing = assertable::assert_ids(birth_dt, id_vars = id.vars, warn_only = F)
 
 ## save birth prevalence
@@ -208,11 +214,10 @@ spec_draw[,birth_prev := NULL]
 output.u1 <- split_u1.new_ages(spec_draw[age == 0], loc, run.name = run.name, gbdyear = gbdyear)
 output.u1[age=="x_388", age := "1-5 mo."]
 output.u1[age=="x_389", age := "6-11 mo."]
-id.vars = list(year = c(1970:2022), sex = c("female","male"), age = c("enn","6-11 mo.","lnn","1-5 mo."), run_num = c(1:1000))
-missing = assertable::assert_ids(output.u1, id_vars = id.vars, warn_only = T)
-if(class(missing)[1] != "character"){
-  if(fill.draw) {
-    need.draws <- unique(missing$run_num)
+
+if(fill.draw) {
+    have.draws <- unique(output.u1$run_num)
+    need.draws <- setdiff(1:1000, have.draws)
     for(draw in need.draws) {
       replace.draw <- sample(have.draws, 1)
       replace.dt <- output.u1[run_num == replace.draw]
@@ -220,8 +225,10 @@ if(class(missing)[1] != "character"){
       replace.dt[, run_num := draw]
       output.u1 <- rbind(output.u1, replace.dt)
     }
-  }
 }
+id.vars = list(year = c(1970:2024), sex = c("female","male"), age = c("enn","6-11 mo.","lnn","1-5 mo."), run_num = c(1:1000))
+missing = assertable::assert_ids(output.u1, id_vars = id.vars, warn_only = T)
+
 
 spec_draw <- spec_draw[age != 0]
 spec_draw <- rbind(spec_draw, output.u1[,pop_death_pop := NULL], use.names = T)    
@@ -229,6 +236,7 @@ spec_draw <- rbind(spec_draw, output.u1[,pop_death_pop := NULL], use.names = T)
 spec_draw[sex=="male",sex_id:=1]
 spec_draw[sex=="female",sex_id:=2] 
 spec_draw[,age:=as.character(age)]
+# spec_draw[age == "1-5 mo.", age := "1m"][age == "6-11 mo.", age := "6m"]
 spec_draw <- merge(spec_draw,age_map,by="age")
 spec_draw[,age:=NULL]
 ## vestigial column
@@ -241,11 +249,16 @@ spec_o80 <- data.table(spec_draw[age_group_id==21,])
 spec_o80[, age_group_id := NULL]
 
 # Get raw proportions for splitting populations and other general ones
-if(run.name == "zaf_full_run_0.15"){
-  pop <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/200713_yuka/population_splits/', loc, '.csv'))
-}else{
-  pop <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/population_splits/', loc, '.csv'))
-}
+# if(run.name == "zaf_full_run_0.15"){ ## update it once we have new demographic input
+  pop <- fread(paste0('/share/hiv/epp_input/gbd20/200713_yuka/population_splits/', loc, '.csv'))
+  pop.2023 <- pop[year_id==2022]
+  pop.2023[, year_id := 2023]
+  pop <- rbind(pop, pop.2023)
+  pop.2023[, year_id := 2024]
+  pop <- rbind(pop, pop.2023)
+# }else{
+#   pop <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/population_splits/', loc, '.csv'))
+# }
 o80_pop <- pop[age_group_id %in% c(30:32, 235),]
 o80_pop[,pop_total:=sum(population), by=list(sex_id,year_id)]
 o80_pop[,pop_prop:=population/pop_total, by=list(sex_id,year_id)]
@@ -338,7 +351,7 @@ assert_values(spec_combined, names(spec_combined), "gte", 0)
 assert_values(spec_combined, colnames(spec_combined), "not_na")
 
 ## test missing data
-id.vars = list(year_id = c(1970:2022), sex_id = c(1,2), age_group_id = c(2,3,6:20, 30:32, 34, 235, 238, 388, 389), run_num = c(1:1000))
+id.vars = list(year_id = c(1970:2024), sex_id = c(1,2), age_group_id = c(2,3,6:20, 30:32, 34, 235, 238, 388, 389), run_num = c(1:1000))
 missing = assertable::assert_ids(spec_combined, id_vars = id.vars, warn_only = F)
 
 ## save birth prevalence
@@ -349,5 +362,4 @@ write.csv(spec_combined[,list(sex_id,year_id,age_group_id,run_num,hiv_deaths,non
 
 ## save birth prevalence
 write.csv(spec_combined[,list(sex_id,year_id,run_num,hiv_deaths, non_hiv_deaths, new_hiv,hiv_births,suscept_pop,total_births,pop_neg,pop_lt200,pop_200to350,pop_gt350,pop_art,age_group_id)],paste0(out_dir,"/",loc,"_ART_data.csv"),row.names=F)
-
 

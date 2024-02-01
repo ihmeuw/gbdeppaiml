@@ -20,10 +20,10 @@ if(length(args) > 0) {
     compare.run <- NA
   }
 } else {
-  run.name = '220329_maggie'
-  loc <- 'AGO'
+  run.name = '230809_meixin'
+  loc <- 'ZAF_482'
   draw.fill <- TRUE
-  compare.run <- c('200713_yuka')
+  compare.run <- c('zaf_full_run_0.15')
   test <-  NULL
   gbd_year_new <- "gbdTEST"
 }
@@ -87,7 +87,7 @@ if(loc %in% c('STP', 'COM', 'MAR')){
 run.names.comp <- compare.run
 #run_vec <- paste0('gbd20/zaf_test_', seq(0.05,0.95, by = 0.05))
 # ## 15-49 plots
-dir.create(paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/15to49_plots/'), recursive = TRUE, showWarnings = FALSE)
+dir.create(paste0('/ihme/hiv/epp_output/',gbd_year_new,'/', run.name, '/15to49_plots/'), recursive = TRUE, showWarnings = FALSE)
   plot_15to49(loc,
               # run.vec = run_vec,
               run.vec = c(paste0(gbd_year_new, '/', run.name), 'gbd20/200713_yuka'),

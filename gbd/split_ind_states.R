@@ -8,7 +8,7 @@
 ################################################################################
 
 ### Setup
-# rm(list=ls())
+rm(list=ls())
 windows <- Sys.info()[1][["sysname"]]=="Windows"
 root <- ifelse(windows,"J:/","/home/j/")
 user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
@@ -38,7 +38,7 @@ pop.dir <- list(paste0('/share/hiv/epp_input/gbd20/',run.name,"/population_singl
 
 
 ### Functions
-library(mortdb, lib = "/ihme/mortality/shared/r")
+library(mortdb, lib = "/ihme/mortality/shared/r/4")
 
 
 ##Find corrent age groups and sex ids to match EPP-ASM output using one location

@@ -13,6 +13,7 @@
 ## ---------------------------
 
 ## Used in basically every script
+rm(list = ls())
 Sys.umask(mode = "0002")
 windows <- Sys.info()[1][["sysname"]]=="Windows"
 root <- ifelse(windows,"J:/","/home/j/")

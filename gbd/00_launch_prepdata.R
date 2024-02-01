@@ -33,10 +33,11 @@ dir.create(paste0('/ihme/hiv/data/PJNZ_prepped/', unaids_year, '/'))
 ## Launch prepare locations file
 ### Functions
 library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
-setwd(paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/"))
+gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
+setwd(gbdeppaiml_dir)
 devtools::load_all()
-setwd(code.dir)
-devtools::load_all()
+library(eppasm, lib.loc = "/snfs1/Project/GBD_Select_Infectious_Diseases/J TEMP HOLD/HIV/packages_r")
+
 
 ### Tables
 loc.table <- data.table(get_locations(hiv_metadata = T))
@@ -71,3 +72,6 @@ nrow(unique(attr(cal,"eppd")$ancsitedat))
 
       
 ### End
+
+
+

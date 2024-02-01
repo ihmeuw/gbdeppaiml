@@ -14,6 +14,7 @@
 ## ---------------------------
 
 ## Used in basically every script
+rm(list = ls())
 Sys.umask(mode = "0002")
 windows <- Sys.info()[1][["sysname"]]=="Windows"
 root <- ifelse(windows,"J:/","/home/j/")
@@ -28,9 +29,9 @@ source(paste0('/ihme/homes/', user, '/rt-shared-functions/cluster_functions.R'))
 
 ## Arguments
 #run.name = '200713_yuka_newUNAIDS'
-run.name = '220407_Meixin'
+run.name = '230809_meixin'
 compare.run <- c("200713_yuka")
-proj.end <- 2022
+proj.end <- 2024
 if(file.exists(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))){
   n.draws = nrow(fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv')))
   array.job = T
@@ -44,7 +45,7 @@ cluster.project <- "proj_hiv"
 plot_ART <- FALSE
 reckon_prep <- FALSE
 decomp.step <- "iterative"
-gbdyear <- "gbdTEST"
+gbdyear <- "gbd22"
 redo_offsets <- F
 testing = FALSE
 test = NULL
@@ -58,7 +59,7 @@ dir <- paste0("/ihme/hiv/epp_output/", gbdyear, '/', run.name, "/")
 dir.create(dir, showWarnings = FALSE)
 dir.table <- fread(paste0('/share/hiv/epp_input/gbd20//dir_table_log_gbd20.csv'))
 
-run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
+run.table <- fread(paste0('/share/hiv/epp_input/gbd22//eppasm_run_table.csv'))
 
 # if(!run.name %in% unique(run.table$run_name)){
 #   stop("Add run comment and new run to run tracker")
@@ -67,7 +68,7 @@ run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
 #   # new_run[,comments := "Testing swap SWZ pop structure for LSO"]
 #   # run.table = rbind(run.table,new_run)
 #   # fwrite(run.table,paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'),row.names = FALSE)
-# }
+# }     
 
 
 ### Functions
@@ -82,11 +83,9 @@ epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
 loc.list <- epp.list
 ##standard loc list
 loc.list <- c(loc.list, 'MRT', 'STP', 'COM')
-loc.list <- c( loc.list[grepl('KEN', loc.list)], 'MOZ')
-# loc.list <- c('LSO', 'MOZ', 'SWZ')
-zaf_scalar <- fread('/ihme/homes/mwalte10/test_cd4_art_num.csv')
-run.list <- unique(zaf_scalar$run_name)
-run.list = c('zaf_full_run_0.15')
+# loc.have <- list.dirs("/share/hiv/epp_output/gbd22/230809_meixin/fit")
+# loc.have <- gsub("/share/hiv/epp_output/gbd22/230809_meixin/fit/","",loc.have)
+# setdiff(loc.list, loc.have)
 
 # EPP-ASM ---------------------------------------
 if(run_eppasm & !array.job){
@@ -96,11 +95,13 @@ if(run_eppasm & !array.job){
                        queue = 'long.q', memory = '7G', threads = 1, time = "24:00:00", name = paste0(loc, '_', run.name, '_eppasm'),
                        archive = F, args = c(run.name, loc, proj.end, paediatric, TRUE))
     }
-      # #Make sure all locations are done
-      dirs = paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/', loc.list)
-      lapply(dirs, dir.exists)
+}
 
-          #Draw compilation
+    ## Make sure all locations are done
+    dirs = paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/', loc.list)
+    lapply(dirs, dir.exists)
+
+    #Draw compilation
     for(loc in loc.list) {
       submit_job(script = paste0(code.dir, 'gbd/compile_draws.R'),
                       queue = 'all.q', memory = '30G', threads = 1, time = "01:00:00", name = paste0(loc, '_', run.name, '_compile'),
@@ -117,7 +118,7 @@ if(run_eppasm & !array.job){
       #  #Make sure all locations are done
        check_loc_results(paste0(loc.list, '.csv'),paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/summary_files/'))
 
-
+       for(loc in loc.list) {
       submit_job(script = paste0(code.dir, 'gbd/main_plot_output.R'),
                  queue = 'all.q', memory = '20G', threads = 1, time = "00:15:00", name = paste0(loc, '_', run.name, '_plot'),
                  archive = T, args = c(loc, run.name, compare.run, gbdyear))
@@ -125,7 +126,6 @@ if(run_eppasm & !array.job){
       
     }
     
-}
 
 
 

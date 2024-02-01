@@ -27,12 +27,12 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
   array.job = FALSE
-  run.name = '220407_Meixin'
-  loc <- 'TZA'
+  run.name = '230809_meixin'
+  loc <- 'AGO'
   draw.fill <- T
   paediatric <- T
-  gbdyear <- "gbdTEST"
-  n = 5
+  gbdyear <- "gbd22"
+  n = 1000
 }else{
   run.name <- args[1]
   array.job <- as.logical(args[2])
@@ -71,7 +71,7 @@ library(assertable)
 # devtools::load_all()
 if(!array.job & length(args) > 0){
   loc <- args[3]
-  n = 5
+  n = 1000
 }
 
 # Array job ---------------------------------------
@@ -140,6 +140,7 @@ print(draw.path)
     dt <- rbindlist(dt)
     dt <- melt(dt, id.vars = c('age', 'sex', 'year', 'run_num'))
     print(colnames(dt))
+    dt <- as.data.table(dt)
     dt[value <0, value := 0]
     print('negative values replaced if necessary')
     dt <- dcast(dt, age + sex + year + run_num  ~ variable, value.var = 'value')

@@ -282,7 +282,7 @@ convert_paed_cd4 <- function(dt, agegr){
   return(dt)
 }
 
-sub.paeds <- function(dt, loc, k, start.year = 1970, stop.year = stop.year){
+sub.paeds <- function(dt, loc, k, start.year = 1970, stop.year = stop.year, gbdyear = gbdyear, run.name = run.name){
   
     fp_root <- fp_root
     artdist <- fread(artdist)
@@ -483,7 +483,7 @@ sub.paeds <- function(dt, loc, k, start.year = 1970, stop.year = stop.year){
   
 
   pmtct <- pmtct[year %in% years]
-  #pmtct <- extend.years(pmtct, years)
+  pmtct <- extend.years(pmtct, years)
   if(min(pmtct$year) > start.year){
     backfill <- data.table(year = start.year:(min(pmtct$year) - 1))
     backfill <- backfill[, names(pmtct)[!names(pmtct) == 'year'] := 0]

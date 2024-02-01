@@ -26,9 +26,9 @@ devtools::load_all()
 source(paste0('/ihme/homes/', user, '/rt-shared-functions/cluster_functions.R'))
 
 # Arguments ---------------------------------------
-gbdyear = 'gbdTEST'
-run.name = "220407_Meixin"
-spec.name = "220719_meixin"
+gbdyear = 'gbd22'
+run.name = "230809_meixin"
+spec.name = "230809_meixin"
 code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
 loc.table <- get_locations(hiv_metadata = T)
 cluster.project = 'proj_hiv'

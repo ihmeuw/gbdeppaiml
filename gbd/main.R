@@ -25,8 +25,8 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
   run.name = '230809_meixin'
-  loc <- 'ZAF_482'
-  stop.year <- 2022
+  loc <- 'IND_4842'
+  stop.year <- 2024
   j <- 5
   paediatric <- TRUE
 }else{
@@ -62,11 +62,12 @@ for(p in packages){
 gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
 setwd(gbdeppaiml_dir)
 devtools::load_all()
-library(eppasm, lib.loc = "/snfs1/Project/GBD_HIV/packages_r")
+library(eppasm, lib.loc = "/snfs1/Project/GBD_Select_Infectious_Diseases/J TEMP HOLD/HIV/packages_r")
+library(abind)
 
-gbdyear <- 'gbdTEST'
+gbdyear <- 'gbd22'
 
-run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
+run.table <- fread(paste0('/share/hiv/epp_input/',gbdyear,'/eppasm_run_table.csv'))
 in_run_table = F
 if(in_run_table){
   c.args <- run.table[run_name==run.name]
@@ -146,7 +147,7 @@ dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
                        anc.prior.sub = TRUE, lbd.anc = lbd.anc,
                        geoadjust = geoadjust, use_2019 = TRUE,
                        test.sub_prev_granular = test,
-                       anc.rt = FALSE
+                       anc.rt = FALSE, gbdyear =gbdyear, run.name = run.name
                        # anc.backcast,
                        )
 ###Switched to a binomial model, so we can now handle observations of zero
@@ -161,7 +162,7 @@ if(loc %in% c( "STP")){
 attr(dt, 'eppd')$hhs <- data.frame(mod)
 
 ###Extends inputs to the projection year as well as does some site specific changes. This should probably be examined by cycle
-dt <- modify_dt(dt, run_name = run.name)
+dt <- modify_dt(dt, run_name = run.name,gbdyear=gbdyear)
 # if(loc == 'CAF'){
 #   print('outliering some ancrt points')
 #   dat <- data.table(attr(dt, 'eppd')$ancsitedat)

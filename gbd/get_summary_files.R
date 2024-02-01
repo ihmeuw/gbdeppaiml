@@ -28,7 +28,7 @@ install.packages(p)
 }
 library(p, character.only = T)
 }
-library(vctrs, lib.loc="/ihme/singularity-images/rstudio/lib/4.1.3.4")
+#library(vctrs, lib.loc="/ihme/singularity-images/rstudio/lib/4.1.3.4")
 eppasm_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/")
 setwd(eppasm_dir)
 devtools::load_all()
@@ -43,8 +43,8 @@ if(length(args) > 0) {
   loc = args[2]
   gbdyear = args[3]
 } else {
-  run.name = '220329_maggie'
-  loc <- 'AGO'
+  run.name = '230809_meixin'
+  loc <- 'ZAF_482'
   gbdyear = "gbdTEST"
 }
 library(mortdb, lib ="/mnt/team/mortality/pub/shared/r/4")
