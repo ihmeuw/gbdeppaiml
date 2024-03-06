@@ -38,7 +38,7 @@ cluster.project = 'proj_hiv'
 ## Prepare for post-reckoning steps
 loc.list <- loc.table[epp == 1, ihme_loc_id]
 loc.list <- c(loc.list, 'MRT', 'COM', 'STP')
-loc.list <- setdiff(loc.list, loc.list[grep("IND", loc.list)])
+# loc.list <- setdiff(loc.list, loc.list[grep("IND", loc.list)])
 eppasm_parents <-  c("KEN","ZAF","ETH","KEN_44793" ,"KEN_44794","KEN_44795", "KEN_44796" ,"KEN_44797", "KEN_44798","KEN_44799", "KEN_44800","NGA")
 all_loc_list <- c(loc.list,eppasm_parents)
 ## Aggregation and reckoning prep for higher levels

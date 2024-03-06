@@ -38,7 +38,7 @@ if(length(args) > 0) {
 id.vars <- c("run_num", "year", "sex", "age")
 
 ### Paths
-in.dir <- paste0("/ihme/hiv/epp_output/gbd22/", run.name, "/compiled/")
+in.dir <- paste0("/ihme/hiv/epp_output/gbd23/", run.name, "/compiled/")
 single.age.dir <- paste0('/ihme/hiv/spectrum_draws/', spec.run.name,'/detailed_deaths/')
 
 ### Functions

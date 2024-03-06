@@ -89,7 +89,7 @@ loc.list <- c(loc.list, 'MRT', 'STP', 'COM')
 
 # EPP-ASM ---------------------------------------
 if(run_eppasm & !array.job){
-    for(loc in loc.list[1:30]) {    
+    for(loc in loc.list) {    
       ## Run EPPASM
       submit_array_job(script = paste0(code.dir, 'gbd/main.R'), n_jobs = n.draws,
                        queue = 'long.q', memory = '7G', threads = 1, time = "24:00:00", name = paste0(loc, '_', run.name, '_eppasm'),
