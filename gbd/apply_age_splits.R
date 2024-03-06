@@ -11,20 +11,18 @@ if(length(args) > 0) {
   loc <- args[1]
   run.name <- args[2]
   spec.name <- args[3]
+  gbdyear <- args[4]
 } else {
 
-  loc <- "AGO"
-  run.name = "230809_meixin"
-  spec.name = "230809_meixin"
+  loc <- "SOM"
+  run.name = "220407_Meixin"
+  spec.name = "221115_meixin"
+  gbdyear <- 'gbdTEST'
 
 }
 fill.draw <- T
 fill.na <- T
-if(run.name == "220407_Meixin"){
-  gbdyear <- 'gbdTEST'
-} else{
-  gbdyear <- 'gbd22'
-}
+
 
 ### Paths
 #library(vctrs, lib.loc="/ihme/singularity-images/rstudio/lib/4.1.3.4")
@@ -207,7 +205,7 @@ id.vars = list(year = c(1970:2024), sex_id = c(1,2), age_group_id = 164, run_num
 missing = assertable::assert_ids(birth_dt, id_vars = id.vars, warn_only = F)
 
 ## save birth prevalence
-write.csv(birth_dt[,.(year, sex_id, run_num, age_group_id, birth_prev_rate, birth_prev_count)], paste0(out_dir_birth, loc, '.csv'), row.names = F)
+write.csv(birth_dt[,.(year, sex_id, run_num, age_group_id, birth_prev_rate, birth_prev_count, gbd_pop)], paste0(out_dir_birth, loc, '.csv'), row.names = F)
 spec_draw[,birth_prev := NULL]
 
 ## split under 1 age group

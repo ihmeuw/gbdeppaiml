@@ -297,7 +297,7 @@ split_u5_gbd2017 <- function(dt){
 }
 
 
-split_u1.new_ages <- function(dt, loc, run.name, gbdyear=gbdyear, test_run = NULL, loc_name = loc, inherits = TRUE){
+split_u1.new_ages <- function(dt, loc, run.name, gbdyear, test_run = NULL, loc_name = loc, inherits = TRUE){
   if(!grepl('socialdets', run.name) & !grepl('tvfoi', run.name)){
     loc_name = loc
   }else{
@@ -305,7 +305,7 @@ split_u1.new_ages <- function(dt, loc, run.name, gbdyear=gbdyear, test_run = NUL
   }
   #change to the new population splits folder
   pop <- data.table(fread(paste0('/ihme/hiv/epp_input/gbd20/200713_yuka//population_splits/', loc_name, '.csv')))
-  #pop <- data.table(fread(paste0('/ihme/hiv/epp_input/',gbdyear,"/" ,run.name, "/population_splits/", loc_name, '.csv')))
+  # pop <- data.table(fread(paste0('/ihme/hiv/epp_input/',gbdyear,"/" ,run.name, "/population_splits/", loc_name, '.csv')))
   pop.2023 <- pop[year_id==2022]
   pop.2023[, year_id :=2023]
   pop <- rbind(pop,pop.2023)

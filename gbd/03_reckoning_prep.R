@@ -26,9 +26,9 @@ devtools::load_all()
 source(paste0('/ihme/homes/', user, '/rt-shared-functions/cluster_functions.R'))
 
 # Arguments ---------------------------------------
-gbdyear = 'gbd22'
-run.name = "230809_meixin"
-spec.name = "230809_meixin"
+gbdyear = 'gbd23'
+run.name = "231129_bandicoot"
+spec.name = "231129_bandicoot"
 code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
 loc.table <- get_locations(hiv_metadata = T)
 cluster.project = 'proj_hiv'
@@ -37,25 +37,31 @@ cluster.project = 'proj_hiv'
 ## Aggregate to higher levels for EPP-ASM child locs - not India because it goes through Spectrum
 ## Prepare for post-reckoning steps
 loc.list <- loc.table[epp == 1, ihme_loc_id]
+loc.list <- c(loc.list, 'MRT', 'COM', 'STP')
+loc.list <- setdiff(loc.list, loc.list[grep("IND", loc.list)])
 eppasm_parents <-  c("KEN","ZAF","ETH","KEN_44793" ,"KEN_44794","KEN_44795", "KEN_44796" ,"KEN_44797", "KEN_44798","KEN_44799", "KEN_44800","NGA")
-all_loc_list <- c(loc.list,eppasm_parents, 'MRT', 'COM', 'STP')
+all_loc_list <- c(loc.list,eppasm_parents)
 ## Aggregation and reckoning prep for higher levels
+# for(loc in all_loc_list){
+#   if(loc %in% eppasm_parents){
+#     submit_job(script = paste0(code.dir, 'gbd/aggregate.R'),
+#                queue = 'all.q', memory = '100G', threads = 1, time = "02:15:00", name = paste0(loc, '_aggregate'),
+#                archive = T, args = c(loc, run.name,  spec.name, 10))
+#   }
+# }
 
-  for(loc in all_loc_list){
-    if(loc %in% eppasm_parents){
-      submit_job(script = paste0(code.dir, 'gbd/aggregate.R'),
-                 queue = 'all.q', memory = '100G', threads = 1, time = "02:15:00", name = paste0(loc, '_aggregate'),
-                 archive = T, args = c(loc, run.name,  spec.name, 10))
-    }
-  }
-    
 for(loc in loc.list){
     submit_job(script = paste0(code.dir, 'gbd/apply_age_splits.R'),
                queue = 'all.q', memory = '50G', threads = 1, time = "02:00:00", name = paste0(loc, '_age_splits'),
-               archive = T, args = c(loc, run.name,  spec.name))
+               archive = T, args = c(loc, run.name,  spec.name, gbdyear))
     
   }
   
+for(loc in eppasm_parents){
+    submit_job(script = paste0(code.dir, 'gbd/aggregate_after_age_split.R'),
+               queue = 'all.q', memory = '100G', threads = 1, time = "02:15:00", name = paste0(loc, '_aggregate'),
+               archive = T, args = c(loc, spec.name, 10))
+}
 
 
 

@@ -408,8 +408,8 @@ sub.paeds <- function(dt, loc, k, start.year = 1970, stop.year = stop.year, gbdy
 
     
    
-
-  
+  years <- start.year:stop.year
+  art <- extend.years(art, years)
   setnames(art, old = 'year', new = 'year_id')
   
   if('ART_Cov_pct' %in% colnames(art)){
@@ -442,7 +442,6 @@ sub.paeds <- function(dt, loc, k, start.year = 1970, stop.year = stop.year, gbdy
   names(cotrim_isperc) <- art$year
   attr(dt, 'specfp')$cotrim_isperc <- cotrim_isperc
   
-  years <- start.year:stop.year
   
   artdist <- artdist[year %in% years]
   artdist <- extend.years(artdist, years)

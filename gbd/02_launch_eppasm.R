@@ -29,14 +29,14 @@ source(paste0('/ihme/homes/', user, '/rt-shared-functions/cluster_functions.R'))
 
 ## Arguments
 #run.name = '200713_yuka_newUNAIDS'
-run.name = '230809_meixin'
+run.name = '231129_bandicoot'
 compare.run <- c("200713_yuka")
 proj.end <- 2024
 if(file.exists(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))){
   n.draws = nrow(fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv')))
   array.job = T
 }else{
-  n.draws = 5
+  n.draws = 100
   array.job = F
 }
 run.group2 <- FALSE
@@ -45,7 +45,7 @@ cluster.project <- "proj_hiv"
 plot_ART <- FALSE
 reckon_prep <- FALSE
 decomp.step <- "iterative"
-gbdyear <- "gbd22"
+gbdyear <- "gbd23"
 redo_offsets <- F
 testing = FALSE
 test = NULL
@@ -89,7 +89,7 @@ loc.list <- c(loc.list, 'MRT', 'STP', 'COM')
 
 # EPP-ASM ---------------------------------------
 if(run_eppasm & !array.job){
-    for(loc in loc.list) {    
+    for(loc in loc.list[1:30]) {    
       ## Run EPPASM
       submit_array_job(script = paste0(code.dir, 'gbd/main.R'), n_jobs = n.draws,
                        queue = 'long.q', memory = '7G', threads = 1, time = "24:00:00", name = paste0(loc, '_', run.name, '_eppasm'),
@@ -130,18 +130,18 @@ if(run_eppasm & !array.job){
 
 
 # Compile plots ---------------------------------------
-plot.holds <- paste(paste0(loc.list, '_plot_eppasm'), collapse = ",")
-plot.string <- paste0("qsub -l m_mem_free=1G -l fthread=1 -l h_rt=00:35:00 -q all.q -P ", cluster.project, " ",
-                      "-e /share/homes/", user, "/errors ",
-
-                      "-o /share/temp/sgeoutput/", user, "/output ",
-                      "-N ", "compile_plots_eppasm ",
-                      "-hold_jid ", plot.holds, " ",
-                      code.dir, "gbd/singR_shell.sh ",
-                      code.dir, "gbd/compile_plots.R ",
-                      run.name, " ", gbdyear)
-print(plot.string)
-system(plot.string)
+# plot.holds <- paste(paste0(loc.list, '_plot_eppasm'), collapse = ",")
+# plot.string <- paste0("qsub -l m_mem_free=1G -l fthread=1 -l h_rt=00:35:00 -q all.q -P ", cluster.project, " ",
+#                       "-e /share/homes/", user, "/errors ",
+# 
+#                       "-o /share/temp/sgeoutput/", user, "/output ",
+#                       "-N ", "compile_plots_eppasm ",
+#                       "-hold_jid ", plot.holds, " ",
+#                       code.dir, "gbd/singR_shell.sh ",
+#                       code.dir, "gbd/compile_plots.R ",
+#                       run.name, " ", gbdyear)
+# print(plot.string)
+# system(plot.string)
 
 
 

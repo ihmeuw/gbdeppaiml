@@ -15,11 +15,11 @@ if(length(args) > 0) {
 	decomp.step <- args[4]
 	gbdyear <- args[5]
 } else {
-	run.name <- "230809_meixin"
+	run.name <- "231129_bandicoot"
 	proj.end <- 2024
 	run.group2 <- FALSE
 	decomp.step <- "iterative"
-	gbdyear <- 'gbd22'
+	gbdyear <- 'gbd23'
 }
 
 input.table <- fread(paste0('/share/hiv/epp_input/gbd22/input_ids.csv'))

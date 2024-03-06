@@ -24,8 +24,8 @@ user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
-  run.name = '230809_meixin'
-  loc <- 'IND_4842'
+  run.name = '231129_bandicoot'
+  loc <- 'ZWE'
   stop.year <- 2024
   j <- 5
   paediatric <- TRUE
@@ -65,7 +65,7 @@ devtools::load_all()
 library(eppasm, lib.loc = "/snfs1/Project/GBD_Select_Infectious_Diseases/J TEMP HOLD/HIV/packages_r")
 library(abind)
 
-gbdyear <- 'gbd22'
+gbdyear <- 'gbd23'
 
 run.table <- fread(paste0('/share/hiv/epp_input/',gbdyear,'/eppasm_run_table.csv'))
 in_run_table = F
@@ -163,6 +163,10 @@ attr(dt, 'eppd')$hhs <- data.frame(mod)
 
 ###Extends inputs to the projection year as well as does some site specific changes. This should probably be examined by cycle
 dt <- modify_dt(dt, run_name = run.name,gbdyear=gbdyear)
+if(grepl('IND', loc)){
+  old <- readRDS(paste0("/share/hiv/epp_output/gbd20/200713_yuka/dt_objects/", loc, '_dt.RDS'))
+  attr(dt, "specfp")$cd4_mort <- attr(old, "specfp")$cd4_mort
+}
 # if(loc == 'CAF'){
 #   print('outliering some ancrt points')
 #   dat <- data.table(attr(dt, 'eppd')$ancsitedat)
@@ -211,7 +215,7 @@ if (loc =="MRT"){
 }
 
 fit <- eppasm::fitmod(dt, eppmod = ifelse(grepl('IND', loc),'rlogistic',epp.mod), 
-                      B0 = 1e3, B = 1e3, number_k = 5, 
+                      B0 = 1e5, B = 1e3, number_k = 3000, 
                       ageprev = ifelse(loc %in% zero_prev_locs,'binom','probit'))
 
 dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fitmod/'))
@@ -225,7 +229,7 @@ data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/
 ## data period. The `extend_projection()` function extends the random walk for r(t)
 ## through the end of the projection period.
 
-if(epp.mod == 'rhybrid'){
+if(epp.mod == 'rhybrid'&grepl('IND', loc)==F){
   fit <- extend_projection(fit, proj_years = stop.year - start.year + 1)
 }
 

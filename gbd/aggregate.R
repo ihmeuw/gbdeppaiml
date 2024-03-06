@@ -28,8 +28,8 @@ if(length(args) > 0) {
   
 } else {
   parent <- "ZAF"
-  run.name = 'zaf_full_run_0.05'
-  spec.run.name <-"200713_yuka_ZAFtest_num"
+  run.name = "230809_meixin"
+  spec.run.name <-"230809_meixin"
   ncores <- 2
 }
 
@@ -38,7 +38,7 @@ if(length(args) > 0) {
 id.vars <- c("run_num", "year", "sex", "age")
 
 ### Paths
-in.dir <- paste0("/ihme/hiv/epp_output/gbd20/", run.name, "/compiled/")
+in.dir <- paste0("/ihme/hiv/epp_output/gbd22/", run.name, "/compiled/")
 single.age.dir <- paste0('/ihme/hiv/spectrum_draws/', spec.run.name,'/detailed_deaths/')
 
 ### Functions
