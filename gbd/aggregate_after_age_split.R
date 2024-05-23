@@ -26,19 +26,20 @@ if(length(args) > 0) {
   ncores <- args[3]
 } else {
   parent <- "KEN_44793"
-  spec_name <- "231129_bandicoot"
+  spec_name <- "240304_platypus"
   ncores <- 20
 }
 
 n.draws <- 1000
 stages <- c("stage_1")
 suffix <- "_ART_data.csv"
-id.vars <- c("run_num", "year_id", "sex_id", "age_group_id")
+id.vars <- c("run_num", "year", "sex_id", "age_group_id")
 
 
 ### Paths
 # in.dir <- paste0("/ihme/hiv/spectrum_draws/", run.name, "/compiled/")
 # single.age.dir <- paste0('/ihme/hiv/spectrum_draws/', run.name,'/detailed_deaths/')
+eppasm_dir <- paste0('/share/hiv/epp_output/gbd23/', spec_name, '/')
 out_dir <- paste0("/ihme/hiv/spectrum_prepped/art_draws/",spec_name)
 dir.create(out_dir, recursive = T, showWarnings = F)
 out_dir_death <- paste0("/ihme/hiv/spectrum_prepped/death_draws/",spec_name)
@@ -50,23 +51,6 @@ dir.create(out_dir_birth, recursive = T, showWarnings = F)
 ### Functions
 library(mortdb, lib = "/mnt/team/mortality/pub/shared/r/4")
 source("/share/cc_resources/libraries/current/r/get_population.R")
-
-add.age.groups <- function(pop.dt) {
-  pop <- pop.dt[, c("year_id", "sex_id", "age_group_id", "population", "location_id"), with = F]
-  if(!(1 %in% unique(pop$age_group_id))) {
-    u5.gbd.pop <- pop[age_group_id %in% c(2,3,238,34,388,389)]
-    u5.gbd.pop[, age_group_id := 1]
-    u5.gbd.pop <- u5.gbd.pop[,.(population = sum(population)), by = c("year_id", "sex_id", "age_group_id", "location_id")]
-    pop <- rbind(pop, u5.gbd.pop)	
-  }
-  if(!(21 %in% unique(pop$age_group_id))) {
-    o80.gbd.pop <- pop[age_group_id %in% c(30:32, 235) ]
-    o80.gbd.pop[, age_group_id := 21]
-    o80.gbd.pop <- o80.gbd.pop[,.(population = sum(population)), by = c("year_id", "sex_id", "age_group_id", "location_id")]
-    pop <- rbind(pop, o80.gbd.pop)	
-  }
-  return(pop)
-}
 
 
 ### Tables
@@ -98,11 +82,11 @@ while(length(new.parents) > 0) {
 
 
 # Read in child data
-combined.dt <- rbindlist(
+spec_combined <- rbindlist(
   mclapply(child.locs,
            function(loc) {
              for(stage in stages) {
-               in.path <- paste0(out_dir, "/", loc, suffix)
+               in.path <- paste0(eppasm_dir, "compiled/", loc, suffix)
                if(file.exists(in.path)) {
                  out.stage <- stage
                  break
@@ -113,22 +97,101 @@ combined.dt <- rbindlist(
            , mc.cores = ncores)
 )
 
+spec_combined[, non_hiv_deaths := as.numeric(non_hiv_deaths)][, pop := as.numeric(pop)][, pop_neg := as.numeric(pop_neg)][,hiv_deaths:= as.numeric(hiv_deaths)]
+spec_combined[,new_hiv:= as.numeric(new_hiv)][,total_births:= as.numeric(total_births)][,hiv_births := as.numeric(hiv_births)][,suscept_pop:=as.numeric(suscept_pop)]
+spec_combined[, pop_art:= as.numeric(pop_art)][,pop_gt350:= as.numeric(pop_gt350)][,pop_200to350:= as.numeric(pop_200to350)][, pop_lt200:= as.numeric(pop_lt200)]
 
-# Add up children and write parent
-combined.dt <- combined.dt[, lapply(.SD, sum), by = id.vars]
-combined.dt[, non_hiv_deaths_prop := non_hiv_deaths / (non_hiv_deaths + hiv_deaths)]
+spec_combined <- spec_combined[, lapply(.SD, sum), by = id.vars]
 
-print(head(combined.dt))
-assert_values(combined.dt, names(combined.dt), "gte", 0)
-assert_values(combined.dt, colnames(combined.dt), "not_na")
+##################################################################################################################
+## Convert from Spectrum to rate space
+##################################################################################################################
+convert_to_rate <- function(x) { 
+  rate <- ifelse(spec_combined[['spec_pop']] != 0,
+                 x/spec_combined[['spec_pop']], 0)
+  return(rate)
+} 
+
+convert_to_rate_2 <- function(x) {
+  rate <- ifelse(spec_combined[['spec_pop']] != 0,
+                 x/((spec_combined[['spec_pop']]+spec_combined[['spec_pop_last']])/2), 0)  
+  return(rate)
+} 
+
+shift_to_midyear <- function(x) {
+  ## TODO we need to revisit repeating the last year
+  x_last <- x[length(x)]
+  x_lag <- c(shift(x, type = "lead")[-length(x)], x_last)
+  out_x <- (x + x_lag) / 2
+  return(out_x)
+}
+
+spec_combined[, non_hiv_deaths_prop := non_hiv_deaths / (non_hiv_deaths + hiv_deaths)]
+spec_combined[is.na(non_hiv_deaths_prop), non_hiv_deaths_prop := 1]
+
+### get the mid year spec_pop for incidence and death
+setnames(spec_combined, 'pop', 'spec_pop')
+spec_combined_last <- spec_combined[,.(year, sex_id, run_num, age_group_id, spec_pop)]
+spec_combined_last[, year:= year+1]
+spec_combined_0 <- spec_combined[year==min(spec_combined$year),.(year, sex_id, run_num, age_group_id, suscept_pop)]
+setnames(spec_combined_0, "suscept_pop", "spec_pop")
+spec_combined_last <- rbind(spec_combined_last, spec_combined_0)
+setnames(spec_combined_last, "spec_pop", "spec_pop_last")
+
+spec_combined <- merge(spec_combined, spec_combined_last, by=c("year", "sex_id", "run_num", "age_group_id"))
+
+## Shift HIV incidence and deaths
+## EPPASM output infections and deaths are midyear-to-midyear
+## We want incidence and deaths to be calendar year, and populations to be midyear
+convert_vars <- c('non_hiv_deaths', 'hiv_deaths', 'new_hiv', 'hiv_births', 'total_births')
+spec_combined[,(convert_vars) := lapply(.SD,shift_to_midyear),.SDcols=convert_vars, by=c("sex_id", "run_num", "age_group_id")] 
+spec_combined[,(convert_vars) := lapply(.SD,convert_to_rate),.SDcols=convert_vars] 
+print(head(spec_combined))
+
+convert_vars2 <- c("suscept_pop","pop_neg","pop_lt200","pop_200to350","pop_gt350","pop_art")
+spec_combined[,(convert_vars2) := lapply(.SD,convert_to_rate),.SDcols=convert_vars2] 
+print(spec_combined)
+
+##################################################################################################################
+## Format and Output
+setnames(spec_combined,"year","year_id")
+
+
+
+print(head(spec_combined))
+assert_values(spec_combined, names(spec_combined), "gte", 0)
+assert_values(spec_combined, colnames(spec_combined), "not_na")
+
+## fix larger than 1 values
+spec_mean <- spec_combined[,.(non_hiv_deaths_mean = quantile(non_hiv_deaths,probs = 0.5),
+                              hiv_deaths_mean = quantile(hiv_deaths,probs = 0.5),
+                              new_hiv_mean = quantile(new_hiv,probs = 0.5),
+                              pop_art_mean = quantile(pop_art,probs = 0.5),
+                              pop_gt350_mean = quantile(pop_gt350,probs = 0.5),
+                              pop_200to350_mean = quantile(pop_200to350,probs = 0.5),
+                              pop_lt200_mean = quantile(pop_lt200,probs = 0.5)),
+                           by = c("year_id", "sex_id", "age_group_id")]
+spec_combined <- merge(spec_combined, spec_mean, by = c("year_id", "sex_id", "age_group_id"))
+
+spec_combined[suscept_pop>1, suscept_pop := 1][pop_neg>1, pop_neg :=1]
+spec_combined[non_hiv_deaths>1, non_hiv_deaths := non_hiv_deaths_mean][hiv_deaths>1, hiv_deaths := hiv_deaths_mean]
+spec_combined[new_hiv>1, new_hiv := new_hiv_mean][pop_art >1, pop_art := pop_art_mean][pop_gt350>1, pop_gt350 := pop_gt350_mean]
+spec_combined[pop_200to350>1, pop_200to350 := pop_200to350_mean][pop_lt200>1, pop_lt200 :=pop_lt200_mean]
+
 
 ## test missing data
 id.vars = list(year_id = c(1970:2024), sex_id = c(1,2), age_group_id = c(2,3,6:20, 30:32, 34, 235, 238, 388, 389), run_num = c(1:1000))
-missing = assertable::assert_ids(combined.dt, id_vars = id.vars, warn_only = F)
+missing = assertable::assert_ids(spec_combined, id_vars = id.vars, warn_only = F)
 
+## save deaths
+write.csv(spec_combined[,list(sex_id,year_id,age_group_id,run_num,hiv_deaths,non_hiv_deaths, non_hiv_deaths_prop)],paste0(out_dir_death,"/",parent,"_ART_deaths.csv"),row.names=F)
 
-write.csv(combined.dt[,list(sex_id,year_id,age_group_id,run_num,hiv_deaths,non_hiv_deaths, non_hiv_deaths_prop)],paste0(out_dir_death,"/",parent,"_ART_deaths.csv"),row.names=F)
-write.csv(combined.dt[,list(sex_id,year_id,run_num,hiv_deaths, non_hiv_deaths, new_hiv,hiv_births,suscept_pop,total_births,pop_neg, pop_lt200,pop_200to350,pop_gt350,pop_art,age_group_id)],paste0(out_dir,"/",parent,"_ART_data.csv"),row.names=F)
+# # Rescramble draws to match Reckoning output before outputting non-fatal results (can't do it to the fatal that feeds into the Reckoning because we want to preserve within-draw correlation between them)
+# spec_combined <- merge(spec_combined,draw_map,by="run_num")
+
+## save all
+write.csv(spec_combined[,list(sex_id,year_id,run_num,hiv_deaths, non_hiv_deaths, new_hiv,hiv_births,suscept_pop,total_births,pop_neg,pop_lt200,pop_200to350,pop_gt350,pop_art,age_group_id)],paste0(out_dir,"/",parent,"_ART_data.csv"),row.names=F)
+
 
 # Read in child birth prevalence data
 suffix <- ".csv"

@@ -43,9 +43,9 @@ if(length(args) > 0) {
   loc = args[2]
   gbdyear = args[3]
 } else {
-  run.name = '230809_meixin'
-  loc <- 'ZAF_482'
-  gbdyear = "gbdTEST"
+  run.name = '240304_platypus'
+  loc <- "KEN_35653"
+  gbdyear = "gbd23"
 }
 library(mortdb, lib ="/mnt/team/mortality/pub/shared/r/4")
 

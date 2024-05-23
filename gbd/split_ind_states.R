@@ -21,24 +21,24 @@ library(data.table);library(tidyr);library(dplyr);library(parallel)
 args <- commandArgs(trailingOnly = TRUE)
 if(length(args) > 0) {
   run.name <- args[1]
-  decomp.step <- args[2]
+  gbdyear <- args[2]
 } else {
 
-  run.name <- "200713_yuka"
-  decomp.step <- 'iterative'
+  run.name <- "240304_platypus"
+  gbdyear <- "gbd23"
 }
 
 
 
 ### Paths
-dir.list <- paste0('/share/hiv/epp_output/gbd20/',run.name,'/compiled/')
+dir.list <- paste0('/share/hiv/epp_output/',gbdyear,'/',run.name,'/compiled/')
 prop.path <- paste0('/share/hiv/epp_input/gbd20/art_prop.csv')
-pop.dir <- list(paste0('/share/hiv/epp_input/gbd20/',run.name,"/population_single_age/"),
-                paste0('/share/hiv/epp_input/gbd20/',run.name,"/population_single_age/india_splitting_locs/"))
+pop.dir <- list(paste0('/share/hiv/epp_input/',gbdyear,'/',run.name,"/population_single_age/"),
+                paste0('/share/hiv/epp_input/',gbdyear,'/',run.name,"/population_single_age/india_splitting_locs/"))
 
 
 ### Functions
-library(mortdb, lib = "/ihme/mortality/shared/r/4")
+library(mortdb, lib = "/mnt/team/mortality/pub/shared/r/4")
 
 
 ##Find corrent age groups and sex ids to match EPP-ASM output using one location
@@ -54,7 +54,7 @@ sex_groups <- get_ids("sex")
 sex_groups$sex <- tolower(sex_groups$sex)
 
 prop.dt <- fread(prop.path)[grepl("IND", ihme_loc_id)]
-pops <- paste0("/ihme/hiv/epp_input/gbd20/",run.name,"/population_single_age/")
+pops <- paste0("/ihme/hiv/epp_input/",gbdyear,"/",run.name,"/population_single_age/")
 
 
 
@@ -74,53 +74,76 @@ file.list <- list.files(dir.list, "IND_")
 locs <- gsub("_under1_splits.csv", "", file.list)
 locs <- gsub(".csv", "", locs)
 ind.locs <- loc.table[grepl("IND", ihme_loc_id) & level == 4, ihme_loc_id]
+locs <- intersect(ind.locs, locs)
 missing.locs <- setdiff(ind.locs, unique(locs))
 missing.locs.child <- missing.locs
 
-spec.inc.path <- paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/compiled/IND_inc/')
-spec.prev.path <- paste0('/ihme/hiv/epp_output/gbd20/', run.name, '/compiled/IND_prev/')
+spec.inc.path <- paste0('/ihme/hiv/epp_output/',gbdyear,'/', run.name, '/compiled/IND_inc/')
+spec.prev.path <- paste0('/ihme/hiv/epp_output/',gbdyear,'/', run.name, '/compiled/IND_prev/')
 dir.create(spec.inc.path, showWarnings = F)
 dir.create(spec.prev.path, showWarnings = F)
 
 ind.locs.epp <- loc.table[grepl("IND",ihme_loc_id) & epp==1,ihme_loc_id]
 
 ##Sum counts across populations
-all.ind<- lapply(ind.locs.epp, function(loc_i) {
-  sum.dt <- fread(paste0(dir.list,loc_i,".csv"))
-  print(which(ind.locs.epp == loc_i) / length(ind.locs.epp))
-  return(sum.dt)
-})
-all.ind <- rbindlist(all.ind)
-stratum <- colnames(all.ind)[colnames(all.ind) %in% c("age", "sex", "year","run_num")]
-cols <- colnames(all.ind)[!colnames(all.ind) %in% stratum]
-measures <- cols
-x <- all.ind[ ,lapply(.SD,as.numeric), .SDcols=cols]
-all.ind <- cbind(x, all.ind[,.(age, sex, year, run_num)])
-sum.ind <- all.ind[ ,lapply(.SD,sum), .SDcols=cols, by=stratum]
+if(length(missing.locs)>0){
+  id.vars <- c("run_num", "year", "sex", "age")
+  combined.dt <- fread(paste0(dir.list, "/", locs[1], ".csv"))
+  for(loc in locs[2:length(locs)]){
+    print(loc)
+    in.path <- paste0(dir.list, "/", loc, ".csv")
+    dt <- fread(in.path,blank.lines.skip = T)
+    dt[,pop_gt350 := as.numeric(pop_gt350)]
+    combined.dt <- rbind(combined.dt,dt)[, lapply(.SD, sum), by = id.vars]
+    rm(dt)
+  }
+  out.dt <- combined.dt
+  
+  age.map <- data.table(get_age_map(type="all"))
+  setnames(age.map, "age_group_years_start", "age")
+  pop.locs <- loc.table[parent_id == 163, location_id]
+  pop.table <- get_mort_outputs(
+    "population single year", "estimate",
+    run_id = 299,
+    age_group_id = c(28, 238,21 ,50:127),
+    location_id = pop.locs, year_id = seq(1970, 2024), sex_id = 1:2)
+  pop.o80 <-  get_mort_outputs(
+    "population", "estimate",
+    gbd_year = 2023,
+    run_id = 355,
+    age_group_id = 21,
+    location_id = pop.locs, year_id = seq(1970, 2024), sex_id = 1:2)
+  pop.table[, upload_population_single_year_estimate_id := NULL]
+  pop.o80[, upload_population_estimate_id := NULL]
+  setnames(pop.o80, "mean", "population")
+  pop.table <- rbind(pop.table, pop.o80)
+  merged.pop <- merge(pop.table, age.map[,.(age_group_id, age)], by = "age_group_id")
+  merged.pop[, sex := ifelse(sex_id == 1, "male", "female")]
+  merged.pop[, c("age_group_id", "sex_id") := NULL]
+  setnames(merged.pop, "year_id", "year")
+  
+  other.dt <- copy(merged.pop[location_id != loc.table[ihme_loc_id %in% missing.locs, location_id]])
+  other.dt <- other.dt[, .(other_pop = sum(population)), by = .(year, age, sex)]
+  minor.dt <- copy(merged.pop[location_id == loc.table[ihme_loc_id %in% missing.locs, location_id]])
+  merged.dt <- merge(minor.dt, other.dt, by = c("year", "age", "sex"))
+  merged.dt[, ratio := population / other_pop]
+  merged.dt[, age := as.integer(age)]
+  
+  merged.out <- merge(out.dt, merged.dt[, .(year, age, sex, ratio)], by = c("year", "sex", "age"), all.x = T)
+  val.vars <- setdiff(names(merged.out), c("year", "sex", "age", "run_num", "ratio"))
+  matrix <- as.matrix(merged.out[, val.vars, with = F])
+  ratio <- merged.out$ratio
+  ratio.matrix <- sweep(matrix, MARGIN = 1, ratio, `*`)
+  ratio.dt <- as.data.table(ratio.matrix)
+  bound.dt <- cbind(merged.out[, .(year, age, sex, run_num)], ratio.dt)
+  out.dt <- copy(bound.dt)
+  
+  print("filling in missing locs")
+  for(m_loc in missing.locs){
+    write.csv(out.dt,paste0(dir.list,m_loc,".csv"),row.names = FALSE)
+  }
+}
 
-#
-# print("filling in missing locs")
-# # for(m_loc in missing.locs){
-# #   m_loc1 <- loc.table[ihme_loc_id==m_loc,location_id]
-# #   pop <- get_mort_outputs('population', 'estimate', location_id = m_loc1, age_group_ids = unique(get.age.groups$age_group_id), sex_id = c(1,2), year_ids = c(1970:2022))
-# #   pop_sa <-  get_mort_outputs('population single year', 'estimate', location_id = m_loc1, age_group_ids = unique(get.age.groups$age_group_id), sex_id = c(1,2), year_ids = c(1970:2022))
-# #   setnames(pop_sa, 'population', 'mean')
-# #   pop <- rbind(pop[,.(year_id, location_id, ihme_loc_id, sex_id, age_group_id, mean, lower, upper)],
-# #                pop_sa[,.(year_id, location_id, ihme_loc_id, sex_id, age_group_id, mean, lower, upper)])
-# #   pop <- merge(pop,unique(get.age.groups),by="age_group_id")
-# #   pop <- merge(pop,sex_groups,by="sex_id")
-# #   setnames(pop,c('year_id'), c('year'))
-# #   pop$age <- as.integer(pop$age)
-# #   setnames(pop, 'mean', 'population')
-# #   combined.pop <- merge(sum.ind,unique(pop[,.(year,sex,age,population)]), by=c('year','sex','age'))
-# #   combined.pop$pop.ratio <- combined.pop$population/combined.pop$pop
-# #
-# #   m_loc_all <- combined.pop[ ,lapply(.SD,"*",pop.ratio), .SDcols=cols, by=stratum]
-# #
-# #   write.csv(m_loc_all,paste0(dir.list,m_loc,".csv"),row.names = FALSE)
-# #
-# # }
-#
 # ##Sum counts across populations for children under 1
 # file.list <- paste0(dir.list, ind.locs.epp, '_under1_splits.csv')
 # all.ind <- rbindlist(lapply(file.list , function(loc_i) {
@@ -131,12 +154,12 @@ sum.ind <- all.ind[ ,lapply(.SD,sum), .SDcols=cols, by=stratum]
 #
 measures_child <- c("enn","lnn","x_388", 'x_389')
 stratum <- c("year","run_num")
-cols <- colnames(all.ind)[!colnames(all.ind) %in% stratum]
-measures_child <- cols
-options(datatable.optimize=1)
-x <- all.ind[ ,lapply(.SD,as.numeric), .SDcols=cols]
-all.ind <- cbind(x, all.ind[,.(  year, run_num)])
-sum.ind <- all.ind[ ,lapply(.SD,sum), .SDcols=cols, by=stratum]
+# cols <- colnames(all.ind)[!colnames(all.ind) %in% stratum]
+# measures_child <- cols
+# options(datatable.optimize=1)
+# x <- all.ind[ ,lapply(.SD,as.numeric), .SDcols=cols]
+# all.ind <- cbind(x, all.ind[,.(  year, run_num)])
+# sum.ind <- all.ind[ ,lapply(.SD,sum), .SDcols=cols, by=stratum]
 child_age <- age_groups[age_group_id %in% c(2,3,388,389)]
 child_age[age_group_name == "Early Neonatal", age_group_name := "enn"]
 child_age[age_group_name == "Late Neonatal", age_group_name := "lnn"]
@@ -197,8 +220,8 @@ missing.parents <- unique(loc.table[location_id %in% loc.table[ihme_loc_id %in% 
 state.locs <- c(loc.table[grepl("IND", ihme_loc_id) & level == 4 & epp == 1, ihme_loc_id],"IND_44538") #"IND_44538"-not run through EPP but filled in above
 
 
-#
 
+# Start split state to rural and urban
 split_states <- function(state) {
   loc.id <- as.integer(strsplit(state, "_")[[1]][2])
   children <- loc.table[parent_id == loc.id, ihme_loc_id]
@@ -318,48 +341,49 @@ split_states <- function(state) {
     write.csv(prev.dt, paste0(spec.prev.path, child, '.csv'), row.names = F)
     
     
-    ##Under 1 splits
-    path <- paste0(dir, state,"_under1_splits.csv")
-    state.dt <- fread(path)
-    measures_child <- c("enn","lnn","x_388", 'x_389')
-    stratum <- c("year","run_num")
-    child.result <- state.dt[,mget(stratum)]
-    for(measure in measures_child) {
-      child.id <- loc.table[ihme_loc_id == child, location_id]
-      measure <- as.character(measure)
-      cols <- c(stratum,measure)
-      state.dt.t <- state.dt[,mget(cols)]
-      state.dt.t$run_num <- paste0("draw", state.dt.t$run_num )
-      state.dt.t <- spread(state.dt.t, run_num, get(measure))
-
-      max.draw <- max(state.dt$run_num)
-
-      #times the state level counts by the child ART props
-      draw.cols <- paste0("draw",1:max.draw)
-      child.dt <- copy(state.dt.t)
-      child.dt <- child.dt[, (draw.cols) := lapply(.SD, '*',  props[ihme_loc_id == child, prop]), .SDcols = draw.cols][]
-      child.dt <- melt(child.dt,id.vars = c("year"))
-      child.dt$variable <- as.integer(gsub("draw","", child.dt$variable))
-      setnames(child.dt,c("variable","value"),c("run_num",measure))
-
-      #Get counts for relevent measure  for child region
-      child.result <- merge(child.result,child.dt)
-
-    }
-
-    write.csv(child.result, paste0(dir, child ,"_under1_splits.csv"), row.names = F)
+    # ##Under 1 splits
+    # path <- paste0(dir, state,"_under1_splits.csv")
+    # state.dt <- fread(path)
+    # measures_child <- c("enn","lnn","x_388", 'x_389')
+    # stratum <- c("year","run_num")
+    # child.result <- state.dt[,mget(stratum)]
+    # for(measure in measures_child) {
+    #   child.id <- loc.table[ihme_loc_id == child, location_id]
+    #   measure <- as.character(measure)
+    #   cols <- c(stratum,measure)
+    #   state.dt.t <- state.dt[,mget(cols)]
+    #   state.dt.t$run_num <- paste0("draw", state.dt.t$run_num )
+    #   state.dt.t <- spread(state.dt.t, run_num, get(measure))
+    # 
+    #   max.draw <- max(state.dt$run_num)
+    # 
+    #   #times the state level counts by the child ART props
+    #   draw.cols <- paste0("draw",1:max.draw)
+    #   child.dt <- copy(state.dt.t)
+    #   child.dt <- child.dt[, (draw.cols) := lapply(.SD, '*',  props[ihme_loc_id == child, prop]), .SDcols = draw.cols][]
+    #   child.dt <- melt(child.dt,id.vars = c("year"))
+    #   child.dt$variable <- as.integer(gsub("draw","", child.dt$variable))
+    #   setnames(child.dt,c("variable","value"),c("run_num",measure))
+    # 
+    #   #Get counts for relevent measure  for child region
+    #   child.result <- merge(child.result,child.dt)
+    # 
+    # }
+    # 
+    # write.csv(child.result, paste0(dir, child ,"_under1_splits.csv"), row.names = F)
   }
   
 }
 ind.locs <- loc.table[grepl("IND",ihme_loc_id) & spectrum==1,ihme_loc_id]
-ind.locs <- setdiff(ind.locs, c('IND_43880', 'IND_43877', 'IND_43911', 'IND_43910', 'IND_43875', 'IND_43874',
-                                'IND_43909', 'IND_43872', 'IND_43873', 'IND_43882', 'IND_43881', 'IND_43883', 'IND_43884'))
+# ind.locs <- setdiff(ind.locs, c('IND_43872', 'IND_43873', 'IND_43874', 'IND_43875', 'IND_43877', 'IND_43880', 
+#                                 'IND_43881', 'IND_43882', 'IND_43883', 'IND_43884', 'IND_43909', 'IND_43910', 'IND_43911'))
 state.locs <- c(loc.table[grepl("IND", ihme_loc_id) & level == 4 & epp == 1, ihme_loc_id],"IND_44538") #"IND_44538"-not run through EPP but filled in above
-state.locs <- unique(loc.table[ihme_loc_id%in%ind.locs,parent_id])
-state.locs <- loc.table[location_id %in% state.locs, ihme_loc_id]
-mclapply(state.locs[1:10], split_states, mc.cores = 10)
-mclapply(state.locs[11:20], split_states, mc.cores = 10)
-mclapply(state.locs[21:28], split_states, mc.cores = 10)
+# state.locs <- unique(loc.table[ihme_loc_id%in%ind.locs,parent_id])
+# state.locs <- loc.table[location_id %in% state.locs, ihme_loc_id]
+mclapply(state.locs[c(20,31)], split_states, mc.cores = 10)
+# mclapply(state.locs[20:29], split_states, mc.cores = 10)
+# mclapply(state.locs[30:31], split_states, mc.cores = 10)
+# mclapply(state.locs[], split_states, mc.cores = 1)
 
 
 ### End

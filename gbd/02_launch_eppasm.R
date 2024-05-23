@@ -29,14 +29,14 @@ source(paste0('/ihme/homes/', user, '/rt-shared-functions/cluster_functions.R'))
 
 ## Arguments
 #run.name = '200713_yuka_newUNAIDS'
-run.name = '231129_bandicoot'
+run.name = '240304_platypus'
 compare.run <- c("200713_yuka")
 proj.end <- 2024
 if(file.exists(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))){
   n.draws = nrow(fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv')))
   array.job = T
 }else{
-  n.draws = 100
+  n.draws = 1000
   array.job = F
 }
 run.group2 <- FALSE
@@ -53,13 +53,11 @@ run_eppasm = T
 code.dir = paste0('/homes/', user, '/gbdeppaiml/')
 
 ### Paths
-input.dir <- paste0("/ihme/hiv/epp_input/", gbdyear, '/', run.name, "/")
-dir.create(input.dir, recursive = TRUE, showWarnings = FALSE)
 dir <- paste0("/ihme/hiv/epp_output/", gbdyear, '/', run.name, "/")
 dir.create(dir, showWarnings = FALSE)
-dir.table <- fread(paste0('/share/hiv/epp_input/gbd20//dir_table_log_gbd20.csv'))
-
-run.table <- fread(paste0('/share/hiv/epp_input/gbd22//eppasm_run_table.csv'))
+# dir.table <- fread(paste0('/share/hiv/epp_input/gbd20//dir_table_log_gbd20.csv'))
+# 
+# run.table <- fread(paste0('/share/hiv/epp_input/gbd23//eppasm_run_table.csv'))
 
 # if(!run.name %in% unique(run.table$run_name)){
 #   stop("Add run comment and new run to run tracker")
@@ -81,8 +79,6 @@ loc.table <- data.table(get_locations(hiv_metadata = T))
 ### Code
 epp.list <- sort(loc.table[epp == 1 & grepl('1', group), ihme_loc_id])
 loc.list <- epp.list
-##standard loc list
-loc.list <- c(loc.list, 'MRT', 'STP', 'COM')
 # loc.have <- list.dirs("/share/hiv/epp_output/gbd22/230809_meixin/fit")
 # loc.have <- gsub("/share/hiv/epp_output/gbd22/230809_meixin/fit/","",loc.have)
 # setdiff(loc.list, loc.have)
@@ -92,7 +88,7 @@ if(run_eppasm & !array.job){
     for(loc in loc.list) {    
       ## Run EPPASM
       submit_array_job(script = paste0(code.dir, 'gbd/main.R'), n_jobs = n.draws,
-                       queue = 'long.q', memory = '7G', threads = 1, time = "24:00:00", name = paste0(loc, '_', run.name, '_eppasm'),
+                       queue = 'all.q', memory = '7G', threads = 1, time = "24:00:00", name = paste0(loc, '_', run.name, '_eppasm'),
                        archive = F, args = c(run.name, loc, proj.end, paediatric, TRUE))
     }
 }
@@ -107,23 +103,21 @@ if(run_eppasm & !array.job){
                       queue = 'all.q', memory = '30G', threads = 1, time = "01:00:00", name = paste0(loc, '_', run.name, '_compile'),
                       archive = F, args = c(run.name,  array.job,  loc,  'TRUE', paediatric, gbdyear))
     }
-      # Make sure all locations are done
-       check_files(paste0(loc.list, '.csv'),paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/compiled/'))
+    # Make sure all locations are done
+    check_files(paste0(loc.list, '.csv'),paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/compiled/'))
 
     for(loc in loc.list) {
       submit_job(script = paste0(code.dir, 'gbd/get_summary_files.R'),
-                 queue = 'all.q', memory = '5G', threads = 1, time = "01:00:00", name = paste0(loc, '_', run.name, '_summary'),
+                 queue = 'all.q', memory = '10G', threads = 1, time = "01:00:00", name = paste0(loc, '_', run.name, '_summary'),
                  archive = F, args = c(run.name,   loc, gbdyear))
     }
       #  #Make sure all locations are done
        check_loc_results(paste0(loc.list, '.csv'),paste0('/share/hiv/epp_output/', gbdyear, '/', run.name, '/summary_files/'))
 
-       for(loc in loc.list) {
+    for(loc in loc.list) {
       submit_job(script = paste0(code.dir, 'gbd/main_plot_output.R'),
                  queue = 'all.q', memory = '20G', threads = 1, time = "00:15:00", name = paste0(loc, '_', run.name, '_plot'),
                  archive = T, args = c(loc, run.name, compare.run, gbdyear))
-      
-      
     }
     
 

@@ -20,12 +20,12 @@ if(length(args) > 0) {
     compare.run <- NA
   }
 } else {
-  run.name = '230809_meixin'
-  loc <- 'ZAF_482'
+  run.name = '240304_platypus'
+  loc <- 'ETH_44858'
   draw.fill <- TRUE
-  compare.run <- c('zaf_full_run_0.15')
+  compare.run <- '200713_yuka'
   test <-  NULL
-  gbd_year_new <- "gbdTEST"
+  gbd_year_new <- "gbd23"
 }
 
 # gbd_year_new <- "gbd20"
@@ -33,10 +33,10 @@ if( '190630_rhino2' %in% compare.run){
   gbd_year_old <- "gbd19"
   
 }else{
-  gbd_year_old <- "gbd20"
+  gbd_year_old <- "gbd23"
   
 }
-gbdyear <- 'gbd20'
+gbdyear <- 'gbd23'
 
 # array.dt <- fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
 # loc.name <- unique(array.dt[loc_scalar == loc, ihme_loc_id])
@@ -73,26 +73,26 @@ if(!file.exists(paste0('/share/hiv/epp_input/gbd20/', run.name, '/location_table
 if(!is.na(compare.run)){
   run.name.old = compare.run[1]
   if(run.name.old != '190630_rhino2'){
-    loc.table.old <- fread(paste0('/share/hiv/epp_input/gbd20/', run.name.old, '/location_table.csv'))
+    loc.table.old <- fread(paste0('/share/hiv/epp_input/gbd23/', run.name.old, '/location_table.csv'))
     
   }else{
-    loc.table.old <- fread(paste0('/share/hiv/epp_input/gbd19/', run.name.old, '/location_table.csv'))
+    loc.table.old <- fread(paste0('/share/hiv/epp_input/gbd23/', run.name.old, '/location_table.csv'))
     
   }
 }
 
-if(loc %in% c('STP', 'COM', 'MAR')){
-  compare.run = NA
-}
+# if(loc %in% c('STP', 'COM', 'MAR')){
+#   compare.run = NA
+# }
 run.names.comp <- compare.run
 #run_vec <- paste0('gbd20/zaf_test_', seq(0.05,0.95, by = 0.05))
 # ## 15-49 plots
 dir.create(paste0('/ihme/hiv/epp_output/',gbd_year_new,'/', run.name, '/15to49_plots/'), recursive = TRUE, showWarnings = FALSE)
   plot_15to49(loc,
               # run.vec = run_vec,
-              run.vec = c(paste0(gbd_year_new, '/', run.name), 'gbd20/200713_yuka'),
+              run.vec = c(paste0(gbd_year_new, '/', run.name), paste0(gbd_year_old, '/', compare.run)),
               base.run = paste0(run.name),
-              names = c('Modified run', 'GBD20'),
+              names = c("GBD23_platypus", "GBD23_bandicoot"),
               gbdyear = gbd_year_new,
               loc_name = loc.name)
 

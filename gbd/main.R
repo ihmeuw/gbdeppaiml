@@ -24,8 +24,8 @@ user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
-  run.name = '231129_bandicoot'
-  loc <- 'ZWE'
+  run.name = '240304_platypus'
+  loc <- 'ETH_44858'
   stop.year <- 2024
   j <- 5
   paediatric <- TRUE
@@ -139,8 +139,6 @@ if(loc %in% c("MAR","MRT","COM")){
 
 
 # Prepare the dt object ---------------------------------------
-##attr(dt, 'eppd')
-##attr(dt, 'specfp')
 dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
                        pop.sub, anc.sub,  prev.sub = prev_sub, art.sub = TRUE,
                        sexincrr.sub = sexincrr.sub,  age.prev = age.prev, paediatric = TRUE,
@@ -150,15 +148,20 @@ dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
                        anc.rt = FALSE, gbdyear =gbdyear, run.name = run.name
                        # anc.backcast,
                        )
-###Switched to a binomial model, so we can now handle observations of zero
-mod <- data.table(attr(dt, 'eppd')$hhs)[prev == 0.0005,se := 0]
-mod[prev == 0.0005, prev := 0]
 
+# fix cd4_mort for STP
 if(loc %in% c( "STP")){
-  cd4_mort <- readRDS("/homes/mzhang25/cd4_mort_STP.rds")
+  cd4_mort <- readRDS("/share/hiv/data/PJNZ_prepped/2022/cd4_mort_STP.rds")
   cd4_mort <- cd4_mort[, c(1,1,1,2,2,3,3,4,4),]
   attr(dt, "specfp")$cd4_mort <- cd4_mort
 }
+if (loc =="MRT"){
+  attr(dt, "specfp")$ss$time_epi_start <- 1975
+}
+
+###Switched to a binomial model, so we can now handle observations of zero
+mod <- data.table(attr(dt, 'eppd')$hhs)[prev == 0.0005,se := 0]
+mod[prev == 0.0005, prev := 0]
 attr(dt, 'eppd')$hhs <- data.frame(mod)
 
 ###Extends inputs to the projection year as well as does some site specific changes. This should probably be examined by cycle
@@ -198,9 +201,10 @@ sub.anc.prior <- function(dt,loc){
 dt <- sub.anc.prior(dt, loc)
 
 ###Get the locations that should be run with the binomial likelihood
-# zero_prev_locs <- fread(prev_surveys)
-zero_prev_locs <- fread("/ihme/hiv/epp_input/gbd20/prev_surveys.csv")
+# zero_prev_locs <- fread("/ihme/hiv/epp_input/gbd20/prev_surveys.csv")
+zero_prev_locs <- fread("/ihme/hiv/epp_input/gbd23/prev_surveys_ind.csv")
 zero_prev_locs <- unique(zero_prev_locs[prev == 0.0005 & use == TRUE,iso3])
+zero_prev_locs <- c(zero_prev_locs, "ETH_44858")
 attr(dt, 'eppd')$ancsitedat <- data.frame(attr(dt, 'eppd')$ancsitedat)
 # Fit model ---------------------------------------
 # dt <- readRDS(paste0('/ihme/hiv/epp_output/gbd20/200713_yuka/dt_objects/',loc,'_dt.RDS'))
@@ -210,9 +214,11 @@ if(grepl('ZAF', loc)){
   attr(dt, 'specfp')$art_mort <- attr(dt, 'specfp')$art_mort  * 0.15
 }
 
-if (loc =="MRT"){
-  attr(dt, "specfp")$ss$time_epi_start <- 1975
+if(loc %in% c("SOM", "NER")){
+  attr(dt, 'specfp')$scale_cd4_mort <- as.integer(1)
 }
+
+
 
 fit <- eppasm::fitmod(dt, eppmod = ifelse(grepl('IND', loc),'rlogistic',epp.mod), 
                       B0 = 1e5, B = 1e3, number_k = 3000, 

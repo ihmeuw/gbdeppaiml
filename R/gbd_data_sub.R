@@ -761,7 +761,7 @@ sub.prev.granular <- function(dt, loc, test.sub_prev_granular){
     age.prev.dt <- age.prev.dt[sex_id == 3,]
   }else{
     if(grepl('IND', loc)){
-      prev_surveys <- "/ihme/hiv/epp_input/gbd20/prev_surveys_ind.csv"
+      prev_surveys <- "/ihme/hiv/epp_input/gbd23/prev_surveys_ind.csv"
       age.prev.dt <- fread(prev_surveys)
 
       }else{
@@ -777,8 +777,12 @@ sub.prev.granular <- function(dt, loc, test.sub_prev_granular){
     
   }
   
+  if (loc == "ETH_44858"){
+    age.prev.dt <- age.prev.dt[iso3 == "ETH_95069"]
+  }else{
+    age.prev.dt <- age.prev.dt[iso3 == loc]
+  }
   
-  age.prev.dt <- age.prev.dt[iso3 == loc]
   # if(!is.null(test.sub_prev_granular)){
   #   if(test.sub_prev_granular == 'test1'){
   #     age.prev.dt[,prev := prev * 1]

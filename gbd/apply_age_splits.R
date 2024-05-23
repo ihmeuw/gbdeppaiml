@@ -14,10 +14,10 @@ if(length(args) > 0) {
   gbdyear <- args[4]
 } else {
 
-  loc <- "SOM"
-  run.name = "220407_Meixin"
-  spec.name = "221115_meixin"
-  gbdyear <- 'gbdTEST'
+  loc <- "KEN_35617"
+  run.name = "240304_platypus"
+  spec.name = "240304_platypus"
+  gbdyear <- 'gbd23'
 
 }
 fill.draw <- T
@@ -114,7 +114,7 @@ spec_draw <- spec_draw[,.(pop = sum(pop), hiv_deaths = sum(hiv_deaths), non_hiv_
                     by = c('age_gbd', 'sex', 'year', 'run_num')]
 setnames(spec_draw, 'age_gbd', 'age')
 
-## identify unreasonable draws in NGA
+# ## identify unreasonable draws in NGA
 if(loc %like% "NGA"){
   draws.list <- unique(spec_draw[pop > 100*quantile(pop, probs = 0.75), run_num])
   draws.list <- unique(c(unique(spec_draw[hiv_deaths > 100*quantile(hiv_deaths, probs = 0.75), run_num]), draws.list))
@@ -122,7 +122,7 @@ if(loc %like% "NGA"){
   draws.list <- unique(c(unique(spec_draw[new_hiv > 100*quantile(new_hiv, probs = 0.75), run_num]), draws.list))
   draws.list <- unique(c(unique(spec_draw[pop_neg > 100*quantile(pop_neg, probs = 0.75), run_num]), draws.list))
   spec_draw <- spec_draw[!(run_num %in% draws.list)]
-  }
+}
 
 # Fill in missing draws
 if(fill.draw) {
@@ -172,17 +172,18 @@ if(fill.na & na.present) {
 birth_pop <-  get_mort_outputs(
   "birth", "estimate",
   gbd_year = 2021,
-  run_id = ids[run_name == run.name, births],
+  run_id = 'best',
   ##all ages 10-54
   age_group_id = 169,
-  location_id = loc_id, year_id = seq(1970, 2022), sex_id = 1:2)
-birth_pop.2023 <- birth_pop[year_id==2022]
-birth_pop.2023[, year_id:= 2023]
-birth_pop <- rbind(birth_pop, birth_pop.2023)
-birth_pop.2023[, year_id:= 2024]
-birth_pop <- rbind(birth_pop, birth_pop.2023)
+  location_id = loc_id, year_id = seq(1970, 2024), sex_id = 1:2)
+# birth_pop.2023 <- birth_pop[year_id==2022]
+# birth_pop.2023[, year_id:= 2023]
+# birth_pop <- rbind(birth_pop, birth_pop.2023)
+# birth_pop.2023[, year_id:= 2024]
+# birth_pop <- rbind(birth_pop, birth_pop.2023)
 
 setnames(birth_pop, 'mean', 'population')
+birth_pop = extrapolate_years(birth_pop, years_to_average = 2, end_year = 2024, trans_vars = "population", id_vars = c("age_group_id","location_id","sex_id","run_id"))
 birth_pop[,population := sum(population), by = c('location_id', 'year_id', 'sex_id')]
 birth_pop[,age_group_id := 164]
 setnames(birth_pop, c("year_id", "population"), c("year", "gbd_pop"))
@@ -247,16 +248,7 @@ spec_o80 <- data.table(spec_draw[age_group_id==21,])
 spec_o80[, age_group_id := NULL]
 
 # Get raw proportions for splitting populations and other general ones
-# if(run.name == "zaf_full_run_0.15"){ ## update it once we have new demographic input
-  pop <- fread(paste0('/share/hiv/epp_input/gbd20/200713_yuka/population_splits/', loc, '.csv'))
-  pop.2023 <- pop[year_id==2022]
-  pop.2023[, year_id := 2023]
-  pop <- rbind(pop, pop.2023)
-  pop.2023[, year_id := 2024]
-  pop <- rbind(pop, pop.2023)
-# }else{
-#   pop <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/population_splits/', loc, '.csv'))
-# }
+pop <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/population_splits/', loc, '.csv'))
 o80_pop <- pop[age_group_id %in% c(30:32, 235),]
 o80_pop[,pop_total:=sum(population), by=list(sex_id,year_id)]
 o80_pop[,pop_prop:=population/pop_total, by=list(sex_id,year_id)]
@@ -286,7 +278,11 @@ spec_o80[,(death_vars) := lapply(.SD,pop_weight_death),.SDcols=death_vars]
 
 spec_o80[,c("pop_total","pop_prop","pop_prop_inc","pop_prop_death","location_id") :=NULL]
 
+spec_combined <- rbindlist(list(spec_draw[!age_group_id == 21,],spec_o80),use.names=T) # Drop 0-5 and 80+, replace with spec_u5 and spec_o80 
 
+if (unique(loc.table[ihme_loc_id == loc, level])>3){
+  write.csv(spec_combined[,list(sex_id,year,run_num, pop, hiv_deaths, non_hiv_deaths, new_hiv,pop_neg,hiv_births,suscept_pop,total_births,pop_lt200,pop_200to350,pop_gt350,pop_art,age_group_id)],paste0(eppasm_dir,"/compiled/",loc,"_ART_data.csv"),row.names=F)
+}
 ##################################################################################################################
 ## Convert from Spectrum to rate space
 convert_to_rate <- function(x) { 
@@ -310,7 +306,6 @@ shift_to_midyear <- function(x) {
 }
 
 # Recombine with spec_draw
-spec_combined <- rbindlist(list(spec_draw[!age_group_id == 21,],spec_o80),use.names=T) # Drop 0-5 and 80+, replace with spec_u5 and spec_o80 
 spec_combined[, non_hiv_deaths_prop := non_hiv_deaths / (non_hiv_deaths + hiv_deaths)]
 spec_combined[is.na(non_hiv_deaths_prop), non_hiv_deaths_prop := 1]
 
@@ -348,16 +343,32 @@ print(head(spec_combined))
 assert_values(spec_combined, names(spec_combined), "gte", 0)
 assert_values(spec_combined, colnames(spec_combined), "not_na")
 
+## fix larger than 1 values
+spec_mean <- spec_combined[,.(non_hiv_deaths_mean = quantile(non_hiv_deaths,probs = 0.5),
+                              hiv_deaths_mean = quantile(hiv_deaths,probs = 0.5),
+                              new_hiv_mean = quantile(new_hiv,probs = 0.5),
+                              pop_art_mean = quantile(pop_art,probs = 0.5),
+                              pop_gt350_mean = quantile(pop_gt350,probs = 0.5),
+                              pop_200to350_mean = quantile(pop_200to350,probs = 0.5),
+                              pop_lt200_mean = quantile(pop_lt200,probs = 0.5)),
+                           by = c("year_id", "sex_id", "age_group_id")]
+spec_combined <- merge(spec_combined, spec_mean, by = c("year_id", "sex_id", "age_group_id"))
+
+spec_combined[suscept_pop>1, suscept_pop := 1][pop_neg>1, pop_neg :=1]
+spec_combined[non_hiv_deaths>0.999, non_hiv_deaths := non_hiv_deaths_mean][hiv_deaths>0.999, hiv_deaths := hiv_deaths_mean]
+spec_combined[new_hiv>0.999, new_hiv := new_hiv_mean][pop_art >0.999, pop_art := pop_art_mean][pop_gt350>0.999, pop_gt350 := pop_gt350_mean]
+spec_combined[pop_200to350>0.999, pop_200to350 := pop_200to350_mean][pop_lt200>0.999, pop_lt200 :=pop_lt200_mean]
+
 ## test missing data
 id.vars = list(year_id = c(1970:2024), sex_id = c(1,2), age_group_id = c(2,3,6:20, 30:32, 34, 235, 238, 388, 389), run_num = c(1:1000))
 missing = assertable::assert_ids(spec_combined, id_vars = id.vars, warn_only = F)
 
-## save birth prevalence
+## save deaths
 write.csv(spec_combined[,list(sex_id,year_id,age_group_id,run_num,hiv_deaths,non_hiv_deaths, non_hiv_deaths_prop)],paste0(out_dir_death,"/",loc,"_ART_deaths.csv"),row.names=F)
 
 # # Rescramble draws to match Reckoning output before outputting non-fatal results (can't do it to the fatal that feeds into the Reckoning because we want to preserve within-draw correlation between them)
 # spec_combined <- merge(spec_combined,draw_map,by="run_num")
 
-## save birth prevalence
+## save all
 write.csv(spec_combined[,list(sex_id,year_id,run_num,hiv_deaths, non_hiv_deaths, new_hiv,hiv_births,suscept_pop,total_births,pop_neg,pop_lt200,pop_200to350,pop_gt350,pop_art,age_group_id)],paste0(out_dir,"/",loc,"_ART_data.csv"),row.names=F)
 

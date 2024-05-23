@@ -405,7 +405,8 @@ modify_dt <- function(dt, run_name, gbdyear=gbdyear){
   
   attr(dt, 'eppd')$ancsitedat = unique(attr(dt, 'eppd')$ancsitedat)
   ## TODO - fix se = 0 data points in ZAF
-  attr(dt, 'eppd')$hhs <- attr(dt, 'eppd')$hhs[!attr(dt, 'eppd')$hhs$se == 0,]
+  # attr(dt, 'eppd')$hhs <- attr(dt, 'eppd')$hhs[!attr(dt, 'eppd')$hhs$se == 0,]
+  
 
   
   attr(dt, 'specfp')$relinfectART <- 0.3

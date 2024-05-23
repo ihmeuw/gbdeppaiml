@@ -27,11 +27,11 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
   array.job = FALSE
-  run.name = '230809_meixin'
-  loc <- 'AGO'
+  run.name = '240304_platypus'
+  loc <- 'KEN_35653'
   draw.fill <- T
   paediatric <- T
-  gbdyear <- "gbd22"
+  gbdyear <- "gbd23"
   n = 1000
 }else{
   run.name <- args[1]
@@ -113,38 +113,48 @@ print('loc.table loaded')
 
 
 ### Code
+if(!is.null(test)){
+  draw.path <- paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, "/", loc, '_', test)
+}else{
+  draw.path <- paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, "/", loc)
+}
 
-
-    if(!is.null(test)){
-      draw.path <- paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, "/", loc, '_', test)
-      
-    }else{
-      draw.path <- paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, "/", loc)
-      
-    }
 print(draw.path)
-    draw.list <- list.files(draw.path)
-  
+draw.list <- list.files(draw.path)
+print('draw.list exists')
+
+## subset out additional outputs (theta, under-1 splits)
+draw.list <- draw.list[gsub('.csv', '', draw.list) %in% 1:1000]    
+print(draw.list)
     
-    print('draw.list exists')
-    ## subset out additional outputs (theta, under-1 splits)
-    ## this could probably be tidied up
-    # draw.list <- draw.list[grepl('.csv', draw.list) & !grepl('theta_', draw.list) & !grepl('under_', draw.list) & !grepl('missing_', draw.list)]
-    draw.list <- draw.list[gsub('.csv', '', draw.list) %in% 1:1000]
-    print(draw.list)
+dt <- lapply(draw.list, function(draw){
+  print(draw)
+  draw.dt <- fread(paste0(draw.path, '/', draw))
+})
+dt <- rbindlist(dt)
+if(loc=="ETH_44857"){
+  dt <- dt[run_num != 421]
+}
+if(loc=="ETH_44858"){
+  dt <- dt[run_num != 384]
+}
+if(loc=="ETH_44859"){
+  dt <- dt[run_num != 389]
+}
+if(loc=="KEN_35653"){
+  dt <- dt[run_num != 791]
+  dt <- dt[run_num != 415]
+}
+dt <- melt(dt, id.vars = c('age', 'sex', 'year', 'run_num'))
+print(colnames(dt))
+dt <- as.data.table(dt)
+dt[, value := as.numeric(value)]
+dt[value <0, value := 0]
+print('negative values replaced if necessary')
+dt <- dcast(dt, age + sex + year + run_num  ~ variable, value.var = 'value')
+dt <- as.data.table(dt)
     
-    dt <- lapply(draw.list, function(draw){
-      print(draw)
-      draw.dt <- fread(paste0(draw.path, '/', draw))
-    })
-    dt <- rbindlist(dt)
-    dt <- melt(dt, id.vars = c('age', 'sex', 'year', 'run_num'))
-    print(colnames(dt))
-    dt <- as.data.table(dt)
-    dt[value <0, value := 0]
-    print('negative values replaced if necessary')
-    dt <- dcast(dt, age + sex + year + run_num  ~ variable, value.var = 'value')
-    ##Sometimes there are negative values, need to replace
+##Sometimes there are negative values, need to replace
     
     # dt.check <- lapply(dt,function(draw.dt)
     #   try(assert_values(draw.dt,colnames(draw.dt),test="gte",0))

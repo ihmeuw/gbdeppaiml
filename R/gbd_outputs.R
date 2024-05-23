@@ -304,13 +304,8 @@ split_u1.new_ages <- function(dt, loc, run.name, gbdyear, test_run = NULL, loc_n
     loc_name = loc_name
   }
   #change to the new population splits folder
-  pop <- data.table(fread(paste0('/ihme/hiv/epp_input/gbd20/200713_yuka//population_splits/', loc_name, '.csv')))
-  # pop <- data.table(fread(paste0('/ihme/hiv/epp_input/',gbdyear,"/" ,run.name, "/population_splits/", loc_name, '.csv')))
-  pop.2023 <- pop[year_id==2022]
-  pop.2023[, year_id :=2023]
-  pop <- rbind(pop,pop.2023)
-  pop.2023[, year_id :=2024]
-  pop <- rbind(pop,pop.2023)
+  # pop <- data.table(fread(paste0('/ihme/hiv/epp_input/gbd20/200713_yuka//population_splits/', loc_name, '.csv')))
+  pop <- data.table(fread(paste0('/ihme/hiv/epp_input/',gbdyear,"/" ,run.name, "/population_splits/", loc_name, '.csv')))
   
   u1.pop <- pop[age_group_id %in% c(2,3,388,389)]
   u1.pop[,pop_total := sum(population), by = c('sex_id', 'year_id')]

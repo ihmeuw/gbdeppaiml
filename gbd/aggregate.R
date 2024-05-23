@@ -27,9 +27,9 @@ if(length(args) > 0) {
   ncores <- args[4]
   
 } else {
-  parent <- "ZAF"
-  run.name = "230809_meixin"
-  spec.run.name <-"230809_meixin"
+  parent <- "IND"
+  run.name = "240304_platypus"
+  spec.run.name <-"240304_platypus"
   ncores <- 2
 }
 
@@ -67,6 +67,7 @@ while(length(new.parents) > 0) {
     new.parents <- c(new.parents, loc.table[location_id %in% children & spectrum != 1, location_id])
   }
 }	
+
 
 ##Read in the first child file, then append the sum of other files to reduce memory requirements  
 suffix <- ".csv"
@@ -117,7 +118,6 @@ out.path <- paste0(in.dir, "/", parent, suffix)
 write.csv(out.dt, out.path, row.names=F)
 
 
-
 # Multiply summed up India locations by ratio of Minor Territories pop to non-Minor Territories India
 # Only needed if we end up putting India through EPP-ASM
 if(parent == "IND_44538") {
@@ -150,6 +150,7 @@ if(parent == "IND_44538") {
   out.path <- paste0(in.dir, "/", parent, suffix)
   write.csv(out.dt, out.path, row.names=F)
 }
+
 
 
 ##Unsure when this is needed 

@@ -15,8 +15,8 @@ if(length(args) > 0) {
   run.name <- args[1]
   gbdyear <- args[2]
 } else {
-  run.name <- '201209_socialdets'
-  gbdyear <- 'gbd20'
+  run.name <- '240304_platypus'
+  gbdyear <- 'gbd23'
 }
 
 dir <- paste0("/ihme/hiv/epp_output/", gbdyear ,'/', run.name, "/")
