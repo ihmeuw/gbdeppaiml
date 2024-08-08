@@ -27,8 +27,8 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
   array.job = FALSE
-  run.name = '240304_platypus'
-  loc <- 'KEN_35653'
+  run.name = '240529_meixin_test2art'
+  loc <- 'KEN_35660'
   draw.fill <- T
   paediatric <- T
   gbdyear <- "gbd23"
@@ -151,6 +151,12 @@ dt <- as.data.table(dt)
 dt[, value := as.numeric(value)]
 dt[value <0, value := 0]
 print('negative values replaced if necessary')
+dt.summary <- dt[, .(mean = mean(value), upper = quantile(value, probs=0.975), cap=quantile(value, probs=0.99)), by= c("age","sex","year", "variable")]
+dt <- merge(dt, dt.summary)
+drop.draws <- unique(dt[mean>upper&value>cap, run_num])
+dt <- dt[!(run_num%in%drop.draws)]
+print('problematic draws dropped')
+dt[, mean:= NULL][, upper:= NULL][, cap:= NULL]
 dt <- dcast(dt, age + sex + year + run_num  ~ variable, value.var = 'value')
 dt <- as.data.table(dt)
     
@@ -162,7 +168,6 @@ dt <- as.data.table(dt)
     # 
     # dt.check <- unlist(lapply(dt.check,function(check) !class(check)=="try-error"))
     # dt <- rbindlist(dt[dt.check])
-    print('negative values replaced if necessary')
     
     if(draw.fill){
       dt <- fill_draws(dt,type="adult")

@@ -29,14 +29,14 @@ source(paste0('/ihme/homes/', user, '/rt-shared-functions/cluster_functions.R'))
 
 ## Arguments
 #run.name = '200713_yuka_newUNAIDS'
-run.name = '240304_platypus'
-compare.run <- c("200713_yuka")
+run.name = "240529_meixin_test2art"
+compare.run <- c("231129_bandicoot")
 proj.end <- 2024
 if(file.exists(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))){
   n.draws = nrow(fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv')))
   array.job = T
 }else{
-  n.draws = 1000
+  n.draws = 50
   array.job = F
 }
 run.group2 <- FALSE
@@ -85,7 +85,7 @@ loc.list <- epp.list
 
 # EPP-ASM ---------------------------------------
 if(run_eppasm & !array.job){
-    for(loc in loc.list) {    
+    for(loc in loc.list.1) {    
       ## Run EPPASM
       submit_array_job(script = paste0(code.dir, 'gbd/main.R'), n_jobs = n.draws,
                        queue = 'all.q', memory = '7G', threads = 1, time = "24:00:00", name = paste0(loc, '_', run.name, '_eppasm'),

@@ -24,8 +24,8 @@ user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
-  run.name = '240304_platypus'
-  loc <- 'ETH_44858'
+  run.name = '240529_meixin_test2art'
+  loc <- 'ZAF_482'
   stop.year <- 2024
   j <- 5
   paediatric <- TRUE
@@ -214,11 +214,9 @@ if(grepl('ZAF', loc)){
   attr(dt, 'specfp')$art_mort <- attr(dt, 'specfp')$art_mort  * 0.15
 }
 
-if(loc %in% c("SOM", "NER")){
+# if(loc %in% c("NAM", "NER", "MDG")){
   attr(dt, 'specfp')$scale_cd4_mort <- as.integer(1)
-}
-
-
+# }
 
 fit <- eppasm::fitmod(dt, eppmod = ifelse(grepl('IND', loc),'rlogistic',epp.mod), 
                       B0 = 1e5, B = 1e3, number_k = 3000, 

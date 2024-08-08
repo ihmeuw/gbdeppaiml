@@ -25,8 +25,8 @@ if(length(args) > 0) {
   spec_name <- args[2]
   ncores <- args[3]
 } else {
-  parent <- "KEN_44793"
-  spec_name <- "240304_platypus"
+  parent <- "KEN"
+  spec_name <- "240529_meixin_test2art"
   ncores <- 20
 }
 
@@ -80,7 +80,10 @@ while(length(new.parents) > 0) {
   }
 }	
 
-
+if(parent=="ETH"){
+  child.locs <- c("ETH_44852", "ETH_44853", "ETH_44854", "ETH_44855", "ETH_44856", "ETH_44857", "ETH_44858", "ETH_44859",
+                  "ETH_44860", "ETH_44861", "ETH_44862")
+}
 # Read in child data
 spec_combined <- rbindlist(
   mclapply(child.locs,

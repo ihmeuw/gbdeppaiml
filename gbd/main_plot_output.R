@@ -21,9 +21,9 @@ if(length(args) > 0) {
   }
 } else {
   run.name = '240304_platypus'
-  loc <- 'ETH_44858'
+  loc <- 'ZWE'
   draw.fill <- TRUE
-  compare.run <- '200713_yuka'
+  compare.run <- '231129_bandicoot'
   test <-  NULL
   gbd_year_new <- "gbd23"
 }

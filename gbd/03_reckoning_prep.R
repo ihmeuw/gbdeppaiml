@@ -27,8 +27,8 @@ source(paste0('/ihme/homes/', user, '/rt-shared-functions/cluster_functions.R'))
 
 # Arguments ---------------------------------------
 gbdyear = 'gbd23'
-run.name = "240304_platypus"
-spec.name = "240304_platypus"
+run.name = "240529_meixin_test2art"
+spec.name = "240529_meixin_test2art"
 code.dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
 loc.table <- get_locations(hiv_metadata = T)
 cluster.project = 'proj_hiv'
