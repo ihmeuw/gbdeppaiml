@@ -14,9 +14,9 @@ if(length(args) > 0) {
   gbdyear <- args[4]
 } else {
 
-  loc <- "KEN_35617"
-  run.name = "240304_platypus"
-  spec.name = "240304_platypus"
+  loc <- "MOZ"
+  run.name = "art_mort_test_0.7_art_pct"
+  spec.name = "art_mort_test_0.7_art_pct"
   gbdyear <- 'gbd23'
 
 }
@@ -210,7 +210,7 @@ write.csv(birth_dt[,.(year, sex_id, run_num, age_group_id, birth_prev_rate, birt
 spec_draw[,birth_prev := NULL]
 
 ## split under 1 age group
-output.u1 <- split_u1.new_ages(spec_draw[age == 0], loc, run.name = run.name, gbdyear = gbdyear)
+output.u1 <- split_u1.new_ages(spec_draw[age == 0], loc, run.name = "240529_meixin_test2art", gbdyear = gbdyear)
 output.u1[age=="x_388", age := "1-5 mo."]
 output.u1[age=="x_389", age := "6-11 mo."]
 
@@ -248,7 +248,7 @@ spec_o80 <- data.table(spec_draw[age_group_id==21,])
 spec_o80[, age_group_id := NULL]
 
 # Get raw proportions for splitting populations and other general ones
-pop <- fread(paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/population_splits/', loc, '.csv'))
+pop <- fread(paste0('/share/hiv/epp_input/gbd23/240529_meixin_test2art/population_splits/', loc, '.csv'))
 o80_pop <- pop[age_group_id %in% c(30:32, 235),]
 o80_pop[,pop_total:=sum(population), by=list(sex_id,year_id)]
 o80_pop[,pop_prop:=population/pop_total, by=list(sex_id,year_id)]

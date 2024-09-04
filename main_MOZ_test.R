@@ -29,14 +29,16 @@ if(length(args) == 0){
   stop.year <- 2024
   j <- 5
   paediatric <- TRUE
+  scalar <- 0.1
 }else{
   run.name <- args[1]
   j <- as.integer(Sys.getenv("SLURM_ARRAY_TASK_ID"))
   loc <- args[2]
   stop.year <- as.integer(args[3])
   paediatric <- as.logical(args[4])
+  scalar <- as.numeric(args[6])
 }
-
+print(scalar)
 print(paste0('J is ', j))
 
 
@@ -105,13 +107,7 @@ paediatric = TRUE
 file_name = loc
 out.dir <- paste0('/ihme/hiv/epp_output/',gbdyear,'/', run.name, "/", file_name)
 
-## scale ZAF ART coverage input
-if(grepl('ZAF', loc)){
-  source(paste0('/ihme/homes/', user, '/gbdeppaiml/gbd/data_prep_scale_ZAF_ART.R'))
-}else{
-  source(paste0('/ihme/homes/', user, '/gbdeppaiml/gbd/data_prep.R'))
-}
-
+source(paste0('/ihme/homes/', user, '/gbdeppaiml/gbd/data_prep.R'))
 # Location specific toggles ---------------------------------------
 # ANC data bias adjustment
 ##### These locations do not have information from LBD team estimates
@@ -153,7 +149,7 @@ dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
                        test.sub_prev_granular = test,
                        anc.rt = FALSE, gbdyear =gbdyear, run.name = run.name
                        # anc.backcast,
-                       )
+)
 
 # fix cd4_mort for STP
 if(loc %in% c( "STP")){
@@ -220,17 +216,19 @@ if(grepl('ZAF', loc)){
   attr(dt, 'specfp')$art_mort <- attr(dt, 'specfp')$art_mort  * 0.15
 }
 
-# if(loc %in% c("NAM", "NER", "MDG")){
-  attr(dt, 'specfp')$scale_cd4_mort <- as.integer(1)
-# }
+if(loc=="MOZ"){
+  attr(dt, 'specfp')$art_mort <- attr(dt, 'specfp')$art_mort  * scalar
+}
+attr(dt, 'specfp')$scale_cd4_mort <- as.integer(1)
+
 
 fit <- eppasm::fitmod(dt, eppmod = ifelse(grepl('IND', loc),'rlogistic',epp.mod), 
                       B0 = 1e5, B = 1e3, number_k = 3000, 
                       ageprev = ifelse(loc %in% zero_prev_locs,'binom','probit'))
-if(grepl('ZAF', loc)){
-  run.name <- paste0(run.name, "_ZAF_ARTscale")
-  dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name))
-}
+
+## reset run.name to avoid over-write
+run.name <- paste0("MOZ_test_", scalar)
+dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/'))
 dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fitmod/'))
 saveRDS(fit, file = paste0('/ihme/hiv/epp_output/' , gbdyear, '/', run.name, '/fitmod/', loc, '_', j, '.RDS'))
 fit <- readRDS(paste0('/ihme/hiv/epp_output/',gbdyear,'/',run.name,'/fitmod/', loc, '_', j, '.RDS'))
@@ -281,9 +279,6 @@ if(plot.draw){
 params <- fnCreateParam(theta = unlist(param), fp = fit$fp)
 saveRDS(params, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', file_name, '.RDS'))
 
-dir.create(paste0('/share/hiv/epp_input/', gbdyear, '/', run.name))
 dir.create(paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/'))
 data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc,'.csv')
 save_data(loc, attr(dt, 'eppd'), run.name)
-
-

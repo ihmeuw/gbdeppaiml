@@ -36,7 +36,7 @@ if(file.exists(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))
   n.draws = nrow(fread(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv')))
   array.job = T
 }else{
-  n.draws = 50
+  n.draws = 1000
   array.job = F
 }
 run.group2 <- FALSE
@@ -85,12 +85,28 @@ loc.list <- epp.list
 
 # EPP-ASM ---------------------------------------
 if(run_eppasm & !array.job){
-    for(loc in loc.list.1) {    
+    for(loc in loc.list) {    
       ## Run EPPASM
       submit_array_job(script = paste0(code.dir, 'gbd/main.R'), n_jobs = n.draws,
                        queue = 'all.q', memory = '7G', threads = 1, time = "24:00:00", name = paste0(loc, '_', run.name, '_eppasm'),
                        archive = F, args = c(run.name, loc, proj.end, paediatric, TRUE))
     }
+}
+# EPP-ASM test for MOZ
+loc <- "MOZ"
+for(c.scalar in seq(0.5, 1, 0.1)) {    
+  ## Run EPPASM
+  submit_array_job(script = paste0(code.dir, 'gbd/main_MOZ_test.R'), n_jobs = n.draws,
+                   queue = 'all.q', memory = '7G', threads = 1, time = "24:00:00", name = paste0(loc, '_', run.name, '_eppasm'),
+                   archive = F, args = c(run.name, loc, proj.end, paediatric, TRUE, c.scalar))
+}
+for (loc in loc.list) {
+  for(c.scalar in c(1)) {    
+    ## Run EPPASM
+    submit_array_job(script = paste0(code.dir, 'gbd/main_MOZ_test.R'), n_jobs = n.draws,
+                     queue = 'all.q', memory = '7G', threads = 1, time = "24:00:00", name = paste0(loc, '_', run.name, '_eppasm'),
+                     archive = F, args = c(run.name, loc, proj.end, paediatric, TRUE, c.scalar))
+  }
 }
 
     ## Make sure all locations are done
