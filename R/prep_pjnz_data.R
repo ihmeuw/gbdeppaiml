@@ -2,9 +2,9 @@
 ## Reads in demp and projp to create specfp
 ## Saves object as .rds file (in order to avoid reading and collapsing PJNZ files every run)
 
-prepare_spec_object <- function(loc, popadjust = TRUE, popupdate=TRUE, use_ep5=FALSE){
+prepare_spec_object <- function(loc, popadjust = TRUE, popupdate=TRUE, use_ep5=FALSE, gbdyear=gbdyear){
   
-  pjnz <- find_pjnz(loc)[[1]]
+  pjnz <- find_pjnz(loc, gbdyear=gbdyear)[[1]]
   ##TODO: Make this work for ZAF
   if(grepl ('ZAF', loc)){
     eppd <- epp::read_epp_data(pjnz)
@@ -22,7 +22,7 @@ prepare_spec_object <- function(loc, popadjust = TRUE, popupdate=TRUE, use_ep5=F
     epp.totals <- list()
     epp.totals$epp.input.tot <- epp::read_epp_input(pjnz)
   } else{
-    epp.totals <- collapse_epp(loc)
+    epp.totals <- collapse_epp(loc, gbdyear=gbdyear)
     eppd <- epp.totals$eppd
   }
   

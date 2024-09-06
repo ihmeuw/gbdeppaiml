@@ -235,7 +235,7 @@ fit <- eppasm::fitmod(dt, eppmod = ifelse(grepl('IND', loc),'rlogistic',epp.mod)
 ## reset run.name to avoid over-write
 run.name <- paste0("art_mort_test_", scalar)
 if(loc=="MOZ"){
-  run.name <- paste0("art_mort_test_", scalar, "_art_pct")
+  run.name <- paste0("240529_meixin_test2art_GBD21_art")
 }
 
 dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name))

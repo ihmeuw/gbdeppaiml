@@ -25,7 +25,7 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
   run.name = '240529_meixin_test2art'
-  loc <- 'MOZ'
+  loc <- 'TZA'
   stop.year <- 2024
   j <- 5
   paediatric <- TRUE
@@ -108,6 +108,8 @@ out.dir <- paste0('/ihme/hiv/epp_output/',gbdyear,'/', run.name, "/", file_name)
 ## scale ZAF ART coverage input
 if(grepl('ZAF', loc)){
   source(paste0('/ihme/homes/', user, '/gbdeppaiml/gbd/data_prep_scale_ZAF_ART.R'))
+}else if(grepl('MOZ', loc)){
+  source(paste0('/ihme/homes/', user, '/gbdeppaiml/gbd/data_prep_scale_MOZ_ART.R'))
 }else{
   source(paste0('/ihme/homes/', user, '/gbdeppaiml/gbd/data_prep.R'))
 }
@@ -212,6 +214,10 @@ zero_prev_locs <- fread("/ihme/hiv/epp_input/gbd23/prev_surveys_ind.csv")
 zero_prev_locs <- unique(zero_prev_locs[prev == 0.0005 & use == TRUE,iso3])
 zero_prev_locs <- c(zero_prev_locs, "ETH_44858")
 attr(dt, 'eppd')$ancsitedat <- data.frame(attr(dt, 'eppd')$ancsitedat)
+if(loc=="TZA"){
+  attr(dt, 'eppd')$ancsitedat <- data.table(attr(dt, 'eppd')$ancsitedat)[year<=2016]
+  attr(dt, 'eppd')$ancsitedat <- data.frame(attr(dt, 'eppd')$ancsitedat)
+}
 # Fit model ---------------------------------------
 # dt <- readRDS(paste0('/ihme/hiv/epp_output/gbd20/200713_yuka/dt_objects/',loc,'_dt.RDS'))
 attr(dt,"eppd")$ancsitedat <- as.data.frame(attr(dt,"eppd")$ancsitedat)
@@ -227,8 +233,11 @@ if(grepl('ZAF', loc)){
 fit <- eppasm::fitmod(dt, eppmod = ifelse(grepl('IND', loc),'rlogistic',epp.mod), 
                       B0 = 1e5, B = 1e3, number_k = 3000, 
                       ageprev = ifelse(loc %in% zero_prev_locs,'binom','probit'))
-if(grepl('ZAF', loc)){
-  run.name <- paste0(run.name, "_ZAF_ARTscale")
+if(grepl('MOZ', loc)){
+  run.name <- paste0(run.name, "_art_pct")
+  dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name))
+}else if(grepl('TZA', loc)){
+  run.name <- paste0(run.name, "_anc_subset")
   dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name))
 }
 dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fitmod/'))

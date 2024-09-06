@@ -1,5 +1,6 @@
-find_pjnz <- function(loc){
+find_pjnz <- function(loc, gbdyear=gbdyear){
 
+  loc.table <- fread("/mnt/team/mortality/pub/shared/hiv_model_strategy_2024.csv")
   if(grepl("KEN", loc) & loc.table[ihme_loc_id == loc, level] == 5) {
       temp.loc <- loc.table[location_id == loc.table[ihme_loc_id == loc, parent_id], ihme_loc_id]
   } else if(grepl('ZAF', loc)){
@@ -31,7 +32,7 @@ find_pjnz <- function(loc){
   ##make exception for india
   if(grepl('IND', loc)){dir <-paste0("/ihme/limited_use/LIMITED_USE/PROJECT_FOLDERS/UNAIDS_ESTIMATES/2013/IND")}else{
   
-  if(unaids.year %in% 2016:2020) {
+  if(unaids.year %in% 2016:2023) {
     dir <- paste0("/home/j/DATA/UNAIDS_ESTIMATES/", unaids.year, "/", temp.loc, '/')
   } else {
     dir <- paste0("/ihme/limited_use/LIMITED_USE/PROJECT_FOLDERS/UNAIDS_ESTIMATES/", unaids.year, "/", temp.loc, "/")        
@@ -171,8 +172,8 @@ Mode <- function(x) {
   ux[which.max(tabulate(match(x, ux)))]
 }
 
-collapse_epp <- function(loc){
-  file.list <- find_pjnz(loc)
+collapse_epp <- function(loc, gbdyear=gbdyear){
+  file.list <- find_pjnz(loc, gbdyear=gbdyear)
   eppd.list <- lapply(file.list, function(file) {
     pjnz <- file
     eppd <- epp::read_epp_data(pjnz)

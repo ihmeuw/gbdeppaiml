@@ -121,10 +121,10 @@ if(run.name %in% c("240529_meixin_test1art")){
   if(grepl("ZAF", loc)){
     tem_art <- paste0('/share/hiv/data/UNAIDS_extrapolated/GBD23/adultARTcoverage/ZAF_sub/', loc, '_Adult_ART_cov.csv')
   }else if(loc=="MOZ"){
-    tem_art <- paste0('/share/hiv/data/UNAIDS_extrapolated/GBD23/adultARTcoverage/UNAIDS_2019/', loc, '_Adult_ART_cov.csv')
-
-  }
+    tem_art <- paste0('/share/hiv/data/UNAIDS_extrapolated/GBD23/adultARTcoverage/UNAIDS_2023/', loc, '_Adult_ART_cov_scale.csv')
     
+  }
+  
 }
 if(dir.table[ref == max(ref),population_single_age]){
   population_single_age <- paste0(input_root, '/population_single_age/', loc, '.csv')
@@ -249,4 +249,3 @@ print(paste('Using', pmtct, 'for PMTCT', sep = ' '))
 #   
 # ))
 
-# }

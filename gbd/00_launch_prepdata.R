@@ -11,19 +11,15 @@ library(data.table)
 
 ## Arguments
 cluster.project <- "proj_hiv"
-unaids_year <- 2019
+unaids_year <- 2023
 
 ### Functions
 library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
 loc.table <- data.table(get_locations(hiv_metadata = T))
 
 #Alternate metadata until 2019 becomes available
-loc.table <- "/ihme/mortality/shared/hiv_model_strategy_2020.csv"
-all_locs = loc.table[unaids_2019==1 & grepl("1",group) & epp==1,ihme_loc_id]
-
-
-### Tables
-loc.table <- data.table(get_locations(hiv_metadata = T))
+loc.table <- fread("/mnt/team/mortality/pub/shared/hiv_model_strategy_2024.csv")
+all_locs = loc.table[unaids_recent==unaids_year & grepl("1",group) & epp==1,ihme_loc_id]
 
 ### Code
 epp.list <- sort(loc.table[epp == 1, ihme_loc_id])
@@ -39,22 +35,22 @@ devtools::load_all()
 library(eppasm, lib.loc = "/snfs1/Project/GBD_Select_Infectious_Diseases/J TEMP HOLD/HIV/packages_r")
 
 
-### Tables
-loc.table <- data.table(get_locations(hiv_metadata = T))
-loc.list <- loc.table[,ihme_loc_id] %>% unique
+# ### Tables
+# loc.table <- data.table(get_locations(hiv_metadata = T))
+# loc.list <- loc.table[,ihme_loc_id] %>% unique
 
-unaids_2020 <- strsplit(list.dirs('/snfs1/DATA/UNAIDS_ESTIMATES/2020/'), split = '//')
-unaids_2020 <- sapply(unaids_2020[2:length(unaids_2020)], '[[', 2)
+unaids_2023 <- strsplit(list.dirs('/snfs1/DATA/UNAIDS_ESTIMATES/2023/'), split = '//')
+unaids_2023 <- sapply(unaids_2023[3:length(unaids_2023)], '[[', 2)
 
 
-for(loc in loc.list){
+for(loc in all_locs){
   unaids_year <- loc.table[ihme_loc_id==loc, unaids_recent]
   dir.create(paste0("/share/hiv/data/PJNZ_prepped/",unaids_year,"/"),recursive = TRUE, showWarnings = FALSE)
   
   
   if(grepl('1', loc.table[ihme_loc_id == loc, group])){
     if(!grepl('IND', loc)){
-      val <- prepare_spec_object(loc)
+      val <- prepare_spec_object(loc, gbdyear = gbdyear)
       print(attr(val,"country"))
     }else{
       val <- prepare_spec_object_ind(loc)
