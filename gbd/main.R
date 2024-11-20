@@ -24,8 +24,8 @@ user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
-  run.name = '240529_meixin_test2art'
-  loc <- 'TZA'
+  run.name = '240906_quokka'
+  loc <- 'AGO'
   stop.year <- 2024
   j <- 5
   paediatric <- TRUE
@@ -36,7 +36,7 @@ if(length(args) == 0){
   stop.year <- as.integer(args[3])
   paediatric <- as.logical(args[4])
 }
-
+new.run.name <- '241119_quokka_paed'
 print(paste0('J is ', j))
 
 
@@ -59,11 +59,13 @@ for(p in packages){
 # setwd(eppasm_dir)
 # pkgbuild::compile_dll(eppasm_dir, debug = FALSE)
 # devtools::load_all()
-gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
+library(eppasm, lib.loc = "/snfs1/Project/GBD_Select_Infectious_Diseases/J TEMP HOLD/HIV/packages_r")
+gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/projects/hiv/gbdeppaiml/")
 setwd(gbdeppaiml_dir)
 devtools::load_all()
-library(eppasm, lib.loc = "/snfs1/Project/GBD_Select_Infectious_Diseases/J TEMP HOLD/HIV/packages_r")
 library(abind)
+
+source(file.path(gbdeppaiml_dir, "gbd", "sub_paeds_drivers.R"))
 
 gbdyear <- 'gbd23'
 
@@ -107,11 +109,11 @@ out.dir <- paste0('/ihme/hiv/epp_output/',gbdyear,'/', run.name, "/", file_name)
 
 ## scale ZAF ART coverage input
 if(grepl('ZAF', loc)){
-  source(paste0('/ihme/homes/', user, '/gbdeppaiml/gbd/data_prep_scale_ZAF_ART.R'))
+  source(paste0('/ihme/homes/', user, '/projects/hiv/gbdeppaiml/gbd/data_prep_scale_ZAF_ART.R'))
 }else if(grepl('MOZ', loc)){
-  source(paste0('/ihme/homes/', user, '/gbdeppaiml/gbd/data_prep_scale_MOZ_ART.R'))
+  source(paste0('/ihme/homes/', user, '/projects/hiv/gbdeppaiml/gbd/data_prep_scale_MOZ_ART.R'))
 }else{
-  source(paste0('/ihme/homes/', user, '/gbdeppaiml/gbd/data_prep.R'))
+  source('gbd/data_prep.R')
 }
 
 # Location specific toggles ---------------------------------------
@@ -230,19 +232,25 @@ if(grepl('ZAF', loc)){
   attr(dt, 'specfp')$scale_cd4_mort <- as.integer(1)
 # }
 
-fit <- eppasm::fitmod(dt, eppmod = ifelse(grepl('IND', loc),'rlogistic',epp.mod), 
-                      B0 = 1e5, B = 1e3, number_k = 3000, 
-                      ageprev = ifelse(loc %in% zero_prev_locs,'binom','probit'))
-if(grepl('MOZ', loc)){
-  run.name <- paste0(run.name, "_art_pct")
-  dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name))
-}else if(grepl('TZA', loc)){
-  run.name <- paste0(run.name, "_anc_subset")
-  dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name))
-}
-dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fitmod/'))
-saveRDS(fit, file = paste0('/ihme/hiv/epp_output/' , gbdyear, '/', run.name, '/fitmod/', loc, '_', j, '.RDS'))
-fit <- readRDS(paste0('/ihme/hiv/epp_output/',gbdyear,'/',run.name,'/fitmod/', loc, '_', j, '.RDS'))
+# fit <- eppasm::fitmod(dt, eppmod = ifelse(grepl('IND', loc),'rlogistic',epp.mod), 
+#                       B0 = 1e5, B = 1e3, number_k = 3000, 
+#                       ageprev = ifelse(loc %in% zero_prev_locs,'binom','probit'))
+# if(grepl('MOZ', loc)){
+#   run.name <- paste0(run.name, "_art_pct")
+#   dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name))
+# }else if(grepl('TZA', loc)){
+#   run.name <- paste0(run.name, "_anc_subset")
+#   dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name))
+# }
+# dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fitmod/'))
+# saveRDS(fit, file = paste0('/ihme/hiv/epp_output/' , gbdyear, '/', run.name, '/fitmod/', loc, '_', j, '.RDS'))
+fit <- readRDS(paste0('/ihme/hiv/epp_output/',gbdyear,'/240906_quokka_PJNZ_2023/fitmod/', loc, '_', j, '.RDS'))
+
+## Execute the substitution of the new drivers into the fit object
+fit <- sub_paeds_drivers_fit(fit, art, pmtct)
+
+# Save to new directory (for future use)
+saveRDS(fit, file = paste0('/ihme/hiv/epp_output/' , gbdyear, '/', new.run.name, '/fitmod/', loc, '_', j, '.RDS'))
 
 data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc,'.csv')
 
@@ -264,14 +272,14 @@ if(max(fit$fp$pmtct_dropout$year) < stop.year & ped_toggle){
 
 draw <- j
 result <- gbd_sim_mod(fit, VERSION = "R")
-dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', file_name, '/'), recursive = T)
-saveRDS(result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', file_name, '/', draw, '.RDS'))
+dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', new.run.name, '/fit/', file_name, '/'), recursive = T)
+saveRDS(result, paste0('/ihme/hiv/epp_output/', gbdyear, '/', new.run.name, '/fit/', file_name, '/', draw, '.RDS'))
 #
 # #results
 # ##track the output of the prev and inc through get_gbd_outputs
 output.dt <- get_gbd_outputs(result, attr(dt, 'specfp'), paediatric = paediatric)
 output.dt[,run_num := j]
-out.dir <- paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/', file_name, '/')
+out.dir <- paste0('/ihme/hiv/epp_output/', gbdyear, '/', new.run.name, '/', file_name, '/')
 dir.create(out.dir, showWarnings = FALSE)
 write.csv(output.dt, paste0(out.dir, '/', j, '.csv'), row.names = F)
 
@@ -285,14 +293,14 @@ if(paediatric){
 param <- data.table(theta = attr(result, 'theta'))
 write.csv(param, paste0(out.dir,'/theta_', j, '.csv'), row.names = F)
 if(plot.draw){
-  plot_15to49_draw(loc, output.dt, attr(dt, 'eppd'), run.name)
+  plot_15to49_draw(loc, output.dt, attr(dt, 'eppd'), new.run.name)
 }
 params <- fnCreateParam(theta = unlist(param), fp = fit$fp)
-saveRDS(params, paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fit/', file_name, '.RDS'))
+saveRDS(params, paste0('/ihme/hiv/epp_output/', gbdyear, '/', new.run.name, '/fit/', file_name, '.RDS'))
 
-dir.create(paste0('/share/hiv/epp_input/', gbdyear, '/', run.name))
-dir.create(paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/'))
-data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', run.name, '/fit_data/', loc,'.csv')
-save_data(loc, attr(dt, 'eppd'), run.name)
+dir.create(paste0('/share/hiv/epp_input/', gbdyear, '/', new.run.name))
+dir.create(paste0('/share/hiv/epp_input/', gbdyear, '/', new.run.name, '/fit_data/'))
+data.path <- paste0('/share/hiv/epp_input/', gbdyear, '/', new.run.name, '/fit_data/', loc,'.csv')
+save_data(loc, attr(dt, 'eppd'), new.run.name)
 
 

@@ -24,12 +24,12 @@ user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 # devtools::load_all()
 library(data.table)
 date <- substr(gsub("-","",Sys.Date()),3,8)
-source(paste0('/ihme/homes/', user, '/rt-shared-functions/cluster_functions.R'))
+source(paste0('/ihme/homes/', user, '/projects/hiv/rt-shared-functions/cluster_functions.R'))
 
 
 ## Arguments
 #run.name = '200713_yuka_newUNAIDS'
-run.name = "240529_meixin_test2art"
+run.name = "240906_quokka"
 compare.run <- c("231129_bandicoot")
 proj.end <- 2024
 if(file.exists(paste0('/ihme/hiv/epp_input/gbd20/',run.name,'/array_table.csv'))){
@@ -50,7 +50,7 @@ redo_offsets <- F
 testing = FALSE
 test = NULL
 run_eppasm = T
-code.dir = paste0('/homes/', user, '/gbdeppaiml/')
+code.dir = paste0('/homes/', user, '/projects/hiv/gbdeppaiml/')
 
 ### Paths
 dir <- paste0("/ihme/hiv/epp_output/", gbdyear, '/', run.name, "/")

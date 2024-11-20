@@ -8,7 +8,7 @@ user <- Sys.getenv("USER")
 run.table <- fread(paste0('/share/hiv/epp_input/gbd20//eppasm_run_table.csv'))
 
 c.args <- run.table[run_name==run.name,]
-dir.table <- fread(paste0('/share/homes/',user,'/dir_table_log_gbd20.csv'))
+dir.table <- fread(paste0('/share/hiv/epp_input/gbd20/dir_table_log_gbd20_update.csv'))
 dir.table <- dir.table[ref == min(ref),] ##Changed from max which had ASFR/births set to F, might have been old
 if(grepl('test', loc)){
   loc <- 'IND_4856'
