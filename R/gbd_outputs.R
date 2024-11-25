@@ -305,7 +305,7 @@ split_u1.new_ages <- function(dt, loc, run.name, gbdyear, test_run = NULL, loc_n
   }
   #change to the new population splits folder
   # pop <- data.table(fread(paste0('/ihme/hiv/epp_input/gbd20/200713_yuka//population_splits/', loc_name, '.csv')))
-  pop <- data.table(fread(paste0('/ihme/hiv/epp_input/',gbdyear,"/" ,run.name, "/population_splits/", loc_name, '.csv')))
+  pop <- data.table(fread(paste0('/ihme/hiv/epp_input/',gbdyear,"/" ,"240906_quokka", "/population_splits/", loc_name, '.csv')))
   
   u1.pop <- pop[age_group_id %in% c(2,3,388,389)]
   u1.pop[,pop_total := sum(population), by = c('sex_id', 'year_id')]
@@ -414,6 +414,10 @@ split_u1 <- function(dt, loc, run.name, gbdyear="gbd20"){
 
 get_summary <- function(loc, run.name, paediatric = FALSE, old.splits, gbdyear){
  output <- fread(paste0('/share/hiv/epp_output/', gbdyear, '/',run.name, '/compiled/', loc, '.csv'))
+ output[, non_hiv_deaths := as.numeric(non_hiv_deaths)][, pop := as.numeric(pop)][, pop_neg := as.numeric(pop_neg)][,hiv_deaths:= as.numeric(hiv_deaths)]
+ output[,new_hiv:= as.numeric(new_hiv)][,total_births:= as.numeric(total_births)][,hiv_births := as.numeric(hiv_births)][,birth_prev:=as.numeric(birth_prev)]
+ output[, pop_art:= as.numeric(pop_art)][,pop_gt350:= as.numeric(pop_gt350)][,pop_200to350:= as.numeric(pop_200to350)][, pop_lt200:= as.numeric(pop_lt200)]
+ 
   if(grepl('socialdets', run.name) | grepl('tvfoi', run.name)){
     loc_name = unlist(strsplit(loc, '_'))[[1]]
   }else{

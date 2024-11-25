@@ -24,9 +24,9 @@ user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
-  run.name = '240529_meixin_test2art'
+  run.name = '200713_yuka'
   loc <- 'MOZ'
-  stop.year <- 2024
+  stop.year <- 2022
   j <- 5
   paediatric <- TRUE
   scalar <- 0.1
@@ -109,7 +109,7 @@ out.dir <- paste0('/ihme/hiv/epp_output/',gbdyear,'/', run.name, "/", file_name)
 
 ## scale ZAF ART coverage input
 if(grepl('ZAF', loc)|loc=="MOZ"){
-  source(paste0('/ihme/homes/', user, '/gbdeppaiml/gbd/data_prep_scale_ZAF_ART.R'))
+  source(paste0('/ihme/homes/', user, '/gbdeppaiml/gbd/data_prep_scale_MOZ_ART.R'))
 }else{
   source(paste0('/ihme/homes/', user, '/gbdeppaiml/gbd/data_prep.R'))
 }
@@ -235,7 +235,7 @@ fit <- eppasm::fitmod(dt, eppmod = ifelse(grepl('IND', loc),'rlogistic',epp.mod)
 ## reset run.name to avoid over-write
 run.name <- paste0("art_mort_test_", scalar)
 if(loc=="MOZ"){
-  run.name <- paste0("240529_meixin_test2art_GBD21_art")
+  run.name <- paste0("240906_quokka_art_pct")
 }
 
 dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name))

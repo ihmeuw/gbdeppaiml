@@ -14,9 +14,9 @@ if(length(args) > 0) {
   gbdyear <- args[4]
 } else {
 
-  loc <- "MOZ"
-  run.name = "art_mort_test_0.7_art_pct"
-  spec.name = "art_mort_test_0.7_art_pct"
+  loc <- "AGO"
+  run.name = "241119_quokka_paed"
+  spec.name = "241119_quokka_paed"
   gbdyear <- 'gbd23'
 
 }
@@ -69,6 +69,7 @@ age_map[age == "12-23 mo.",age_group_id := 238]
 locations <- data.table(get_locations(hiv_metadata = T))
 # locations <- get_location_metadata(gbd_round_id = 7, decomp_step = 'iterative', location_set_id = 35)
 loc_id <- locations[ihme_loc_id==loc,location_id]
+if(loc=="ETH_44858"){loc_id <- 44858}
 
 ## Use draw maps to scramble draws so that they are not correlated over time
 ## This is because Spectrum output is semi-ranked due to Ranked Draws into EPP
@@ -168,14 +169,16 @@ if(fill.na & na.present) {
     spec_draw <- rbind(spec_draw[run_num != draw], replace.dt)
   }
 }
+
 ## Calculate birth prevalence rate
-birth_pop <-  get_mort_outputs(
-  "birth", "estimate",
-  gbd_year = 2021,
-  run_id = 'best',
-  ##all ages 10-54
-  age_group_id = 169,
-  location_id = loc_id, year_id = seq(1970, 2024), sex_id = 1:2)
+  birth_pop <-  get_mort_outputs(
+    "birth", "estimate",
+    gbd_year = 2021,
+    run_id = 'best',
+    ##all ages 10-54
+    age_group_id = 169,
+    location_id = loc_id, year_id = seq(1970, 2024), sex_id = 1:2)
+
 # birth_pop.2023 <- birth_pop[year_id==2022]
 # birth_pop.2023[, year_id:= 2023]
 # birth_pop <- rbind(birth_pop, birth_pop.2023)
@@ -206,11 +209,17 @@ id.vars = list(year = c(1970:2024), sex_id = c(1,2), age_group_id = 164, run_num
 missing = assertable::assert_ids(birth_dt, id_vars = id.vars, warn_only = F)
 
 ## save birth prevalence
-write.csv(birth_dt[,.(year, sex_id, run_num, age_group_id, birth_prev_rate, birth_prev_count, gbd_pop)], paste0(out_dir_birth, loc, '.csv'), row.names = F)
+if(loc=="ETH_44858"){
+  write.csv(birth_dt[,.(year, sex_id, run_num, age_group_id, birth_prev_rate, birth_prev_count, gbd_pop)], paste0(out_dir_birth, "ETH_60908", '.csv'), row.names = F)
+  write.csv(birth_dt[,.(year, sex_id, run_num, age_group_id, birth_prev_rate, birth_prev_count, gbd_pop)], paste0(out_dir_birth, "ETH_94364", '.csv'), row.names = F)
+  write.csv(birth_dt[,.(year, sex_id, run_num, age_group_id, birth_prev_rate, birth_prev_count, gbd_pop)], paste0(out_dir_birth, "ETH_95069", '.csv'), row.names = F)
+}else{
+  write.csv(birth_dt[,.(year, sex_id, run_num, age_group_id, birth_prev_rate, birth_prev_count, gbd_pop)], paste0(out_dir_birth, loc, '.csv'), row.names = F)
+}
 spec_draw[,birth_prev := NULL]
 
 ## split under 1 age group
-output.u1 <- split_u1.new_ages(spec_draw[age == 0], loc, run.name = "240529_meixin_test2art", gbdyear = gbdyear)
+output.u1 <- split_u1.new_ages(spec_draw[age == 0], loc, run.name = run.name, gbdyear = gbdyear)
 output.u1[age=="x_388", age := "1-5 mo."]
 output.u1[age=="x_389", age := "6-11 mo."]
 
@@ -248,7 +257,7 @@ spec_o80 <- data.table(spec_draw[age_group_id==21,])
 spec_o80[, age_group_id := NULL]
 
 # Get raw proportions for splitting populations and other general ones
-pop <- fread(paste0('/share/hiv/epp_input/gbd23/240529_meixin_test2art/population_splits/', loc, '.csv'))
+pop <- fread(paste0('/share/hiv/epp_input/',gbdyear,'/',"240906_quokka",'/population_splits/', loc, '.csv'))
 o80_pop <- pop[age_group_id %in% c(30:32, 235),]
 o80_pop[,pop_total:=sum(population), by=list(sex_id,year_id)]
 o80_pop[,pop_prop:=population/pop_total, by=list(sex_id,year_id)]
@@ -280,9 +289,9 @@ spec_o80[,c("pop_total","pop_prop","pop_prop_inc","pop_prop_death","location_id"
 
 spec_combined <- rbindlist(list(spec_draw[!age_group_id == 21,],spec_o80),use.names=T) # Drop 0-5 and 80+, replace with spec_u5 and spec_o80 
 
-if (unique(loc.table[ihme_loc_id == loc, level])>3){
-  write.csv(spec_combined[,list(sex_id,year,run_num, pop, hiv_deaths, non_hiv_deaths, new_hiv,pop_neg,hiv_births,suscept_pop,total_births,pop_lt200,pop_200to350,pop_gt350,pop_art,age_group_id)],paste0(eppasm_dir,"/compiled/",loc,"_ART_data.csv"),row.names=F)
-}
+# if (unique(loc.table[ihme_loc_id == loc, level])>3){
+#   write.csv(spec_combined[,list(sex_id,year,run_num, pop, hiv_deaths, non_hiv_deaths, new_hiv,pop_neg,hiv_births,suscept_pop,total_births,pop_lt200,pop_200to350,pop_gt350,pop_art,age_group_id)],paste0(eppasm_dir,"/compiled/",loc,"_ART_data.csv"),row.names=F)
+# }
 ##################################################################################################################
 ## Convert from Spectrum to rate space
 convert_to_rate <- function(x) { 
@@ -364,11 +373,23 @@ id.vars = list(year_id = c(1970:2024), sex_id = c(1,2), age_group_id = c(2,3,6:2
 missing = assertable::assert_ids(spec_combined, id_vars = id.vars, warn_only = F)
 
 ## save deaths
-write.csv(spec_combined[,list(sex_id,year_id,age_group_id,run_num,hiv_deaths,non_hiv_deaths, non_hiv_deaths_prop)],paste0(out_dir_death,"/",loc,"_ART_deaths.csv"),row.names=F)
+if(loc=="ETH_44858"){
+  write.csv(spec_combined[,list(sex_id,year_id,age_group_id,run_num,hiv_deaths,non_hiv_deaths, non_hiv_deaths_prop)],paste0(out_dir_death,"/","ETH_60908","_ART_deaths.csv"),row.names=F)
+  write.csv(spec_combined[,list(sex_id,year_id,age_group_id,run_num,hiv_deaths,non_hiv_deaths, non_hiv_deaths_prop)],paste0(out_dir_death,"/","ETH_94364","_ART_deaths.csv"),row.names=F)
+  write.csv(spec_combined[,list(sex_id,year_id,age_group_id,run_num,hiv_deaths,non_hiv_deaths, non_hiv_deaths_prop)],paste0(out_dir_death,"/","ETH_95069","_ART_deaths.csv"),row.names=F)
+}else{
+  write.csv(spec_combined[,list(sex_id,year_id,age_group_id,run_num,hiv_deaths,non_hiv_deaths, non_hiv_deaths_prop)],paste0(out_dir_death,"/",loc,"_ART_deaths.csv"),row.names=F)
+}
 
 # # Rescramble draws to match Reckoning output before outputting non-fatal results (can't do it to the fatal that feeds into the Reckoning because we want to preserve within-draw correlation between them)
 # spec_combined <- merge(spec_combined,draw_map,by="run_num")
 
 ## save all
-write.csv(spec_combined[,list(sex_id,year_id,run_num,hiv_deaths, non_hiv_deaths, new_hiv,hiv_births,suscept_pop,total_births,pop_neg,pop_lt200,pop_200to350,pop_gt350,pop_art,age_group_id)],paste0(out_dir,"/",loc,"_ART_data.csv"),row.names=F)
+if(loc=="ETH_44858"){
+  write.csv(spec_combined[,list(sex_id,year_id,run_num,hiv_deaths, non_hiv_deaths, new_hiv,hiv_births,suscept_pop,total_births,pop_neg,pop_lt200,pop_200to350,pop_gt350,pop_art,age_group_id)],paste0(out_dir,"/","ETH_60908","_ART_data.csv"),row.names=F)
+  write.csv(spec_combined[,list(sex_id,year_id,run_num,hiv_deaths, non_hiv_deaths, new_hiv,hiv_births,suscept_pop,total_births,pop_neg,pop_lt200,pop_200to350,pop_gt350,pop_art,age_group_id)],paste0(out_dir,"/","ETH_94364","_ART_data.csv"),row.names=F)
+  write.csv(spec_combined[,list(sex_id,year_id,run_num,hiv_deaths, non_hiv_deaths, new_hiv,hiv_births,suscept_pop,total_births,pop_neg,pop_lt200,pop_200to350,pop_gt350,pop_art,age_group_id)],paste0(out_dir,"/","ETH_95069","_ART_data.csv"),row.names=F)
+}else{
+  write.csv(spec_combined[,list(sex_id,year_id,run_num,hiv_deaths, non_hiv_deaths, new_hiv,hiv_births,suscept_pop,total_births,pop_neg,pop_lt200,pop_200to350,pop_gt350,pop_art,age_group_id)],paste0(out_dir,"/",loc,"_ART_data.csv"),row.names=F)
+}
 

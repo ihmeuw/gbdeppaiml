@@ -13,6 +13,28 @@ library(data.table)
 cluster.project <- "proj_hiv"
 unaids_year <- 2023
 
+
+## Launch prepare locations file
+### Functions
+# file_names <- list.files(path = paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/R/"), pattern = "\\.R$")
+# file_names <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/eppasm/R/", file_names)
+# lapply(file_names, source)
+
+library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
+library(eppasm, lib.loc = "/snfs1/Project/GBD_Select_Infectious_Diseases/J TEMP HOLD/HIV/packages_r")
+
+
+gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
+setwd(gbdeppaiml_dir)
+devtools::load_all()
+source("/ihme/homes/mzhang25/eppasm/R/read-spectrum-files.R")
+source("/ihme/homes/mzhang25/eppasm/R/spectrum.R")
+source("/ihme/homes/mzhang25/eppasm_ihme/R/fit-model.R")
+# source("/ihme/homes/mzhang25/gbdeppaiml/lbd_anc_align/archived_files/ancsitedat_func.R")
+# source("/ihme/homes/mzhang25/gbdeppaiml/R/prep_pjnz_data.R")
+# source("/ihme/homes/mzhang25/gbdeppaiml/R/gbd_prep_data.R")
+
+
 ### Functions
 library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
 loc.table <- data.table(get_locations(hiv_metadata = T))
@@ -26,21 +48,15 @@ epp.list <- sort(loc.table[epp == 1, ihme_loc_id])
 loc.list <- epp.list
 dir.create(paste0('/ihme/hiv/data/PJNZ_prepped/', unaids_year, '/'))
 
-## Launch prepare locations file
-### Functions
-library(mortdb, lib = "/home/j/WORK/02_mortality/shared/r")
-gbdeppaiml_dir <- paste0(ifelse(windows, "H:", paste0("/ihme/homes/", user)), "/gbdeppaiml/")
-setwd(gbdeppaiml_dir)
-devtools::load_all()
-library(eppasm, lib.loc = "/snfs1/Project/GBD_Select_Infectious_Diseases/J TEMP HOLD/HIV/packages_r")
-
-
 # ### Tables
 # loc.table <- data.table(get_locations(hiv_metadata = T))
 # loc.list <- loc.table[,ihme_loc_id] %>% unique
 
 unaids_2023 <- strsplit(list.dirs('/snfs1/DATA/UNAIDS_ESTIMATES/2023/'), split = '//')
 unaids_2023 <- sapply(unaids_2023[3:length(unaids_2023)], '[[', 2)
+
+unaids_2022 <- strsplit(list.dirs('/snfs1/DATA/UNAIDS_ESTIMATES/2022/'), split = '//')
+unaids_2022 <- sapply(unaids_2022[2:length(unaids_2022)], '[[', 2)
 
 
 for(loc in all_locs){
@@ -66,7 +82,7 @@ for(loc in all_locs){
 cal = readRDS(paste0("/share/hiv/data/PJNZ_EPPASM_prepped/", loc, '.rds'))
 nrow(unique(attr(cal,"eppd")$ancsitedat))
 
-      
+
 ### End
 
 

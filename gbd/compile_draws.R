@@ -27,8 +27,8 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
   array.job = FALSE
-  run.name = '240529_meixin_test2art'
-  loc <- 'KEN_35660'
+  run.name = '240906_quokka_PJNZ_2023'
+  loc <- 'KEN_35630'
   draw.fill <- T
   paediatric <- T
   gbdyear <- "gbd23"
@@ -131,7 +131,20 @@ dt <- lapply(draw.list, function(draw){
   print(draw)
   draw.dt <- fread(paste0(draw.path, '/', draw))
 })
+
+## remove draws with character number
+remove.draws <- c()
+
+
+for (i in c(1:length(draw.list))) {
+  print(i)
+  if(class(dt[[i]][, c(pop, hiv_deaths, non_hiv_deaths, new_hiv, pop_neg, total_births,
+                       hiv_births, birth_prev, pop_art, pop_gt350,pop_200to350, pop_lt200)])=="character"){
+    remove.draws <- c(remove.draws, i)
+  }
+}
 dt <- rbindlist(dt)
+dt <- dt[!run_num %in% remove.draws]
 if(loc=="ETH_44857"){
   dt <- dt[run_num != 421]
 }

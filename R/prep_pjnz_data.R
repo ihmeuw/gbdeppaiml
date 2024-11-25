@@ -42,13 +42,15 @@ prepare_spec_object <- function(loc, popadjust = TRUE, popupdate=TRUE, use_ep5=F
   ## TODO: Do we want to implement a collapse function for demog param? (probably not, but it's worth noting
   ## that for locations we collapse (like Benin, Cote d'Ivoire, etc), the demp object will only hold the population for 1 subnational)
   
-  if(loc %in% "STP"){ ##Can generalize to any 2015 PJNZ file
-    demp <- create_spectrum_demog_param(loc, start.year, stop.year)
-    projp <- create_hivproj_param(loc, start.year, stop.year)
-  } else {
+  # if(loc %in% "STP"){ ##Can generalize to any 2015 PJNZ file
+  #   start.year <- epp.totals$epp.input.tot$start.year
+  #   stop.year <- epp.totals$epp.input.tot$stop.year
+  #   demp <- create_spectrum_demog_param(loc, start.year, stop.year)
+  #   projp <- create_hivproj_param(loc, start.year, stop.year)
+  # } else {
     demp <- read_specdp_demog_param(pjnz, use_ep5=use_ep5)
     projp <- read_hivproj_param(pjnz, use_ep5=use_ep5)
-  }
+  # }
 
   epp_t0 <- epp.totals$epp.input.tot$epidemic.start
 
@@ -191,7 +193,7 @@ create_hivproj_param <- function(loc, start.year = 1970, stop.year = 2019){
   
   ## TODO: Get these fertility and incrr adjustments by country from Jeff
   print('Warning: Still reading in placeholders from other location for some parameters')
-  pjnz <- find_pjnz(loc="MWI")[[1]]
+  pjnz <- find_pjnz(loc=loc, gbdyear=gbdyear)[[1]]
   temp.projp <- read_hivproj_param(pjnz, use_ep5=FALSE)
   relinfectART <- 0.15
   if(grepl('IND', loc)){

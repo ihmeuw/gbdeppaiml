@@ -24,8 +24,8 @@ user <- ifelse(windows, Sys.getenv("USERNAME"), Sys.getenv("USER"))
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
 if(length(args) == 0){
-  run.name = '240529_meixin_test2art'
-  loc <- 'TZA'
+  run.name = '240906_quokka'
+  loc <- 'AGO'
   stop.year <- 2024
   j <- 5
   paediatric <- TRUE
@@ -98,7 +98,7 @@ anc.prior.sub <- c.args[['anc.prior.sub']]
 prev_sub <- c.args[['prev_sub']]
 sexincrr.sub <- c.args[['sexincrr.sub']]
 
-lbd.anc <- T
+lbd.anc <- F
 ped_toggle = TRUE
 paediatric = TRUE
 
@@ -106,13 +106,13 @@ file_name = loc
 out.dir <- paste0('/ihme/hiv/epp_output/',gbdyear,'/', run.name, "/", file_name)
 
 ## scale ZAF ART coverage input
-if(grepl('ZAF', loc)){
-  source(paste0('/ihme/homes/', user, '/gbdeppaiml/gbd/data_prep_scale_ZAF_ART.R'))
-}else if(grepl('MOZ', loc)){
-  source(paste0('/ihme/homes/', user, '/gbdeppaiml/gbd/data_prep_scale_MOZ_ART.R'))
-}else{
+# if(grepl('ZAF', loc)|loc=="MOZ"){
+#   source(paste0('/ihme/homes/', user, '/gbdeppaiml/gbd/data_prep_scale_ZAF_ART.R'))
+# }else if(grepl('MOZ', loc)){
+#   source(paste0('/ihme/homes/', user, '/gbdeppaiml/gbd/data_prep_scale_MOZ_ART.R'))
+# }else{
   source(paste0('/ihme/homes/', user, '/gbdeppaiml/gbd/data_prep.R'))
-}
+# }
 
 # Location specific toggles ---------------------------------------
 # ANC data bias adjustment
@@ -126,6 +126,7 @@ if(geoadjust & !loc %in% no_geo_adj | loc %in% c('ZWE', 'MWI')){
 } else {
   geoadjust  <- FALSE
 }
+geoadjust  <- FALSE
 print(paste0(loc, ' geoadjust set to ', geoadjust))
 
 # LBD Adjustments
@@ -158,11 +159,11 @@ dt <- read_spec_object(loc, j, start.year, stop.year, trans.params.sub,
                        )
 
 # fix cd4_mort for STP
-if(loc %in% c( "STP")){
-  cd4_mort <- readRDS("/share/hiv/data/PJNZ_prepped/2022/cd4_mort_STP.rds")
-  cd4_mort <- cd4_mort[, c(1,1,1,2,2,3,3,4,4),]
-  attr(dt, "specfp")$cd4_mort <- cd4_mort
-}
+# if(loc %in% c( "STP")){
+#   cd4_mort <- readRDS("/share/hiv/data/PJNZ_prepped/2019_extended/cd4_mort_STP.rds")
+#   cd4_mort <- cd4_mort[, c(1,1,1,2,2,3,3,4,4),]
+#   attr(dt, "specfp")$cd4_mort <- cd4_mort
+# }
 if (loc =="MRT"){
   attr(dt, "specfp")$ss$time_epi_start <- 1975
 }
@@ -173,6 +174,9 @@ mod[prev == 0.0005, prev := 0]
 attr(dt, 'eppd')$hhs <- data.frame(mod)
 
 ###Extends inputs to the projection year as well as does some site specific changes. This should probably be examined by cycle
+run.name <- paste0(run.name, "_artmot_0.5")
+dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name))
+
 dt <- modify_dt(dt, run_name = run.name,gbdyear=gbdyear)
 if(grepl('IND', loc)){
   old <- readRDS(paste0("/share/hiv/epp_output/gbd20/200713_yuka/dt_objects/", loc, '_dt.RDS'))
@@ -214,32 +218,24 @@ zero_prev_locs <- fread("/ihme/hiv/epp_input/gbd23/prev_surveys_ind.csv")
 zero_prev_locs <- unique(zero_prev_locs[prev == 0.0005 & use == TRUE,iso3])
 zero_prev_locs <- c(zero_prev_locs, "ETH_44858")
 attr(dt, 'eppd')$ancsitedat <- data.frame(attr(dt, 'eppd')$ancsitedat)
-if(loc=="TZA"){
-  attr(dt, 'eppd')$ancsitedat <- data.table(attr(dt, 'eppd')$ancsitedat)[year<=2016]
-  attr(dt, 'eppd')$ancsitedat <- data.frame(attr(dt, 'eppd')$ancsitedat)
-}
+
 # Fit model ---------------------------------------
-# dt <- readRDS(paste0('/ihme/hiv/epp_output/gbd20/200713_yuka/dt_objects/',loc,'_dt.RDS'))
 attr(dt,"eppd")$ancsitedat <- as.data.frame(attr(dt,"eppd")$ancsitedat)
 if(grepl('ZAF', loc)){
   attr(dt, 'specfp')$scale_cd4_mort <- as.integer(1)
   attr(dt, 'specfp')$art_mort <- attr(dt, 'specfp')$art_mort  * 0.15
+}else if(loc=="MOZ"){
+  attr(dt, 'specfp')$art_mort <- attr(dt, 'specfp')$art_mort  * 0.5
 }
 
-# if(loc %in% c("NAM", "NER", "MDG")){
-  attr(dt, 'specfp')$scale_cd4_mort <- as.integer(1)
-# }
+
+attr(dt, 'specfp')$scale_cd4_mort <- as.integer(1)
+
 
 fit <- eppasm::fitmod(dt, eppmod = ifelse(grepl('IND', loc),'rlogistic',epp.mod), 
                       B0 = 1e5, B = 1e3, number_k = 3000, 
                       ageprev = ifelse(loc %in% zero_prev_locs,'binom','probit'))
-if(grepl('MOZ', loc)){
-  run.name <- paste0(run.name, "_art_pct")
-  dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name))
-}else if(grepl('TZA', loc)){
-  run.name <- paste0(run.name, "_anc_subset")
-  dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name))
-}
+
 dir.create(paste0('/ihme/hiv/epp_output/', gbdyear, '/', run.name, '/fitmod/'))
 saveRDS(fit, file = paste0('/ihme/hiv/epp_output/' , gbdyear, '/', run.name, '/fitmod/', loc, '_', j, '.RDS'))
 fit <- readRDS(paste0('/ihme/hiv/epp_output/',gbdyear,'/',run.name,'/fitmod/', loc, '_', j, '.RDS'))

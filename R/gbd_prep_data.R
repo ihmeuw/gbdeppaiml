@@ -1,5 +1,5 @@
 find_pjnz <- function(loc, gbdyear=gbdyear){
-
+  
   loc.table <- fread("/mnt/team/mortality/pub/shared/hiv_model_strategy_2024.csv")
   if(grepl("KEN", loc) & loc.table[ihme_loc_id == loc, level] == 5) {
       temp.loc <- loc.table[location_id == loc.table[ihme_loc_id == loc, parent_id], ihme_loc_id]
@@ -26,9 +26,9 @@ find_pjnz <- function(loc, gbdyear=gbdyear){
   if(grepl("NGA",loc)){temp.loc <- "NGA"}
   if(grepl("KEN",loc)){temp.loc <- "KEN"}
   
-  if(temp.loc == 'NAM'){unaids.year = 2017}
+  # if(temp.loc == 'NAM'){unaids.year = 2017}
   ## TODO: What is wrong with the 2018 ZAF file?
-  if(grepl('ZAF', loc)){unaids.year = 2017}
+  # if(grepl('ZAF', loc)){unaids.year = 2017}
   ##make exception for india
   if(grepl('IND', loc)){dir <-paste0("/ihme/limited_use/LIMITED_USE/PROJECT_FOLDERS/UNAIDS_ESTIMATES/2013/IND")}else{
   
@@ -61,17 +61,17 @@ find_pjnz <- function(loc, gbdyear=gbdyear){
       loc.name <- "Oromiya"
     } 
     if(loc.name == "Benishangul-Gumuz"){
-      loc.name <- "Benis_Gumz"
+      loc.name <- "Benis"
     } 
     if(loc.name == "Southern Nations, Nationalities, and Peoples"){
-      loc.name <- "Southern_Nations_Nationalities"
+      loc.name <- "SNNP"
     }
     if(loc.name == "Gambella"){
-      loc.name <- "Gambela"
+      loc.name <- "Gambella"
     }
     if(loc.name == "Addis Ababa"){
       #probably a spelling mistake on the end of data services
-      loc.name <- "Addisabana"
+      loc.name <- "AddisAbaba"
     }
     if(loc.name == "Dire Dawa"){
       #probably a spelling mistake on the end of data services
@@ -87,9 +87,9 @@ find_pjnz <- function(loc, gbdyear=gbdyear){
   #   file.list <-  pjnz.list[which(grepl(paste0("/", loc.name,"_"), pjnz.list))]
   # }
   
-  if(loc.name=="Niger" ){
-    file.list <-  pjnz.list[which(grepl(paste0("/", loc.name,"_"), pjnz.list))]
-  }
+  # if(loc.name=="Niger" ){
+  #   file.list <-  pjnz.list[which(grepl(paste0("/", loc.name,"_"), pjnz.list))]
+  # }
       
   if(grepl("KEN",loc)){
     if(loc.name == "Rift Valley"){

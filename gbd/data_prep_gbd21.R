@@ -29,7 +29,7 @@ dir.table[,'pmtct' := as.logical(pmtct)]
 dir.table[,'on.art' := as.logical(on.art)]
 input_root <- paste0('/ihme/hiv/epp_input/', gbdyear, '/',run.name, '/')
 
-loc.table <- fread("/mnt/team/mortality/pub/shared/hiv_model_strategy_2024.csv")
+loc.table <- get_locations(hiv_metadata = TRUE)
 if(grepl('IND', loc)){
   temp.loc <- loc.table[parent_id == loc.table[ihme_loc_id == loc, location_id], ihme_loc_id][1]
 }else{
@@ -57,38 +57,24 @@ if(dir.table[ref == max(ref),migration]){
 }else{
   migration <- paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/migration/', loc, '.csv')
 }
-
-if (run.name %in% c("240529_meixin_test1art")){
+if(dir.table[ref == max(ref),prev_surveys]){
+  
   prev_surveys <- paste0('/ihme/hiv/epp_input/gbd20/prev_surveys.csv')
   if(grepl('IND', loc)){
     prev_surveys <- paste0('/ihme/hiv/epp_input/gbd20/prev_surveys_ind.csv')
-
+    
   }
   
-}else if(dir.table[ref == max(ref),prev_surveys]){
-  prev_surveys <- paste0('/ihme/hiv/epp_input/gbd23/prev_surveys_ind.csv')
-  
+  #prev_surveys <- '/ihme/hiv/data/prevalence_surveys/prev_surveys_temp.csv'
 }else{
   ##need to look up old FP
   prev_surveys <- paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/prev_surveys/')
 }
-if (run.name %in% c("240529_meixin_test1art")){
+if(dir.table[ref == max(ref),art]){
   for(c.year in c('UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
     if(file.exists(paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/adultARTcoverage/' ,c.year,'/', loc, '_Adult_ART_cov.csv'))){
       
       art.dt <- paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/adultARTcoverage/' ,c.year,'/', loc, '_Adult_ART_cov.csv')
-      
-      
-      break
-    }
-    
-  }
-  
-}else if(dir.table[ref == max(ref),art]){
-  for(c.year in c('UNAIDS_2023', 'UNAIDS_2022', 'UNAIDS_2021', 'UNAIDS_2020', 'UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', 'UNAIDS_2013')){
-    if(file.exists(paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD23/adultARTcoverage/' ,c.year,'/', loc, '_Adult_ART_cov.csv'))){
-      
-      art.dt <- paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD23/adultARTcoverage/' ,c.year,'/', loc, '_Adult_ART_cov.csv')
       
       
       break
@@ -114,27 +100,20 @@ if(loc == 'KEN'){
 #   art.dt <- paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/adultARTcoverage/' ,'140520','/', loc, '_Adult_ART_cov.csv')
 #   
 # }
-if(run.name %in% c("240529_meixin_test1art")){
-  tem_art <- paste0('/share/hiv/data/UNAIDS_extrapolated/GBD20//ZAF_sub/', loc, '_Adult_ART_cov.csv')
-  
-} else {
-  tem_art <- paste0('/share/hiv/data/UNAIDS_extrapolated/GBD23//ZAF_sub/thembisa_v4.6/', loc, '_Adult_ART_cov.csv')
-  
-}
+tem_art <- paste0('/share/hiv/data/UNAIDS_extrapolated/GBD20//ZAF_sub/', loc, '_Adult_ART_cov.csv')
 if(dir.table[ref == max(ref),population_single_age]){
   population_single_age <- paste0(input_root, '/population_single_age/', loc, '.csv')
 }else{
   population_single_age <- paste0('/ihme/hiv/epp_input/gbd19/190630_rhino2/population_single_age/', loc, '.csv')
 }
 if(dir.table[ref == max(ref),fp_root]){
-  fp_root <- paste0('/ihme/hiv/spectrum_input/', run.name, "/")
+  fp_root <- paste0('/ihme/hiv/spectrum_input/191224_trumpet/')
   artdist <- paste0(fp_root, '/childARTDist/', temp.loc, '.csv')
   if(grepl('IND',temp.loc)){
     artelig <- paste0(fp_root, '/childARTeligibility/AGO.csv')
   }else{
     artelig <- paste0(fp_root, '/childARTeligibility/', temp.loc, '.csv')
   }
-  # percbf <- paste0('/ihme/hiv/spectrum_input/191224_trumpet/', '/percentBF/', temp.loc, '.csv')
   percbf <- paste0(fp_root, '/percentBF/', temp.loc, '.csv')
   mort.art <- paste0(fp_root, "/childMortOnART/",temp.loc, '.csv')
   prog <-  paste0(fp_root, "/childProgParam/" ,temp.loc, '.csv')
@@ -155,23 +134,13 @@ if(dir.table[ref == max(ref),fp_root]){
   dropout <- paste0(fp_root, '/PMTCTdropoutRates/', temp.loc, '.csv')
   
 }
-if (run.name %in% c("240529_meixin_test1art")){
+if(dir.table[ref == max(ref),childARTcoverage]){
   for(c.year in c('UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
     
     if(file.exists(paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/childARTcoverage/',c.year, '/', loc, '_Child_ART_cov.csv'))){
       art <- paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/childARTcoverage/',c.year, '/', loc, '_Child_ART_cov.csv')
       break
-    }
-  }
-  
-}else if(dir.table[ref == max(ref),childARTcoverage]){
-  for(c.year in c('UNAIDS_2023', 'UNAIDS_2022', 'UNAIDS_2021', 'UNAIDS_2020','UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', 'UNAIDS_2013')){
-    
-    if(file.exists(paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD23/childARTcoverage/',c.year, '/', loc, '_Child_ART_cov.csv'))){
-      art <- paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD23/childARTcoverage/',c.year, '/', loc, '_Child_ART_cov.csv')
-      break
-    }
-  }
+    }}
 }else{
   art <- (paste0('/share/hiv/epp_input/gbd19/paeds/childARTcoverage/', loc, '.csv'))
 }
@@ -183,36 +152,25 @@ if (run.name %in% c("240529_meixin_test1art")){
 #   art <- paste0('/share/hiv/epp_input/gbd19/paeds/childARTcoverage/', loc, '.csv')
 #   
 # }
-if (run.name %in% c("240529_meixin_test1art")){
+if(dir.table[ref == max(ref),pmtct]){
   for(c.year in c('UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', '140520')){
     print(c.year)
     if(file.exists( paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/PMTCT/', c.year,'/', loc, '_PMTCT_ART_cov.csv'))){
       pmtct <- paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD20/PMTCT/', c.year,'/', loc, '_PMTCT_ART_cov.csv')
       break
     }
-  }
-}else if(dir.table[ref == max(ref),pmtct]){
-  for(c.year in c('UNAIDS_2023', 'UNAIDS_2022', 'UNAIDS_2021', 'UNAIDS_2020','UNAIDS_2019', 'UNAIDS_2018', 'UNAIDS_2017', 'UNAIDS_2016', 'UNAIDS_2015', 'UNAIDS_2013')){
-    print(c.year)
-    if(file.exists( paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD23/PMTCT/', c.year,'/', loc, '_PMTCT_ART_cov.csv'))){
-      pmtct <- paste0('/ihme/hiv/data/UNAIDS_extrapolated/GBD23/PMTCT/', c.year,'/', loc, '_PMTCT_ART_cov.csv')
-      break
-    }
+    
   }
 }else{
   pmtct <- paste0('/share/hiv/epp_input/gbd19/paeds/PMTCT/', temp.loc, '.csv')
 }
-if (run.name %in% c("240529_meixin_test1art", "240529_meixin_test2art", "240906_quokka")&loc.table[ihme_loc_id==loc]$super_region_name=="Sub-Saharan Africa"){
-  mortart <- paste0("/share/hiv/r01/scratch/onART/adult/best/ssa/compiled_HIVonART.csv")
-  print(paste0('Using MRBRT ', mortart))
-  
-} else if(dir.table[ref == max(ref),on.art]){
+if(dir.table[ref == max(ref),on.art]){
   mortart <- paste0("/ihme/hiv/mrbrt_output/gbd20/", loc,"_HIVonART.csv")
-  print(paste0('Using MRBRT ', mortart))
+  print('Using MRBRT')
   
 } else {
   mortart <- paste0(root,"/temp/TB/joyma/HIV/model_draw2/gbd20/", loc,"_HIVonART.csv")
-  print(paste0('Using MRBRT ', mortart))
+  print('Using test model')
 }
 
 
@@ -236,13 +194,3 @@ print(paste('Using', mort.offart, 'for child mortality off art', sep = ' '))
 print(paste('Using', dropout, 'for pmtct dropout rates', sep = ' '))
 print(paste('Using', art, 'for child ART', sep = ' '))
 print(paste('Using', pmtct, 'for PMTCT', sep = ' '))
-# return(list( 'asfr' = ASFR,
-#              'pop' = population_single_age,
-#              'mig' = migration,
-#              'birth' = births,
-#              
-#   
-# ))
-
-# }
-

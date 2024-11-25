@@ -122,7 +122,7 @@ if(run.name %in% c("240529_meixin_test1art")){
     tem_art <- paste0('/share/hiv/data/UNAIDS_extrapolated/GBD23/adultARTcoverage/ZAF_sub/', loc, '_Adult_ART_cov.csv')
   }else if(loc=="MOZ"){
     tem_art <- paste0('/share/hiv/data/UNAIDS_extrapolated/GBD23/adultARTcoverage/UNAIDS_2019/', loc, '_Adult_ART_cov.csv')
-
+    art.dt <- tem_art
   }
     
 }
@@ -207,7 +207,7 @@ if (run.name %in% c("240529_meixin_test1art")){
 }else{
   pmtct <- paste0('/share/hiv/epp_input/gbd19/paeds/PMTCT/', temp.loc, '.csv')
 }
-if (run.name %in% c("240529_meixin_test1art", "240529_meixin_test2art")){
+if (run.name %in% c("240529_meixin_test1art", "240529_meixin_test2art", "240906_quokka")){
   mortart <- paste0("/share/hiv/r01/scratch/onART/adult/best/ssa/compiled_HIVonART.csv")
   print(paste0('Using MRBRT ', mortart))
   

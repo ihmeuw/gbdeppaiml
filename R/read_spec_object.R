@@ -10,16 +10,20 @@ read_spec_object <- function(loc, j, start.year = 1970, stop.year, trans.params.
   #Do this for now as something is weird with the new PJNZ files - don't need subpop anyway
   #Eventually these hsould all be regenerated with subpopulations
 
-# if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2021/', loc, '.rds'))) {
-#   dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2021/', loc, '.rds'))
-# 
-# } else
-#   if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2020/', loc, '.rds'))) {
-#     dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2020/', loc, '.rds'))
-# 
-#     } else
-  if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2022/', loc, '.rds'))) {
+  if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2023/', loc, '.rds'))) {
+    dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2023/', loc, '.rds'))
+    
+  } else if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2022/', loc, '.rds'))) {
     dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2022/', loc, '.rds'))
+    
+  } else if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2021/', loc, '.rds'))) {
+    dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2021/', loc, '.rds'))
+    
+  } else if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2020/', loc, '.rds'))) {
+    dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2020/', loc, '.rds'))
+    
+  } else if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019_new_anc/', loc, '.rds'))) {
+    dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2019_new_anc/', loc, '.rds'))
     
   } else if (file.exists(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))) {
     dt <- readRDS(paste0('/share/hiv/data/PJNZ_prepped/2019/', loc, '.rds'))
@@ -41,22 +45,22 @@ read_spec_object <- function(loc, j, start.year = 1970, stop.year, trans.params.
   if(lbd.anc){
     # if(file.exists(paste0('/share/hiv/data/PJNZ_prepped/lbd_anc/2021/', loc, '.rds'))){
     #   replace <- as.data.table(readRDS(paste0('/share/hiv/data/PJNZ_prepped/lbd_anc/2021/', loc, '.rds')))
-    #   
+    #
     # }else{
       replace <- as.data.table(readRDS(paste0('/share/hiv/data/PJNZ_prepped/lbd_anc/2019/', loc, '.rds')))
-      
+
     # }
-    
+
     if(grepl("KEN",loc)){
       replace <- replace[which(subpop == attr(dt,"eppd")$ancsitedat$subpop[1])]
     }
-    
-    
+
+
     if(grepl("SOM",loc)){
       replace <- replace[subpop %in% "Remaining females" & type=="ancss"]
     }
-    
-    
+
+
     if(!geoadjust){
       replace[,offset := NULL]
     }
@@ -70,12 +74,12 @@ read_spec_object <- function(loc, j, start.year = 1970, stop.year, trans.params.
       replace[,adm0_lower:=NULL]
       replace[,adm0_upper:=NULL]
       replace[,site_pred:=NULL]
-      
+
     }
-    
+
     attr(dt, 'eppd')$ancsitedat <- replace
-    
-    
+
+
   }
   
 
@@ -117,6 +121,7 @@ read_spec_object <- function(loc, j, start.year = 1970, stop.year, trans.params.
     }
   }
   ## Group 1 inputs
+  loc.table <- fread("/mnt/team/mortality/pub/shared/hiv_model_strategy_2024.csv")
   if(grepl('1', loc.table[ihme_loc_id == loc, group]) | loc %in% c("STP","COM","MRT","MAR")){
     ## Prevalence surveys
     if(prev.sub) {
@@ -200,7 +205,39 @@ read_spec_object <- function(loc, j, start.year = 1970, stop.year, trans.params.
         attr(dt, 'eppd')$ancsitedat <- attr(dt, 'eppd')$ancsitedat[which(attr(dt, 'eppd')$ancsitedat$used==TRUE),]
      }
     }
-      
+    
+    ## Subsetting NGA counties from province, updated 5/5/2020
+    if(grepl('NGA', loc)){
+      NGA.anc.path <- paste0('/share/hiv/epp_input/gbd23/NGA_anc_map.csv')
+      NGA.anc <- fread(NGA.anc.path)
+      if(loc %in% NGA.anc$ihme_loc_id){
+        county.sites <- NGA.anc[ihme_loc_id == loc, site]
+        prov.sites <- unique(attr(dt, "eppd")$ancsitedat$site)
+        
+        
+        attr(dt, "eppd")$anc.used[] <- FALSE
+        
+        temp1 <- attr(dt, "eppd")$anc.prev[]
+        temp1 <- temp1[0,]
+        
+        temp2 <- attr(dt, "eppd")$anc.n[]
+        temp2 <- temp2[0,]
+        
+        for(site in unique(county.sites)){
+          attr(dt, "eppd")$anc.used[grepl(site,names(attr(dt, "eppd")$anc.used))] <- TRUE
+          keep_index <- which(grepl(site,rownames(attr(dt, "eppd")$anc.prev)))
+          temp1 <- rbind(temp1,attr(dt, "eppd")$anc.prev[keep_index,,drop =FALSE])
+          temp2 <- rbind(temp2,attr(dt, "eppd")$anc.n[keep_index,,drop =FALSE])
+          
+        }
+        
+        attr(dt, "eppd")$anc.prev <- temp1
+        attr(dt, "eppd")$anc.n <- temp2
+        attr(dt, "eppd")$anc.used <- attr(dt, "eppd")$anc.used[attr(dt, "eppd")$anc.used]
+        attr(dt, 'eppd')$ancsitedat$used[!(attr(dt, 'eppd')$ancsitedat$site %in% county.sites | grepl(loc.table[ihme_loc_id == loc, location_name], attr(dt, 'eppd')$ancsitedat$site))] <- FALSE
+        attr(dt, 'eppd')$ancsitedat <- attr(dt, 'eppd')$ancsitedat[which(attr(dt, 'eppd')$ancsitedat$used==TRUE),]
+      }
+    }
     # 
     if(!anc.rt){
       attr(dt, 'eppd')$ancrtsite.prev <- NULL
